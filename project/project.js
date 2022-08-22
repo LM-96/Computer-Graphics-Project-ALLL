@@ -1,0 +1,1 @@
+loadDoc("./assets/WorldBox.obj")
