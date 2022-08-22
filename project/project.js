@@ -7,7 +7,7 @@ gl = canvas.getContext('webgl');
 
 var bufferInfo_obj;
 
-loadDoc("./assets/WorldBox.obj")
+loadDoc("./assets/WorldBox1.obj")
 
 const arrays_obj = {
     position:	{ numComponents: 3, data:webglVertexData[0], },
@@ -59,92 +59,12 @@ function drawWorld() {
 }
 
 
-// FUNCTION RENDER AND UPDATE
 
-function update(time){
-	if(nstep*PHYS_SAMPLING_STEP <= timeNow){ //skip the frame if the call is too early
-		throwPizza();
-		CarDoStep(); 
-		nstep++; 
-		doneSomething=true;
-		window.requestAnimationFrame(update);
-		return; // return as there is nothing to do
-	}
-	timeNow=time;
-	if (doneSomething) {
-		render();
-		doneSomething=false;
-	}
-	window.requestAnimationFrame(update); // get next frame
-}
-
-function render(){
-
-	//gl.enable(gl.CULL_FACE); 	//se è disabilitato, riesco a vedere dentro al cubo, se no no
-    gl.enable(gl.DEPTH_TEST);
-
-    // first draw from the POV of the light
-    lightWorldMatrix = m4.lookAt(
-        [settings.x_light, settings.y_light, settings.z_light],          			// position
-        [settings.x_targetlight, settings.y_targetlight, settings.z_targetlight], 	// target
-        settings.up,                                              					// up
-    );
-
-    lightProjectionMatrix = m4.perspective(
-            degToRad(settings.fovLight),
-            settings.width_projLight / settings.height_projLight,
-            1,  	// near: top of the frustum
-            700);   // far: bottom of the frustum
+var doneSomething=false; 
+			var nstep=0; 
+			var timeNow=0;
+			const PHYS_SAMPLING_STEP=20; 	// numero di millisec che un passo di fisica simula
 
 
-	// -----------------------------------------------------------
-    // draw to the depth texture
-	
-    gl.bindFramebuffer(gl.FRAMEBUFFER, depthFramebuffer);
-    gl.viewport(0, 0, depthTextureSize, depthTextureSize);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    drawScene( lightProjectionMatrix, lightWorldMatrix, m4.identity(), lightWorldMatrix, programInfo_color);
-
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    gl.clearColor(0, 0, 0, 1); //setta tutto a nero se 0,0,0,1
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    let textureMatrix = m4.identity();
-    textureMatrix = m4.translate(textureMatrix, 0.5, 0.5, 0.5);
-    textureMatrix = m4.scale(textureMatrix, 0.5, 0.5, 0.5);
-    textureMatrix = m4.multiply(textureMatrix, lightProjectionMatrix);
-    textureMatrix = m4.multiply(textureMatrix, m4.inverse(lightWorldMatrix));
-
-	// -------------------------------------------------------------------
-	//matrici di vista
-	
-	projectionMatrix = m4.perspective(settings.fov, settings.aspect, 1, 2000);
-
-	var targetAuto = [px, py, pz];
-	
-	camera = [px + (settings.D*Math.sin(degToRad(facing))), py+20, pz+(settings.D*Math.cos(degToRad(facing)))]; //posteriore alla macchina
-
-	//cambiaCamera = true --> camera posteriore
-	if(cambiaCamera){
-		var targetAuto = [px, py, pz];
-		camera = [px+(-settings.D*Math.sin(degToRad(facing))), py+20, pz+(-settings.D*Math.cos(degToRad(facing)))];		
-	}
-	//permette di muoversi nella scena (esempio con la drag del mouse)
-	if(cameraLibera){
-		camera = [settings.D*7*Math.sin(settings.PHI)*Math.cos(settings.THETA),
-					settings.D*7*Math.sin(settings.PHI)*Math.sin(settings.THETA),
-					settings.D*7*Math.cos(settings.PHI)];
-	}
-	
-    cameraMatrix = m4.lookAt(camera, targetAuto, settings.up);
-
-    drawScene( projectionMatrix, cameraMatrix, textureMatrix, lightWorldMatrix, programInfo_sun);
-    
-	drawAdvert();
-	//drawFrustum();
-	drawWorld();
-	drawDeliveryArea();
-}
-
+update(); // start animation
+window.requestAnimationFrame(update);
