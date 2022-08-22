@@ -17,8 +17,7 @@ const arrays_obj = {
 
  bufferInfo_obj = webglUtils.createBufferInfoFromArrays(gl, arrays_obj);
 
- function setObjsToDraw() {
-	objectsToDraw = [
+objectsToDraw = [
         {
             //not affected by the light
             name: "world",
@@ -30,10 +29,9 @@ const arrays_obj = {
             },
         }
     ];
-}
 
 function drawWorld() {
-	const viewMatrix = m4.inverse(cameraMatrix);
+	//const viewMatrix = m4.inverse(cameraMatrix);
 	
 	let objToDraw = getObjToDraw(objectsToDraw, "world");
 	const programInfo = objToDraw.programInfo;
@@ -60,7 +58,7 @@ function drawWorld() {
 
 
 
-var doneSomething=false; 
+/*var doneSomething=false; 
 			var nstep=0; 
 			var timeNow=0;
 			const PHYS_SAMPLING_STEP=20; 	// numero di millisec che un passo di fisica simula
@@ -68,3 +66,6 @@ var doneSomething=false;
 
 update(); // start animation
 window.requestAnimationFrame(update);
+*/
+
+drawWorld()
