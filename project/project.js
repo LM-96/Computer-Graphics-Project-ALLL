@@ -1,71 +1,62 @@
-/*============= Creating a canvas ======================*/ 
+/*============= Creating a canvas ======================*/
 var canvas = document.getElementById('my_Canvas');
 gl = canvas.getContext('webgl');
 
+/* ============ Geometry ===============================*/
+var vertices =  vertices=[
+-1,-1,-1, 1,-1,-1, 1,1,-1, -1,1,-1, -1,-1,1, 1,-1,1, 1,1,1, -1,1,1, -1,-1,-1, -1,1,-1, -1, 1,1, -1,-1,1,
+1,-1,-1, 1,1,-1, 1,1,1, 1,-1,1, -1,-1,-1, -1,-1,1, 1,-1,1, 1,-1,-1, -1,1,-1, -1,1,1, 1,1,1, 1,1,-1,];
+var colors = colorsPerFaceArray(4, COLOR.RED, COLOR.BLUE, COLOR.CYAN, COLOR.GREEN, COLOR.PURPLE, COLOR.YELLOW);
+var indices = [
+0,1,2, 0,2,3, 4,5,6, 4,6,7, 8,9,10, 8,10,11, 12,13,14, 12,14,15, 16,17,18, 16,18,19, 20,21,22, 20,22,23 ];
 
-//WORLD LOAD AND DRAW
+var vertex_buffer = glArrayBuffer(vertices);
+var color_buffer = glArrayBuffer(colors);
+var index_buffer = glElementBuffer(indices);
+var THETA = 0;
+var PHI = 0;
+/* ============ Shader Programs ========================*/
+var shaderProgram = webglUtils.createProgramFromScripts(gl, ["vertex-shader", "fragment-shader"])
 
-var bufferInfo_obj;
+/* ======= Matrices ===================================*/
+var _Pmatrix = gl.getUniformLocation(shaderProgram, "Pmatrix");
+var _Vmatrix = gl.getUniformLocation(shaderProgram, "Vmatrix");
+var _Mmatrix = gl.getUniformLocation(shaderProgram, "Mmatrix");
 
-loadDoc("./assets/WorldBox1.obj")
+gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+var _coordinates = gl.getAttribLocation(shaderProgram, "coordinates");
+gl.vertexAttribPointer(_coordinates, 3, gl.FLOAT, false, 0, 0);
+gl.enableVertexAttribArray(_coordinates);
 
-const arrays_obj = {
-    position:	{ numComponents: 3, data:webglVertexData[0], },
-    texcoord:	{ numComponents: 2, data:webglVertexData[1], },
-    normal:		{ numComponents: 3, data:webglVertexData[2], },
- };
+gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
+var _colors = gl.getAttribLocation(shaderProgram, "color");
+gl.vertexAttribPointer(_colors, 3, gl.FLOAT, false, 0, 0);
+gl.enableVertexAttribArray(_colors);
 
- bufferInfo_obj = webglUtils.createBufferInfoFromArrays(gl, arrays_obj);
+gl.useProgram(shaderProgram);
 
-objectsToDraw = [
-        {
-            //not affected by the light
-            name: "world",
-            programInfo: programInfo_world,
-            bufferInfo: bufferInfo_obj,
-            uniforms: {
-                u_texture: textures[6],
-                u_world: m4.identity(),
-            },
-        }
-    ];
+/* ======= P, V matrices ====================================*/
+var proj_matrix = createProjectionMatrix(gl.canvas, 1, 100, 40)
+var view_matrix = createViewMatrix(0, 0, 5);
 
-function drawWorld() {
-	//const viewMatrix = m4.inverse(cameraMatrix);
-	
-	let objToDraw = getObjToDraw(objectsToDraw, "world");
-	const programInfo = objToDraw.programInfo;
-	gl.useProgram(programInfo.program);
-	
-	let matrix_world = m4.identity();
-	matrix_world = m4.translate(matrix_world,0,50,0);
-	matrix_world = m4.scale(matrix_world,500,400,500);
-	matrix_world = m4.yRotate(matrix_world,degToRad(270));
-	
-	webglUtils.setBuffersAndAttributes(gl, programInfo, objToDraw.bufferInfo);
-	
-	webglUtils.setUniforms(programInfo, objToDraw.uniforms);
-	
-	webglUtils.setUniforms(programInfo, {
-		u_view: viewMatrix,
-		u_projection: projectionMatrix,
-		u_world: matrix_world,
-	});
-	
-	webglUtils.drawBufferInfo(gl, objToDraw.bufferInfo);	
-	
+gl.uniformMatrix4fv(_Pmatrix, false, proj_matrix);
+gl.uniformMatrix4fv(_Vmatrix, false, view_matrix);
+
+/* ======= Rendering ===================================*/
+var render = function() {
+	console.log("render");
+	var mo_matrix = createMoMatrix(THETA, PHI);
+	gl.enable(gl.DEPTH_TEST);
+	gl.clearColor(0.8, 0.8, .8, 1);
+	gl.clearDepth(1.0);
+	gl.viewport(0, 0, canvas.width, canvas.height);
+	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	gl.uniformMatrix4fv(_Mmatrix, false, mo_matrix);
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index_buffer);
+	gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+
+	//window.requestAnimationFrame(render);
 }
 
-
-
-/*var doneSomething=false; 
-			var nstep=0; 
-			var timeNow=0;
-			const PHYS_SAMPLING_STEP=20; 	// numero di millisec che un passo di fisica simula
-
-
-update(); // start animation
-window.requestAnimationFrame(update);
-*/
-
-drawWorld()
+/* ======= Start rendering =============================*/
+render();
