@@ -53,12 +53,21 @@ function createMoMatrix(theta, phi) {
 	return mo_matrix;
 }
 
-function createProjectionMatrix(canvas, zNear, zFar, fov) {
+function createProjectionMatrix(fov, canvas, zNear, zFar, ) {
   return m4.perspective(degToRad(fov), canvas.clientWidth / canvas.clientHeight, zNear, zFar);
 }
 
+/* ======= Maths ============================================================== */
+function isPowerOf2(value) {
+  return (value & (value - 1)) === 0;
+}
+
+function radToDeg(r) {
+  return r * 180 / Math.PI;
+}
+
 function degToRad(d) {
-   return d * Math.PI / 180;
+  return d * Math.PI / 180;
 }
 
 /* ======= Colors ============================================================= */
@@ -70,7 +79,7 @@ const COLOR = {
   "CYAN"      : [0, 1, 1],
   "YELLOW"    : [1, 1, 0],
   "WHITE"     : [1, 1, 1],
-  "BLACK"     : [0, 0, 0], 
+  "BLACK"     : [0, 0, 0],
 }
 
 function getColor(color) {
