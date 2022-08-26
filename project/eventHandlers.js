@@ -17,10 +17,10 @@ var mouseUp = function(e) {
 
 var mouseMove = function(e) {
   if(!drag) return false;
-  dX=(e.pageX-old_x)*2*Math.PI/canvas.width,
-  dY=(e.pageY-old_y)*2*Math.PI/canvas.height;
-  THETA += dX;
-  PHI += dY;
+  dX=(e.pageX-old_x)*2*Math.PI/ENV.canvas.width,
+  dY=(e.pageY-old_y)*2*Math.PI/ENV.canvas.height;
+  ENV.theta += dX;
+  ENV.phi += dY;
   old_x=e.pageX, old_y=e.pageY;
   e.preventDefault();
   render();
@@ -36,9 +36,11 @@ var keydown = function(e) {
   render();
 }
 
-canvas.onmousedown=mouseDown;
-canvas.onmouseup=mouseUp;
-canvas.mouseout=mouseUp;
-canvas.onmousemove=mouseMove;
+function attachHandlers(canvas) {
+  canvas.onmousedown=mouseDown;
+  canvas.onmouseup=mouseUp;
+  canvas.mouseout=mouseUp;
+  canvas.onmousemove=mouseMove;
 
-document.addEventListener('keydown', keydown);
+  document.addEventListener('keydown', keydown);
+}

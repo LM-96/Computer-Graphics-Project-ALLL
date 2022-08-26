@@ -1,5 +1,5 @@
 /* ======= GL Utilities ======================================================= */
-function glArrayBuffer(array) {
+function glArrayBuffer(gl, array) {
 	var res = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, res);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(array), gl.STATIC_DRAW);
@@ -8,7 +8,7 @@ function glArrayBuffer(array) {
 	return res;
 }
 
-function glElementBuffer(array) {
+function glElementBuffer(gl, array) {
 	var res = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, res);
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(array), gl.STATIC_DRAW);
