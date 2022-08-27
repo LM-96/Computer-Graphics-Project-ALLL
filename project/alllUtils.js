@@ -82,6 +82,72 @@ const COLOR = {
   "BLACK"     : [0, 0, 0],
 }
 
-function getColor(color) {
+/* ======= Uniforms and Attributes ============================================ */
+const LOCATION_TYPE = {
+	ATTRIBUTE : 0,
+	UNIFORM : 1
+}
 
+const DIFFUSE_NAME = "diffuse";
+const AMBIENT_NAME = "ambient";
+const SPECULAR_NAME = "specular";
+const EMISSIVE_NAME = "emissive";
+const SHININESS_NAME = "shininess";
+const OPACITY_NAME = "opacity";
+const AMBIENT_LIGHT_NAME = "u_ambientLight";
+const COLOR_LIGHT_NAME = "u_colorLight";
+const ALL_UNIFORMS = [DIFFUSE_NAME, AMBIENT_NAME, SPECULAR_NAME,
+	EMISSIVE_NAME, SHININESS_NAME, OPACITY_NAME, AMBIENT_LIGHT_NAME, COLOR_LIGHT_NAME];
+
+const PROJECTION_MATRIX_NAME = "u_projection";
+const VIEW_MATRIX_NAME = "u_view";
+const WORLD_MATRIX_NAME = "u_world";
+const ALL_MATRIX_UNIFORMS = [PROJECTION_MATRIX_NAME, VIEW_MATRIX_NAME, WORLD_MATRIX_NAME];
+
+const POSITION_NAME = "a_position";
+const NORMAL_NAME = "a_normal";
+const TEXCOORD_NAME = "a_texcoord";
+const ALL_ATTRIBUTES = [POSITION_NAME, NORMAL_NAME, TEXCOORD_NAME];
+
+function ShaderLocation(name, type, location) {
+	this.name = name;
+	this.type = type;
+	this.location = location;
+}
+
+function getShaderLocationFromName(locationArray, locationName) {
+	for(const location of locationArray) {
+		if(location.name == locationName) return location;
+	}
+
+	return null;
+}
+
+function getUniformLocations(gl, program, ...uniformNames) {
+	var uniforms = [];
+	for(const name of uniformNames) {
+		var location = gl.getUniformLocation(program, name)
+		log("getUniformLocations() | location [name = " + name + ", location: " + location);
+		uniforms.push(new ShaderLocation(name, LOCATION_TYPE.UNIFORM, location));
+	}
+	return uniforms;
+}
+
+function getAttributeLocations(gl, program, ...attributeNames) {
+	var attributes = [];
+	for(const name of attributeNames) {
+		var location = gl.getAttribLocation(program, name);
+		log("getAttributeLocations() | location [name = " + name + ", location: " + location);
+		attributes.push(new ShaderLocation(name, LOCATION_TYPE.ATTRIBUTE, location));
+	}
+	return attributes;
+}
+
+function getLocations(program, type, ...varNames) {
+	switch(type) {
+		case LOCATION_TYPE.ATTRIBUTE : return getAttributeLocations(program, varNames);
+		case LOCATION_TYPE.UNIFORM : return getUniformLocations(program, varNames);
+	}
+
+	throw new Error("Invalid type \'" + type + "\' for shader location");
 }
