@@ -181,20 +181,28 @@
       emissive=mesh.materials[1].parameter.get("Ke");
       shininess=mesh.materials[1].parameter.get("Ns");
       opacity=mesh.materials[1].parameter.get("Ni");
-    }
+    };
 
-    return {
-      mesh : mesh,
-      positions : positions,
-      normals : normals,
-      texcoords : texcoords,
-      numVertices : numVertices,
+    var attributes = {
+      position : { data : positions },
+      texcoord : { data : texcoords },
+      normal : { data : normals },
+    };
+
+    var uniforms = {
       ambient : ambient,
       diffuse : diffuse,
       specular : specular,
       emissive : emissive,
       shininess : shininess,
-      opacity : opacity
-    }
+      opacity : opacity,
+    };
+
+    return {
+      mesh : mesh,
+      attributes : attributes,
+      numVertices : numVertices,
+      uniforms : uniforms
+    };
 
 }

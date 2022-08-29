@@ -13,3 +13,11 @@ function log(str) {
     console.log(str);
   }
 }
+
+function setLoggerName(name) {
+  loggerName = name;
+}
+
+function logN(name, str) {
+  log(name + " | " + str);
+}

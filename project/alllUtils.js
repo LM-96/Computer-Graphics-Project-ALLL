@@ -83,32 +83,6 @@ const COLOR = {
 }
 
 /* ======= Uniforms and Attributes ============================================ */
-const LOCATION_TYPE = {
-	ATTRIBUTE : 0,
-	UNIFORM : 1
-}
-
-const DIFFUSE_NAME = "diffuse";
-const AMBIENT_NAME = "ambient";
-const SPECULAR_NAME = "specular";
-const EMISSIVE_NAME = "emissive";
-const SHININESS_NAME = "shininess";
-const OPACITY_NAME = "opacity";
-const AMBIENT_LIGHT_NAME = "u_ambientLight";
-const COLOR_LIGHT_NAME = "u_colorLight";
-const ALL_UNIFORMS = [DIFFUSE_NAME, AMBIENT_NAME, SPECULAR_NAME,
-	EMISSIVE_NAME, SHININESS_NAME, OPACITY_NAME, AMBIENT_LIGHT_NAME, COLOR_LIGHT_NAME];
-
-const PROJECTION_MATRIX_NAME = "u_projection";
-const VIEW_MATRIX_NAME = "u_view";
-const WORLD_MATRIX_NAME = "u_world";
-const ALL_MATRIX_UNIFORMS = [PROJECTION_MATRIX_NAME, VIEW_MATRIX_NAME, WORLD_MATRIX_NAME];
-
-const POSITION_NAME = "a_position";
-const NORMAL_NAME = "a_normal";
-const TEXCOORD_NAME = "a_texcoord";
-const ALL_ATTRIBUTES = [POSITION_NAME, NORMAL_NAME, TEXCOORD_NAME];
-
 function ShaderLocation(name, type, location) {
 	this.name = name;
 	this.type = type;
