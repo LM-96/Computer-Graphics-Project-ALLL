@@ -76,12 +76,16 @@ function sleep(ms) {
 }
 
 async function render(time) {
-    time *= 0.0005;
-
-		MESH_MANAGER.get('cube1').rotate(0, -time);
-		GL_DRAWER.drawScene();
-		//await sleep(200);
-		requestAnimationFrame(render);
+    
+	time *= 0.001;
+	var delta = time - then;
+	then = time;
+	
+	MESH_MANAGER.get('cube1').rotate((-0.7*delta), 0);
+	GL_DRAWER.drawScene();
+	
+	//await sleep(200);
+	requestAnimationFrame(render);
 }
 
 main();
