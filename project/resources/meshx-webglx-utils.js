@@ -470,6 +470,16 @@ function MeshObject(name, data) {
     this.data.uniforms.u_world = m4.yRotate(this.data.uniforms.u_world, deltaPhi);
   }
 
+  this.rotateTheta = function(deltaTheta, u_world = this.data.uniforms.u_world) {
+    this.rotation.rotateTheta(deltaTheta);
+    this.data.uniforms.u_world = m4.xRotate(u_world, deltaTheta);
+  }
+
+  this.rotatePhi = function(deltaTheta, deltaPhi, u_world = this.data.uniforms.u_world) {
+    this.rotation.rotatePhi(deltaPhi);
+    this.data.uniforms.u_world = m4.yRotate(u_world, deltaTheta);
+  }
+
   this.scalate = function(deltaSX, deltaSY, deltaSZ, u_world = this.data.uniforms.u_world) {
     this.scale.scale(deltaSX, deltaSY, deltaSZ);
     this.data.uniforms.u_world = m4.scale(u_world, deltaSX, deltaSY, deltaSZ);
@@ -499,8 +509,32 @@ function MeshManager(gl, programInfo) {
   this.objects = new Map();
 
   this.loadFromObj = function(name, path) {
-    log("loadFromObj(" + name + ", " + path + ")");
     var meshObj = new MeshObject(name, LoadMesh(this.gl, path));
+    this.objects.set(name, meshObj);
+    meshObj.init(this.gl);
+    return meshObj;
+  }
+
+  this.loadFromRawData = function(name, position, texcoord, normal, indices) {
+    var attributes = {
+      position : { data : position }
+    }
+    if(texcoord != null) {
+      attributes.texcoord = { data : texcoord };
+    }
+    if(normal != null) {
+      attributes.normal = { data : normal };
+    }
+    if(indices != null) {
+      attributes.indices = { data : indices };
+    }
+    var data = {
+      mesh : null,
+      attributes : attributes,
+      numVertices : undefined,
+      uniforms : new Object()
+    }
+    var meshObj = new MeshObject(name, data);
     this.objects.set(name, meshObj);
     meshObj.init(this.gl);
     return meshObj;
@@ -549,7 +583,7 @@ function GlDrawer(meshMgr) {
   this.startDrawing = function() {
     //webglUtils.resizeCanvasToDisplaySize(gl.canvas);
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-    this.gl.enable(this.gl.CULL_FACE);
+    //this.gl.enable(this.gl.CULL_FACE);
     this.gl.enable(this.gl.DEPTH_TEST);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     this.updateProjectionMatrix();
@@ -560,7 +594,6 @@ function GlDrawer(meshMgr) {
   }
 
   this.drawScene = function() {
-    log("drawScene()")
     this.startDrawing();
     var objs = this.meshMgr.getAll();
     for(const obj of objs) {
