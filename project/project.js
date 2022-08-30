@@ -55,10 +55,14 @@ function init() {
 	   normal:		{numComponents: 3, data: [0,1,0,	0,1,0,	0,1,0,	0,1,0,], },
 	};
 	MESH_MANAGER.loadFromRawData('cube1', floor.position, floor.texcoord, floor.normal, floor.indices);*/
-	MESH_MANAGER.loadFromObj('floor', 'assets/plane-2m.obj');
+	const L = 3;
+	var floor = MESH_MANAGER.loadFromObj('floor', 'assets/plane-2m.obj');
+	floor.scalate(L, L, 0);
 	var cube = MESH_MANAGER.loadFromObj('cube1', 'assets/cube.obj');
+	cube.setPosition(0, 0, 0.25);
 	cube.scalate(0.25, 0.25, 0.25);
 
+	GL_DRAWER.fov = degToRad(70);
 	attachHandlers(ENV.canvas, MESH_MANAGER.get('cube1'));
 	log("init() | handlers attached");
 }
@@ -83,7 +87,7 @@ async function render(time) {
 	var delta = time - then;
 	then = time;
 
-	MESH_MANAGER.get('cube1').rotate((-0.7*delta), 0);
+	//MESH_MANAGER.get('cube1').rotate((-0.7*delta), 0);
 	GL_DRAWER.drawScene();
 
 	//await sleep(200);

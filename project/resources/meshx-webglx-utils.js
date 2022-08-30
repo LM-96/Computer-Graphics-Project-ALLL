@@ -237,17 +237,17 @@ function Scale(sx, sy, sz) { /* ****************************************** */
   this.sz = sz;
 
   this.scaleX = function(deltaSX) {
-    this.sx += deltaSX;
+    this.sx *= deltaSX;
     return this;
   }
 
   this.scaleY = function(deltaSY) {
-    this.sy += deltaSY;
+    this.sy *= deltaSY;
     return this;
   }
 
   this.scaleZ = function(deltaSZ) {
-    this.sz += deltaSZ;
+    this.sz *= deltaSZ;
     return this;
   }
 
@@ -464,6 +464,26 @@ function MeshObject(name, data) {
     return this;
   }
 
+  this.setPosition = function(x, y, z, updateMatrix = true) {
+    this.position.x = x;
+    this.position.y = y;
+    this.position.z = z;
+    if(updateMatrix) this.updateUMatrix();
+  }
+
+  this.setRotation = function(theta, phi) {
+    this.rotation.theta = theta;
+    this.rotation.phi = phi;
+    if(updateMatrix) this.updateUMatrix();
+  }
+
+  this.setScale = function(sx, sy, sz) {
+    this.scale.sx = sx;
+    this.scale.sy = sy;
+    this.scale.sz = sz;
+    if(updateMatrix) this.updateUMatrix();
+  }
+
   this.rotate = function(deltaTheta, deltaPhi, u_world = this.data.uniforms.u_world) {
     this.rotation.rotate(deltaTheta, deltaPhi);
     this.data.uniforms.u_world = m4.xRotate(u_world, deltaTheta);
@@ -475,9 +495,9 @@ function MeshObject(name, data) {
     this.data.uniforms.u_world = m4.xRotate(u_world, deltaTheta);
   }
 
-  this.rotatePhi = function(deltaTheta, deltaPhi, u_world = this.data.uniforms.u_world) {
+  this.rotatePhi = function(deltaPhi, u_world = this.data.uniforms.u_world) {
     this.rotation.rotatePhi(deltaPhi);
-    this.data.uniforms.u_world = m4.yRotate(u_world, deltaTheta);
+    this.data.uniforms.u_world = m4.yRotate(u_world, deltaPhi);
   }
 
   this.scalate = function(deltaSX, deltaSY, deltaSZ, u_world = this.data.uniforms.u_world) {
@@ -487,6 +507,14 @@ function MeshObject(name, data) {
 
   this.setUMatrix = function(u_world) {
     this.data.uniforms.u_world = u_world;
+  }
+
+  this.updateUMatrix = function(translation = true, rotation = true, scale = true) {
+    var u_world = m4.identity();
+    if(translation) u_world = m4.translate(u_world, this.position.x, this.position.y, this.position.z);
+    if(rotation) u_world = m4.xRotate(u_world, this.rotation.theta, this.rotation.phi);
+    if(scale) u_world = m4.scale(u_world, this.scale.sx, this.scale.sy, this.scale.sz);
+    this.setUMatrix(u_world);
   }
 
   this.draw = function(gl, programInfo, clear = false) {
