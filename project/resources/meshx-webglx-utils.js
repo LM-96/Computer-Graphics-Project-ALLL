@@ -76,6 +76,10 @@ function Position(x, y, z) { /* ****************************************** */
     this.translateZ(zTranslation);
     return this;
   }
+
+  this.toArray = function() {
+    return [this.x, this.y, this.z];
+  }
 }
 
 Position.zeroPosition = function() {
@@ -518,7 +522,6 @@ function MeshObject(name, data) {
   }
 
   this.draw = function(gl, programInfo, clear = false) {
-    log("draw() | draw \'" + this.name + "\', clear = " + clear);
     if(clear) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }

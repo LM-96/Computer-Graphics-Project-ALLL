@@ -28,8 +28,8 @@ var mouseMove = function(e) {
 
 var keydown = function(e) {
   switch(e.keyCode) {
-    case 40 : target.translate(0, 0, 0.1); break;  //Freccia Giù
-    case 38 : target.translate(0, 0, -0.1); break;       //Freccia Su
+    case 40 : target.translate(0, 0.1, 0); break;  //Freccia Giù
+    case 38 : target.translate(0, -0.1, 0); break;       //Freccia Su
     case 37 : target.translate(-0.1, 0, 0); break;  //Freccia Sx
     case 39 : target.translate(0.1, 0, 0); break;       //Ferccia Dx
   }

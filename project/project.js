@@ -62,7 +62,8 @@ function init() {
 	cube.setPosition(0, 0, 0.25);
 	cube.scalate(0.25, 0.25, 0.25);
 
-	GL_DRAWER.fov = degToRad(70);
+	GL_DRAWER.fov = degToRad(100);
+	GL_DRAWER.cameraPosition = [1, 1, 0.1];
 	attachHandlers(ENV.canvas, MESH_MANAGER.get('cube1'));
 	log("init() | handlers attached");
 }
@@ -86,8 +87,11 @@ async function render(time) {
 	time *= 0.001;
 	var delta = time - then;
 	then = time;
-
+	var cube = MESH_MANAGER.get('cube1')
+	//GL_DRAWER.target = cube.position.toArray();
 	//MESH_MANAGER.get('cube1').rotate((-0.7*delta), 0);
+	//log("cameraPosition: " + GL_DRAWER.cameraPosition + ", target: " + GL_DRAWER.target);
+	//log("cubePosition: " + cube.position.toArray());
 	GL_DRAWER.drawScene();
 
 	//await sleep(200);
