@@ -61,12 +61,12 @@ function Position(x, y, z) { /* ****************************************** */
   }
 
   this.translateY = function(yTranslation) {
-    this.x += yTranslation;
+    this.y += yTranslation;
     return this;
   }
 
   this.translateZ = function(zTranslation) {
-    this.x += zTranslation;
+    this.z += zTranslation;
     return this;
   }
 
@@ -77,8 +77,20 @@ function Position(x, y, z) { /* ****************************************** */
     return this;
   }
 
+  this.plus = function(position) {
+    return new Positon(this.x + position.x, this.y + position.y, this.z + position.z);
+  }
+
+  this.plus = function(deltaX, deltaY, deltaZ) {
+    return new Position(this.x + deltaX, this.y + deltaY, this.z + deltaZ);
+  }
+
   this.toArray = function() {
     return [this.x, this.y, this.z];
+  }
+
+  this.toString = function() {
+    return "(" + this.x + ", " + this.y + ", " + this.z + ")";
   }
 }
 
@@ -435,6 +447,49 @@ MeshBuffers.createGlBuffers = function(gl) {
   return buffers;
 }
 
+/* ----------- Position Limit Control ------------------------------------------------------ */
+function Limits(data, type = "undefined", isInLimitFunction = (position, data) => false) {
+  this.data = data;
+  this.type = type;
+  this.isInLimitFunction = isInLimitFunction;
+
+  this.isInLimits = function(position) {
+    return isInLimitFunction(position, this.data);
+  }
+
+  this.isOutOfLimits = function(position) {
+    return !isInLimitFunction(position, this.data);
+  }
+}
+
+Limits.linear = function(xMin, xMax, yMin, yMax, zMin, zMax) {
+  var limData = {
+    xLimits : Pair.of(xMin, xMax),
+    yLimits : Pair.of(yMin, yMax),
+    zLimits : Pair.of(zMin, zMax)
+  };
+
+  var isInLimitFunction = (position, data) => {
+    if(position.x < data.xLimits.first || position.x > data.xLimits.second ||
+        position.y < data.yLimits.first || position.y > data.yLimits.second ||
+        position.z < data.zLimits.firs || position.z > data.zLimits.second){
+      return false;
+    }
+
+    return true;
+  };
+
+  return new Limits(limData, "linear", isInLimitFunction);
+}
+
+Limits.unlimited = function() {
+  return new Limits({
+    xLimits : Pair.of(-Infinity, Infinity),
+    yLimits : Pair.of(-Infinity, Infinity),
+    zLimits : Pair.of(-Infinity, Infinity)
+  }, "unlimited", (position, data) => true);
+}
+
 /* ----------- Mesh Object ---------------------------------------------------- */
 function MeshObject(name, data) {
   this.name = name;
@@ -443,6 +498,7 @@ function MeshObject(name, data) {
   this.rotation = Rotation.zeroRotation();
   this.scale = Scale.identityScale();
   this.speed = Speed.zeroSpeed();
+  this.limits = Limits.unlimited();
   //this.buffers = MeshBuffers.empyBuffers();
   this.bufferInfo = null;
 
@@ -462,10 +518,23 @@ function MeshObject(name, data) {
   }
 
   this.translate = function(deltaX, deltaY, deltaZ, u_world = this.data.uniforms.u_world) {
-    this.position.translate(deltaX, deltaY, deltaZ);
+    this.position.translate(deltaX*this.scale.sx, deltaY*this.scale.sy, deltaZ*this.scale.sz);
     this.data.uniforms.u_world = m4.translate(u_world, deltaX, deltaY, deltaZ);
 
     return this;
+  }
+
+  this.translateL = function(deltaX, deltaY, deltaZ, u_world = this.data.uniforms.u_world) {
+    switch(this.limits.type) {
+      case "unlimited": return this.translate(deltaX, deltaY, deltaZ, u_world);
+      case "linear": {
+        if(this.limits.isInLimits(this.position.plus(deltaX, deltaY, deltaZ))) {
+          return this.translate(deltaX, deltaY, deltaZ);
+        } else {
+          return this;
+        }
+      }
+    }
   }
 
   this.setPosition = function(x, y, z, updateMatrix = true) {
@@ -644,3 +713,40 @@ function createMeshManager(gl, programInfo) {
 function createGlDrawer(meshMgr) {
   return new GlDrawer(meshMgr);
 }
+<<<<<<< Updated upstream
+=======
+
+/*
+this.limitPositions = function(bool){
+  this.limitEnabled = bool
+}
+
+this.setLimits = function(LimX, LimY, LimZ){
+  this.XLim = LimX;
+  this.YLim = LimY;
+  this.ZLim = LimZ;
+}
+
+this.isInLimit = function(pos, limit){
+  if(Math.abs(pos) > Math.abs(limit))
+    return false;
+  return true;
+}
+
+this.translateWithLimits = function(xTranslation, yTranslation, zTranslation) {
+  if(isInLimit(X+xTranslation, XLim))
+    this.translateX(xTranslation);
+  if(isInLimit(this.y+yTranslation, XLim))
+    this.translateX(yTranslation);
+  if(isInLimit(this.z+zTranslation, XLim))
+    this.translateX(zTranslation);
+  return this;
+}
+
+this.translate = function(xTranslation, yTranslation, zTranslation) {
+  if(limitPositions == true)
+    this.translateWithLimits(xTranslation, yTranslation, zTranslation);
+  else
+    this.translateLimitless(xTranslation, yTranslation, zTranslation);
+}*/
+>>>>>>> Stashed changes

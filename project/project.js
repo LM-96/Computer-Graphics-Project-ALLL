@@ -59,11 +59,12 @@ function init() {
 	var floor = MESH_MANAGER.loadFromObj('floor', 'assets/plane-2m.obj');
 	floor.scalate(L, L, 0);
 	var cube = MESH_MANAGER.loadFromObj('cube1', 'assets/cube.obj');
+	cube.limits = Limits.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, -0.25, 0.25);
 	cube.setPosition(0, 0, 0.25);
 	cube.scalate(0.25, 0.25, 0.25);
 
-	GL_DRAWER.fov = degToRad(100);
-	GL_DRAWER.cameraPosition = [1, 1, 0.1];
+	//GL_DRAWER.fov = degToRad(100);
+	GL_DRAWER.cameraPosition = [0.1, 0.1, 15];
 	attachHandlers(ENV.canvas, MESH_MANAGER.get('cube1'));
 	log("init() | handlers attached");
 }
