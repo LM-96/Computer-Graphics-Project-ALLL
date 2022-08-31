@@ -70,7 +70,7 @@ function Position(x, y, z) { /* ****************************************** */
     return this;
   }
 
-  this.translate = function(xTranslation, yTranslation, zTranslation) {
+  this.translateLimitless = function(xTranslation, yTranslation, zTranslation) {
     this.translateX(xTranslation);
     this.translateY(yTranslation);
     this.translateZ(zTranslation);
@@ -643,4 +643,39 @@ function createMeshManager(gl, programInfo) {
 
 function createGlDrawer(meshMgr) {
   return new GlDrawer(meshMgr);
+}
+
+
+/* ----------- Position Limit Control ------------------------------------------------------ */var 
+this.limitPositions = function(bool){
+  this.limitEnabled = bool
+}
+
+this.setLimits = function(LimX, LimY, LimZ){
+  this.XLim = LimX;
+  this.YLim = LimY;
+  this.ZLim = LimZ;
+}
+
+this.isInLimit = function(pos, limit){
+  if(Math.abs(pos) > Math.abs(limit))
+    return false;
+  return true;
+}
+
+this.translateWithLimits = function(xTranslation, yTranslation, zTranslation) {
+  if(isInLimit(X+xTranslation, XLim))
+    this.translateX(xTranslation);
+  if(isInLimit(this.y+yTranslation, XLim))
+    this.translateX(yTranslation);
+  if(isInLimit(this.z+zTranslation, XLim))
+    this.translateX(zTranslation);
+  return this;
+}
+
+this.translate = function(xTranslation, yTranslation, zTranslation) {
+  if(limitPositions == true)
+    this.translateWithLimits(xTranslation, yTranslation, zTranslation);
+  else
+    this.translateLimitless(xTranslation, yTranslation, zTranslation);
 }
