@@ -713,8 +713,6 @@ function createMeshManager(gl, programInfo) {
 function createGlDrawer(meshMgr) {
   return new GlDrawer(meshMgr);
 }
-<<<<<<< Updated upstream
-=======
 
 /*
 this.limitPositions = function(bool){
@@ -749,4 +747,3 @@ this.translate = function(xTranslation, yTranslation, zTranslation) {
   else
     this.translateLimitless(xTranslation, yTranslation, zTranslation);
 }*/
->>>>>>> Stashed changes
