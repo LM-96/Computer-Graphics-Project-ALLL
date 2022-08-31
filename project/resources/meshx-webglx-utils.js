@@ -646,7 +646,7 @@ function createGlDrawer(meshMgr) {
 }
 
 
-/* ----------- Position Limit Control ------------------------------------------------------ */var 
+/* ----------- Position Limit Control ------------------------------------------------------ */ 
 this.limitPositions = function(bool){
   this.limitEnabled = bool
 }

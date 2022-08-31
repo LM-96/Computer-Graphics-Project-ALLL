@@ -94,6 +94,8 @@ async function render(time) {
 	//log("cubePosition: " + cube.position.toArray());
 	GL_DRAWER.drawScene();
 
+	
+
 	//await sleep(200);
 	requestAnimationFrame(render);
 }
