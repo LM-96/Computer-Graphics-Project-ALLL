@@ -61,7 +61,7 @@ function init() {
 	var cube = MESH_MANAGER.loadFromObj('cube1', 'assets/cube.obj');
 	cube.limits = Limits.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, -0.25, 0.25);
 	cube.setPosition(0, 0, 0.25);
-	cube.scalate(0.25, 0.25, 0.25);
+	//cube.scalate(0.25, 0.25, 0.25);
 
 	//GL_DRAWER.fov = degToRad(100);
 	GL_DRAWER.cameraPosition = [0.1, 0.1, 15];
