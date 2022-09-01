@@ -533,11 +533,16 @@ function MeshObject(name, data) {
   }
 
   this.relativeTranslate = function(deltaXR, deltaYR, deltaZR) {
-    var rotationMatrix = this.rotationMatrix2D(this.rotation.theta, this.rotation.phi);
+    /*/var rotationMatrix = this.rotationMatrix2D(this.rotation.theta, this.rotation.phi);
     var p0Neg = math.matrix([[-this.position.x], [-this.position.y], [-this.position.z]]);
     var deltaR = math.matrix([[deltaXR], [deltaYR], [deltaZR]]);
     var pos = math.multiply(math.inv(rotationMatrix), math.add(deltaR, p0Neg));
-    return this.setPosition(pos.get([0, 0], pos.get([1, 0], pos.get([2, 0]))));
+    return this.setPosition(pos.get([0, 0], pos.get([1, 0], pos.get([2, 0]))));*/
+    var translationM = m4.identity();
+    translationM = m4.translate(deltaXR, deltaYR, deltaZR);
+    this.setUMatrix(translationM);
+
+    return this
 
   }
 
@@ -676,10 +681,10 @@ function GlDrawer(meshMgr) {
   this.gl = meshMgr.gl;
   this.meshMgr = meshMgr;
   this.programInfo = meshMgr.programInfo,
-  this.fov = degToRad(30);
+  this.fov = degToRad(60);
   this.zNear = 0.1;
   this.zFar = 200;
-  this.cameraPosition = [4.5, 4.5, 2];
+  this.cameraPosition = new Position(1, 1, 1);
   this.target = [0, 0, 0];
   this.up = [0, 0, 1];
   this.sharedUniforms = {
@@ -690,7 +695,7 @@ function GlDrawer(meshMgr) {
   }
 
   this.updateViewMatrix = function() {
-    var cameraMatrix = m4.lookAt(this.cameraPosition, this.target, this.up);
+    var cameraMatrix = m4.lookAt(this.cameraPosition.toArray(), this.target, this.up);
     this.sharedUniforms.u_view = m4.inverse(cameraMatrix);
   }
 

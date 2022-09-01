@@ -64,7 +64,7 @@ function init() {
 	cube.scalate(0.25, 0.25, 0.25);
 
 	//GL_DRAWER.fov = degToRad(100);
-	//GL_DRAWER.cameraPosition = [0.1, 0.1, 15];
+	//GL_DRAWER.cameraPosition = [10, 10, 1];
 	attachHandlers(ENV.canvas, MESH_MANAGER.get('cube1'));
 	log("init() | handlers attached");
 }
