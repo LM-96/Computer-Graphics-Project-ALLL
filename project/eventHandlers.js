@@ -28,10 +28,10 @@ var mouseMove = function(e) {
 
 var keydown = function(e) {
   switch(e.keyCode) {
-    case 40 : target.translateL(0, 0.1, 0); break;  //Freccia Giù
-    case 38 : target.translateL(0, -0.1, 0); break;       //Freccia Su
-    case 37 : target.translateL(-0.1, 0, 0); break;  //Freccia Sx
-    case 39 : target.translateL(0.1, 0, 0); break;       //Ferccia Dx
+    case 40 : target.translateL(0, 0.1, 0, m4.identity()); break;  //Freccia Giù
+    case 38 : target.translateL(0, -0.1, 0, m4.identity()); break;       //Freccia Su
+    case 37 : target.translateL(-0.1, 0, 0, m4.identity()); break;  //Freccia Sx
+    case 39 : target.translateL(0.1, 0, 0, m4.identity()); break;       //Ferccia Dx
   }
   log("pos: " + target.position.toString());
   GL_DRAWER.drawScene();

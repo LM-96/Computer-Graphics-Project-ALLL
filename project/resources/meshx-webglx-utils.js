@@ -517,11 +517,28 @@ function MeshObject(name, data) {
     this.data.uniforms.u_world = m4.identity();
   }
 
-  this.translate = function(deltaX, deltaY, deltaZ, u_world = this.data.uniforms.u_world) {
-    this.position.translate(deltaX*this.scale.sx, deltaY*this.scale.sy, deltaZ*this.scale.sz);
-    this.data.uniforms.u_world = m4.translate(u_world, deltaX, deltaY, deltaZ);
+  this.translate = function(deltaX, deltaY, deltaZ, u_world = m4.identity()/*this.data.uniforms.u_world*/) {
+    this.position.translate(deltaX/**this.scale.sx*/, deltaY/**this.scale.sy*/, deltaZ/**this.scale.sz*/);
+    this.updateUMatrix(u_world);
 
     return this;
+  }
+
+  this.rotationMatrix2D = function(theta, phi) {
+    return math.matrix([
+      [Math.cos(phi),   Math.sin(theta)*Math.sin(phi),  Math.cos(theta)*Math.sin(phi)],
+      [0,               Math.cos(theta),                -Math.sin(theta) ],
+      [-Math.sin(phi),  Math.sin(theta)*Math.cos(phi),  Math.cos(theta)*Math.cos(phi)]
+    ]);
+  }
+
+  this.relativeTranslate = function(deltaXR, deltaYR, deltaZR) {
+    var rotationMatrix = this.rotationMatrix2D(this.rotation.theta, this.rotation.phi);
+    var p0Neg = math.matrix([[-this.position.x], [-this.position.y], [-this.position.z]]);
+    var deltaR = math.matrix([[deltaXR], [deltaYR], [deltaZR]]);
+    var pos = math.multiply(math.inv(rotationMatrix), math.add(deltaR, p0Neg));
+    return this.setPosition(pos.get([0, 0], pos.get([1, 0], pos.get([2, 0]))));
+
   }
 
   this.translateL = function(deltaX, deltaY, deltaZ, u_world = this.data.uniforms.u_world) {
@@ -529,7 +546,7 @@ function MeshObject(name, data) {
       case "unlimited": return this.translate(deltaX, deltaY, deltaZ, u_world);
       case "linear": {
         if(this.limits.isInLimits(this.position.plus(deltaX, deltaY, deltaZ))) {
-          return this.translate(deltaX, deltaY, deltaZ);
+          return this.relativeTranslate(deltaX, deltaY, deltaZ);
         } else {
           return this;
         }
@@ -559,33 +576,34 @@ function MeshObject(name, data) {
 
   this.rotate = function(deltaTheta, deltaPhi, u_world = this.data.uniforms.u_world) {
     this.rotation.rotate(deltaTheta, deltaPhi);
-    this.data.uniforms.u_world = m4.xRotate(u_world, deltaTheta);
-    this.data.uniforms.u_world = m4.yRotate(this.data.uniforms.u_world, deltaPhi);
+    this.updateUMatrix();
   }
 
   this.rotateTheta = function(deltaTheta, u_world = this.data.uniforms.u_world) {
     this.rotation.rotateTheta(deltaTheta);
-    this.data.uniforms.u_world = m4.xRotate(u_world, deltaTheta);
+    this.updateUMatrix();
   }
 
   this.rotatePhi = function(deltaPhi, u_world = this.data.uniforms.u_world) {
     this.rotation.rotatePhi(deltaPhi);
-    this.data.uniforms.u_world = m4.yRotate(u_world, deltaPhi);
+    this.updateUMatrix();
   }
 
   this.scalate = function(deltaSX, deltaSY, deltaSZ, u_world = this.data.uniforms.u_world) {
     this.scale.scale(deltaSX, deltaSY, deltaSZ);
-    this.data.uniforms.u_world = m4.scale(u_world, deltaSX, deltaSY, deltaSZ);
+    this.updateUMatrix();
   }
 
   this.setUMatrix = function(u_world) {
     this.data.uniforms.u_world = u_world;
   }
 
-  this.updateUMatrix = function(translation = true, rotation = true, scale = true) {
-    var u_world = m4.identity();
+  this.updateUMatrix = function(u_world = m4.identity(), translation = true, rotation = true, scale = true) {
     if(translation) u_world = m4.translate(u_world, this.position.x, this.position.y, this.position.z);
-    if(rotation) u_world = m4.xRotate(u_world, this.rotation.theta, this.rotation.phi);
+    if(rotation) {
+      u_world = m4.xRotate(u_world, this.rotation.theta);
+      u_world = m4.yRotate(u_world, this.rotation.phi);
+    }
     if(scale) u_world = m4.scale(u_world, this.scale.sx, this.scale.sy, this.scale.sz);
     this.setUMatrix(u_world);
   }
