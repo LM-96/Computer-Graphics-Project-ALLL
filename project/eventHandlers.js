@@ -30,6 +30,8 @@ var mouseMove = function(e) {
   old_x=e.pageX, old_y=e.pageY;
   e.preventDefault();
   GL_DRAWER.drawScene();
+
+  log("Angles || T:" + target.rotation.theta + ", P:" + target.rotation.phi);
 }
 
 var keydown = function(e) {

@@ -59,7 +59,7 @@ function init() {
 	var floor = MESH_MANAGER.loadFromObj('floor', 'assets/plane-2m.obj');
 	floor.scalate(L, L, 0);
 	var cube = MESH_MANAGER.loadFromObj('cube1', 'assets/cube.obj');
-	cube.limits = Limits.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, -0.25, 0.25);
+	cube.limits = Limits.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, 3, 3);
 	cube.setPosition(0, 0, 0.25);
 	cube.scalate(0.25, 0.25, 0.25);
 

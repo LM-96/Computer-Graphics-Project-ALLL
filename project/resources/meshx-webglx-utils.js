@@ -532,26 +532,32 @@ function MeshObject(name, data) {
     ]);
   }
 
-  this.relativeTranslate = function(deltaXR, deltaYR, deltaZR) {
-    /*/var rotationMatrix = this.rotationMatrix2D(this.rotation.theta, this.rotation.phi);
-    var p0Neg = math.matrix([[-this.position.x], [-this.position.y], [-this.position.z]]);
-    var deltaR = math.matrix([[deltaXR], [deltaYR], [deltaZR]]);
-    var pos = math.multiply(math.inv(rotationMatrix), math.add(deltaR, p0Neg));
-    return this.setPosition(pos.get([0, 0], pos.get([1, 0], pos.get([2, 0]))));*/
-    var translationM = m4.identity();
-    translationM = m4.translate(deltaXR, deltaYR, deltaZR);
-    this.setUMatrix(translationM);
+  this.transformRelative = function(deltaX, deltaY, deltaZ){
+    //Calcoli Angoli
+    var theta = this.rotation.theta,  phi = this.rotation.phi;  
+    var cosTh =  Math.cos(theta), cosPh = Math.cos(phi), sinTh = Math.sin(theta), sinPh = Math.sin(phi);
+    
+    //Calcoli coordinate Relative
+    //(Theta angolo tra Y verso Z)
+    //(Phi angolo tra X e -Z)
+    var dxR= deltaX * cosPh + deltaY * sinTh * sinPh + deltaZ * sinPh;
+    var dyR= deltaX * sinTh * sinPh + deltaY * cosTh +  deltaZ * -sinTh;
+    var dzR= - deltaX * sinPh + deltaY * sinTh + deltaZ * cosPh;
 
-    return this
-
+    return [dxR, dyR, dzR];
   }
 
-  this.translateL = function(deltaX, deltaY, deltaZ, u_world = this.data.uniforms.u_world) {
+  this.translateL = function(deltaX, deltaY, deltaZ, u_world = this.data.uniforms.u_world, relative = true) {
     switch(this.limits.type) {
       case "unlimited": return this.translate(deltaX, deltaY, deltaZ, u_world);
       case "linear": {
-        if(this.limits.isInLimits(this.position.plus(deltaX, deltaY, deltaZ))) {
-          return this.relativeTranslate(deltaX, deltaY, deltaZ);
+        if(relative)
+          var deltaTrasl = this.transformRelative(deltaX, deltaY, deltaZ);
+          else
+          var deltaTrasl = [deltaX, deltaY, deltaZ];
+
+        if(this.limits.isInLimits(this.position.plus(deltaTrasl[0], deltaTrasl[1], deltaTrasl[2]))) {
+          return this.translate(deltaTrasl[0], deltaTrasl[1], deltaTrasl[2]);
         } else {
           return this;
         }
@@ -748,8 +754,8 @@ this.setLimits = function(LimX, LimY, LimZ){
   this.ZLim = LimZ;
 }
 
-this.isInLimit = function(pos, limit){
-  if(Math.abs(pos) > Math.abs(limit))
+this.isInLimit = function(deltaTrasl, limit){
+  if(Math.abs(deltaTrasl) > Math.abs(limit))
     return false;
   return true;
 }
