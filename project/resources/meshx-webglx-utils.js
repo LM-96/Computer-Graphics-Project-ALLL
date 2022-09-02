@@ -542,7 +542,7 @@ function MeshObject(name, data) {
     //(Phi angolo tra X e -Z)
     var dxR= deltaX * cosPh + deltaY * sinTh * sinPh + deltaZ * sinPh;
     var dyR= deltaX * sinTh * sinPh + deltaY * cosTh +  deltaZ * -sinTh;
-    var dzR= - deltaX * sinPh + deltaY * sinTh + deltaZ * cosPh;
+    var dzR= deltaX * -sinPh + deltaY * sinTh + deltaZ * cosPh * cosTh;
 
     return [dxR, dyR, dzR];
   }
