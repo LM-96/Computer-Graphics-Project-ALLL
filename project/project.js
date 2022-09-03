@@ -4,6 +4,7 @@ var ENV;
 var GL;
 var then = 0;
 var modelXRotationRadians = degToRad(0);
+var CAMERA_MANAGER;
 
 function createEnv() {
 	log("createEnv() | creating environment...");
@@ -56,9 +57,9 @@ function init() {
 	};
 	MESH_MANAGER.loadFromRawData('cube1', floor.position, floor.texcoord, floor.normal, floor.indices);*/
 	const L = 3;
-	var floor = MESH_MANAGER.loadFromObj('floor', 'assets/plane-2m.obj');
+	var floor = MESH_MANAGER.loadFromObj('floor', './assets/plane-2m.obj');
 	floor.scalate(L, L, 0);
-	var cube = MESH_MANAGER.loadFromObj('cube1', 'assets/cubo_con_assi.obj');
+	var cube = MESH_MANAGER.loadFromObj('cube1', './assets/cubo_con_assi.obj');
 	cube.limits = Limits.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, 3, 3);
 	cube.setPosition(0, 0, 0.25);
 	cube.scalate(0.25, 0.25, 0.25);
@@ -67,6 +68,9 @@ function init() {
 	//GL_DRAWER.cameraPosition = [10, 10, 1];
 	attachHandlers(ENV.canvas, MESH_MANAGER.get('cube1'));
 	log("init() | handlers attached");
+
+	CAMERA_MANAGER = createCameraManager(cube);
+	CAMERA_MANAGER.setCameraPosition(-1, -1, 1);
 }
 
 function main() {
