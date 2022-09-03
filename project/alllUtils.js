@@ -127,7 +127,7 @@ function getLocations(program, type, ...varNames) {
 }
 
 /* ======= Utilities ========================================================== */
-function sumAllElements(array, value) {
+function addToAllElements(array, value) {
 	for(var el in array) {
 		array[el] += value;
 	}
