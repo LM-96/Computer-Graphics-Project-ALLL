@@ -4,7 +4,8 @@ var ENV;
 var GL;
 var then = 0;
 var modelXRotationRadians = degToRad(0);
-var CAMERA_MANAGER;
+var CAMERA_MANAGER, CubeController;
+var CAMERA_MODE = 1;			//0 visuale in terza persona, //1 visuale dall'alto, //2 visuale in prima persona
 
 function createEnv() {
 	log("createEnv() | creating environment...");
@@ -71,17 +72,17 @@ function init() {
 	log("init() | handlers attached");
 
 	CAMERA_MANAGER = createCameraManager(cube);
-	CAMERA_MANAGER.setCameraPosition(0, -1, 1);
 }
 
 function main() {
 	init();
 	log("main() | init completed");
 	var cube1 = MESH_MANAGER.get("cube1");
-	//cube1.scalate(0.5, 0.5, 0.5);
+	CubeController = new Controller(cube1);
 
+
+	//Start rendering loop
 	requestAnimationFrame(render);
-
 }
 
 function sleep(ms) {
@@ -93,13 +94,7 @@ async function render(time) {
 	time *= 0.001;
 	var delta = time - then;
 	then = time;
-	var cube = MESH_MANAGER.get('cube1')
-
 	
-	
-	//MESH_MANAGER.get('cube1').rotate((-0.7*delta), 0);
-	//log("cameraPosition: " + GL_DRAWER.cameraPosition + ", target: " + GL_DRAWER.target);
-	//log("cubePosition: " + cube.position.toArray());
 	CAMERA_MANAGER.updateGL_DRAWER();
 	GL_DRAWER.drawScene();
 
