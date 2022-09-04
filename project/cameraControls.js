@@ -1,40 +1,32 @@
 //Camera controls
-
-function CameraManager(objTarget, cameraPos, cameraup, target){
+function CameraManager(){
 
   this.cameraViewModeNum = 1;   //0= Vista dall'alto; 1= vista in prima persona, 2= prima persona inversa
 
-  this.cameraPosition = new Position(cameraPos[0], cameraPos[1], cameraPos[2]);
-  this.cameraUP = cameraup;
-  this.cameraTargetPos = new Position(target[0], target[1], target[2]);
+  this.cameraPosition = new Position(cameraPos[1], cameraPos[1], cameraPos[1]);
+  this.up = cameraup;
+  this.target = new Position(target[0], target[0], target[0]);
   this.fov = degToRad(60);
-  this.objTarget = objTarget;
+
+  this.objTarget = null;
   this.followObjTarget = false;
   this.followObjTraslation = false;
-  this.distanceVector = [1,1,1];
 
-  
-  //DRAWER UPDATE FUNCTION (to call in the render function)
-  this.updateGL_DRAWER = function(){
-    
-    if(this.followObjTarget)
-      GL_DRAWER.target = this.objTarget.position.toArray();
-    else
-      GL_DRAWER.target = this.cameraTargetPos.toArray();
-
-    if(this.followObjTraslation)
-      this.updatePosOnTarget(this.distanceVector);
-
-      GL_DRAWER.cameraPosition = this.cameraPosition;
-    GL_DRAWER.up = this.cameraUP;
-    GL_DRAWER.fov = this.fov;
-
-    GL_DRAWER.updateViewMatrix();
+  this.onTranslationCallback = (deltaX, deltaY, deltaZ) => {
+    this.cameraPosition.translate(deltaX, deltaY, deltaZ);
   }
 
   //GETTER AND SETTER
-  this.setObjTarget = function(objTarget){
+  this.setTargetObject = function(objTarget){
+    this?.objTarget?.removeOnTranslation(this.onTranslationCallback);
+
     this.objTarget = objTarget;
+    if(this.followTraslation) objTarget.setOnTranslation(this.onTranslationCallback);
+  }
+
+  this.setMode = (followObjTarget, followObjTraslation) => {
+    this.followObjTarget = followObject;
+    
   }
 
   this.setCameraPosition = function(x, y, z){
@@ -70,7 +62,7 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
   this.traslatePosCamera = function(deltaX, deltaY, deltaZ, translateTarget = true){
       this.cameraPosition.translate(deltaX, deltaY, deltaZ);
       if(translateTarget){
-        this.cameraTargetPos.translate(deltaX, deltaY, deltaZ);
+        this.target.translate(deltaX, deltaY, deltaZ);
       }
       //this.updateGL_DRAWER();
   }

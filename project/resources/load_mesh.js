@@ -55,7 +55,7 @@
 		function handleError(jqXhr, textStatus, errorMessage){
 			console.error('Error : ' + errorMessage);
 		}*/
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4) {
@@ -97,11 +97,11 @@
       function handleError(jqXhr, textStatus, errorMessage){
          console.error('Error : ' + errorMessage);
       }*/
-      var xhr = new XMLHttpRequest();
+      let xhr = new XMLHttpRequest();
 
     	xhr.onreadystatechange = function() {
     		if(xhr.readyState == 4) {
-    			var result = glmReadOBJ(xhr.response,new subd_mesh());
+    			let result = glmReadOBJ(xhr.response,new subd_mesh());
     			mesh.data = result.mesh;
     			mesh.fileMTL = result.fileMtl;
     		}
@@ -113,44 +113,44 @@
 /*========== Loading and storing the geometry ==========*/
    function LoadMesh(gl,path) {
 
-     var mesh = new Array();
+     let mesh = new Array();
      mesh.sourceMesh = path;
-     var positions = [];
-     var normals = [];
-     var texcoords = [];
-     var numVertices;
-     var ambient;   //Ka
-     var diffuse;   //Kd
-     var specular;  //Ks
-     var emissive;  //Ke
-     var shininess; //Ns
-     var opacity;   //Ni
+     let positions = [];
+     let normals = [];
+     let texcoords = [];
+     let numVertices;
+     let ambient;   //Ka
+     let diffuse;   //Kd
+     let specular;  //Ks
+     let emissive;  //Ke
+     let shininess; //Ns
+     let opacity;   //Ni
 
       retrieveDataFromSource(mesh);
       Unitize(mesh.data);
   //Ora che ho la mesh e il/i materiali associati, mi occupo di caricare
   //la/le texture che tali materiali contengono
-      var map = mesh.materials[1].parameter;
-      var path = mesh.sourceMesh.substring(0, mesh.sourceMesh.lastIndexOf("/")+1);
+      let map = mesh.materials[1].parameter;
+      path = mesh.sourceMesh.substring(0, mesh.sourceMesh.lastIndexOf("/")+1);
       map.set("map_Kd", loadTexture(gl, path, map.get("map_Kd")));
 
-     var x=[], y=[], z=[];
-     var xt=[], yt=[];
-     var i0,i1,i2;
-     var nvert=mesh.data.nvert;
-     var nface=mesh.data.nface;
-     var ntexcoord=mesh.data.textCoords.length;
+     let x=[], y=[], z=[];
+     let xt=[], yt=[];
+     let i0,i1,i2;
+     let nvert=mesh.data.nvert;
+     let nface=mesh.data.nface;
+     let ntexcoord=mesh.data.textCoords.length;
 
-     for (var i=0; i<nvert; i++){
+     for (let i=0; i<nvert; i++){
         x[i]=mesh.data.vert[i+1].x;
         y[i]=mesh.data.vert[i+1].y;
         z[i]=mesh.data.vert[i+1].z;
       }
-     for (var i=0; i<ntexcoord-1; i++){
+     for (let i=0; i<ntexcoord-1; i++){
         xt[i]=mesh.data.textCoords[i+1].u;
         yt[i]=mesh.data.textCoords[i+1].v;
      }
-     for (var i=1; i<=nface; i++){
+     for (let i=1; i<=nface; i++){
        i0=mesh.data.face[i].vert[0]-1;
        i1=mesh.data.face[i].vert[1]-1;
        i2=mesh.data.face[i].vert[2]-1;
@@ -183,13 +183,13 @@
       opacity=mesh.materials[1].parameter.get("Ni");
     };
 
-    var attributes = {
+    let attributes = {
       position : { data : positions },
       texcoord : { data : texcoords },
       normal : { data : normals },
     };
 
-    var uniforms = {
+    let uniforms = {
       ambient : ambient,
       diffuse : diffuse,
       specular : specular,

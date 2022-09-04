@@ -316,12 +316,12 @@ const TEXCOORD_NAME = "a_texcoord";
 const ALL_ATTRIBUTES = [POSITION_NAME, NORMAL_NAME, TEXCOORD_NAME];
 
 /* ----------- Shader Locations ----------------------------------------------- */
-const SHADER_VAR_TYPE = {
+const SHADER_let_TYPE = {
 	ATTRIBUTE : 0,
 	UNIFORM : 1
 }
 
-function checkIsShaderVarType(type) {
+function checkIsShaderletType(type) {
   if(type == SHADER_VAR_TYPE.ATTRIBUTE || type == SHADER_VAR_TYPE.UNIFORM) {
     return true;
   }
@@ -356,7 +356,7 @@ function ShaderLocationArray() {
   }
 
   this.getLocation = function(name) {
-    var loc = this.get(name);
+    let loc = this.get(name);
     if(loc != undefined) {
       return loc.location;
     }
@@ -442,7 +442,7 @@ MeshBuffers.empyBuffers = function() {
 }
 
 MeshBuffers.createGlBuffers = function(gl) {
-  var buffers = MeshBuffers.empyBuffers();
+  let buffers = MeshBuffers.empyBuffers();
   buffers.glCreate(gl);
   return buffers;
 }
@@ -463,13 +463,13 @@ function Limits(data, type = "undefined", isInLimitFunction = (position, data) =
 }
 
 Limits.linear = function(xMin, xMax, yMin, yMax, zMin, zMax) {
-  var limData = {
+  let limData = {
     xLimits : Pair.of(xMin, xMax),
     yLimits : Pair.of(yMin, yMax),
     zLimits : Pair.of(zMin, zMax)
   };
 
-  var isInLimitFunction = (position, data) => {
+  let isInLimitFunction = (position, data) => {
     if(position.x < data.xLimits.first || position.x > data.xLimits.second ||
         position.y < data.yLimits.first || position.y > data.yLimits.second ||
         position.z < data.zLimits.firs || position.z > data.zLimits.second){
@@ -502,6 +502,49 @@ function MeshObject(name, data) {
   //this.buffers = MeshBuffers.empyBuffers();
   this.bufferInfo = null;
 
+  this.onTranslation = [];
+  this.onRotation = [];
+  this.onScaled = [];
+
+  this.addOnTranslation = (func) => {
+    if(typeof(func) != 'function') {
+      log("func is not a function");
+    }
+    else {
+      this.onTranslation.push(func);
+    }
+  }
+
+  this.addOnRotation = (func) => {
+    if(typeof(func) != 'function') {
+      log("func is not a function");
+    }
+    else {
+      this.onRotation.push(func);
+    }
+  }
+
+  this.addOnScaled = (func) => {
+    if(typeof(func) != 'function') {
+      log("func is not a function");
+    }
+    else {
+      this.onScaled.push(func);
+    }
+  }
+
+  this.removeOnTranslation = (func) => {
+    this.onTranslation = this.onTranslation.filter((el) => el !== func);
+  }
+
+  this.removeOnRotation = (func) => {
+    this.onRotation = this.onRotation.filter((el) => el !== func);
+  }
+
+  this.removeOnScaled = (func) => {
+    this.onTranslation = this.onScaled.filter((el) => el !== func);
+  }
+
   this.getDataByName = function(name) {
     switch(name) {
       case POSITION_NAME: return this.data.attributes.positions;
@@ -517,9 +560,18 @@ function MeshObject(name, data) {
     this.data.uniforms.u_world = m4.identity();
   }
 
+  /**
+   * Applies a translation to this object
+   * @param {*} deltaX the x translation
+   * @param {*} deltaY the y translation
+   * @param {*} deltaZ the z translation
+   * @param {*} u_world the u_world matrix
+   * @returns this object
+   */
   this.translate = function(deltaX, deltaY, deltaZ, u_world = m4.identity()/*this.data.uniforms.u_world*/) {
     this.position.translate(deltaX/**this.scale.sx*/, deltaY/**this.scale.sy*/, deltaZ/**this.scale.sz*/);
     this.updateUMatrix(u_world);
+    this.onRotation.forEach((func) => func(deltaX, deltaY, deltaZ));
 
     return this;
   }
@@ -532,31 +584,53 @@ function MeshObject(name, data) {
     ]);
   }
 
-  this.transformRelative = function(deltaX, deltaY, deltaZ){
-    //Calcoli Angoli
-    var theta = this.rotation.theta,  phi = this.rotation.phi;  
-    var cosTh =  Math.cos(theta), cosPh = Math.cos(phi), sinTh = Math.sin(theta), sinPh = Math.sin(phi);
+  this.relToAbs = (deltaX, deltaY, deltaZ) => {
+    let theta = this.rotation.theta,  phi = this.rotation.phi;  
+    let cosTh =  Math.cos(theta), cosPh = Math.cos(phi), sinTh = Math.sin(theta), sinPh = Math.sin(phi);
     
     //Calcoli coordinate Relative
     //(Theta angolo tra Y verso Z)
     //(Phi angolo tra X e -Z)
-    var dxR= deltaX * cosPh + deltaY * sinTh * sinPh + deltaZ * sinPh;
-    var dyR= deltaX * sinTh * sinPh + deltaY * cosTh +  deltaZ * -sinTh;
-    var dzR= deltaX * -sinPh + deltaY * sinTh + deltaZ * cosPh * cosTh;
+    let dxR= deltaX * cosPh + deltaY * sinTh * sinPh + deltaZ * sinPh;
+    let dyR= deltaX * sinTh * sinPh + deltaY * cosTh +  deltaZ * -sinTh;
+    let dzR= deltaX * -sinPh + deltaY * sinTh + deltaZ * cosPh * cosTh;
 
     return [dxR, dyR, dzR];
+  } 
+
+  /**
+   * Applies a translation by using the relative reference system of the object
+   * @param {*} deltaX the relative x translation
+   * @param {*} deltaY the relative y translation
+   * @param {*} deltaZ the relative z translation
+   * @returns this object
+   */
+  this.translateRelative = function(deltaX, deltaY, deltaZ){
+    //Calcoli Angoli
+    
+
+    return this.translate(dxR, dyR, dzR);
   }
 
+  /**
+   * Apply a translation if allowed by limits
+   * @param {*} deltaX the x translation
+   * @param {*} deltaY the y translation
+   * @param {*} deltaZ the z translation
+   * @param {*} u_world the u_world matrix
+   * @param {*} relative 
+   * @returns this object
+   */
   this.translateL = function(deltaX, deltaY, deltaZ, u_world = this.data.uniforms.u_world, relative = true) {
     switch(this.limits.type) {
       case "unlimited": return this.translate(deltaX, deltaY, deltaZ, u_world);
       case "linear": {
-        if(relative)
-          var deltaTrasl = this.transformRelative(deltaX, deltaY, deltaZ);
-          else
-          var deltaTrasl = [deltaX, deltaY, deltaZ];
+        if(relative) {
+          [deltaX, deltaY, deltaZ] = this.relToAbs(deltaX, deltaY, deltaZ);
+        }
+        //let deltaTrasl = (relative) ? this.transformRelative(deltaX, deltaY, deltaZ) : [deltaX, deltaY, deltaZ];
 
-        if(this.limits.isInLimits(this.position.plus(deltaTrasl[0], deltaTrasl[1], deltaTrasl[2]))) {
+        if(this.limits.isInLimits(this.position.plus(deltaX, deltaY, deltaZ))) {
           return this.translate(deltaTrasl[0], deltaTrasl[1], deltaTrasl[2]);
         } else {
           return this;
@@ -638,14 +712,14 @@ function MeshManager(gl, programInfo) {
   this.objects = new Map();
 
   this.loadFromObj = function(name, path) {
-    var meshObj = new MeshObject(name, LoadMesh(this.gl, path));
+    let meshObj = new MeshObject(name, LoadMesh(this.gl, path));
     this.objects.set(name, meshObj);
     meshObj.init(this.gl);
     return meshObj;
   }
 
   this.loadFromRawData = function(name, position, texcoord, normal, indices) {
-    var attributes = {
+    let attributes = {
       position : { data : position }
     }
     if(texcoord != null) {
@@ -657,13 +731,13 @@ function MeshManager(gl, programInfo) {
     if(indices != null) {
       attributes.indices = { data : indices };
     }
-    var data = {
+    let data = {
       mesh : null,
       attributes : attributes,
       numVertices : undefined,
       uniforms : new Object()
     }
-    var meshObj = new MeshObject(name, data);
+    let meshObj = new MeshObject(name, data);
     this.objects.set(name, meshObj);
     meshObj.init(this.gl);
     return meshObj;
@@ -690,9 +764,10 @@ function GlDrawer(meshMgr) {
   this.fov = degToRad(60);
   this.zNear = 0.1;
   this.zFar = 200;
-  this.cameraPosition = new Position(1, 1, 1);
-  this.target = [0, 0, 0];
-  this.up = [0, 0, 1];
+  /*this.cameraPosition = new Position(1, 1, 1);
+  this.targetPosition = new Position(0, 0, 0);
+  this.up = [0, 0, 1];*/
+  this.cameraManager = new CameraManager();
   this.sharedUniforms = {
     u_ambientLight : [0.2,0.2,0.2],
     u_colorLight : [1.0,1.0,1.0],
@@ -700,8 +775,41 @@ function GlDrawer(meshMgr) {
     u_projection : m4.identity()
   }
 
+  this.setCameraPosition = function(position) {
+    this.cameraPosition = position;
+  }
+
+  this.setCameraPosition = function(x, y, z) {
+    this.cameraPosition = new Position(x, y, z)
+  }
+
+  this.setTarget = function(targetPosition) {
+    this.target = targetPosition;
+  }
+
+  this.setTarget = function(x, y, z) {
+    this.target = new Position(x, y, z);
+  }
+
+  this.setDistanceFromTarget = function(distance) {
+    if(typeof(distance) == 'number') {
+      this.cameraPosition.translate(distance, distance, distance);
+    } else if(Array.isArray(distance)) {
+      this.cameraPosition.translate(distance[0], distance[1], distance[2]);
+    } else {
+      throw new Error("setDistanceFromTarger: distance must be a number or an array of number");
+    }
+  }
+
+  this.frameObjectWithDistance = function(meshObject, distance) {
+    this.setTarget(meshObj.position);
+    this.setDistanceFromTarget(distance);
+  }
+
   this.updateViewMatrix = function() {
-    var cameraMatrix = m4.lookAt(this.cameraPosition.toArray(), this.target, this.up);
+    let cameraMatrix = m4.lookAt(this.cameraManager.cameraPosition.toArray(),
+                                  this.cameraManager.targetPosition.toArray(),
+                                  this.cameraManager.up);
     this.sharedUniforms.u_view = m4.inverse(cameraMatrix);
   }
 
@@ -724,7 +832,7 @@ function GlDrawer(meshMgr) {
 
   this.drawScene = function() {
     this.startDrawing();
-    var objs = this.meshMgr.getAll();
+    let objs = this.meshMgr.getAll();
     for(const obj of objs) {
       obj.draw(this.gl, this.programInfo, false);
     }
@@ -732,8 +840,8 @@ function GlDrawer(meshMgr) {
 }
 
 /* ----------- Singleton ------------------------------------------------------ */
-var MESH_MANAGER;
-var GL_DRAWER;
+let MESH_MANAGER;
+let GL_DRAWER;
 
 function createMeshManager(gl, programInfo) {
   return new MeshManager(gl, programInfo);

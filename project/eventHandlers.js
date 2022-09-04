@@ -7,6 +7,9 @@ var target;
 var xCamInput = document.getElementById("camXValue");
 var yCamInput = document.getElementById("camYValue");
 var zCamInput = document.getElementById("camZValue");
+var xUpInput = document.getElementById("upXValue");
+var yUpInput = document.getElementById("upYValue");
+var zUpInput = document.getElementById("upZValue");
 var fovInput = document.getElementById("fovValue");
 const INCREMENT_UNIT = 0.25;
 const RAD_INCREMENT_UNIT = 0.05;
@@ -61,60 +64,131 @@ function trans(x, y, z, translateCamera = false){
   	CAMERA_MANAGER.traslatePosCamera(x, y, z);
 }
 
-function incrementXCam() {
-  setXCam(GL_DRAWER.cameraPosition.x + INCREMENT_UNIT);
+function increment(what, decrement= false, _updateView = true, draw = true) {
+  var inc = 1;
+  if(decrement) inc = -1;
+
+  switch(what) {
+    case 'xCam': {
+      GL_DRAWER.cameraPosition.translateX(inc * INCREMENT_UNIT);
+      break;
+    }
+
+    case 'yCam': {
+      GL_DRAWER.cameraPosition.translateY(inc * INCREMENT_UNIT);
+      break;
+    }
+
+    case 'zCam': {
+      GL_DRAWER.cameraPosition.translateZ(inc * INCREMENT_UNIT);
+      break;
+    }
+
+    case 'fov': {
+      GL_DRAWER.fov += (inc * RAD_INCREMENT_UNIT);
+      break;
+    }
+
+    case 'xUp': {
+      GL_DRAWER.up[0] += inc;
+      break;
+    }
+
+    case 'yUp': {
+      GL_DRAWER.up[1] += inc;
+      break;
+    }
+
+    case 'zUp': {
+      GL_DRAWER.up[2] += inc;
+      break;
+    }
+
+  }
+
+  if(_updateView) updateView(what);
+  if(draw) GL_DRAWER.drawScene();
 }
 
-function decrementXCam() {
-  setXCam(GL_DRAWER.cameraPosition.x - INCREMENT_UNIT);
+function set(what, value, updateView = true, draw = true) {
+  switch(what) {
+    case 'xCam': {
+      GL_DRAWER.cameraPosition.x = value;
+      break;
+    }
+
+    case 'yCam': {
+      GL_DRAWER.cameraPosition.y = value;
+      break;
+    }
+
+    case 'zCam': {
+      GL_DRAWER.cameraPosition.z = value;
+      break;
+    }
+
+    case 'fov': {
+      GL_DRAWER.fov = value;
+      break;
+    }
+
+    case 'xUp': {
+      GL_DRAWER.up[0] = value;
+      break;
+    }
+
+    case 'yUp': {
+      GL_DRAWER.up[1] = value;
+      break;
+    }
+
+    case 'zUp': {
+      GL_DRAWER.up[2] = value;
+      break;
+    }
+  }
+
+  if(updateView) updateView(what);
+  if(draw) GL_DRAWER.drawScene();
 }
 
-function incrementYCam() {
-  setYCam(GL_DRAWER.cameraPosition.y + INCREMENT_UNIT);
-}
+function updateView(what) {
+  switch(what) {
+    case 'xCam': {
+      xCamInput.value = GL_DRAWER.cameraPosition.x;
+      break;
+    }
 
-function decrementYCam() {
-  setYCam(GL_DRAWER.cameraPosition.y - INCREMENT_UNIT);
-}
+    case 'yCam': {
+      yCamInput.value = GL_DRAWER.cameraPosition.y;
+      break;
+    }
 
-function incrementZCam() {
-  setZCam(GL_DRAWER.cameraPosition.z + INCREMENT_UNIT);
-}
+    case 'zCam': {
+      zCamInput.value = GL_DRAWER.cameraPosition.z;
+      break;
+    }
 
-function decrementZCam() {
-  setZCam(GL_DRAWER.cameraPosition.z - INCREMENT_UNIT);
-}
+    case 'fov': {
+      fovInput.value = radToDeg(GL_DRAWER.fov);
+      break;
+    }
 
-function incrementFov() {
-  setFov(GL_DRAWER.fov + RAD_INCREMENT_UNIT);
-}
+    case 'xUp': {
+      xUpInput.value = GL_DRAWER.up[0];
+      break;
+    }
 
-function decrementFov() {
-  setFov(GL_DRAWER.fov - RAD_INCREMENT_UNIT);
-}
+    case 'yUp': {
+      yUpInput.value = GL_DRAWER.up[1];
+      break;
+    }
 
-function setXCam(value, updateView = true) {
-  GL_DRAWER.cameraPosition.x = value;
-  if(updateView) xCamInput.value = value;
-  GL_DRAWER.drawScene();
-}
-
-function setYCam(value, updateView = true) {
-  GL_DRAWER.cameraPosition.y = value;
-  if(updateView) yCamInput.value = value;
-  GL_DRAWER.drawScene();
-}
-
-function setZCam(value, updateView = true) {
-  GL_DRAWER.cameraPosition.z = value;
-  if(updateView) zCamInput.value = value;
-  GL_DRAWER.drawScene();
-}
-
-function setFov(value, updateView = true) {
-  GL_DRAWER.fov = value;
-  if(updateView) fovInput.value = radToDeg(value);
-  GL_DRAWER.drawScene();
+    case 'zUp': {
+      zUpInput.value = GL_DRAWER.up[2];
+      break;
+    }
+  }
 }
 
 function attachHandlers(canvas, p_target) {
@@ -125,4 +199,14 @@ function attachHandlers(canvas, p_target) {
   target = p_target;
 
   document.addEventListener('keydown', keydown);
+}
+
+function syncView() {
+  xCamInput.value = GL_DRAWER.cameraPosition.x;
+  yCamInput.value = GL_DRAWER.cameraPosition.y;
+  zCamInput.value = GL_DRAWER.cameraPosition.z;
+  fovInput.value = radToDeg(GL_DRAWER.fov);
+  xUpInput.value = GL_DRAWER.up[0];
+  yUpInput.value = GL_DRAWER.up[1];
+  zUpInput.value = GL_DRAWER.up[2];
 }

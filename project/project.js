@@ -72,6 +72,7 @@ function init() {
 
 	CAMERA_MANAGER = createCameraManager(cube);
 	CAMERA_MANAGER.setCameraPosition(0, -1, 1);
+	syncView();
 }
 
 function main() {
