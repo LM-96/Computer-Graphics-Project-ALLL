@@ -60,10 +60,12 @@ function init() {
 	var floor = MESH_MANAGER.loadFromObj('floor', './assets/plane-2m.obj');
 	floor.scalate(L, L, 0);
 	var cube = MESH_MANAGER.loadFromObj('cube1', './assets/cubo_con_assi.obj');
+	var camioncino = MESH_MANAGER.loadFromObj('camion', './assets/camion.obj');
 	cube.limits = Limits.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, 3, 3);
 	cube.setPosition(0, 0, 0.25);
 	cube.scalate(0.25, 0.25, 0.25);
-	cube.setRotation(0,0);
+
+	camioncino.setPosition(2,2,1);
 
 	//GL_DRAWER.fov = degToRad(100);
 	//GL_DRAWER.cameraPosition = [10, 10, 1];
