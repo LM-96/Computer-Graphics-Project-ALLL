@@ -63,4 +63,13 @@ this.moveFirstPerson = function(keyMove){
     }
 }
 
+this.moveThirdPerson = function(keyMove){
+    switch(keyMove){
+        case KEYMOVE.upArrow : target.translateL(0,this.stepSize, 0); break;
+        case KEYMOVE.downArrow : target.translateL(0,-this.stepSize, 0); break;
+        case KEYMOVE.leftArrow : target.translateL(-this.stepSize, 0, 0); break;
+        case KEYMOVE.rightArrow : target.translateL(this.stepSize, 0, 0); break;
+    }
+}
+
 }
