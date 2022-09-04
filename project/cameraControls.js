@@ -7,6 +7,7 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
   this.cameraPosition = new Position(cameraPos[0], cameraPos[1], cameraPos[2]);
   this.cameraUP = cameraup;
   this.cameraTargetPos = new Position(target[0], target[1], target[2]);
+  this.fov = degToRad(60);
   this.objTarget = objTarget;
   this.followObjTarget = false;
   this.followObjTraslation = false;
@@ -15,8 +16,7 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
   
   //DRAWER UPDATE FUNCTION (to call in the render function)
   this.updateGL_DRAWER = function(){
-    GL_DRAWER.cameraPosition = this.cameraPosition;
-    GL_DRAWER.up = this.cameraUP;
+    
     if(this.followObjTarget)
       GL_DRAWER.target = this.objTarget.position.toArray();
     else
@@ -24,6 +24,10 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
 
     if(this.followObjTraslation)
       this.updatePosOnTarget(this.distanceVector);
+
+      GL_DRAWER.cameraPosition = this.cameraPosition;
+    GL_DRAWER.up = this.cameraUP;
+    GL_DRAWER.fov = this.fov;
 
     GL_DRAWER.updateViewMatrix();
   }
@@ -35,6 +39,15 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
 
   this.setCameraPosition = function(x, y, z){
     this.cameraPosition = new Position(x, y, z);
+  }
+
+  this.setCameraFov = function(fov){
+    this.fov = fov;
+  }
+
+  this.incrementCameraFov = function(deltaFov){
+    if((this.fov + degToRad(deltaFov)) > 0 && (this.fov + degToRad(deltaFov)) < (3.14))
+      this.fov += degToRad(deltaFov);
   }
 
   this.getObjTargetPos = function(){
@@ -50,6 +63,7 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
     this.cameraPosition = new Position(this.objTarget.position.x + distanceVector[0], this.objTarget.position.y + distanceVector[1], this.objTarget.position.z + distanceVector[2]);
     //this.updateGL_DRAWER();
   }
+
 
 
   //LOGIC FUNCTION
@@ -87,6 +101,7 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
       case 2 :  this.setVisualeGeneral([0,5,2]);  break;       //Vista dal lato
       case 3 :  this.setVisualeGeneral([-5,0,2], false);  break;       //Vista dal lato 2
       case 4 :  this.setVisualeGeneral([3,-3,1], true);  break;       //Vista dall'angolo con follow
+      case 5 :  this.setVisualeGeneral([-1,-1,0.5], true, true);  break;       //Vista dall'angolo con follow
       case "alto" : target.translateL(0, 0, 0.1, m4.identity()); break;
       case "basso" : target.translateL(0, 0, -0.1, m4.identity()); break;
     }
