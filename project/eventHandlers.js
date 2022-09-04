@@ -36,18 +36,19 @@ var mouseMove = function(e) {
 
 var keydown = function(e) {
   switch(e.keyCode) {
-    case 40 : trans(0,-0.1,0); break;      	//Freccia Giù
-    case 38 : trans(0,0.1,0); break;       	//Freccia Su
-    case 37 : trans(-0.1,0,0); break;       //Freccia Sx
-    case 39 : trans(0.1,0,0); break;       	//Ferccia Dx
+    case 40 : CubeController.move(KEYMOVE.downArrow); break;      	//Freccia Giù
+    case 38 : CubeController.move(KEYMOVE.upArrow); break;       	//Freccia Su
+    case 37 : CubeController.move(KEYMOVE.leftArrow); break;       //Freccia Sx
+    case 39 : CubeController.move(KEYMOVE.rightArrow); break;       	//Ferccia Dx
     case 104 : trans(0,0,0.1); break;		//NUmpad 8
-	case 189: 	trans(0,0,-0.1); break;		//-
-    case 97 : 	CAMERA_MANAGER.changeCameraView(0); break;         	//NUMpad 1
-    case 98 : 	CAMERA_MANAGER.changeCameraView(5); break;      	//NUMpad 2
-    case 99 : 	CAMERA_MANAGER.changeCameraView(1); break;          //NumPad 3
-    case 100 :	CAMERA_MANAGER.changeCameraView(2); break;        	//NumPad 4
-    case 101 :	CAMERA_MANAGER.changeCameraView(3); break;			//NumPad 5
-    case 102 :	CAMERA_MANAGER.changeCameraView(4); break;			//NumPad 6
+	  case 189: 	trans(0,0,-0.1); break;		//-
+    case 96 : 	CAMERA_MANAGER.changeCameraView(0); break;        //NUMpad 0
+    case 97 : 	CAMERA_MANAGER.changeCameraView(1); break;         	//NUMpad 1
+    case 98 : 	CAMERA_MANAGER.changeCameraView(2); break;      	//NUMpad 2
+    case 99 : 	CAMERA_MANAGER.changeCameraView(3); break;          //NumPad 3
+    case 100 :	CAMERA_MANAGER.changeCameraView(4); break;        	//NumPad 4
+    case 101 :	CAMERA_MANAGER.changeCameraView(5); break;			//NumPad 5
+    case 102 :	CAMERA_MANAGER.changeCameraView(0); break;			//NumPad 6
 	case 188: 	CAMERA_MANAGER.incrementCameraFov(-1); break;		//,
 	case 190:	CAMERA_MANAGER.incrementCameraFov(1); break;		//.
   }
