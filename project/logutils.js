@@ -9,7 +9,7 @@ function disableLog() {
 }
 
 function log(str) {
-  if(logEnabled) {
+  if (logEnabled) {
     console.log(str);
   }
 }
