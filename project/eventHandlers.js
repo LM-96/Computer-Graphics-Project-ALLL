@@ -41,24 +41,24 @@ var mouseMove = function (e) {
 var keydown = function (e) {
   switch (e.keyCode) {
     case 40:
-      trans(0, -0.1, 0);
+      target.translate(0, -0.1, 0);
       break; //Freccia Giù
     case 38:
-      trans(0, 0.1, 0);
+      target.translate(0, 0.1, 0);
       break; //Freccia Su
     case 37:
-      trans(-0.1, 0, 0);
+      target.translate(-0.1, 0, 0);
       break; //Freccia Sx
     case 39:
-      trans(0.1, 0, 0);
+      target.translate(0.1, 0, 0);
       break; //Ferccia Dx
     case 104:
-      trans(0, 0, 0.1);
+      target.translate(0, 0, 0.1);
       break; //NUmpad 8
     case 189:
-      trans(0, 0, -0.1);
+      target.translate(0, 0, -0.1);
       break; //-
-    case 97:
+    /*case 97:
       CAMERA_MANAGER.changeCameraView(0);
       break; //NUMpad 1
     case 98:
@@ -81,54 +81,52 @@ var keydown = function (e) {
       break; //,
     case 190:
       CAMERA_MANAGER.incrementCameraFov(1);
-      break; //.
+      break; //.*/
   }
   log("pos: " + target.position.toString());
+  log("camerapos :" + GL_DRAWER.cameraManager.getCameraPosition().toString());
   GL_DRAWER.drawScene();
 };
-
-function trans(x, y, z, translateCamera = false) {
-  target.translateL(x, y, z, m4.identity());
-  if (translateCamera) CAMERA_MANAGER.traslatePosCamera(x, y, z);
-}
-
 function increment(what, decrement = false, _updateView = true, draw = true) {
   var inc = 1;
   if (decrement) inc = -1;
 
   switch (what) {
     case "xCam": {
-      GL_DRAWER.cameraPosition.translateX(inc * INCREMENT_UNIT);
+      GL_DRAWER.cameraManager.translateCameraPosition(inc * INCREMENT_UNIT, 0, 0);
       break;
     }
 
     case "yCam": {
-      GL_DRAWER.cameraPosition.translateY(inc * INCREMENT_UNIT);
+      GL_DRAWER.cameraManager.translateCameraPosition(0, inc * INCREMENT_UNIT, 0);
       break;
     }
 
     case "zCam": {
-      GL_DRAWER.cameraPosition.translateZ(inc * INCREMENT_UNIT);
+      GL_DRAWER.cameraManager.translateCameraPosition(0, 0, inc * INCREMENT_UNIT);
       break;
     }
 
     case "fov": {
-      GL_DRAWER.fov += inc * RAD_INCREMENT_UNIT;
+      GL_DRAWER.cameraManager.setCameraFovRadiants(GL_DRAWER.cameraManager.getFov() + inc * RAD_INCREMENT_UNIT);
       break;
     }
 
     case "xUp": {
-      GL_DRAWER.up[0] += inc;
+      let oldUp = GL_DRAWER.cameraManager.getUp();
+      GL_DRAWER.cameraManager.setUp([oldUp[0] + inc, oldUp[1], oldUp[2]]);
       break;
     }
 
     case "yUp": {
-      GL_DRAWER.up[1] += inc;
+      let oldUp = GL_DRAWER.cameraManager.getUp();
+      GL_DRAWER.cameraManager.setUp([oldUp[0], oldUp[1] + inc, oldUp[2]]);
       break;
     }
 
     case "zUp": {
-      GL_DRAWER.up[2] += inc;
+      let oldUp = GL_DRAWER.cameraManager.getUp();
+      GL_DRAWER.cameraManager.setUp([oldUp[0], oldUp[1], oldUp[2] + inc]);
       break;
     }
   }
@@ -140,37 +138,37 @@ function increment(what, decrement = false, _updateView = true, draw = true) {
 function set(what, value, updateView = true, draw = true) {
   switch (what) {
     case "xCam": {
-      GL_DRAWER.cameraPosition.x = value;
+      GL_DRAWER.cameraManager.cameraPosition.x = value;
       break;
     }
 
     case "yCam": {
-      GL_DRAWER.cameraPosition.y = value;
+      GL_DRAWER.cameraManager.cameraPosition.y = value;
       break;
     }
 
     case "zCam": {
-      GL_DRAWER.cameraPosition.z = value;
+      GL_DRAWER.cameraManager.cameraPosition.z = value;
       break;
     }
 
     case "fov": {
-      GL_DRAWER.fov = value;
+      GL_DRAWER.cameraManager.fov = value;
       break;
     }
 
     case "xUp": {
-      GL_DRAWER.up[0] = value;
+      GL_DRAWER.cameraManager.up[0] = value;
       break;
     }
 
     case "yUp": {
-      GL_DRAWER.up[1] = value;
+      GL_DRAWER.cameraManager.up[1] = value;
       break;
     }
 
     case "zUp": {
-      GL_DRAWER.up[2] = value;
+      GL_DRAWER.cameraManager.up[2] = value;
       break;
     }
   }
@@ -182,37 +180,37 @@ function set(what, value, updateView = true, draw = true) {
 function updateView(what) {
   switch (what) {
     case "xCam": {
-      xCamInput.value = GL_DRAWER.cameraPosition.x;
+      xCamInput.value = GL_DRAWER.cameraManager.getCameraPosition().x;
       break;
     }
 
     case "yCam": {
-      yCamInput.value = GL_DRAWER.cameraPosition.y;
+      yCamInput.value = GL_DRAWER.cameraManager.getCameraPosition().y;
       break;
     }
 
     case "zCam": {
-      zCamInput.value = GL_DRAWER.cameraPosition.z;
+      zCamInput.value = GL_DRAWER.cameraManager.getCameraPosition().z;
       break;
     }
 
     case "fov": {
-      fovInput.value = radToDeg(GL_DRAWER.fov);
+      fovInput.value = GL_DRAWER.cameraManager.getFovDegree();
       break;
     }
 
     case "xUp": {
-      xUpInput.value = GL_DRAWER.up[0];
+      xUpInput.value = GL_DRAWER.cameraManager.getUp()[0];
       break;
     }
 
     case "yUp": {
-      yUpInput.value = GL_DRAWER.up[1];
+      yUpInput.value = GL_DRAWER.cameraManager.getUp()[1];
       break;
     }
 
     case "zUp": {
-      zUpInput.value = GL_DRAWER.up[2];
+      zUpInput.value = GL_DRAWER.cameraManager.getUp()[2];
       break;
     }
   }
@@ -226,14 +224,33 @@ function attachHandlers(canvas, p_target) {
   target = p_target;
 
   document.addEventListener("keydown", keydown);
+
+  /* AUTO UPDATE VIEW ********************************************* */
+  GL_DRAWER.cameraManager.addOnCameraPositionChange((_, endPos) => {
+    xCamInput.value = endPos.x;
+    yCamInput.value = endPos.y;
+    zCamInput.value = endPos.z;
+  });
+
+  GL_DRAWER.cameraManager.addOnFovChange((_, endFov) => {
+    fovInput.value = radToDeg(endFov);
+  })
+
+  GL_DRAWER.cameraManager.addOnUpChange((_, newUp) => {
+    xUpInput.value = newUp[0];
+    yUpInput.value = newUp[1];
+    zUpInput.value = newUp[2];
+  })
 }
 
 function syncView() {
-  xCamInput.value = GL_DRAWER.cameraPosition.x;
-  yCamInput.value = GL_DRAWER.cameraPosition.y;
-  zCamInput.value = GL_DRAWER.cameraPosition.z;
-  fovInput.value = radToDeg(GL_DRAWER.fov);
-  xUpInput.value = GL_DRAWER.up[0];
-  yUpInput.value = GL_DRAWER.up[1];
-  zUpInput.value = GL_DRAWER.up[2];
+  let cameraPosition = GL_DRAWER.cameraManager.getCameraPosition();
+  let up = GL_DRAWER.cameraManager.getUp();
+  xCamInput.value = cameraPosition.x;
+  yCamInput.value = cameraPosition.y;
+  zCamInput.value = cameraPosition.z;
+  fovInput.value = GL_DRAWER.cameraManager.getFovDegree();
+  xUpInput.value = up[0];
+  yUpInput.value = up[1];
+  zUpInput.value = up[2];
 }

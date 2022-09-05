@@ -895,10 +895,13 @@ MeshBuffers.createGlBuffers = function (gl) {
 
 /* ----------- Position Limit Control ------------------------------------------------------ */
 /**
- * Represents the "limit" of the movement of one object inside a reference system
- * @param {*} data
- * @param {*} type
- * @param {*} isInLimitFunction
+ * Represents the "limits" of the movement of one object inside a reference system.
+ * An object of this prototype can be used to calculate if a position is inside limits and
+ * so if its legal
+ * @param {object} data a set of data used by the limit function
+ * @param {string} type the type of the limit
+ * @param {function} isInLimitFunction a lambda that uses the 'data' parameter to calculate if a point
+ * is inside limits. This lambda must accept two parameter: a position and a data object
  */
 function Limits(
   data,
@@ -909,15 +912,38 @@ function Limits(
   this.type = type;
   this.isInLimitFunction = isInLimitFunction;
 
+  /**
+   * Returns 'true' if the given position is inside limits (so, it is legal)
+   * @param {Position} position 
+   * @returns 'true' if the given position is inside limits, 'false' otherwise
+   */
   this.isInLimits = function (position) {
     return isInLimitFunction(position, this.data);
   };
 
+  /**
+   * Returns 'false' if the given position is outside limits (so, it is NOT legal)
+   * @param {Position} position 
+   * @returns 'true' if the given position is outside limits, 'false' otherwise
+   */
   this.isOutOfLimits = function (position) {
     return !isInLimitFunction(position, this.data);
   };
 }
 
+/**
+ * Returns a Limits object that "limitates" the position inside a parallelepiped.
+ * The 'isInLimits' function returns 'true' if the position to valide is inside 
+ * the parallelepiped defined by the xMin/xMax, yMin/yMax, zMin/zMax parameters.
+ * The type parameter of this Limits is 'linear'
+ * @param {number} xMin the minimum value of the x coordinate a position can have
+ * @param {number} xMax the maximum value of the x coordinate a position can have
+ * @param {number} yMin the minimum value of the y coordinate a position can have
+ * @param {number} yMax the maximum value of the y coordinate a position can have
+ * @param {number} zMin the minimum value of the z coordinate a position can have
+ * @param {number} zMax the maximum value of the z coordinate a position can have
+ * @returns a Limits object that "limitates" the position inside a parallelepiped
+ */
 Limits.linear = function (xMin, xMax, yMin, yMax, zMin, zMax) {
   let limData = {
     xLimits: Pair.of(xMin, xMax),
@@ -943,6 +969,12 @@ Limits.linear = function (xMin, xMax, yMin, yMax, zMin, zMax) {
   return new Limits(limData, "linear", isInLimitFunction);
 };
 
+/**
+ * Returns a Limits object that returns alway 'true' when calling its 'isInLimits'.
+ * So, this represents "limits that are unlimited", means that all positions are allowed.
+ * The type variable of this limit is 'unlimited'
+ * @returns a Limits object that returns alway 'true' when calling its 'isInLimits'
+ */
 Limits.unlimited = function () {
   return new Limits(
     {
@@ -956,21 +988,118 @@ Limits.unlimited = function () {
 };
 
 /* ----------- Mesh Object ---------------------------------------------------- */
+/**
+ * Represents a mesh object mainaining its "mesh" data (vertices, indices, texcoord, buffers, ...)
+ * and some other positioning and geometrical datas.
+ * @param {string} name a name that identify this mesh object
+ * @param {object} data the data of this mesh object
+ */
 function MeshObject(name, data) {
+  /**
+   * The name that idenfies this mesh object
+   */
   this.name = name;
+
+  /**
+   * The "mesh" data of this object.
+   * It can be obtained, for example, loading ad '.obj' file using the 'loadMesh' function
+   * provided by 'load_mesh.js'.
+   * This object must have this interface:
+   * 
+   * data = {
+   * 
+        *  mesh: ...,
+        * 
+        *  attributes: ...,
+        * 
+        *  numOfVertices: ...,
+        * 
+        *  uniforms: ...
+   * 
+   * }
+   */
   this.data = data;
+
+  /**
+   * The position of this object considering the absolute reference system.
+   * By default, it is set to the origin [position = (0, 0, 0)]
+   */
   this.position = Position.zeroPosition();
+
+  /**
+   * The rotation of this object considering the absolute reference system.
+   * By default, the object is unrotated [rotation = (0, 0)]
+   */
   this.rotation = Rotation.zeroRotation();
+
+  /**
+   * The scale of this object considering the absolute reference system.
+   * By default, the object is unscaled [scale = (1, 1, 1)]
+   */
   this.scale = Scale.identityScale();
+
+  /**
+   * The speed of this object considering the absolute reference system.
+   * By default, this object is fixed [speed = (0, 0, 0)]
+   */
   this.speed = Speed.zeroSpeed();
+
+  /**
+   * The limits that constraint the movement of this object.
+   * By default, the object has no limit [limits.type = "unlimited"]
+   */
   this.limits = Limits.unlimited();
-  //this.buffers = MeshBuffers.empyBuffers();
+
+  /**
+   * The bufferInfo of this mesh object.
+   * 'null' by default
+   */
   this.bufferInfo = null;
 
+  /**
+   * An array of callback that will be invoked when the object is translated.
+   * All callbacks of this array must have five parameters: 
+   *    - a startPosition (it will be passed as a copy)
+   *    - the three delta for the translation
+   *    - a endPosition (it will be passed as a copy)
+   * 
+   * It is recommended to add or remove a callback to this array using 'addOnTraslation'
+   * or 'removeOnTranslation' functions.
+   */
   this.onTranslation = [];
+
+  /**
+   * An array of callback that will be invoked when the object is rotated.
+   * All callbacks of this array must have four parameters: 
+   *    - a startRotation (it will be passed as a copy)
+   *    - the two delta for the angles
+   *    - a endRotation (it will be passed as a copy)
+   * 
+   * It is recommended to add or remove a callback to this array using 'addOnRotation'
+   * or 'removeOnRotation' functions.
+   */
   this.onRotation = [];
+
+  /**
+   * An array of callback that will be invoked when the object is scaled.
+   * All callbacks of this array must have five parameters: 
+   *    - a startScale (it will be passed as a copy)
+   *    - the three delta for the scale
+   *    - a endScale (it will be passed as a copy)
+   * 
+   * It is recommended to add or remove a callback to this array using 'addOnScaled'
+   * or 'removeOnScaled functions.
+   */
   this.onScaled = [];
 
+  /**
+   * Adds a callback that will be invoked when the object is translated.
+   * The callback must accept five parameters:
+   *    - a startPosition, that represents the position before the translation (it will be passed as a copy)
+   *    - the three delta used for the translation (deltaX, deltaY and deltaZ)
+   *    - a endPosition, that represents the position after the translation (it will be passed as a copy)
+   * @param {function} func a callback that will be invoked when the object is translated
+   */
   this.addOnTranslation = (func) => {
     if (typeof func != "function") {
       log("func is not a function");
@@ -979,6 +1108,14 @@ function MeshObject(name, data) {
     }
   };
 
+  /**
+   * Adds a callback that will be invoked when the object is rotated.
+   * The callback must accept four parameters:
+   *    - a startRotation, that represents the angles before the rotation (it will be passed as a copy)
+   *    - the two delta used for the rotation (deltaTheta, deltaPhi)
+   *    - a endRotation, that represents the angles after the rotation (it will be passed as a copy)
+   * @param {function} func a callback that will be invoked when the object is rotated
+   */
   this.addOnRotation = (func) => {
     if (typeof func != "function") {
       log("func is not a function");
@@ -987,6 +1124,14 @@ function MeshObject(name, data) {
     }
   };
 
+  /**
+   * Adds a callback that will be invoked when the object is scaled.
+   * The callback must accept five parameters:
+   *    - a startScale, that represents the previous scale before the transformation (it will be passed as a copy)
+   *    - the three delta used for the scale (scaleX, scaleY and scaleZ)
+   *    - a endScale, that represents end scale after the transformation (it will be passed as a copy)
+   * @param {function} func a callback that will be invoked when the object is scaled
+   */
   this.addOnScaled = (func) => {
     if (typeof func != "function") {
       log("func is not a function");
@@ -995,31 +1140,34 @@ function MeshObject(name, data) {
     }
   };
 
+  /**
+   * Removes a callback function from the onTranslation array
+   * @param {function} func the callback to be removed
+   */
   this.removeOnTranslation = (func) => {
     this.onTranslation = this.onTranslation.filter((el) => el !== func);
   };
 
+  /**
+   * Removes a callback function from the onRotation array
+   * @param {function} func the callback to be removed
+   */
   this.removeOnRotation = (func) => {
     this.onRotation = this.onRotation.filter((el) => el !== func);
   };
 
+  /**
+   * Removes a callback function from the onScaled array
+   * @param {function} func the callback to be removed
+   */
   this.removeOnScaled = (func) => {
     this.onTranslation = this.onScaled.filter((el) => el !== func);
   };
 
-  this.getDataByName = function (name) {
-    switch (name) {
-      case POSITION_NAME:
-        return this.data.attributes.positions;
-      case NORMAL_NAME:
-        return this.data.attributes.normals;
-      case TEXCOORD_NAME:
-        return this.data.attributes.texcoords;
-    }
-
-    return undefined;
-  };
-
+  /**
+   * Inits this object creating the bufferInfo and its 'u_world' matrix
+   * @param {WebGLRenderingContext} gl the webGL context 
+   */
   this.init = function (gl) {
     this.bufferInfo = webglUtils.createBufferInfoFromArrays(
       gl,
@@ -1030,45 +1178,37 @@ function MeshObject(name, data) {
 
   /**
    * Applies a translation to this object
-   * @param {*} deltaX the x translation
-   * @param {*} deltaY the y translation
-   * @param {*} deltaZ the z translation
-   * @param {*} u_world the u_world matrix
+   * @param {number} deltaX the x translation
+   * @param {number} deltaY the y translation
+   * @param {number} deltaZ the z translation
    * @returns this object
    */
   this.translate = function (
     deltaX,
     deltaY,
-    deltaZ,
-    u_world = m4.identity() /*this.data.uniforms.u_world*/
+    deltaZ
   ) {
+    let startPos = this.position.copy();
     this.position.translate(
       deltaX /**this.scale.sx*/,
       deltaY /**this.scale.sy*/,
       deltaZ /**this.scale.sz*/
     );
-    this.updateUMatrix(u_world);
-    this.onRotation.forEach((func) => func(deltaX, deltaY, deltaZ));
+    let endPos = this.position.copy();
+    this.updateUMatrix();
+    this.onTranslation.forEach((func) => func(startPos, deltaX, deltaY, deltaZ, endPos));
 
     return this;
   };
 
-  this.rotationMatrix2D = function (theta, phi) {
-    return math.matrix([
-      [
-        Math.cos(phi),
-        Math.sin(theta) * Math.sin(phi),
-        Math.cos(theta) * Math.sin(phi),
-      ],
-      [0, Math.cos(theta), -Math.sin(theta)],
-      [
-        -Math.sin(phi),
-        Math.sin(theta) * Math.cos(phi),
-        Math.cos(theta) * Math.cos(phi),
-      ],
-    ]);
-  };
-
+  /**
+   * Transform the given translation deltas from the relative reference system of the object (the one that has this
+   * object as the origin) to the absolute reference system 
+   * @param {number} deltaX the relative delta for the x coordinate
+   * @param {number} deltaY the relative delta for the y coordinate
+   * @param {number} deltaZ the relative delta for the z coordinate
+   * @returns an array containing the absolute deltas [deltaXA, deltaYA, deltaZA]
+   */
   this.relToAbs = (deltaX, deltaY, deltaZ) => {
     let theta = this.rotation.theta,
       phi = this.rotation.phi;
@@ -1076,10 +1216,11 @@ function MeshObject(name, data) {
       cosPh = Math.cos(phi),
       sinTh = Math.sin(theta),
       sinPh = Math.sin(phi);
-
-    //Calcoli coordinate Relative
-    //(Theta angolo tra Y verso Z)
-    //(Phi angolo tra X e -Z)
+    
+    /*
+      Calculates the absolute coordinates from the relative
+      (theta is the angle between Y and Z, phi is the angle between X and -Z
+    */
     let dxR = deltaX * cosPh + deltaY * sinTh * sinPh + deltaZ * sinPh;
     let dyR = deltaX * sinTh * sinPh + deltaY * cosTh + deltaZ * -sinTh;
     let dzR = deltaX * -sinPh + deltaY * sinTh + deltaZ * cosPh * cosTh;
@@ -1088,37 +1229,40 @@ function MeshObject(name, data) {
   };
 
   /**
-   * Applies a translation by using the relative reference system of the object
-   * @param {*} deltaX the relative x translation
-   * @param {*} deltaY the relative y translation
-   * @param {*} deltaZ the relative z translation
+   * Applies a translation by using the relative reference system of the object (the one that has
+   * this object as the origin)
+   * @param {number} deltaX the relative delta for the x translation
+   * @param {number} deltaY the relative delta for the y translation
+   * @param {number} deltaZ the relative delta for the z translation
    * @returns this object
    */
   this.translateRelative = function (deltaX, deltaY, deltaZ) {
-    //Calcoli Angoli
-
-    return this.translate(dxR, dyR, dzR);
+    [dxA, dyA, dzA] = this.relToAbs(deltaX, deltaY, deltaZ)
+    return this.translate(dxA, dyA, dzA);
   };
 
   /**
-   * Apply a translation if allowed by limits
-   * @param {*} deltaX the x translation
-   * @param {*} deltaY the y translation
-   * @param {*} deltaZ the z translation
-   * @param {*} u_world the u_world matrix
-   * @param {*} relative
+   * Apply a translation if allowed by limits.
+   * At this moment the only supported translation type are:
+   *    - unlimited
+   *    - linear
+   * Notice that the translation will not be applied if does not respect
+   * the constraints imposed by the limits
+   * @param {number} deltaX the relative delta for the x translation
+   * @param {number} deltaY the relative delta for the y translation
+   * @param {number} deltaZ the relative delta for the z translation
+   * @param {boolean} relative 'true' if the deltas are relative and then the applied translation is relative
    * @returns this object
    */
   this.translateL = function (
     deltaX,
     deltaY,
     deltaZ,
-    u_world = this.data.uniforms.u_world,
     relative = true
   ) {
     switch (this.limits.type) {
       case "unlimited":
-        return this.translate(deltaX, deltaY, deltaZ, u_world);
+        return this.translate(deltaX, deltaY, deltaZ);
       case "linear": {
         if (relative) {
           [deltaX, deltaY, deltaZ] = this.relToAbs(deltaX, deltaY, deltaZ);
@@ -1128,7 +1272,7 @@ function MeshObject(name, data) {
         if (
           this.limits.isInLimits(this.position.plus(deltaX, deltaY, deltaZ))
         ) {
-          return this.translate(deltaTrasl[0], deltaTrasl[1], deltaTrasl[2]);
+          return this.translate(deltaX, deltaY, deltaZ);
         } else {
           return this;
         }
@@ -1136,62 +1280,125 @@ function MeshObject(name, data) {
     }
   };
 
-  this.setPosition = function (x, y, z, updateMatrix = true) {
+  /**
+   * Sets the absolute position of this object
+   * @param {number} x the new x coordinate of the position of this object
+   * @param {number} y the new y coordinate of the position of this object
+   * @param {number} z the new z coordinate of the position of this object
+   */
+  this.setPosition = function (x, y, z) {
     this.position.x = x;
     this.position.y = y;
     this.position.z = z;
-    if (updateMatrix) this.updateUMatrix();
+    this.updateUMatrix();
   };
 
-  this.setRotation = function (theta, phi, updateMatrix = true) {
+
+  /**
+   * Sets the absolute rotation of this object
+   * @param {number} theta the new theta angle of the rotation of this object
+   * @param {number} phi the new phi angle of the rotation of this object
+   */
+  this.setRotation = function (theta, phi) {
+    let startRotation = this.rotation.copy();
     this.rotation.theta = theta;
     this.rotation.phi = phi;
-    if (updateMatrix) this.updateUMatrix();
+    let endRotation = this.rotation.copy();
+    this.updateUMatrix();
+
+    this.onRotation.forEach((c) => { c(startRotation, theta, phi, endRotation) });
   };
 
-  this.setScale = function (sx, sy, sz, updateMatrix = true) {
+  /**
+   * Sets the absolute scale of this object
+   * @param {number} sx the new x scale of this object
+   * @param {number} sy the new y scale of this object
+   * @param {number} sz the new z scale of this object
+   */
+  this.setScale = function (sx, sy, sz) {
+    let oldScale = this.scale.copy();
     this.scale.sx = sx;
     this.scale.sy = sy;
     this.scale.sz = sz;
-    if (updateMatrix) this.updateUMatrix();
+    let newScale = this.scale.copy();
+    this.updateUMatrix();
+
+    this.onScaled.forEach((c) => { c(oldScale, sx, sy, sz, newScale) });
   };
 
+  /**
+   * Applies a rotation on this object
+   * @param {number} deltaTheta the delta for the theta angle
+   * @param {number} deltaPhi the delta for the phi angle
+   * @param {Float32Array} u_world the starting u_world matrix
+   * (m4.identity() by default)
+   */
   this.rotate = function (
     deltaTheta,
-    deltaPhi,
-    u_world = this.data.uniforms.u_world
+    deltaPhi
   ) {
+    let startRot = this.rotation.copy();
     this.rotation.rotate(deltaTheta, deltaPhi);
+    let endRot = this.rotation.copy();
     this.updateUMatrix();
+    
+    this.onRotation.forEach((c) => { c(startRot, deltaTheta, deltaPhi, endRot) });
   };
 
+  /**
+   * Applies a rotation only of theta on this object
+   * @param {number} deltaTheta the delta for the theta angle
+   */
   this.rotateTheta = function (
-    deltaTheta,
-    u_world = this.data.uniforms.u_world
+    deltaTheta
   ) {
-    this.rotation.rotateTheta(deltaTheta);
-    this.updateUMatrix();
+    this.rotate(deltaTheta, 0);
   };
 
-  this.rotatePhi = function (deltaPhi, u_world = this.data.uniforms.u_world) {
-    this.rotation.rotatePhi(deltaPhi);
-    this.updateUMatrix();
+  /**
+   * Applies a rotation only of phi on this object
+   * @param {number} deltaPhi the delta for the phi angle
+   * @param {Float32Array} u_world the starting u_world matrix
+   * (m4.identity() by default)
+   */
+  this.rotatePhi = function (deltaPhi) {
+    this.rotate(0, deltaPhi);
   };
 
+  /**
+   * Applies a scale on this object
+   * @param {number} deltaSX the scale of the x axis
+   * @param {number} deltaSY the scale of the y axis
+   * @param {number} deltaSZ the scale of the z axis
+   */
   this.scalate = function (
     deltaSX,
     deltaSY,
-    deltaSZ,
-    u_world = this.data.uniforms.u_world
+    deltaSZ
   ) {
     this.scale.scale(deltaSX, deltaSY, deltaSZ);
     this.updateUMatrix();
   };
 
+  /**
+   * Sets the 'u_world' matrix of this object
+   * @param {Float32Array} u_world the matrix to be set
+   */
   this.setUMatrix = function (u_world) {
     this.data.uniforms.u_world = u_world;
-  };
+  }
 
+  /**
+   * Updates the 'u_world' matrix of this object using its position,
+   * its rotation and its scale
+   * @param {Float32Array} u_world the starting 'u_world' matrix (m4.identity() by default)
+   * @param {boolean} translation indicates if the matrix must be updated considering the position
+   * of this object ('true' by defaulr)
+   * @param {boolean} rotation indicates if the matrix must be updated considering the rotation
+   * of this object ('true' by defaulr)
+   * @param {boolean} scale indicates if the matrix must be updated considering the scale
+   * of this object ('true' by defaulr)
+   */
   this.updateUMatrix = function (
     u_world = m4.identity(),
     translation = true,
@@ -1214,6 +1421,12 @@ function MeshObject(name, data) {
     this.setUMatrix(u_world);
   };
 
+  /**
+   * Draws this object using the given WebGL context
+   * @param {WebGLRenderingContext} gl the WebGL context
+   * @param {object} programInfo the program info generated by 'webgl-utils'
+   * @param {boolean} clear enable or disable the cleaning of the scene ('true' by default)
+   */
   this.draw = function (gl, programInfo, clear = false) {
     if (clear) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -1226,12 +1439,29 @@ function MeshObject(name, data) {
 }
 
 /* ----------- Manager -------------------------------------------------------- */
+/**
+ * A manager for the mesh object able to load them maintaining their data.
+ * When an object is loaded using this manager, its MeshObject is saved into
+ * an internal map and can be retrieved as nedeed simply calling the 'get' function
+ * @param {WebGLRenderingContex} gl the WebGL context
+ * @param {object} programInfo the program info generated by 'webgl-utils'
+ */
 function MeshManager(gl, programInfo) {
   this.gl = gl;
   this.programInfo = programInfo;
   this.program = programInfo.program;
   this.objects = new Map();
 
+
+  /**
+   * Loads an '.obj' file using the 'load_mesh.js' and stores its data
+   * into a MeshObject, saving it into the internal map of this manager.
+   * The name is associated to the created object and can be used to retrieve
+   * it when calling the 'get' function
+   * @param {string} name the name associated to the object
+   * @param {string} path the path of the '.obj' file
+   * @returns the new MeshObject that is also stored into the manager
+   */
   this.loadFromObj = function (name, path) {
     let meshObj = new MeshObject(name, LoadMesh(this.gl, path));
     this.objects.set(name, meshObj);
@@ -1239,6 +1469,18 @@ function MeshManager(gl, programInfo) {
     return meshObj;
   };
 
+  /**
+   * Loads a mesh object using the raw data passed as parameter and stores its
+   * data into a MeshObject, saving it into the internal map of this manager.
+   * The name is associated to the created object and can be used to retrieve
+   * it when calling the 'get' function
+   * @param {string} name the name associated to the object
+   * @param {object} position the data about the position of the vertex
+   * @param {object} texcoord the data about the texcoords
+   * @param {object} normal the data about the normals
+   * @param {object} indices the data about the indices
+   * @returns the new MeshObject that is also stored into the manager
+   */
   this.loadFromRawData = function (name, position, texcoord, normal, indices) {
     let attributes = {
       position: { data: position },
@@ -1264,24 +1506,47 @@ function MeshManager(gl, programInfo) {
     return meshObj;
   };
 
+  /**
+   * Returns the MeshObject associated with the given name or 'undefined' if
+   * no object is associated to it
+   * @param {string} name the name associated to the object
+   * @returns the MeshObject associated with the given name or 'undefined' if
+   * no object is associated to it
+   */
   this.get = function (name) {
     return this.objects.get(name);
   };
 
+  /**
+   * Returns all of the objects saved into this manager
+   * @returns all of the objects saved into this manager
+   */
   this.getAll = function () {
     return this.objects.values();
   };
 
+  /**
+   * Removes the object associated with the given name returning 'true'.
+   * If no object has this name, then 'false' is returned and nothing is removed
+   * @param {string} name the name associated to the object
+   * @returns 'true' if the object is removed, 'false' is no object is associated
+   * to the given name
+   */
   this.remove = function (name) {
     return this.objects.delete(name);
   };
 }
 
 /* ----------- Drawer --------------------------------------------------------- */
+/**
+ * A drawer for a MeshManager. This component can be used to draw the scene
+ * represented by the set of the object stored into the given MeshManager
+ * @param {MeshManager} meshMgr the MeshManager referred by this drawer
+ */
 function GlDrawer(meshMgr) {
   this.gl = meshMgr.gl;
   this.meshMgr = meshMgr;
-  (this.programInfo = meshMgr.programInfo), (this.fov = degToRad(60));
+  this.programInfo = meshMgr.programInfo;
   this.zNear = 0.1;
   this.zFar = 200;
   /*this.cameraPosition = new Position(1, 1, 1);
@@ -1295,45 +1560,8 @@ function GlDrawer(meshMgr) {
     u_projection: m4.identity(),
   };
 
-  this.setCameraPosition = function (position) {
-    this.cameraPosition = position;
-  };
-
-  this.setCameraPosition = function (x, y, z) {
-    this.cameraPosition = new Position(x, y, z);
-  };
-
-  this.setTarget = function (targetPosition) {
-    this.target = targetPosition;
-  };
-
-  this.setTarget = function (x, y, z) {
-    this.target = new Position(x, y, z);
-  };
-
-  this.setDistanceFromTarget = function (distance) {
-    if (typeof distance == "number") {
-      this.cameraPosition.translate(distance, distance, distance);
-    } else if (Array.isArray(distance)) {
-      this.cameraPosition.translate(distance[0], distance[1], distance[2]);
-    } else {
-      throw new Error(
-        "setDistanceFromTarger: distance must be a number or an array of number"
-      );
-    }
-  };
-
-  this.frameObjectWithDistance = function (meshObject, distance) {
-    this.setTarget(meshObj.position);
-    this.setDistanceFromTarget(distance);
-  };
-
   this.updateViewMatrix = function () {
-    let cameraMatrix = m4.lookAt(
-      this.cameraManager.cameraPosition.toArray(),
-      this.cameraManager.targetPosition.toArray(),
-      this.cameraManager.up
-    );
+    let cameraMatrix = this.cameraManager.calculateCameraMatrix();
     this.sharedUniforms.u_view = m4.inverse(cameraMatrix);
   };
 
