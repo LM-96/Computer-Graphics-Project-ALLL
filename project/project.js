@@ -63,7 +63,6 @@ function init() {
 	cube.limits = Limits.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, 3, 3);
 	cube.setPosition(0, 0, 0.25);
 	cube.scalate(0.25, 0.25, 0.25);
-	cube.setRotation(0,0);
 
 	//GL_DRAWER.fov = degToRad(100);
 	//GL_DRAWER.cameraPosition = [10, 10, 1];
@@ -71,7 +70,7 @@ function init() {
 	log("init() | handlers attached");
 
 	CAMERA_MANAGER = createCameraManager(cube);
-	CAMERA_MANAGER.setCameraPosition(0, -1, 1);
+	CAMERA_MANAGER.setCameraPosition(-1, -1, 1);
 }
 
 function main() {
@@ -94,13 +93,10 @@ async function render(time) {
 	var delta = time - then;
 	then = time;
 	var cube = MESH_MANAGER.get('cube1')
-
-	
-	
+	GL_DRAWER.target = cube.position.toArray();
 	//MESH_MANAGER.get('cube1').rotate((-0.7*delta), 0);
 	//log("cameraPosition: " + GL_DRAWER.cameraPosition + ", target: " + GL_DRAWER.target);
 	//log("cubePosition: " + cube.position.toArray());
-	CAMERA_MANAGER.updateGL_DRAWER();
 	GL_DRAWER.drawScene();
 
 	//await sleep(200);

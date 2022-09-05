@@ -572,13 +572,13 @@ function MeshObject(name, data) {
     if(updateMatrix) this.updateUMatrix();
   }
 
-  this.setRotation = function(theta, phi, updateMatrix = true) {
+  this.setRotation = function(theta, phi) {
     this.rotation.theta = theta;
     this.rotation.phi = phi;
     if(updateMatrix) this.updateUMatrix();
   }
 
-  this.setScale = function(sx, sy, sz, updateMatrix = true) {
+  this.setScale = function(sx, sy, sz) {
     this.scale.sx = sx;
     this.scale.sy = sy;
     this.scale.sz = sz;
