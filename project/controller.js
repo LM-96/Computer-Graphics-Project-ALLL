@@ -47,28 +47,28 @@ this.commandActuator = function(move, controllerMode){
 
 this.moveFromTop = function(keyMove){
     switch(keyMove){
-        case KEYMOVE.upArrow : target.translateL(0,this.stepSize, 0); break;
-        case KEYMOVE.downArrow : target.translateL(0,-this.stepSize, 0); break;
-        case KEYMOVE.leftArrow : target.translateL(-this.stepSize, 0, 0); break;
-        case KEYMOVE.rightArrow : target.translateL(this.stepSize, 0, 0); break;
+        case KEYMOVE.upArrow : this.target.translateL(0,this.stepSize, 0); break;
+        case KEYMOVE.downArrow : this.target.translateL(0,-this.stepSize, 0); break;
+        case KEYMOVE.leftArrow : this.target.translateL(-this.stepSize, 0, 0); break;
+        case KEYMOVE.rightArrow : this.target.translateL(this.stepSize, 0, 0); break;
     }
 }
 
 this.moveFirstPerson = function(keyMove){
     switch(keyMove){
-        case KEYMOVE.upArrow : target.translateL(0,this.stepSize, 0); CAMERA_MANAGER.translate(0, this.stepSize, 0, true); break;
-        case KEYMOVE.downArrow : target.translateL(0,-this.stepSize, 0); CAMERA_MANAGER.translate(0, -this.stepSize, 0, true); break;
-        case KEYMOVE.leftArrow : target.translateL(-this.stepSize, 0, 0); CAMERA_MANAGER.translate(-this.stepSize, 0, 0, true); break;
-        case KEYMOVE.rightArrow : target.translateL(this.stepSize, 0, 0); CAMERA_MANAGER.translate(this.stepSize, 0, 0, true); break;
+        case KEYMOVE.upArrow : this.target.translateL(0,this.stepSize, 0); CAMERA_MANAGER.translate(0, this.stepSize, 0, true); break;
+        case KEYMOVE.downArrow : this.target.translateL(0,-this.stepSize, 0); CAMERA_MANAGER.translate(0, -this.stepSize, 0, true); break;
+        case KEYMOVE.leftArrow : this.target.translateL(-this.stepSize, 0, 0); CAMERA_MANAGER.translate(-this.stepSize, 0, 0, true); break;
+        case KEYMOVE.rightArrow : this.target.translateL(this.stepSize, 0, 0); CAMERA_MANAGER.translate(this.stepSize, 0, 0, true); break;
     }
 }
 
 this.moveThirdPerson = function(keyMove){
     switch(keyMove){
-        case KEYMOVE.upArrow : target.translateL(0,this.stepSize, 0); break;
-        case KEYMOVE.downArrow : target.translateL(0,-this.stepSize, 0); break;
-        case KEYMOVE.leftArrow : target.translateL(-this.stepSize, 0, 0); break;
-        case KEYMOVE.rightArrow : target.translateL(this.stepSize, 0, 0); break;
+        case KEYMOVE.upArrow : this.target.translateL(0,this.stepSize, 0); break;
+        case KEYMOVE.downArrow : this.target.translateL(0,-this.stepSize, 0); break;
+        case KEYMOVE.leftArrow : this.target.translateL(-this.stepSize, 0, 0); break;
+        case KEYMOVE.rightArrow : this.target.translateL(this.stepSize, 0, 0); break;
     }
 }
 
