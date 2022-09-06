@@ -241,6 +241,12 @@ function Rotation(theta, phi) { /* *************************************** */
     return this;
   }
 
+  this.rotateDeg = function(deltaTheta, deltaPhi) {
+    this.rotateTheta(degToRad(deltaTheta));
+    this.rotatePhi(degToRad(deltaPhi));
+    return this;
+  }
+
   this.copy = function() {
     return Rotation(this.theta, this.phi);
   }
@@ -608,7 +614,7 @@ function MeshObject(name, data) {
   }
 
   this.rotate = function(deltaTheta, deltaPhi, u_world = this.data.uniforms.u_world) {
-    this.rotation.rotate(deltaTheta, deltaPhi);
+    this.rotation.rotateDeg(deltaTheta, deltaPhi);
     this.updateUMatrix();
   }
 
