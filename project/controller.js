@@ -54,12 +54,21 @@ this.moveFromTop = function(keyMove){
     }
 }
 
+function navigate(dForward, currentAngle){
+    var angle = currentAngle;
+    dy = dForward * Math.cos(angle);
+    dx = dForward * -Math.sin(angle);
+    dz = 0;
+
+    this.target.translate(dx, dy, dz);
+}
+
 this.moveFirstPerson = function(keyMove){
     switch(keyMove){
-        case KEYMOVE.upArrow : this.target.translateL(0,this.stepSize, 0); CAMERA_MANAGER.translate(0, this.stepSize, 0, true); break;
-        case KEYMOVE.downArrow : this.target.translateL(0,-this.stepSize, 0); CAMERA_MANAGER.translate(0, -this.stepSize, 0, true); break;
-        case KEYMOVE.leftArrow : this.target.translateL(-this.stepSize, 0, 0); CAMERA_MANAGER.translate(-this.stepSize, 0, 0, true); break;
-        case KEYMOVE.rightArrow : this.target.translateL(this.stepSize, 0, 0); CAMERA_MANAGER.translate(this.stepSize, 0, 0, true); break;
+        case KEYMOVE.upArrow : navigate(0.1, this.target.rotation.phi); break;
+        case KEYMOVE.downArrow : navigate(-0.1, this.target.rotation.phi); break;
+        case KEYMOVE.leftArrow : this.target.rotate(0, -1); break;
+        case KEYMOVE.rightArrow : this.target.rotate(0, 1); break;
     }
 }
 
