@@ -575,7 +575,7 @@ function MeshObject(name, data) {
     return [dxR, dyR, dzR];
   }
 
-  this.translateL = function(deltaX, deltaY, deltaZ, u_world = this.data.uniforms.u_world, relative = true) {
+  this.translateL = function(deltaX, deltaY, deltaZ, relative = false, u_world = this.data.uniforms.u_world) {
     switch(this.limits.type) {
       case "unlimited": return this.translate(deltaX, deltaY, deltaZ, u_world);
       case "linear": {
