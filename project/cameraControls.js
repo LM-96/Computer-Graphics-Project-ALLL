@@ -16,15 +16,23 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
   
   //DRAWER UPDATE FUNCTION (to call in the render function)
   this.updateGL_DRAWER = function(){
+    
+    if(CAMERA_MODE == 2){
+      var objPosition = this.objTarget.position, angle = this.objTarget.rotation.phi;
+      this.cameraPosition = objPosition.plus((0.25 * Math.sin(angle)), -(0.25 * Math.cos(angle)), 0); //new Position(this.objTarget.position.x - (2 * -Math.sin(angle) ), this.objTarget.position.y - (2 * Math.cos(angle)), this.objTarget.position.z);
+      this.cameraTargetPos = this.cameraPosition.plus((1 * Math.sin(angle)), -(1 * Math.cos(angle)), 0);
+    }
+
     if(this.followObjTarget)
       GL_DRAWER.target = this.objTarget.position.toArray();
     else
       GL_DRAWER.target = this.cameraTargetPos.toArray();
 
     if(this.followObjTraslation)
-		this.updatePosOnTarget(this.distanceVector);
+		  this.updatePosOnTarget(this.distanceVector);
 
     GL_DRAWER.cameraPosition = this.cameraPosition;
+    
     GL_DRAWER.up = this.cameraUP;
     GL_DRAWER.fov = this.fov;
 
@@ -80,7 +88,7 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
 	this.enableFollowObjTarget(followTarget, followTarget);
   }
 
-  this.setVisualeGeneral = function(pos = [1,1,0.25], lookAt = true, followTraslation = false){
+  this.setVisualeGeneral = function(pos = [1,1,0.25], lookAt = false, followTraslation = false){
     this.cameraUP = [0,0,1];
     this.setCameraPosition(pos[0], pos[1], pos[2]);
     this.enableFollowObjTarget(lookAt, followTraslation);
@@ -92,7 +100,7 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
     switch(num) {
       case 0 :  this.setVisualeGeneral([0,-1.5,1], true, true);  break; //Vista terza persona
       case 1 :  this.setVisualeDallAlto(true);  break;                      //Vista dall'alto
-      case 2 :  this.setVisualeGeneral([0,1,0], false, true);  break;             //Vista Prima persona    
+      case 2 :  this.setVisualeGeneral([0,-1,0.25]);  break;             //Vista Prima persona    
       case 3 :  this.setVisualeGeneral([-5,0,2], false);  break;       	//Vista dal lato 2
       case 4 :  this.setVisualeGeneral([3,-3,1], true);  break;       	//Vista dall'angolo con follow
       case 5 :  this.setVisualeGeneral([-1,-1,0.5], true, true);  break;//Vista dall'angolo con follow
