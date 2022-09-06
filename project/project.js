@@ -1,17 +1,16 @@
 /*============= ENV ============================*/
-var ENV;
+var ENV, ENV2;
 //var SHADERS;
 var GL;
 var then = 0;
-var modelXRotationRadians = degToRad(0);
 var CAMERA_MANAGER, CubeController;
 var CAMERA_MODE = 1;			//0 visuale in terza persona, //1 visuale dall'alto, //2 visuale in prima persona
 var targetObject = null;
 
-function createEnv() {
+function createEnv(canvasId) {
 	log("createEnv() | creating environment...");
 
-	var canvas = document.getElementById('my_Canvas');
+	var canvas = document.getElementById(canvasId);
 	log("createEnv() | canvas: " + canvas);
 	gl = canvas.getContext('webgl');
 	if(!gl) {
@@ -35,7 +34,8 @@ function createEnv() {
 
 function init() {
 	log("init() | starting...")
-	ENV = createEnv();
+	ENV = createEnv('my_Canvas');
+	//ENV2 = createEnv('obj_canvas');
 	GL = ENV.gl;
 	log("init() | ENV created")
 
