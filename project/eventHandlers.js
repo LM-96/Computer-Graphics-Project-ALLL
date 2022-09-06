@@ -26,7 +26,7 @@ var mouseMove = function(e) {
   if(!drag) return false;
   dX=(e.pageX-old_x)*2*Math.PI/ENV.canvas.width,
   dY=(e.pageY-old_y)*2*Math.PI/ENV.canvas.height;
-  target.rotate(dX, dY);
+  target.rotate(dX, dY, true);
   old_x=e.pageX, old_y=e.pageY;
   e.preventDefault();
   GL_DRAWER.drawScene();

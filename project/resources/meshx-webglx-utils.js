@@ -613,8 +613,11 @@ function MeshObject(name, data) {
     if(updateMatrix) this.updateUMatrix();
   }
 
-  this.rotate = function(deltaTheta, deltaPhi, u_world = this.data.uniforms.u_world) {
-    this.rotation.rotateDeg(deltaTheta, deltaPhi);
+  this.rotate = function(deltaTheta, deltaPhi, radMode = false) {
+    if(radMode)
+      this.rotation.rotate(deltaTheta, deltaPhi);
+    else
+      this.rotation.rotateDeg(deltaTheta, deltaPhi);
     this.updateUMatrix();
   }
 
