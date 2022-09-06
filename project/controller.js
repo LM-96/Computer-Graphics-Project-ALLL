@@ -60,15 +60,15 @@ function navigate(dForward, currentAngle){
     dx = dForward * -Math.sin(angle);
     dz = 0;
 
-    this.target.translate(dx, dy, dz);
+    this.target.translateL(dx, dy, dz, false);
 }
 
 this.moveFirstPerson = function(keyMove){
     switch(keyMove){
-        case KEYMOVE.upArrow : navigate(0.1, this.target.rotation.phi); break;
-        case KEYMOVE.downArrow : navigate(-0.1, this.target.rotation.phi); break;
-        case KEYMOVE.leftArrow : this.target.rotate(0, -1); break;
-        case KEYMOVE.rightArrow : this.target.rotate(0, 1); break;
+        case KEYMOVE.upArrow : navigate(-0.1, this.target.rotation.phi); break;
+        case KEYMOVE.downArrow : navigate(0.1, this.target.rotation.phi); break;
+        case KEYMOVE.leftArrow : this.target.rotate(0, 5); break;
+        case KEYMOVE.rightArrow : this.target.rotate(0, -5); break;
     }
 }
 
