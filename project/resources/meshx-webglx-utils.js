@@ -657,6 +657,11 @@ Speed.copyOf = function (speed) {
   return speed.copy();
 };
 
+const ANGLE_UNIT = {
+  "RADIANS" : 0,
+  "DEGREE" : 1
+}
+
 /**
  * Represents a rotation with the two angles 'theta' and 'phi' in a 2-D reference system.
  * @param {number} theta is the angle rotation of the x axis
@@ -1057,9 +1062,8 @@ function MeshObject(name, data) {
 
   /**
    * An array of callback that will be invoked when the object is translated.
-   * All callbacks of this array must have five parameters: 
+   * All callbacks of this array must have two parameterss: 
    *    - a startPosition (it will be passed as a copy)
-   *    - the three delta for the translation
    *    - a endPosition (it will be passed as a copy)
    * 
    * It is recommended to add or remove a callback to this array using 'addOnTraslation'
@@ -1069,9 +1073,8 @@ function MeshObject(name, data) {
 
   /**
    * An array of callback that will be invoked when the object is rotated.
-   * All callbacks of this array must have four parameters: 
+   * All callbacks of this array must have two parameters: 
    *    - a startRotation (it will be passed as a copy)
-   *    - the two delta for the angles
    *    - a endRotation (it will be passed as a copy)
    * 
    * It is recommended to add or remove a callback to this array using 'addOnRotation'
@@ -1081,9 +1084,8 @@ function MeshObject(name, data) {
 
   /**
    * An array of callback that will be invoked when the object is scaled.
-   * All callbacks of this array must have five parameters: 
+   * All callbacks of this array must have two parameters: 
    *    - a startScale (it will be passed as a copy)
-   *    - the three delta for the scale
    *    - a endScale (it will be passed as a copy)
    * 
    * It is recommended to add or remove a callback to this array using 'addOnScaled'
@@ -1195,7 +1197,7 @@ function MeshObject(name, data) {
     );
     let endPos = this.position.copy();
     this.updateUMatrix();
-    onTranslation.forEach((func) => func(startPos, deltaX, deltaY, deltaZ, endPos));
+    onTranslation.forEach((func) => func(startPos, endPos));
 
     return this;
   };
@@ -1294,7 +1296,7 @@ function MeshObject(name, data) {
     let diff = Position.difference(endPos, startPos);
     this.updateUMatrix();
 
-    onTranslation.forEach((c) => { c(startPos, diff.x, diff.y, diff.z, endPos) });
+    onTranslation.forEach((c) => { c(startPos, endPos) });
   };
 
 
@@ -1312,7 +1314,7 @@ function MeshObject(name, data) {
     let diff = Rotation.difference(endRotation, startRotation);
     this.updateUMatrix();
 
-    onRotation.forEach((c) => { c(startRotation, diff.theta, diff.phi, endRotation) });
+    onRotation.forEach((c) => { c(startRotation, endRotation) });
   };
 
   /**
@@ -1330,7 +1332,7 @@ function MeshObject(name, data) {
     let diff = Scale.difference(newScale, oldScale);
     this.updateUMatrix();
 
-    onScaled.forEach((c) => { c(oldScale, diff.sx, diff.sy, diff.sz, newScale) });
+    onScaled.forEach((c) => { c(oldScale, newScale) });
   };
 
   /**
@@ -1349,7 +1351,7 @@ function MeshObject(name, data) {
     let endRot = this.rotation.copy();
     this.updateUMatrix();
     
-    onRotation.forEach((c) => { c(startRot, deltaTheta, deltaPhi, endRot) });
+    onRotation.forEach((c) => { c(startRot, endRot) });
   };
 
   /**
@@ -1388,7 +1390,7 @@ function MeshObject(name, data) {
     let newScale = this.scale.copy();
     this.updateUMatrix();
 
-    onScaled.forEach((c) => { c(oldScale, deltaSX, deltaSY, deltaSZ, newScale) });
+    onScaled.forEach((c) => { c(oldScale, newScale) });
   };
 
   /**
@@ -1551,10 +1553,46 @@ function MeshManager(gl, programInfo) {
 /* ----------- Camera Manager ------------------------------------------------- */
 function CameraManager() {
 
+  let _cameraPosition = new Position(1, 1, 1);
+  let _up = Triple.of(0, 0, 1);
+  let _target = new Position(0, 0, 0);
+  let _fov = degToRad(60);
+  let _targetObject = undefined;
+  let _distanceFromTarget = Triple.of(5, 5, 5);
+
+  /**
+   * This variable can be used to lock the camera watching the target
+   * object. If no object is set as a target, the value of this variable is unused.
+   * Notice that if this variable is enabled and the function 'setTarget' is called, the
+   * camera will look to the set target coordinates until the target object is translated
+   */
+  this.lookingAtObject = false;
+
+  /**
+   * This variable can be used to lock the camera to follow the translation of
+   * the target object, remaining at the set distance from the target.
+   * If no object is set as a target, the value of this variable is unused.
+   * Notice that if this variable is enabled and the function 'setCameraPosition' is called,
+   * the camera will be positioned to the set position until the target object is translated
+   */
+  this.followObjectTranslation = false;
+
+  let onCameraPositionChange = [];
+  let onUpChange = [];
+  let onTargetChange = [];
+  let onFovChange = [];
+
+  const onTranslationCallback = (_startPos, endPos) => {
+    if(this.lookingAtObject) {
+      this.setTargetBy(endPos);
+    }
+    if(this.followObjectTranslation) {
+      this.positionAtDistanceFromTarget();
+    }
+  };
+
 
   /* POSITION ******************************************************* */
-
-  var _cameraPosition = new Position(1, 1, 1);
   /**
    * Returns the camera position. All the changes over the returning value are
    * NOT propagated to the internal camera position. To change the camera position
@@ -1564,13 +1602,10 @@ function CameraManager() {
   this.cameraPosition = () => {
     return _cameraPosition.copy();
   }
-
-  var onCameraPositionChange = [];
   /**
    * Adds a callback that will be invoked every time the camera position changes.
-   * The callback passed a param MUST BE A FUNCTION that accept five parameter:
+   * The callback passed a param MUST BE A FUNCTION that accept two parameters:
    * - the old position of the camera (a Position)
-   * - the three deltas (deltaX, deltaY, deltaZ) that represents the difference of the two position
    * - the current position of the camera (a Position)
    * 
    * So, the signature of a callback must be: 'function(oldPos, deltaX, deltaY, deltaZ, currPos)'
@@ -1595,8 +1630,8 @@ function CameraManager() {
     onCameraPositionChange = onCameraPositionChange.filter((c) => c !== callback);
   }
 
-  var notifyCameraPositionChange = (oldPos, deltaX, deltaY, deltaZ, currentPos) => {
-    onCameraPositionChange.forEach((c) => c(oldPos, deltaX, deltaY, deltaZ, currentPos));
+  let notifyCameraPositionChange = (oldPos, currentPos) => {
+    onCameraPositionChange.forEach((c) => c(oldPos, currentPos));
   }
 
   /**
@@ -1604,6 +1639,7 @@ function CameraManager() {
    * @param {number} x the x coordinate of the position of the camera
    * @param {number} y the y coordinate of the position of the camera
    * @param {number} z the z coordinate of the position of the camera
+   * @returns the current camera position
    */
   this.setCameraPosition = (x, y, z) => {
     let oldPos = this.cameraPosition();
@@ -1611,9 +1647,24 @@ function CameraManager() {
     _cameraPosition.y = y;
     _cameraPosition.z = z;
     let currPos = this.cameraPosition();
-    let diff = Position.difference(currPos, oldPos);
 
-    notifyCameraPositionChange(oldPos, diff.x, diff.y, diff.z, currPos);
+    notifyCameraPositionChange(oldPos, currPos);
+    return currPos;
+  }
+
+  /**
+   * Sets the camera position by using the coordinates of another position.
+   * This function accepts a position or an array with the coordinates
+   * @param {object} position the position that has to be used to get the coordinates or directly
+   * an array with the three coordinates
+   * @returns the current camera position
+   */
+  this.setCameraPositionBy = (position) => {
+    if(Position.prototype.isPrototypeOf(position)) {
+      return this.setCameraPosition(position.x, position.y, position.z);
+    } else {
+      return this.setCameraPosition(position[0], position[1], position[2])
+    }
   }
 
   /**
@@ -1628,13 +1679,26 @@ function CameraManager() {
     _cameraPosition.translate(deltaX, deltaY, deltaZ);
     let currPos = this.cameraPosition();
 
-    notifyCameraPositionChange(oldPos, deltaX, deltaY, deltaZ, currPos);
+    notifyCameraPositionChange(oldPos, currPos);
     return currPos;
   }
 
-  /* UP ************************************************************* */
+  /**
+   * Translates the current position of the camera.
+   * This function accept a Position that contains the translation value for each coordinate or
+   * directly an array
+   * @param {object} transl the position that represent the translation array or an array
+   * @returns the current position of the camera
+   */
+  this.translateCameraPositionBy = (transl) => {
+    if(Position.prototype.isPrototypeOf(transl)) {
+      return this.translateCameraPosition(transl.x, transl.y, transl.z);
+    } else {
+      return this.translateCameraPosition(transl[0], transl[1], transl[2])
+    }
+  }
 
-  var _up = Triple.of(0, 1, 0);
+  /* UP ************************************************************* */
   /**
    * Returns the up setting of the camera. All the changes over the returning value are
    * NOT propagated to the internal up. To change the up
@@ -1645,12 +1709,10 @@ function CameraManager() {
     return _up.copy();
   }
 
-  var onUpChange = [];
   /**
    * Adds a callback that will be invoked every time the up setting changes.
-   * The callback passed a param MUST BE A FUNCTION that accept five parameter:
+   * The callback passed a param MUST BE A FUNCTION that accept two parameters:
    * - the old up of the camera (a Triple)
-   * - the three deltas (deltaX, deltaY, deltaZ) that represents the difference of the two up
    * - the current up of the camera (a Triple)
    * 
    * So, the signature of a callback must be: 'function(oldUp, deltaX, deltaY, deltaZ, currUp)'
@@ -1675,14 +1737,43 @@ function CameraManager() {
     onUpChange = onUpChange.filter((c) => c !== callback);
   }
 
-  var notifyUpChange = (oldUp, deltaX, deltaY, deltaZ, currentUp) => {
-    onUpChange.forEach((c) => c(oldUp, deltaX, deltaY, deltaZ, currentUp));
+  let notifyUpChange = (oldUp, currentUp) => {
+    onUpChange.forEach((c) => c(oldUp, currentUp));
   }
 
+  /**
+   * Sets the up setting of the camera
+   * @param {number} xUp the x coordinate for up
+   * @param {number} yUp the y coordinate for up
+   * @param {number} zUp the z coordinate for up
+   * @returns the current up setting
+   */
+  this.setUp = (xUp, yUp, zUp) => {
+    let oldUp = this.up();
+    _up.first = xUp;
+    _up.second = yUp;
+    _up.third = zUp;
+    let currUp = this.up;
+
+    notifyUpChange(oldUp, currUp);
+    return currUp;
+  }
+
+  /**
+   * Sets the up setting starting from the given 'up' parameter.
+   * This function supports a Triple or an array
+   * @param {object} up the Triple or the array containing the coordinates of the new up
+   * @returns the current up setting
+   */
+  this.setUpBy = (up) => {
+    if(Triple.prototype.isPrototypeOf(up)) {
+      return this.setUp(up.first, up.second, up.third);
+    } else {
+      return this.setUp(up[0], up[1], up[2]);
+    }
+  }
 
   /* TARGET ********************************************************* */
-
-  var _target = new Position(0, 0, 0);
   /**
    * Returns the target position of the camera. All the changes over the returning value are
    * NOT propagated to the internal target. To change the coordinates of the target
@@ -1693,12 +1784,10 @@ function CameraManager() {
     return _target.copy();
   }
 
-  var onTargetChange = [];
   /**
    * Adds a callback that will be invoked every time the target position changes.
-   * The callback passed a param MUST BE A FUNCTION that accept five parameter:
+   * The callback passed a param MUST BE A FUNCTION that accept two parameters:
    * - the old position of the target (a Position)
-   * - the three deltas (deltaX, deltaY, deltaZ) that represents the difference from the two position
    * - the current position of the target (a Position)
    * 
    * So, the signature of a callback must be: 'function(oldPos, deltaX, deltaY, deltaZ, currPos)'
@@ -1706,7 +1795,7 @@ function CameraManager() {
    * @returns A successful result if the callback has been registered or a failure otherwise (for example is
    * callback is not a function)
    */
-  this.addTargetChange = (callback) => {
+  this.addOnTargetChange = (callback) => {
     if(!typeof(callback) === 'function') {
       return Result.failureStr("addOnTargetChange() | callback is not a function");
     }
@@ -1723,15 +1812,43 @@ function CameraManager() {
     onTargetChange = onTargetChange.filter((c) => c !== callback);
   }
 
-  var notifyTargetChange = (oldPos, deltaX, deltaY, deltaZ, currentPos) => {
-    onTargetChange.forEach((c) => c(oldPos, deltaX, deltaY, deltaZ, currentPos));
+  let notifyTargetChange = (oldPos, currentPos) => {
+    onTargetChange.forEach((c) => c(oldPos, currentPos));
   }
 
+  /**
+   * Sets the coordinates of the target of the camera
+   * @param {number} x the x coordinate of the target
+   * @param {number} y the y coordinate of the target
+   * @param {number} z the z coordinate of the target
+   * @returns the new target position
+   */
+  this.setTarget = (x, y, z) => {
+    let oldTarget = this.target();
+    _target.x = x;
+    _target.y = y;
+    _target.z = z;
+    let currTarget = this.target();
 
+    notifyTargetChange(oldTarget, currTarget);
+    return currTarget;
+  }
+
+  /**
+   * Sets the coordinates of the target of the camera.
+   * This function accepts a position or an array with the three coordinates
+   * @param {object} position the position of the target or an array containing its coordinates
+   * @returns the new target position
+   */
+  this.setTargetBy = (position) => {
+    if(Position.prototype.isPrototypeOf(position)) {
+      return this.setTarget(position.x, position.y, position.z);
+    } else {
+      return this.setTarget(position[0], position[1], position[2]);
+    }
+  }
 
   /* FOV ************************************************************ */
-
-  var _fov = degToRad(60);
   /**
    * Returns the fov of the camera. All the changes over the returning value are
    * NOT propagated to the internal fov. To change the coordinates of the target
@@ -1742,12 +1859,10 @@ function CameraManager() {
     return _fov;
   }
 
-  var onFovChange = [];
   /**
    * Adds a callback that will be invoked every time the fov changes.
-   * The callback passed a param MUST BE A FUNCTION that accept three parameter:
+   * The callback passed a param MUST BE A FUNCTION that accept two parameters:
    * - the old fov of the camera (in radiants)
-   * - the difference of the two fov
    * - the current position of the camera (in radiants)
    * 
    * So, the signature of a callback must be: 'function(oldFov, diff, currFov)'
@@ -1772,21 +1887,55 @@ function CameraManager() {
     onFovChange = onFovChange.filter((c) => c !== callback);
   }
 
-  var notifyFovChange = (oldFov, diff, currFov) => {
-    onFovChange.forEach((c) => c(oldFov, diff, currFov));
+  let notifyFovChange = (oldFov, currFov) => {
+    onFovChange.forEach((c) => c(oldFov, currFov));
+  }
+
+  /**
+   * Sets the fov of the camera
+   * @param {number} fov the new value of the fov
+   * @param {number} angleUnit the unit of the angle to be used (ANGLE_UNIT.RADIANS as default)
+   * @returns a failure if the angle unit is not valid or a success otherwise
+   */
+  this.setFov = (fov, angleUnit = ANGLE_UNIT.RADIANS) => {
+    let oldFov = this.fov();
+    switch(angleUnit) {
+      case ANGLE_UNIT.RADIANS: {
+        _fov = fov;
+        break;
+      }
+      case ANGLE_UNIT.DEGREE : {
+        _fov = degToRad(fov);
+        breakM
+      }
+      default : {
+        return Result.failureStr("CameraManager.setFov() | invalid angle unit: " + angleUnit);
+      }
+    }
+    let currFov = this.fov();
+
+    notifyFovChange(oldFov, currFov);
+    return Result.success(true);
+  }
+
+  this.getFovAs = (angleUnit = ANGLE_UNIT.RADIANS) => {
+    switch(angleUnit) {
+      case ANGLE_UNIT.RADIANS : {
+        return Result.success(this.fov());
+      }
+
+      case ANGLE_UNIT.DEGREE : {
+        return Result.success(radToDeg(this.fov()));
+      }
+
+      default : {
+        return Result.failureStr("CameraManager.getFovAs() | invalid angle unit: " + angleUnit);
+      }
+    }
   }
 
 
   /* TARGET OBJECT ************************************************** */
-
-  var _targetObject = undefined;
-  this.followTargetObject = false;
-   var onTranslationCallback = (sp, deltaX, deltaY, deltaZ, ep) => {
-    if(this.followTargetObject) {
-      this.translateCameraPosition(deltaX, deltaY, deltaZ);
-    }
-  };
-
   /**
    * Returns the target object of the camera or 'undefined' if no target object
    * is set
@@ -1797,42 +1946,65 @@ function CameraManager() {
     return _targetObject;
   }
 
-  this.setTargetObject = (meshObject, followTargetObject = true) => {
+  this.removeTarget = () => {
+    _targetObject?.removeOnTranslation(onTranslationCallback);
+    _targetObject = undefined;
+  }
+
+  /**
+   * Sets a target object for the camera removing the previous (if present).
+   * This function also allow to lock the camera watching the object simply passing
+   * 'true' as lookingAtObject parameter and also to follow its translation by
+   * enabling the followObjectTranslation parameter.
+   * If the method 'setTarget' is invoked while lookingAtObject and followObjectTranslation
+   * are true, the camera will watch to the set target until the object is translated
+   * @param {MeshObject} meshObject the object to be followed
+   * @param {boolean} lookingAtObject if enabled, the camera will be locked to watch to the target object
+   * @param {boolean} followObjectTranslation if enabled, the camera follows the translation of the target object
+   */
+  this.setTargetObject = (meshObject, lookingAtObject = true, followObjectTranslation = true) => {
     _targetObject?.removeOnTranslation(onTranslationCallback);
 
     _targetObject = meshObject;
     _targetObject.addOnTranslation(onTranslationCallback);
-    this.followTargetObject = followTargetObject
+    this.lookingAtObject = lookingAtObject;
+    this.followObjectTranslation = followObjectTranslation;
   }
-
-  /* CALLBACK ******************************************************* */
-
-
   /**
-   * Sets the position of the camera to that passed as parameter.
-   * Notice that the position is passed as a copy, then a change over the
-   * original position does not affect that of the camera
-   * @param {Position} position the position to be set
+   * Automatially sets the camera position at the set distance from the target
    */
-   this.setCameraPosition = function(position) {
-    this.setCameraCoordinates(position.x, position.y, position.z);
+  this.positionAtDistanceFromTarget = () => {
+    this.setCameraPosition(_target.x - _distanceFromTarget.first, _target.y - _distanceFromTarget.second, _target.z - _distanceFromTarget.third);
   }
 
   /**
-   * Translates the position of the camer
-   * @param {number} deltaX the x component of the translation
-   * @param {number} deltaY the y component of the translation
-   * @param {number} deltaZ the z component of the translation
+   * Sets the distance the camera will be positioned from the target. If 'doPositioning' parameter is enabled,
+   * the camera is immediately positioned at the required distance while if 'followObjectTranslation' is enabled
+   * then the camera follows the translation of the object remaining at the set distance
+   * @param {number} x the x coordinate for the distance
+   * @param {number} y the y coordinate for the distance
+   * @param {number} z the z coordinate for the distance
+   * @param {boolean} doPositioning if enabled, the camera is immediately positioned at the required distance
+   * @param {boolean} followObjectTranslation if enabled, the camera follows all the translations of the object
+   * remaining at the required distance
    */
-  this.translateCameraPosition = function(deltaX, deltaY, deltaZ) {
-    let startPos = _cameraPosition.copy();
-    _cameraPosition.translate(deltaX, deltaY, deltaZ);
-    let endPos = _cameraPosition.copy();
+  this.setDistanceFromTarget = (x, y = x, z = x, doPositioning = true, followObjectTranslation = this.followObjectTranslation) => {
+    _distanceFromTarget.first = x;
+    _distanceFromTarget.second = y;
+    _distanceFromTarget.third = z;
+    this.followObjectTranslation = followObjectTranslation;
 
-    onCameraPositionChange.forEach((f) => f(startPos, endPos));
+    if(doPositioning) {
+      this.positionAtDistanceFromTarget();
+    }
   }
 
-
+  this.calculateCameraMatrix = () => {
+    return m4.lookAt(
+      _cameraPosition.toArray(),
+      _target.toArray(),
+      _up.toArray());
+  }
 
 }
 
@@ -1844,9 +2016,7 @@ function GlDrawer(meshMgr) {
   this.fov = degToRad(60);
   this.zNear = 0.1;
   this.zFar = 200;
-  this.cameraPosition = new Position(1, 1, 1);
-  this.target = [0, 0, 0];
-  this.up = [0, 0, 1];
+  this.cameraManager = new CameraManager();
   this.sharedUniforms = {
     u_ambientLight : [0.2,0.2,0.2],
     u_colorLight : [1.0,1.0,1.0],
@@ -1855,8 +2025,7 @@ function GlDrawer(meshMgr) {
   }
 
   this.updateViewMatrix = function() {
-    var cameraMatrix = m4.lookAt(this.cameraPosition.toArray(), this.target, this.up);
-    this.sharedUniforms.u_view = m4.inverse(cameraMatrix);
+    this.sharedUniforms.u_view = m4.inverse(this.cameraManager.calculateCameraMatrix());
   }
 
   this.updateProjectionMatrix = function() {

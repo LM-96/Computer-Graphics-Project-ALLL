@@ -1,5 +1,5 @@
 //Camera controls and Movement Controls
-
+/*
 var cameraView = 0; //0= Vista dall'alto; 1= vista in prima persona, 2= prima persona inversa
 
 function CameraManager(objTarget, cameraPos = [1,1,1], cameraup = [0,1,0], target = [0,0,0]){
@@ -74,4 +74,4 @@ function CameraManager(objTarget, cameraPos = [1,1,1], cameraup = [0,1,0], targe
 
 function createCameraManager(objTarget, cameraPos = [1,1,1], cameraup = [0,1,0], target = [0,0,0]){
   return new CameraManager(objTarget, cameraPos, cameraup, target);
-}
+}*/

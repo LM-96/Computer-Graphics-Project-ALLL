@@ -68,9 +68,6 @@ function init() {
 	//GL_DRAWER.cameraPosition = [10, 10, 1];
 	attachHandlers(ENV.canvas, MESH_MANAGER.get('cube1'));
 	log("init() | handlers attached");
-
-	CAMERA_MANAGER = createCameraManager(cube);
-	CAMERA_MANAGER.setCameraPosition(-1, -1, 1);
 }
 
 function main() {
