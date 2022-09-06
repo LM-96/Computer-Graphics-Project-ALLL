@@ -4,7 +4,6 @@ var ENV;
 var GL;
 var then = 0;
 var modelXRotationRadians = degToRad(0);
-var CAMERA_MANAGER;
 
 function createEnv() {
 	log("createEnv() | creating environment...");

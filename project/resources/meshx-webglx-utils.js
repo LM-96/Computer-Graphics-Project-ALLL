@@ -156,8 +156,33 @@ function Pair(first, second) {
     return Pair(tryCopy(this.first), tryCopy(this.second));
   };
 
+  /**
+   * Returns an array that contains the elements of this Pair as the first two
+   * @returns an array that contains the elements of this Pair as the first two
+   */
   this.toArray = function() {
     return [this.first, this.second];
+  }
+
+  /**
+   * Returns true if the given object has Pair as prototype and has its two values
+   * equals to this Pair
+   * @param {*} other the pair to check
+   * @returns true if the given object has Pair as prototype and has its two values
+   * equals to this Pair
+   */
+  this.equals = function(other) {
+    if(other == null || other == undefined) {
+      return false;
+    }
+
+    if(Pair.prototype.isPrototypeOf(other)) {
+      if(other.first === this.first && other.second === this.second) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 
@@ -197,16 +222,41 @@ function Triple(first, second, third) {
    * if their types define the copy() function
    * @returns a deep copy of this Triple
    */
-  this.copy = function () {
-    return Triple(
+  this.copy = function() {
+    return new Triple(
       tryCopy(this.first),
       tryCopy(this.second),
       tryCopy(this.third)
     );
   };
 
+  /**
+   * Returns an array that contains the elements of this Triple as the first three
+   * @returns an array that contains the elements of this Triple as the first three
+   */
   this.toArray = function() {
     return [this.first, this.second, this.third];
+  }
+
+  /**
+   * Returns true if the given object has Triple as prototype and has its three values
+   * equals to this Triple
+   * @param {*} other the triple to check
+   * @returns true if the given object has Triple as prototype and has its three values
+   * equals to this Triple
+   */
+   this.equals = function(other) {
+    if(other == null || other == undefined) {
+      return false;
+    }
+
+    if(Triple.prototype.isPrototypeOf(other)) {
+      if(other.first === this.first && other.second === this.second && other.third === this.third) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 
@@ -1559,28 +1609,16 @@ function CameraManager() {
   let _fov = degToRad(60);
   let _targetObject = undefined;
   let _distanceFromTarget = Triple.of(5, 5, 5);
-
-  /**
-   * This variable can be used to lock the camera watching the target
-   * object. If no object is set as a target, the value of this variable is unused.
-   * Notice that if this variable is enabled and the function 'setTarget' is called, the
-   * camera will look to the set target coordinates until the target object is translated
-   */
-  this.lookingAtObject = false;
-
-  /**
-   * This variable can be used to lock the camera to follow the translation of
-   * the target object, remaining at the set distance from the target.
-   * If no object is set as a target, the value of this variable is unused.
-   * Notice that if this variable is enabled and the function 'setCameraPosition' is called,
-   * the camera will be positioned to the set position until the target object is translated
-   */
-  this.followObjectTranslation = false;
+  let _lookingAtObject = false;
+  let _followObjectTranslation = false;
 
   let onCameraPositionChange = [];
   let onUpChange = [];
   let onTargetChange = [];
   let onFovChange = [];
+  let onTargetObjectChange = [];
+  let onLookingAtObjectChange = [];
+  let onFollowObjectTranslationChange = [];
 
   const onTranslationCallback = (_startPos, endPos) => {
     if(this.lookingAtObject) {
@@ -1590,6 +1628,130 @@ function CameraManager() {
       this.positionAtDistanceFromTarget();
     }
   };
+
+  /* LOCKS ********************************************************** */
+  /**
+   * Returns true if the camera is locked to look a target object.
+   * If no object is set as a target, the value of this variable is unused.
+   * Notice that if the camera is set to look for the target object and the function 'setTarget' is called, the
+   * camera will look to the set target coordinates until the target object is translated
+   *
+   * @returns true if the camera is locked to look a target object
+   */
+  this.lookingAtObject = () => {
+    return _lookingAtObject;
+  }
+
+  /**
+   * Adds a callback that will be invoked every time the camera is locked/unlocked to look at the target object.
+   * The callback passed a param MUST BE A FUNCTION that accept two parameters:
+   * - the old lock state of the camera (a boolean)
+   * - the current lock state of the camera (a boolean)
+   * 
+   * So, the signature of a callback must be: 'function(oldLookingAtObject, currLookingAtObject)'
+   * @param {function} callback the function to be invoked when camera is locked/unlocked to look at the target object
+   * @returns A successful result if the callback has been registered or a failure otherwise (for example is
+   * callback is not a function)
+   */
+   this.addLookingAtObjectChange = (callback) => {
+    if(typeof(callback) !== 'function') {
+      return Result.failureStr("addOnLookingAtObjectChange() | callback is not a function");
+    }
+    
+    onLookingAtObjectChange.push(callback);
+    return Result.success(true);
+  }
+
+  /**
+   * Deregister the given callback for the camera lock/unlock changes
+   * @param {function} callback the callback to be de-registered
+   */
+  this.removeOnLookingAtObjectChange = (callback) => {
+    onLookingAtObjectChange = onLookingAtObjectChange.filter((c) => c !== callback);
+  }
+
+  let notifyOnLoockingAtObjectChange = (oldLATO, currLATO) => {
+    onCameraPositionChange.forEach((c) => c(oldLATO, currLATO));
+  }
+
+  /**
+   * Locks and ulocks the camera to look at the target object.
+   * Notice that:
+   * - if the lock is set and the function 'setTarget' is called, the
+   * camera will look to the set target coordinates until the target object is translated;
+   * - if no target object is set, the camera is not locked until a target object is added.
+   * @param {boolean} lookingAtObject true for locking the camera, false to unlock
+   */
+  this.setLookingAtObject = (lookingAtObject) => {
+    let oldVal = _lookingAtObject;
+    _lookingAtObject = lookingAtObject;
+
+    notifyOnLoockingAtObjectChange(oldVal, _lookingAtObject);
+  }
+
+  /**
+   * Returns true if the camera is locked to follow the translation of the target object.
+   * If no object is set as a target, the value of this variable is unused.
+   * Notice that if the camera is set to follow the translations of the target object
+   * and the function 'setCameraPosition' is called,
+   * the camera will be positioned to the set position until the target object is translated
+   *
+   * @returns true if the camera is locked to follow the translations of the target object
+   */
+   this.followObjectTranslation = () => {
+    return _followObjectTranslation;
+  }
+
+  /**
+   * Adds a callback that will be invoked every time the camera is locked/unlocked to follow the translations of the
+   * target object.
+   * The callback passed a param MUST BE A FUNCTION that accept two parameters:
+   * - the old lock state of the camera for translations (a boolean)
+   * - the current lock state of the camera for translations (a boolean)
+   * 
+   * So, the signature of a callback must be: 'function(oldFollowingObjectTranslation, currFollowingObjectTranslation)'
+   * @param {function} callback the function to be invoked when camera is locked/unlocked to follow the translations of the
+   * target object
+   * @returns A successful result if the callback has been registered or a failure otherwise (for example is
+   * callback is not a function)
+   */
+   this.addFollowObjectTranslationChange = (callback) => {
+    if(typeof(callback) !== 'function') {
+      return Result.failureStr("addFollowObjectTranslationChange() | callback is not a function");
+    }
+    
+    onFollowObjectTranslationChange.push(callback);
+    return Result.success(true);
+  }
+
+  /**
+   * Deregister the given callback for the camera lock/unlock for translations change
+   * @param {function} callback the callback to be de-registered
+   */
+  this.removeOnFollowObjectTranslationChange = (callback) => {
+    onFollowObjectTranslationChange = onFollowObjectTranslationChange.filter((c) => c !== callback);
+  }
+
+  let notifyOnFollowObjectTranslationChange = (oldFOT, currFOT) => {
+    onFollowObjectTranslationChange.forEach((c) => c(oldFOT, currFOT));
+  }
+
+  /**
+   * Locks and ulocks the camera to follow the translations of the target object.
+   * If this functionality is enabled, then the camera follows the object mainainig
+   * the set distance from the target
+   * Notice that:
+   * - if the lock is set and the function 'setCameraPosition' is called, the
+   * camera will be positionated at the set coordinates until the target object is translated;
+   * - if no target object is set, the camera is not locked until a target object is added.
+   * @param {boolean} followObjectTranslation true for locking the camera, false to unlock
+   */
+  this.setFollowObjectTranslation = (followObjectTranslation) => {
+    let oldVal = _followObjectTranslation;
+    _followObjectTranslation = followObjectTranslation;
+
+    notifyOnFollowObjectTranslationChange(oldVal, _followObjectTranslation);
+  }
 
 
   /* POSITION ******************************************************* */
@@ -1753,7 +1915,7 @@ function CameraManager() {
     _up.first = xUp;
     _up.second = yUp;
     _up.third = zUp;
-    let currUp = this.up;
+    let currUp = this.up();
 
     notifyUpChange(oldUp, currUp);
     return currUp;
@@ -1918,6 +2080,11 @@ function CameraManager() {
     return Result.success(true);
   }
 
+  /**
+   * Returns the current fov in the required unit
+   * @param {number} angleUnit the required angle unit (can use ANGLE_UNIT)
+   * @returns the current fov in the required unit
+   */
   this.getFovAs = (angleUnit = ANGLE_UNIT.RADIANS) => {
     switch(angleUnit) {
       case ANGLE_UNIT.RADIANS : {

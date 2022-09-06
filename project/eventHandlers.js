@@ -4,12 +4,18 @@ var old_x, old_y;
 var dX = 0, dY = 0;
 var speed = 0.05;
 var target;
-var xCamInput = document.getElementById("camXValue");
-var yCamInput = document.getElementById("camYValue");
-var zCamInput = document.getElementById("camZValue");
-var fovInput = document.getElementById("fovValue");
+var input = {
+  "xCam" : document.getElementById("xCamInput"),
+  "yCam" : document.getElementById("yCamInput"),
+  "zCam" : document.getElementById("zCamInput"),
+  "fov" : document.getElementById("fovInput"),
+  "xUp" : document.getElementById("xUpInput"),
+  "yUp" : document.getElementById("yUpInput"),
+  "zUp" : document.getElementById("zUpInput")  
+}
 const INCREMENT_UNIT = 0.25;
 const RAD_INCREMENT_UNIT = 0.05;
+const DEG_INCREMENT_UNIT = 1;
 
 var mouseDown = function(e) {
   drag = true;
@@ -49,60 +55,54 @@ var keydown = function(e) {
   GL_DRAWER.drawScene();
 }
 
-function incrementXCam() {
-  setXCam(GL_DRAWER.cameraPosition.x + INCREMENT_UNIT);
+function increment(what, decrement = false) {
+  let inc = 1;
+  if (decrement) inc = -1;
+  let camMgr = GL_DRAWER.cameraManager;
+
+  switch (what) {
+    case "xCam": {
+      camMgr.translateCameraPosition(inc * INCREMENT_UNIT, 0, 0);
+      break;
+    }
+
+    case "yCam": {
+      camMgr.translateCameraPosition(0, inc * INCREMENT_UNIT, 0);
+      break;
+    }
+
+    case "zCam": {
+      camMgr.translateCameraPosition(0, 0, inc * INCREMENT_UNIT);
+      break;
+    }
+
+    case "fov": {
+      camMgr.setFov(camMgr.fov() + inc * degToRad(DEG_INCREMENT_UNIT));
+      break;
+    }
+
+    case "xUp": {
+      let oldUp = camMgr.up();
+      camMgr.setUp(oldUp.first + inc, oldUp.second, oldUp.third);
+      break;
+    }
+
+    case "yUp": {
+      let oldUp = camMgr.up();
+      camMgr.setUp(oldUp.first, oldUp.second + inc, oldUp.third);
+      break;
+    }
+
+    case "zUp": {
+      let oldUp = camMgr.up();
+      camMgr.setUp(oldUp.first, oldUp.second, oldUp.third + inc);
+      break;
+    }
+  }
 }
 
-function decrementXCam() {
-  setXCam(GL_DRAWER.cameraPosition.x - INCREMENT_UNIT);
-}
-
-function incrementYCam() {
-  setYCam(GL_DRAWER.cameraPosition.y + INCREMENT_UNIT);
-}
-
-function decrementYCam() {
-  setYCam(GL_DRAWER.cameraPosition.y - INCREMENT_UNIT);
-}
-
-function incrementZCam() {
-  setZCam(GL_DRAWER.cameraPosition.z + INCREMENT_UNIT);
-}
-
-function decrementZCam() {
-  setZCam(GL_DRAWER.cameraPosition.z - INCREMENT_UNIT);
-}
-
-function incrementFov() {
-  setFov(GL_DRAWER.fov + RAD_INCREMENT_UNIT);
-}
-
-function decrementFov() {
-  setFov(GL_DRAWER.fov - RAD_INCREMENT_UNIT);
-}
-
-function setXCam(value, updateView = true) {
-  GL_DRAWER.cameraPosition.x = value;
-  if(updateView) xCamInput.value = value;
-  GL_DRAWER.drawScene();
-}
-
-function setYCam(value, updateView = true) {
-  GL_DRAWER.cameraPosition.y = value;
-  if(updateView) yCamInput.value = value;
-  GL_DRAWER.drawScene();
-}
-
-function setZCam(value, updateView = true) {
-  GL_DRAWER.cameraPosition.z = value;
-  if(updateView) zCamInput.value = value;
-  GL_DRAWER.drawScene();
-}
-
-function setFov(value, updateView = true) {
-  GL_DRAWER.fov = value;
-  if(updateView) fovInput.value = radToDeg(value);
-  GL_DRAWER.drawScene();
+function setInputValue(what, value) {
+  input[what].value = value;
 }
 
 function attachHandlers(canvas, p_target) {
@@ -113,4 +113,22 @@ function attachHandlers(canvas, p_target) {
   target = p_target;
 
   document.addEventListener('keydown', keydown);
+  let camMgr = GL_DRAWER.cameraManager;
+
+  camMgr.addOnCameraPositionChange((_oldPos, currPos) => {
+    setInputValue("xCam", currPos.x);
+    setInputValue("yCam", currPos.y);
+    setInputValue("zCam", currPos.z);
+  });
+
+  camMgr.addOnFovChange((_oldFov, currFov) => {
+    setInputValue("fov", radToDeg(currFov));
+  })
+
+  camMgr.addOnUpChange((_oldUp, currUp) => {
+    log(currUp)
+    setInputValue("xUp", currUp.first);
+    setInputValue("yUp", currUp.second);
+    setInputValue("zUp", currUp.third);
+  })
 }
