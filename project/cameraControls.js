@@ -1,9 +1,9 @@
 //Camera controls
 
-function CameraManager(objTarget, cameraPos, cameraup, target){
+function CameraManager(GlDrawer, objTarget, cameraPos, cameraup, target){
 
   //this.cameraViewModeNum = 1;   //0 visuale in terza persona, //1 visuale dall'alto, //2 visuale in prima persona
-
+  this.GlDrawer = GlDrawer;
   this.cameraPosition = new Position(cameraPos[0], cameraPos[1], cameraPos[2]);
   this.cameraUP = cameraup;
   this.cameraTargetPos = new Position(target[0], target[1], target[2]);
@@ -24,19 +24,19 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
     }
 
     if(this.followObjTarget)
-      GL_DRAWER.target = this.objTarget.position.toArray();
+      this.GlDrawer.target = this.objTarget.position.toArray();
     else
-      GL_DRAWER.target = this.cameraTargetPos.toArray();
+      this.GlDrawer.target = this.cameraTargetPos.toArray();
 
     if(this.followObjTraslation)
 		  this.updatePosOnTarget(this.distanceVector);
 
-    GL_DRAWER.cameraPosition = this.cameraPosition;
+    this.GlDrawer.cameraPosition = this.cameraPosition;
     
-    GL_DRAWER.up = this.cameraUP;
-    GL_DRAWER.fov = this.fov;
+    this.GlDrawer.up = this.cameraUP;
+    this.GlDrawer.fov = this.fov;
 
-    GL_DRAWER.updateViewMatrix();
+    this.GlDrawer.updateViewMatrix();
   }
 
   //GETTER AND SETTER
@@ -112,9 +112,8 @@ function CameraManager(objTarget, cameraPos, cameraup, target){
 
 }
 
-function createCameraManager(objTarget, cameraPos = [1,1,1], cameraup = [0,1,0], target = [0,0,0]){
-  var camera = new CameraManager(objTarget, cameraPos, cameraup, target);
+function createCameraManager(GlDrawer, objTarget, cameraPos = [1,1,1], cameraup = [0,1,0], target = [0,0,0]){
+  var camera = new CameraManager(GlDrawer, objTarget, cameraPos, cameraup, target);
   camera.changeCameraView(CAMERA_MODE);
-
   return camera;
 }

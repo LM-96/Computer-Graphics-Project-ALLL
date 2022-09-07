@@ -764,46 +764,14 @@ function GlDrawer(meshMgr) {
 
 /* ----------- Singleton ------------------------------------------------------ */
 var MESH_MANAGER;
-var GL_DRAWER;
+var GlDrawer;
+var GL_DRAWER_LIST = [];
 
 function createMeshManager(gl, programInfo) {
   return new MeshManager(gl, programInfo);
 }
 
 function createGlDrawer(meshMgr) {
-  return new GlDrawer(meshMgr);
+  var drawer = new GlDrawer(meshMgr);
+  return GL_DRAWER_LIST.push(drawer) - 1;
 }
-
-/*
-this.limitPositions = function(bool){
-  this.limitEnabled = bool
-}
-
-this.setLimits = function(LimX, LimY, LimZ){
-  this.XLim = LimX;
-  this.YLim = LimY;
-  this.ZLim = LimZ;
-}
-
-this.isInLimit = function(deltaTrasl, limit){
-  if(Math.abs(deltaTrasl) > Math.abs(limit))
-    return false;
-  return true;
-}
-
-this.translateWithLimits = function(xTranslation, yTranslation, zTranslation) {
-  if(isInLimit(X+xTranslation, XLim))
-    this.translateX(xTranslation);
-  if(isInLimit(this.y+yTranslation, XLim))
-    this.translateX(yTranslation);
-  if(isInLimit(this.z+zTranslation, XLim))
-    this.translateX(zTranslation);
-  return this;
-}
-
-this.translate = function(xTranslation, yTranslation, zTranslation) {
-  if(limitPositions == true)
-    this.translateWithLimits(xTranslation, yTranslation, zTranslation);
-  else
-    this.translateLimitless(xTranslation, yTranslation, zTranslation);
-}*/

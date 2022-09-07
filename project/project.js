@@ -3,9 +3,11 @@ var ENV, ENV2;
 //var SHADERS;
 var GL;
 var then = 0;
-var CAMERA_MANAGER, CubeController;
-var CAMERA_MODE = 1;			//0 visuale in terza persona, //1 visuale dall'alto, //2 visuale in prima persona
+var CAMERA_MANAGER, CAMERA_MANAGER2, CubeController;
+var CAMERA_MODE = 0;			//0 visuale in terza persona, //1 visuale dall'alto, //2 visuale in prima persona
 var targetObject = null;
+
+var GL_DRAWER2, MESH_MANAGER2;
 
 function createEnv(canvasId) {
 	log("createEnv() | creating environment...");
@@ -35,41 +37,25 @@ function createEnv(canvasId) {
 function init() {
 	log("init() | starting...")
 	ENV = createEnv('my_Canvas');
-	//ENV2 = createEnv('obj_canvas');
+	ENV2 = createEnv('obj_canvas');
 	GL = ENV.gl;
 	log("init() | ENV created")
 
 	MESH_MANAGER = createMeshManager(ENV.gl, ENV.programInfo);
+	MESH_MANAGER2 = createMeshManager(ENV2.gl, ENV2.programInfo);
 	log("init() | MESH_MANAGER setup completed");
-	GL_DRAWER = createGlDrawer(MESH_MANAGER);
+	GL_DRAWER = GL_DRAWER_LIST[createGlDrawer(MESH_MANAGER)];
+	GL_DRAWER2 = GL_DRAWER_LIST[createGlDrawer(MESH_MANAGER2)]
 	log("init() | GL_DRAWER setup completed")
 
-	//MESH_MANAGER.loadFromObj('cube1', "assets/moto_simple_1.obj");
-	/*const S = 10;
-	const H = 0;
-
-	const textureCoords = [ 0,0, 1,0, 0,1, 1,1,];
-
-	const floor = {
-	   position: 	{ numComponents: 3, data: [-S,H,-S, S,H,-S, -S,H,S,  S,H,S, ], },
-	   texcoord: 	{ numComponents: 2, data: textureCoords, },
-	   //color: 	{ numComponents: 3, data: [0.7,0.7,0.7,  0.7,0.7,0.7,  0.7,0.7,0.7,  0.7,0.7,0.7], },
-	   indices: 	{ numComponents: 3, data: [0,2,1, 	2,3,1,], },
-	   normal:		{numComponents: 3, data: [0,1,0,	0,1,0,	0,1,0,	0,1,0,], },
-	};
-	MESH_MANAGER.loadFromRawData('cube1', floor.position, floor.texcoord, floor.normal, floor.indices);*/
 	const L = 3;
 	var floor = MESH_MANAGER.loadFromObj('floor', './assets/plane-2m.obj');
 	floor.scalate(L, L, 0);
 	var cube = MESH_MANAGER.loadFromObj('cube1', './assets/cubo_con_assi.obj');
+	MESH_MANAGER2.loadFromObj('cube2', './assets/cubo_con_assi.obj');
 	cube.limits = Limits.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, 3, 3);
 	cube.setPosition(0, 0, 0.25);
 	cube.scalate(0.25, 0.25, 0.25);
-
-	
-
-	//GL_DRAWER.fov = degToRad(100);
-	//GL_DRAWER.cameraPosition = [10, 10, 1];
 	
 	log("init() | handlers attached");
 }
@@ -84,9 +70,17 @@ function main() {
 	
 	targetObject = obj;
 	CubeController = new Controller(obj);
-	CAMERA_MANAGER = createCameraManager(obj);
+	CAMERA_MANAGER = createCameraManager(GL_DRAWER, obj);
 	attachHandlers(ENV.canvas, obj);
 
+	//Canvas 2 //test
+	var obj2 = MESH_MANAGER2.get("cube2");
+	obj2.setPosition(0,0,0.25);
+	obj2.rotate(90,0);
+	CAMERA_MANAGER2 = createCameraManager(GL_DRAWER2 ,obj2, [-2,-1,0.25]);
+
+	
+	
 
 	//Start rendering loop
 	requestAnimationFrame(render);
@@ -105,6 +99,9 @@ async function render(time) {
 	CAMERA_MANAGER.updateGL_DRAWER();
 	GL_DRAWER.drawScene();
 
+	CAMERA_MANAGER2.updateGL_DRAWER();
+	GL_DRAWER2.drawScene();
+	
 	//await sleep(200);
 	requestAnimationFrame(render);
 }
