@@ -9,6 +9,10 @@ var targetObject = null;
 
 var GL_DRAWER2, MESH_MANAGER2;
 
+
+
+var canvas1, canvas2;
+
 function createEnv(canvasId) {
 	log("createEnv() | creating environment...");
 
@@ -61,7 +65,7 @@ function init() {
 }
 
 function main() {
-	init();
+	//init();
 	log("main() | init completed");
 	var obj = MESH_MANAGER.get("cube1");
 	obj.setPosition(0,0,0.25);
@@ -86,6 +90,17 @@ function main() {
 	requestAnimationFrame(render);
 }
 
+function main2() {
+	canvas1 = new CanvasEnv("my_Canvas");
+	canvas2 = new CanvasEnv("obj_canvas");
+
+	canvas1.main();
+	canvas2.main();
+
+	//Start rendering loop
+	requestAnimationFrame(render2);
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -96,7 +111,8 @@ async function render(time) {
 	var delta = time - then;
 	then = time;
 	
-	CAMERA_MANAGER.updateGL_DRAWER();
+	canvas1.CAMERA_MANAGER.updateGL_DRAWER();
+	canvas2.CAMERA_MANAGER.updateGL_DRAWER();
 	GL_DRAWER.drawScene();
 
 	CAMERA_MANAGER2.updateGL_DRAWER();
@@ -106,4 +122,21 @@ async function render(time) {
 	requestAnimationFrame(render);
 }
 
-main();
+async function render2(time) {
+
+	time *= 0.001;
+	var delta = time - then;
+	then = time;
+	
+	canvas1.CAMERA_MANAGER.updateGL_DRAWER();
+	canvas2.CAMERA_MANAGER.updateGL_DRAWER();
+
+	canvas1.GlDrawer.drawScene();
+	canvas2.GlDrawer.drawScene();
+
+	
+	//await sleep(200);
+	requestAnimationFrame(render2);
+}
+
+main2();
