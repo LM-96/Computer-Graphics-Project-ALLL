@@ -29,9 +29,41 @@ const cards = {
   "fov" : document.getElementById("fovCard"),
   "cameraDistance" : document.getElementById("cameraDistanceCard")
 }
+const mainAccordion = document.getElementById("mainAccordion")
 const INCREMENT_UNIT = 0.25;
 const RAD_INCREMENT_UNIT = 0.05;
 const DEG_INCREMENT_UNIT = 1;
+const ACCORDION_ITEM_OBJ = `<div class="accordion-item">
+<h2 class="accordion-header" id="heading#objName#">
+  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse#objName#" aria-expanded="false" aria-controls="collapse#objName#">
+  #objName#
+  </button>
+</h2>
+<div id="collapse#objName#" class="accordion-collapse collapse" aria-labelledby="heading#objName#" data-bs-parent="#mainAccordion">
+  <div class="accordion-body">
+    <div id="#objName#Card" class="card center mt-2 mb-1" > 
+      <b>Position</b>
+      <div class="row m-2">
+        <div class="col">
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'x', true)"><img src="resources/images/dash-circle.svg" /></button>
+          <input class="form-control center" id="x#objName#Input" type="text" disabled="true" value="0"\>
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'x', true)"><img src="resources/images/plus-circle.svg" /></button>
+        </div>
+        <div class="col">
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'y', true)"><img src="resources/images/dash-circle.svg" /></button>
+          <input class="form-control center" id="y#objName#Input" type="text" disabled="true" value="0"\>
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'y', true)"><img src="resources/images/plus-circle.svg" /></button>
+        </div>
+        <div class="col">
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'z', true)"><img src="resources/images/dash-circle.svg" /></button>
+          <input class="form-control center" id="z#objName#Input" type="text" disabled="true" value="0"\>
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'z', true)"><img src="resources/images/plus-circle.svg" /></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>`
 
 var mouseDown = function(e) {
   drag = true;
@@ -257,16 +289,92 @@ function onTargetObjectInput(objName) {
   GL_DRAWER.drawScene();
 }
 
+function objIncrement(objName, what, decrement = false) {
+  let inc = 1;
+  if (decrement) inc = -1;
+  let obj = MESH_MANAGER.get(objName);
+  switch(what) {
+    case "x" : {
+      obj.translate(inc * INCREMENT_UNIT, 0, 0);
+    }
+    case "y" : {
+      obj.translate(0, inc * INCREMENT_UNIT, 0);
+    }
+    case "z" : {
+      obj.translate(0, 0, inc * INCREMENT_UNIT);
+    }
+    case "theta" : {
+      obj.rotate(inc * degToRad(DEG_INCREMENT_UNIT), 0);
+    }
+    case "phi" : {
+      obj.rotate(0, inc * degToRad(DEG_INCREMENT_UNIT));
+    }
+    case "sx" : {
+      obj.scalate(inc * INCREMENT_UNIT, 1, 1);
+    }
+    case "sy" : {
+      obj.scalate(1, inc * INCREMENT_UNIT, 1);
+    }
+    case "sz" : {
+      obj.scalate(1, 1, inc * INCREMENT_UNIT);
+    }
+  }
+  GL_DRAWER.drawScene();
+}
+
+
+function objSet(objName, what, value) {
+  let obj = MESH_MANAGER.get(objName);
+  switch(what) {
+    case "x" : {
+      let oldPos = obj.position;
+      obj.setPosition(value, oldPos.y, oldPos.z);
+    }
+    case "y" : {
+      let oldPos = obj.position;
+      obj.setPosition(oldPos.x, value, oldPos.z);
+    }
+    case "z" : {
+      let oldPos = obj.position;
+      obj.setPosition(oldPos.x, oldPos.y, value);
+    }
+    case "theta" : {
+      let oldRot = obj.rotation;
+      obj.setRotation(value, oldRot.phi);
+    }
+    case "phi" : {
+      let oldRot = obj.rotation;
+      obj.setRotation(oldRot.theta, value);
+    }
+    case "sx" : {
+      let oldScale = obj.scale;
+      obj.setScale(value, oldScale.y, oldScale.z);
+    }
+    case "sy" : {
+      let oldScale = obj.scale;
+      obj.setScale(oldScale.x, value, oldScale.z);
+    }
+    case "sz" : {
+      let oldScale = obj.scale;
+      obj.setScale(oldScale.x, oldScale.y, value);
+    }
+  }
+  GL_DRAWER.drawScene();
+}
+
 function attachHandlers(canvas, p_target) {
+  //1: attach mouse events
   canvas.onmousedown=mouseDown;
   canvas.onmouseup=mouseUp;
   canvas.mouseout=mouseUp;
   canvas.onmousemove=mouseMove;
   target = p_target;
 
+  //2: attach keyboard events
   document.addEventListener('keydown', keydown);
   let camMgr = GL_DRAWER.cameraManager;
 
+  //3: attach callbacks for UI update
   camMgr.addOnCameraPositionChange((_oldPos, currPos) => {
     setInputValue("xCam", currPos.x);
     setInputValue("yCam", currPos.y);
@@ -303,6 +411,7 @@ function attachHandlers(canvas, p_target) {
     setInputValue("zCamDist", currDist.third);
   })
 
+  //4: updating UI at startup
   let currPos = camMgr.cameraPosition();
   setInputValue("xCam", currPos.x);
   setInputValue("yCam", currPos.y);
@@ -326,17 +435,36 @@ function attachHandlers(canvas, p_target) {
 
   input["followTranslation"].checked = camMgr.followObjectTranslation();
 
-
-  let objs = MESH_MANAGER.getAll();
+  const objs = MESH_MANAGER.getAll();
   let value = 2;
   for(const select of input["objSelects"]) {
     select.innerHTML += (`<option value="undefined">${undefined}</option>\n`);
   }
   for(const obj of objs) {
+    accordionItemFor(obj);
     for(const select of input["objSelects"]) {
       select.innerHTML += (`<option value="${obj.name}">${obj.name}</option>\n`);
     }
     value++;
   }
 
+}
+
+function accordionItemFor(obj) {
+  mainAccordion.innerHTML += (ACCORDION_ITEM_OBJ.replaceAll("#objName#", obj.name));
+  let xInput = document.getElementById("x" + obj.name + "Input");
+  let yInput = document.getElementById("y" + obj.name + "Input");
+  let zInput = document.getElementById("z" + obj.name + "Input");
+  
+  //1: Attaching callback for UI updates
+  obj.addOnTranslation((_oldPos, currPos) => {
+    xInput.value = currPos.x;
+    yInput.value = currPos.y;
+    zInput.value = currPos.z;
+  })
+
+  //2: Updates UI on startup
+  xInput.value = obj.position.x;
+  yInput.value = obj.position.y;
+  zInput.value = obj.position.z;
 }
