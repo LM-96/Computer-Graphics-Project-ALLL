@@ -428,6 +428,26 @@ function Position(x, y, z) {
   this.copy = function () {
     return new Position(this.x, this.y, this.z);
   };
+
+  /**
+   * Returns true if the given position has the same coordinates of this position
+   * (means that the two positions are equals)
+   * @param {Position} position the position to check
+   * @returns true if the given position has the same coordinates of this position
+   */
+  this.equals = function(position) {
+    if(position == null || position == undefined) {
+      return false;
+    }
+
+    if(Position.prototype.isPrototypeOf(position)) {
+      if(position.x === this.x && position.y === this.y && position.z === this.z) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
 
 /**
@@ -663,6 +683,26 @@ function Speed(vx, vy, vz) {
   this.copy = function () {
     return new Speed(this.vx, this.vy, this.vz);
   };
+
+  /**
+   * Returns true if the given speed has the same component of this speed
+   * (means that the two speeds are equals)
+   * @param {Speed} speed the speed to check
+   * @returns true if the given speed has the same component of this speed
+   */
+   this.equals = function(speed) {
+    if(speed == null || speed == undefined) {
+      return false;
+    }
+
+    if(Speed.prototype.isPrototypeOf(speed)) {
+      if(speed.vx === this.vx && speed.vy === this.vy && speed.vz === this.vz) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
 
 /**
@@ -769,6 +809,25 @@ function Rotation(theta, phi) {
   this.copy = function () {
     return Rotation(this.theta, this.phi);
   };
+
+
+  /**
+   * Returns true if the given rotation has the same angles of this rotation
+   * (means that the two rotations are equals)
+   * @param {Rotation} rotation 
+   * @returns true if the given rotation has the same angles of this rotation
+   */
+  this.equals = function(rotation) {
+    if(rotation == null || rotation == undefined) {
+      return false;
+    }
+
+    if(Rotation.prototype.isPrototypeOf(rotation)) {
+      if(rotation.theta === this.theta && rotation.phi === this.phi) {
+        return true;
+      }
+    }
+  }
 }
 
 /**
@@ -897,6 +956,26 @@ function Scale(sx, sy, sz) {
    this.copy = function () {
     return new Scale(this.sx, this.sy, this.sz);
   };
+
+  /**
+   * Returns true if the given scale has the same components of the this scale
+   * (means that the two scales are equals)
+   * @param {Scale} scale the scale to check
+   * @returns true if the given scale has the same components of the this scale
+   */
+  this.equals = function(scale) {
+    if(scale == null || scale == undefined) {
+      return false;
+    }
+
+    if(Scale.isPrototypeOf(scale)) {
+      if(scale.sx === this.sx && scale.sy === this.sy && scale.sz === this.sz) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
 
 /**
@@ -1343,7 +1422,6 @@ function MeshObject(name, data) {
     this.position.y = y;
     this.position.z = z;
     let endPos = this.position.copy();
-    let diff = Position.difference(endPos, startPos);
     this.updateUMatrix();
 
     onTranslation.forEach((c) => { c(startPos, endPos) });
@@ -1361,7 +1439,6 @@ function MeshObject(name, data) {
     this.rotation.phi = phi;
 
     let endRotation = this.rotation.copy();
-    let diff = Rotation.difference(endRotation, startRotation);
     this.updateUMatrix();
 
     onRotation.forEach((c) => { c(startRotation, endRotation) });
@@ -1608,7 +1685,7 @@ function CameraManager() {
   let _target = new Position(0, 0, 0);
   let _fov = degToRad(60);
   let _targetObject = undefined;
-  let _distanceFromTarget = Triple.of(5, 5, 5);
+  let _distanceFromTarget = Triple.of(-1, -1, -1);
   let _lookingAtObject = false;
   let _followObjectTranslation = false;
 
@@ -1619,12 +1696,13 @@ function CameraManager() {
   let onTargetObjectChange = [];
   let onLookingAtObjectChange = [];
   let onFollowObjectTranslationChange = [];
+  let onDistanceFromTargetChange = [];
 
   const onTranslationCallback = (_startPos, endPos) => {
-    if(this.lookingAtObject) {
+    if(_lookingAtObject) {
       this.setTargetBy(endPos);
     }
-    if(this.followObjectTranslation) {
+    if(_followObjectTranslation) {
       this.positionAtDistanceFromTarget();
     }
   };
@@ -1671,7 +1749,7 @@ function CameraManager() {
   }
 
   let notifyOnLoockingAtObjectChange = (oldLATO, currLATO) => {
-    onCameraPositionChange.forEach((c) => c(oldLATO, currLATO));
+    onLookingAtObjectChange.forEach((c) => c(oldLATO, currLATO));
   }
 
   /**
@@ -1686,7 +1764,9 @@ function CameraManager() {
     let oldVal = _lookingAtObject;
     _lookingAtObject = lookingAtObject;
 
-    notifyOnLoockingAtObjectChange(oldVal, _lookingAtObject);
+    if(oldVal !== _lookingAtObject) {
+      notifyOnLoockingAtObjectChange(oldVal, _lookingAtObject);
+    }
   }
 
   /**
@@ -1750,7 +1830,9 @@ function CameraManager() {
     let oldVal = _followObjectTranslation;
     _followObjectTranslation = followObjectTranslation;
 
-    notifyOnFollowObjectTranslationChange(oldVal, _followObjectTranslation);
+    if(oldVal !== _followObjectTranslation) {
+      notifyOnFollowObjectTranslationChange(oldVal, _followObjectTranslation);
+    }
   }
 
 
@@ -2113,9 +2195,45 @@ function CameraManager() {
     return _targetObject;
   }
 
+  /**
+   * Adds a callback that will be invoked every time a target object is attached/detached.
+   * The callback passed a param MUST BE A FUNCTION that accept two parameters:
+   * - the old target object of the camera
+   * - the current target ovject of the camera
+   * 
+   * So, the signature of a callback must be: 'function(oldTO, currTO)'
+   * @param {function} callback the function to be invoked when target object changes
+   * @returns A successful result if the callback has been registered or a failure otherwise (for example is
+   * callback is not a function)
+   */
+   this.addOnTargetObjectChange = (callback) => {
+    if(!typeof(callback) === 'function') {
+      return Result.failureStr("addOnTargetObjectChange() | callback is not a function");
+    }
+    
+    onTargetObjectChange.push(callback);
+    return Result.success(true);
+  }
+
+  /**
+   * Deregister the given callback for the target object changes
+   * @param {function} callback the callback to be de-registered
+   */
+  this.removeOnTargetObjectChange = (callback) => {
+    onTargetObjectChange = onTargetObjectChange.filter((c) => c !== callback);
+  }
+
+  let notifyTargetObjectChange = (oldTO, currTO) => {
+    onTargetObjectChange.forEach((c) => c(oldTO, currTO));
+  }
+
+
   this.removeTarget = () => {
+    let oldTO = _targetObject;
     _targetObject?.removeOnTranslation(onTranslationCallback);
     _targetObject = undefined;
+
+    notifyTargetObjectChange(oldTO, undefined);
   }
 
   /**
@@ -2130,13 +2248,61 @@ function CameraManager() {
    * @param {boolean} followObjectTranslation if enabled, the camera follows the translation of the target object
    */
   this.setTargetObject = (meshObject, lookingAtObject = true, followObjectTranslation = true) => {
-    _targetObject?.removeOnTranslation(onTranslationCallback);
+    let oldTO = _targetObject;
+    oldTO?.removeOnTranslation(onTranslationCallback);
 
     _targetObject = meshObject;
     _targetObject.addOnTranslation(onTranslationCallback);
-    this.lookingAtObject = lookingAtObject;
-    this.followObjectTranslation = followObjectTranslation;
+    if(_lookingAtObject != lookingAtObject) this.setLookingAtObject(lookingAtObject);
+    if(_followObjectTranslation != followObjectTranslation) this.setFollowObjectTranslation(followObjectTranslation);
+
+    notifyTargetObjectChange(oldTO, _targetObject);
   }
+
+  /**
+   * Returns a Triple that contains the distance of the camera from the target
+   * for each coordinate
+   *
+   * @returns a Triple that contains the distance of the camera from the target
+   * for each coordinate
+   */
+   this.distanceFromTarget = () => {
+    return _distanceFromTarget;
+  }
+
+  /**
+   * Adds a callback that will be invoked every time the distance of the camera from the target changes.
+   * The callback passed a param MUST BE A FUNCTION that accept two parameters:
+   * - the old distance (a Triple)
+   * - the current distance (a Triple)
+   * 
+   * So, the signature of a callback must be: 'function(oldDistanceFromTarget, currDistanceFromTarget)'
+   * @param {function} callback the function to be invoked when the distance of the camera from the target is changed
+   * @returns A successful result if the callback has been registered or a failure otherwise (for example is
+   * callback is not a function)
+   */
+   this.addOnDistanceFromTargetChange = (callback) => {
+    if(typeof(callback) !== 'function') {
+      return Result.failureStr("addOmDistanceFromTargetChange() | callback is not a function");
+    }
+    
+    onDistanceFromTargetChange.push(callback);
+    return Result.success(true);
+  }
+
+  /**
+   * Deregister the given callback for the camera lock/unlock changes
+   * @param {function} callback the callback to be de-registered
+   */
+  this.removeOnLookingAtObjectChange = (callback) => {
+    onDistanceFromTargetChange = onDistanceFromTargetChange.filter((c) => c !== callback);
+  }
+
+  let notifyOnDistanceFromTargetChange = (oldDistance, currDistance) => {
+    onDistanceFromTargetChange.forEach((c) => c(oldDistance, currDistance));
+  }
+
+
   /**
    * Automatially sets the camera position at the set distance from the target
    */
@@ -2156,14 +2322,18 @@ function CameraManager() {
    * remaining at the required distance
    */
   this.setDistanceFromTarget = (x, y = x, z = x, doPositioning = true, followObjectTranslation = this.followObjectTranslation) => {
+    let oldDist = _distanceFromTarget.copy();
     _distanceFromTarget.first = x;
     _distanceFromTarget.second = y;
     _distanceFromTarget.third = z;
-    this.followObjectTranslation = followObjectTranslation;
+    let currDis = _distanceFromTarget.copy();
+    if(_followObjectTranslation != followObjectTranslation) this.setFollowObjectTranslation(followObjectTranslation);
 
     if(doPositioning) {
       this.positionAtDistanceFromTarget();
     }
+
+    notifyOnDistanceFromTargetChange(oldDist, currDis);
   }
 
   this.calculateCameraMatrix = () => {
@@ -2180,7 +2350,6 @@ function GlDrawer(meshMgr) {
   this.gl = meshMgr.gl;
   this.meshMgr = meshMgr;
   this.programInfo = meshMgr.programInfo,
-  this.fov = degToRad(60);
   this.zNear = 0.1;
   this.zFar = 200;
   this.cameraManager = new CameraManager();
@@ -2196,7 +2365,7 @@ function GlDrawer(meshMgr) {
   }
 
   this.updateProjectionMatrix = function() {
-    this.sharedUniforms.u_projection = m4.perspective(this.fov, gl.canvas.clientWidth / gl.canvas.clientHeight, this.zNear, this.zFar);
+    this.sharedUniforms.u_projection = m4.perspective(this.cameraManager.fov(), gl.canvas.clientWidth / gl.canvas.clientHeight, this.zNear, this.zFar);
   }
 
   this.startDrawing = function() {
@@ -2222,6 +2391,8 @@ function GlDrawer(meshMgr) {
 }
 
 /* ----------- Singleton ------------------------------------------------------ */
+const GLX_ENVS = new Map();
+
 var MESH_MANAGER;
 var GL_DRAWER;
 
@@ -2232,6 +2403,25 @@ function createMeshManager(gl, programInfo) {
 function createGlDrawer(meshMgr) {
   return new GlDrawer(meshMgr);
 }
+
+/*
+function glxInit() {
+  let canvases = document.getElementsByClassName("glx-canvas");
+  for(const canvas of canvases) {
+    let gl = canvas.getContext('webgl');
+    if(gl) {
+      GLX_ENVS.set(canvas.id,
+        {
+          id : canvas.id,
+          gl : gl,
+          meshManager : new
+        }
+        )
+    } else {
+      alert("WebGL not supported for \'" + canvas.id + "\'");
+    }
+  }
+}*/
 
 /*
 this.limitPositions = function(bool){

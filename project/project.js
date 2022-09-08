@@ -83,7 +83,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function render(time) {
+function render(time) {
 
 	time *= 0.001;
 	var delta = time - then;

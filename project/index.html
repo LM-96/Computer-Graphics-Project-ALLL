@@ -148,7 +148,7 @@ precision highp float;
 </nav> !-->
 
 <div class="center">
-  <canvas width="1024" height="512" id="my_Canvas"></canvas>
+  <canvas class="glx-canvas" width="1024" height="512" id="my_Canvas"></canvas>
 </div>
 
 <div class="container">
@@ -163,110 +163,119 @@ precision highp float;
         <div class="accordion-body">
 
           <div class="btn-toolbar mb-3 justify-content-between">
-            <div class="col-sm-2 p-1">
-              <div class="btn-group" id="camXDiv" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary" id="btnDecXCam" onclick="increment('xCam', true)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-                  <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-                </button>
-                <div class="input-group">
-                  <div class="input-group-text">X</div>
-                  <input type="text" disabled="true" id="xCamInput" name="xCamInput" class="form-control input-number" value="1" min="-100" max="100">
+
+            <!-- CAMERA POSITION -------------------------------------------------------------------------------------->
+            <div id="cameraPositionCard" class="card center mt-2 mb-1" > 
+              <b>Camera Position</b>
+              <div class="row m-2">
+                <div class="col">
+                  <button class="btn" type="button" onclick="increment('xCam',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <input class="form-control center" id="xCamInput" type="text" disabled="true" value="0"\>
+                  <button class="btn" type="button" onclick="increment('xCam')"><img src="resources/images/plus-circle.svg" /></button>
                 </div>
-                <button type="button" class="btn btn-primary" id="btnIncXCam" onclick="increment('xCam')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-                  <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-                </svg></button>
+                <div class="col">
+                  <button class="btn" type="button" onclick="increment('yCam',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <input class="form-control center" id="yCamInput" type="text" disabled="true" value="0"\>
+                  <button class="btn" type="button" onclick="increment('yCam')"><img src="resources/images/plus-circle.svg" /></button>
+                </div>
+                <div class="col">
+                  <button class="btn" type="button" onclick="increment('zCam',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <input class="form-control center" id="zCamInput" type="text" disabled="true" value="0"\>
+                  <button class="btn" type="button" onclick="increment('zCam')"><img src="resources/images/plus-circle.svg" /></button>
+                </div>
               </div>
             </div>
 
-            <div class="col-md-2 p-1">
-              <div class="btn-group" id="camYDiv" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary" id="btnDecYCam" onclick="increment('yCam', true)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-                  <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-                </button>
-                <div class="input-group">
-                  <div class="input-group-text">Y</div>
-                  <input type="text" disabled="true" id="yCamInput" name="yCamInput" class="form-control input-number" value="1" min="-100" max="100">
+            <!-- UP --------------------------------------------------------------------------------------------------->
+            <div id="upCard" class="card center mt-2 mb-1" >
+              <b>UP</b>
+              <div class="row m-2">
+                <div class="col">
+                  <button class="btn" type="button" onclick="increment('xUp',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <input class="form-control center" id="xUpInput" type="text" disabled="true" value="0"\>
+                  <button class="btn" type="button" onclick="increment('xUp')"><img src="resources/images/plus-circle.svg" /></button>
                 </div>
-                <button type="button" class="btn btn-primary" id="btnIncYCam" onclick="increment('yCam')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-                  <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-                </svg></button>
+                <div class="col">
+                  <button class="btn" type="button" onclick="increment('yUp',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <input class="form-control center" id="yUpInput" type="text" disabled="true" value="0"\>
+                  <button class="btn" type="button" onclick="increment('yUp')"><img src="resources/images/plus-circle.svg" /></button>
+                </div>
+                <div class="col">
+                  <button class="btn" type="button" onclick="increment('zUp',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <input class="form-control center" id="zUpInput" type="text" disabled="true" value="0"\>
+                  <button class="btn" type="button" onclick="increment('zUp')"><img src="resources/images/plus-circle.svg" /></button>
+                </div>
               </div>
             </div>
 
-            <div class="col-md-2 p-1">
-              <div class="btn-group" id="camZDiv" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary" id="btnDecZCam" onclick="increment('zCam', true)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-                  <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-                </button>
-                <div class="input-group" >
-                  <div class="input-group-text">Z</div>
-                  <input type="text" disabled="true" id="zCamInput" name="zCamInput" class="form-control input-number" value="1" min="-100" max="100">
+            <!-- TARGET ----------------------------------------------------------------------------------------------->
+            <div id="targetCard" class="card center mt-2 mb-1" >
+              <b>TARGET</b>
+              <div class="row m-2">
+                <div class="col">
+                  <input class="form-control center mb-1" id="xTargetInput" type="text" value="0"\>
+                  <button class="btn btn-primary" type="button" onclick="set('xTarget', document.getElementById('xTargetInput').value)">SET</button>
                 </div>
-                <button type="button" class="btn btn-primary" id="btnIncZCam" onclick="increment('zCam')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-                  <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-                </svg></button>
+                <div class="col">
+                  <input class="form-control center mb-1" id="yTargetInput" type="text" value="0"\>
+                  <button class="btn btn-primary" type="button" onclick="set('yTarget', document.getElementById('yTargetInput').value)">SET</button>
+                </div>
+                <div class="col">
+                  <input class="form-control center mb-1" id="zTargetInput" type="text" value="0"\>
+                  <button class="btn btn-primary" type="button" onclick="set('zTarget', document.getElementById('zTargetInput').value)">SET</button>
+                </div>
               </div>
             </div>
 
-            <div class="col-md-3 p-1">
-              <div class="btn-group" id="camZDiv" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary" id="btnDecFov" onclick="increment('fov', true)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-                  <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-                </button>
-                <div class="input-group" >
-                  <div class="input-group-text">FOV</div>
-                  <input type="text" disabled="true" id="fovInput" name="fovInput" class="form-control input-number" value="60" min="-520" max="520">
-                </div>
-                <button type="button" class="btn btn-primary" id="btnIncFov" onclick="increment('fov')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-                  <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-                </svg></button>
+            <!-- FOV -------------------------------------------------------------------------------------------------->
+            <div id="fovCard" class="card center mt-2 mb-1" >
+              <b>FOV</b>
+              <div class="input-group mb-2 p-1">
+                <button class="btn" type="button" onclick="increment('fov',true)"><img src="resources/images/dash-circle.svg" /></button>
+                <input class="form-control center" id="fovInput" type="text" disabled="true" value="0"\>
+                <button class="btn" type="button" onclick="increment('fov')"><img src="resources/images/plus-circle.svg" /></button>
               </div>
             </div>
 
-            <div class="col-md-3 p-1">
-              <div class="btn-group" id="upXDiv" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary" id="btnDecXUp" onclick="increment('xUp', true)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-                  <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-                </button>
-                <div class="input-group" >
-                  <div class="input-group-text">X-UP</div>
-                  <input type="text" disabled="true" id="xUpInput" name="xUpInput" class="form-control input-number" value="0" min="-520" max="520">
-                </div>
-                <button type="button" class="btn btn-primary" id="btnIncXUp" onclick="increment('xUp')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-                  <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-                </svg></button>
+            <!-- CAMERA LOCKS ----------------------------------------------------------------------------------------->
+            <div id="cameraLocksCard" class="card center mt-2 mb-1 p-3" >
+              <b>Camera Locks</b>
+              <select class="form-select selectpicker meshx-obj-sel" aria-label="Mesh Object List" onchange="onTargetObjectInput(this.value)">
+              </select>
+
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="lookAtObjectInput" onchange="onLookAtObjectInput(this.checked)">
+                <label class="form-check-label" for="lookAtObjectInput">Look at Object</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="followTranslationInput" onchange="onFollowObjectTranslationInput(this.checked)">
+                <label class="form-check-label" for="followTranslationInput">Follow translation</label>
               </div>
             </div>
 
-            <div class="col-md-3 p-1">
-              <div class="btn-group" id="upYDiv" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary" id="btnDecYUp" onclick="increment('yUp', true)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-                  <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-                </button>
-                <div class="input-group" >
-                  <div class="input-group-text">Y-UP</div>
-                  <input type="text" disabled="true" id="yUpInput" name="yUpInput" class="form-control input-number" value="0" min="-520" max="520">
+            <!-- CAMERA DISTANCE -------------------------------------------------------------------------------------->
+            <div id="cameraDistanceCard" class="card center mt-2 mb-1" > 
+              <b>Camera Distance from Target</b>
+              <div class="row m-2">
+                <div class="col">
+                  <button class="btn" type="button" onclick="increment('xCamDist',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <input class="form-control center" id="xCamDistInput" type="text" disabled="true" value="0"\>
+                  <button class="btn" type="button" onclick="increment('xCamDist')"><img src="resources/images/plus-circle.svg" /></button>
                 </div>
-                <button type="button" class="btn btn-primary" id="btnIncYUp" onclick="increment('yUp')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-                  <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-                </svg></button>
+                <div class="col">
+                  <button class="btn" type="button" onclick="increment('yCamDist',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <input class="form-control center" id="yCamDistInput" type="text" disabled="true" value="0"\>
+                  <button class="btn" type="button" onclick="increment('yCamDist')"><img src="resources/images/plus-circle.svg" /></button>
+                </div>
+                <div class="col">
+                  <button class="btn" type="button" onclick="increment('zCamDist',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <input class="form-control center" id="zCamDistInput" type="text" disabled="true" value="0"\>
+                  <button class="btn" type="button" onclick="increment('zCamDist')"><img src="resources/images/plus-circle.svg" /></button>
+                </div>
               </div>
             </div>
 
-            <div class="col-md-3 p-1">
-              <div class="btn-group" id="upZDiv" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary" id="btnDecZUp" onclick="increment('zUp', true)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-                  <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-                </button>
-                <div class="input-group" >
-                  <div class="input-group-text">Z-UP</div>
-                  <input type="text" disabled="true" id="zUpInput" name="zUpInput" class="form-control input-number" value="0" min="-520" max="520">
-                </div>
-                <button type="button" class="btn btn-primary" id="btnIncZUp" onclick="increment('zUp')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-                  <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-                </svg></button>
-              </div>
-            </div>
+
 
           </div> <!-- button toolbar -->
 
