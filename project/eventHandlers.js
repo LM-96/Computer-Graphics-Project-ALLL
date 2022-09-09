@@ -41,7 +41,7 @@ const ACCORDION_ITEM_OBJ = `<div class="accordion-item">
 </h2>
 <div id="collapse#objName#" class="accordion-collapse collapse" aria-labelledby="heading#objName#" data-bs-parent="#mainAccordion">
   <div class="accordion-body">
-    <div id="#objName#Card" class="card center mt-2 mb-1" > 
+    <div id="#objName#PosCard" class="card center mt-2 mb-1" > 
       <b>Position</b>
       <div class="row m-2">
         <div class="col">
@@ -58,6 +58,43 @@ const ACCORDION_ITEM_OBJ = `<div class="accordion-item">
           <button class="btn" type="button" onclick="objIncrement('#objName#', 'z', true)"><img src="resources/images/dash-circle.svg" /></button>
           <input class="form-control center" id="z#objName#Input" type="text" disabled="true" value="0"\>
           <button class="btn" type="button" onclick="objIncrement('#objName#', 'z', true)"><img src="resources/images/plus-circle.svg" /></button>
+        </div>
+      </div>
+    </div>
+
+    div id="#objName#RotCard" class="card center mt-2 mb-1" > 
+      <b>Scale</b>
+      <div class="row m-2">
+        <div class="col">
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'theta', true)"><img src="resources/images/dash-circle.svg" /></button>
+          <input class="form-control center" id="theta#objName#Input" type="text" disabled="true" value="0"\>
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'theta', true)"><img src="resources/images/plus-circle.svg" /></button>
+        </div>
+        <div class="col">
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'phi', true)"><img src="resources/images/dash-circle.svg" /></button>
+          <input class="form-control center" id="phi#objName#Input" type="text" disabled="true" value="0"\>
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'phi', true)"><img src="resources/images/plus-circle.svg" /></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="#objName#ScaleCard" class="card center mt-2 mb-1" > 
+      <b>Rotation</b>
+      <div class="row m-2">
+        <div class="col">
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'sx', true)"><img src="resources/images/dash-circle.svg" /></button>
+          <input class="form-control center" id="sx#objName#Input" type="text" disabled="true" value="0"\>
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'sx', true)"><img src="resources/images/plus-circle.svg" /></button>
+        </div>
+        <div class="col">
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'sy', true)"><img src="resources/images/dash-circle.svg" /></button>
+          <input class="form-control center" id="sy#objName#Input" type="text" disabled="true" value="0"\>
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'y', true)"><img src="resources/images/plus-circle.svg" /></button>
+        </div>
+        <div class="col">
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'sz', true)"><img src="resources/images/dash-circle.svg" /></button>
+          <input class="form-control center" id="sz#objName#Input" type="text" disabled="true" value="0"\>
+          <button class="btn" type="button" onclick="objIncrement('#objName#', 'sz', true)"><img src="resources/images/plus-circle.svg" /></button>
         </div>
       </div>
     </div>
@@ -455,16 +492,38 @@ function accordionItemFor(obj) {
   let xInput = document.getElementById("x" + obj.name + "Input");
   let yInput = document.getElementById("y" + obj.name + "Input");
   let zInput = document.getElementById("z" + obj.name + "Input");
+  let thetaInput = document.getElementById("theta" + obj.name + "Input");
+  let phiInput = document.getElementById("theta" + obj.name + "Input");
+  let sxInput = document.getElementById("sx" + obj.name + "Input");
+  let syInput = document.getElementById("sy" + obj.name + "Input");
+  let szInput = document.getElementById("sz" + obj.name + "Input");
+
   
   //1: Attaching callback for UI updates
   obj.addOnTranslation((_oldPos, currPos) => {
     xInput.value = currPos.x;
     yInput.value = currPos.y;
     zInput.value = currPos.z;
+  });
+
+  obj.addOnRotation((_oldRot, currRot) => {
+    thetaInput.value = currRot.theta;
+    phiInput.value = currRot.phi;
+  });
+
+  obj.addOnScaled((_oldScale, currScale) => {
+    sxInput.value = currScale.sx;
+    syInput.value = currScale.sy;
+    szInput.value = currScale.sz;
   })
 
   //2: Updates UI on startup
   xInput.value = obj.position.x;
   yInput.value = obj.position.y;
   zInput.value = obj.position.z;
+  thetaInput.value = obj.rotation.theta;
+  phiInput.value = obj.rotation.phi;
+  sxInput.value = obj.scale.sx;
+  syInput.value = obj.scale.sy;
+  szInput.value = obj.scale.sz;
 }
