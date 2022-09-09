@@ -21,6 +21,7 @@ const input = {
   "xCamDist" : document.getElementById("xCamDistInput"),
   "yCamDist" : document.getElementById("yCamDistInput"),
   "zCamDist" : document.getElementById("zCamDistInput"),
+  "objects" : new Object()
 }
 const cards = {
   "cameraPosition" : document.getElementById("cameraPositionCard"),
@@ -29,11 +30,13 @@ const cards = {
   "fov" : document.getElementById("fovCard"),
   "cameraDistance" : document.getElementById("cameraDistanceCard")
 }
-const mainAccordion = document.getElementById("mainAccordion")
+const mainBoard = document.getElementById("mainAccordion");
 const INCREMENT_UNIT = 0.25;
 const RAD_INCREMENT_UNIT = 0.05;
 const DEG_INCREMENT_UNIT = 1;
-const ACCORDION_ITEM_OBJ = `<div class="accordion-item">
+const ACCORDION_ITEM_OBJ = 
+`
+<div class="accordion-item">
 <h2 class="accordion-header" id="heading#objName#">
   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse#objName#" aria-expanded="false" aria-controls="collapse#objName#">
   #objName#
@@ -61,9 +64,8 @@ const ACCORDION_ITEM_OBJ = `<div class="accordion-item">
         </div>
       </div>
     </div>
-
-    div id="#objName#RotCard" class="card center mt-2 mb-1" > 
-      <b>Scale</b>
+    <div id="#objName#RotCard" class="card center mt-2 mb-1" > 
+      <b>Rotation</b>
       <div class="row m-2">
         <div class="col">
           <button class="btn" type="button" onclick="objIncrement('#objName#', 'theta', true)"><img src="resources/images/dash-circle.svg" /></button>
@@ -77,9 +79,8 @@ const ACCORDION_ITEM_OBJ = `<div class="accordion-item">
         </div>
       </div>
     </div>
-
     <div id="#objName#ScaleCard" class="card center mt-2 mb-1" > 
-      <b>Rotation</b>
+      <b>Scale</b>
       <div class="row m-2">
         <div class="col">
           <button class="btn" type="button" onclick="objIncrement('#objName#', 'sx', true)"><img src="resources/images/dash-circle.svg" /></button>
@@ -100,7 +101,7 @@ const ACCORDION_ITEM_OBJ = `<div class="accordion-item">
     </div>
   </div>
 </div>
-</div>`
+`
 
 var mouseDown = function(e) {
   drag = true;
@@ -296,7 +297,7 @@ function set(what, value) {
 
 function setInputValue(what, value) {
   //log("setInputValue(" + what + ", " + value + ")");
-  input[what].value = value;
+  document.getElementById(what).value = value;
 }
 
 function onLookAtObjectInput(checked) {
@@ -333,27 +334,35 @@ function objIncrement(objName, what, decrement = false) {
   switch(what) {
     case "x" : {
       obj.translate(inc * INCREMENT_UNIT, 0, 0);
+      break;
     }
     case "y" : {
       obj.translate(0, inc * INCREMENT_UNIT, 0);
+      break;
     }
     case "z" : {
       obj.translate(0, 0, inc * INCREMENT_UNIT);
+      break;
     }
     case "theta" : {
       obj.rotate(inc * degToRad(DEG_INCREMENT_UNIT), 0);
+      break;
     }
     case "phi" : {
       obj.rotate(0, inc * degToRad(DEG_INCREMENT_UNIT));
+      break;
     }
     case "sx" : {
       obj.scalate(inc * INCREMENT_UNIT, 1, 1);
+      break;
     }
     case "sy" : {
       obj.scalate(1, inc * INCREMENT_UNIT, 1);
+      break;
     }
     case "sz" : {
       obj.scalate(1, 1, inc * INCREMENT_UNIT);
+      break;
     }
   }
   GL_DRAWER.drawScene();
@@ -450,19 +459,19 @@ function attachHandlers(canvas, p_target) {
 
   //4: updating UI at startup
   let currPos = camMgr.cameraPosition();
-  setInputValue("xCam", currPos.x);
-  setInputValue("yCam", currPos.y);
-  setInputValue("zCam", currPos.z);
+  setInputValue("xCamInput", currPos.x);
+  setInputValue("yCamInput", currPos.y);
+  setInputValue("zCamInput", currPos.z);
   let currUp = camMgr.up();
-  setInputValue("xUp", currUp.first);
-  setInputValue("yUp", currUp.second);
-  setInputValue("zUp", currUp.third);
-  setInputValue("fov", radToDeg(camMgr.fov()));
+  setInputValue("xUpInput", currUp.first);
+  setInputValue("yUpInput", currUp.second);
+  setInputValue("zUpInput", currUp.third);
+  setInputValue("fovInput", radToDeg(camMgr.fov()));
 
   let currDistFromTarget = camMgr.distanceFromTarget();
-  setInputValue("xCamDist", currDistFromTarget.first);
-  setInputValue("yCamDist", currDistFromTarget.second);
-  setInputValue("zCamDist", currDistFromTarget.third);
+  setInputValue("xCamDistInput", currDistFromTarget.first);
+  setInputValue("yCamDistInput", currDistFromTarget.second);
+  setInputValue("zCamDistInput", currDistFromTarget.third);
 
   let lookingAtObject = camMgr.lookingAtObject();
   input["lookAtObject"].checked = camMgr.lookingAtObject();
@@ -473,7 +482,6 @@ function attachHandlers(canvas, p_target) {
   input["followTranslation"].checked = camMgr.followObjectTranslation();
 
   const objs = MESH_MANAGER.getAll();
-  let value = 2;
   for(const select of input["objSelects"]) {
     select.innerHTML += (`<option value="undefined">${undefined}</option>\n`);
   }
@@ -482,48 +490,52 @@ function attachHandlers(canvas, p_target) {
     for(const select of input["objSelects"]) {
       select.innerHTML += (`<option value="${obj.name}">${obj.name}</option>\n`);
     }
-    value++;
   }
 
 }
 
 function accordionItemFor(obj) {
-  mainAccordion.innerHTML += (ACCORDION_ITEM_OBJ.replaceAll("#objName#", obj.name));
-  let xInput = document.getElementById("x" + obj.name + "Input");
-  let yInput = document.getElementById("y" + obj.name + "Input");
-  let zInput = document.getElementById("z" + obj.name + "Input");
-  let thetaInput = document.getElementById("theta" + obj.name + "Input");
-  let phiInput = document.getElementById("theta" + obj.name + "Input");
-  let sxInput = document.getElementById("sx" + obj.name + "Input");
-  let syInput = document.getElementById("sy" + obj.name + "Input");
-  let szInput = document.getElementById("sz" + obj.name + "Input");
+  mainBoard.innerHTML += ((ACCORDION_ITEM_OBJ.replaceAll("#objName#", obj.name)));
+  input[obj.name] = {
+    "x" : document.getElementById("x" + obj.name + "Input"),
+    "y" : document.getElementById("y" + obj.name + "Input"),
+    "z" : document.getElementById("z" + obj.name + "Input"),
+    "theta" : document.getElementById("theta" + obj.name + "Input"),
+    "phi" : document.getElementById("phi" + obj.name + "Input"),
+    "sx" : document.getElementById("sx" + obj.name + "Input"),
+    "sy" : document.getElementById("sy" + obj.name + "Input"),
+    "sz" : document.getElementById("sz" + obj.name + "Input")
+  };
 
   
   //1: Attaching callback for UI updates
   obj.addOnTranslation((_oldPos, currPos) => {
-    xInput.value = currPos.x;
-    yInput.value = currPos.y;
-    zInput.value = currPos.z;
+    log("onTraslation(" + obj.name + "): currPos = " + currPos.toString());
+    document.getElementById("x" + obj.name + "Input").value = currPos.x;
+    document.getElementById("y" + obj.name + "Input").value = currPos.y;
+    document.getElementById("z" + obj.name + "Input").value = currPos.z;
   });
 
   obj.addOnRotation((_oldRot, currRot) => {
-    thetaInput.value = currRot.theta;
-    phiInput.value = currRot.phi;
+    log("onRotation(" + obj.name + "): currRot = " + currRot.toString());
+    document.getElementById("theta" + obj.name + "Input").value = currRot.theta;
+    document.getElementById("phi" + obj.name + "Input").value = currRot.phi;
   });
 
   obj.addOnScaled((_oldScale, currScale) => {
-    sxInput.value = currScale.sx;
-    syInput.value = currScale.sy;
-    szInput.value = currScale.sz;
+    log("onScale(" + obj.name + "): currScale = " + currScale.toString());
+    document.getElementById("sx" + obj.name + "Input").value = currScale.sx;
+    document.getElementById("sy" + obj.name + "Input").value = currScale.sy;
+    document.getElementById("sz" + obj.name + "Input").value = currScale.sz;
   })
 
   //2: Updates UI on startup
-  xInput.value = obj.position.x;
-  yInput.value = obj.position.y;
-  zInput.value = obj.position.z;
-  thetaInput.value = obj.rotation.theta;
-  phiInput.value = obj.rotation.phi;
-  sxInput.value = obj.scale.sx;
-  syInput.value = obj.scale.sy;
-  szInput.value = obj.scale.sz;
+  document.getElementById("x" + obj.name + "Input").value = obj.position.x;
+  document.getElementById("y" + obj.name + "Input").value = obj.position.y;
+  document.getElementById("z" + obj.name + "Input").value = obj.position.z;
+  document.getElementById("theta" + obj.name + "Input").value = obj.rotation.theta;
+  document.getElementById("phi" + obj.name + "Input").value = obj.rotation.phi;
+  document.getElementById("sx" + obj.name + "Input").value = obj.scale.sx;
+  document.getElementById("sy" + obj.name + "Input").value = obj.scale.sy;
+  document.getElementById("sz" + obj.name + "Input").value = obj.scale.sz;
 }

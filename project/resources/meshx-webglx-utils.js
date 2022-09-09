@@ -807,7 +807,7 @@ function Rotation(theta, phi) {
    * @returns a copy of this rotation
    */
   this.copy = function () {
-    return Rotation(this.theta, this.phi);
+    return new Rotation(this.theta, this.phi);
   };
 
 
@@ -827,6 +827,14 @@ function Rotation(theta, phi) {
         return true;
       }
     }
+  }
+
+  /**
+   * Returns a string representation of this rotation
+   * @returns a string representation of this rotation
+   */
+  this.toString = function() {
+    return "(theta = " + this.theta + ", phi = " + this.phi + ")";
   }
 }
 
@@ -1474,8 +1482,10 @@ function MeshObject(name, data) {
     deltaPhi
   ) {
     let startRot = this.rotation.copy();
+    log("rotate() | startRot : " + startRot.toString());
     this.rotation.rotate(deltaTheta, deltaPhi);
     let endRot = this.rotation.copy();
+    log("rotate() | endtRot : " + endRot.toString());
     this.updateUMatrix();
     
     onRotation.forEach((c) => { c(startRot, endRot) });
