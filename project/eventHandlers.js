@@ -4,32 +4,27 @@ var old_x, old_y;
 var dX = 0, dY = 0;
 var speed = 0.05;
 var target;
-const input = {
-  "xCam" : document.getElementById("xCamInput"),
-  "yCam" : document.getElementById("yCamInput"),
-  "zCam" : document.getElementById("zCamInput"),
-  "fov" : document.getElementById("fovInput"),
-  "xUp" : document.getElementById("xUpInput"),
-  "yUp" : document.getElementById("yUpInput"),
-  "zUp" : document.getElementById("zUpInput"),
-  "xTarget" : document.getElementById("xTargetInput"),
-  "yTarget" : document.getElementById("yTargetInput"),
-  "zTarget" : document.getElementById("zTargetInput"),
-  "objSelects" : document.getElementsByClassName("meshx-obj-sel"),
-  "lookAtObject" : document.getElementById("lookAtObjectInput"),
-  "followTranslation" : document.getElementById("followTranslationInput"),
-  "xCamDist" : document.getElementById("xCamDistInput"),
-  "yCamDist" : document.getElementById("yCamDistInput"),
-  "zCamDist" : document.getElementById("zCamDistInput"),
-  "objects" : new Object()
+
+const INPUT_NAMES = {
+  xCam : "xCamInput", yCam : "yCamInput", zCam : "zCamInput",
+  fov : "fovInput",
+  xUp : "xUpInput", yUp : "yUpInput", zUp : "zUpInput",
+  xTarget : "xTargetInput", yTarget : "yTargetInput", zTarget : "zTargetInput",
+  lookAtObject : "lookAtObjectInput", followTranslation : "followTranslationInput",
+  xCamDist : "xCamDistInput", yCamDist : "yCamDistInput", zCamDist : "zCamDistInput"
+};
+
+const CARD_NAMES = {
+  cameraPosition : "cameraPositionCard",
+  up : "upCard",
+  target : "targetCard",
+  fov : "fovCard",
+  cameraDistance : "cameraDistance"
 }
-const cards = {
-  "cameraPosition" : document.getElementById("cameraPositionCard"),
-  "up" : document.getElementById("upCard"),
-  "target" : document.getElementById("targetCard"),
-  "fov" : document.getElementById("fovCard"),
-  "cameraDistance" : document.getElementById("cameraDistanceCard")
-}
+
+const INPUTS = DomElementUtils.withLoadedElements(...Object.values(INPUT_NAMES));
+const CARDS = DomElementUtils.withLoadedElements(...Object.values(CARD_NAMES));
+
 const mainBoard = document.getElementById("mainAccordion");
 const INCREMENT_UNIT = 0.25;
 const RAD_INCREMENT_UNIT = 0.05;
@@ -422,64 +417,65 @@ function attachHandlers(canvas, p_target) {
 
   //3: attach callbacks for UI update
   camMgr.addOnCameraPositionChange((_oldPos, currPos) => {
-    setInputValue("xCam", currPos.x);
-    setInputValue("yCam", currPos.y);
-    setInputValue("zCam", currPos.z);
+    INPUTS.setValueOf(INPUT_NAMES.xCam, currPos.x);
+    INPUTS.setValueOf(INPUT_NAMES.yCam, currPos.y);
+    INPUTS.setValueOf(INPUT_NAMES.zCam, currPos.z);
   });
 
   camMgr.addOnFovChange((_oldFov, currFov) => {
-    setInputValue("fov", radToDeg(currFov));
+    INPUTS.setValueOf(INPUT_NAMES.fov, currFov);
   })
 
   camMgr.addOnUpChange((_oldUp, currUp) => {
-    setInputValue("xUp", currUp.first);
-    setInputValue("yUp", currUp.second);
-    setInputValue("zUp", currUp.third);
+    INPUTS.setValueOf(INPUT_NAMES.xUp, currUp.first);
+    INPUTS.setValueOf(INPUT_NAMES.yUp, currUp.second);
+    INPUTS.setValueOf(INPUT_NAMES.zUp, currUp.third);
   })
 
   camMgr.addOnTargetChange((_oldPos, currPos) => {
-    setInputValue("xTarget", currPos.x);
-    setInputValue("yTarget", currPos.y);
-    setInputValue("zTarget", currPos.z);
+    INPUTS.setValueOf(INPUT_NAMES.xTarget, currPos.x);
+    INPUTS.setValueOf(INPUT_NAMES.yTarget, currPos.y);
+    INPUTS.setValueOf(INPUT_NAMES.zTarget, currPos.z);
   });
 
   camMgr.addLookingAtObjectChange((_oldLAO, currLAO) => {
-    input["lookAtObject"].checked = currLAO;
+    INPUTS.setAttributeOf(INPUT_NAMES.lookAtObject, "checked", currLAO);
   })
 
   camMgr.addFollowObjectTranslationChange((_oldFOT, currFOT) => {
-    input["followTranslation"].checked = currFOT;
+    INPUTS.setAttributeOf(INPUT_NAMES.followTranslation, "checked", currFOT);
   })
 
   camMgr.addOnDistanceFromTargetChange((_oldDist, currDist) => {
-    setInputValue("xCamDist", currDist.first);
-    setInputValue("yCamDist", currDist.second);
-    setInputValue("zCamDist", currDist.third);
+    INPUTS.setValueOf(INPUT_NAMES.xCamDist, currDist.first);
+    INPUTS.setValueOf(INPUT_NAMES.xCamDist, currDist.second);
+    INPUTS.setValueOf(INPUT_NAMES.xCamDist, currDist.third);
   })
 
   //4: updating UI at startup
   let currPos = camMgr.cameraPosition();
-  setInputValue("xCamInput", currPos.x);
-  setInputValue("yCamInput", currPos.y);
-  setInputValue("zCamInput", currPos.z);
+  INPUTS.setValueOf(INPUT_NAMES.xCam, currPos.x);
+  INPUTS.setValueOf(INPUT_NAMES.yCam, currPos.y);
+  INPUTS.setValueOf(INPUT_NAMES.zCam, currPos.z);
   let currUp = camMgr.up();
-  setInputValue("xUpInput", currUp.first);
-  setInputValue("yUpInput", currUp.second);
-  setInputValue("zUpInput", currUp.third);
-  setInputValue("fovInput", radToDeg(camMgr.fov()));
+  INPUTS.setValueOf(INPUT_NAMES.xUp, currUp.first);
+  INPUTS.setValueOf(INPUT_NAMES.yUp, currUp.second);
+  INPUTS.setValueOf(INPUT_NAMES.zUp, currUp.third);
+
+  INPUTS.setValueOf(INPUT_NAMES.fov, radToDeg(camMgr.fov()));
 
   let currDistFromTarget = camMgr.distanceFromTarget();
-  setInputValue("xCamDistInput", currDistFromTarget.first);
-  setInputValue("yCamDistInput", currDistFromTarget.second);
-  setInputValue("zCamDistInput", currDistFromTarget.third);
+  INPUTS.setValueOf(INPUT_NAMES.xCamDist, currDistFromTarget.first);
+  INPUTS.setValueOf(INPUT_NAMES.yCamDist, currDistFromTarget.second);
+  INPUTS.setValueOf(INPUT_NAMES.zCamDist, currDistFromTarget.third);
 
   let lookingAtObject = camMgr.lookingAtObject();
-  input["lookAtObject"].checked = camMgr.lookingAtObject();
+  INPUTS.setAttributeOf(INPUT_NAMES.lookAtObject, "checked", camMgr.lookingAtObject())
   if(!lookingAtObject) {
-    cards.cameraDistance.style.display = "none";
+    CARDS.getElementById(CARD_NAMES.cameraDistance).style.display = "none";
   }
 
-  input["followTranslation"].checked = camMgr.followObjectTranslation();
+  INPUTS.setAttributeOf(INPUT_NAMES.followTranslation, "checked", camMgr.followObjectTranslation());
 
   const objs = MESH_MANAGER.getAll();
   for(const select of input["objSelects"]) {
