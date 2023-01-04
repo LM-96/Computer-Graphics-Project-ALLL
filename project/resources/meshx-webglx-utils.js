@@ -8,7 +8,7 @@
  * directly the same object otherwise
  */
 function tryCopy(object) {
-  if (typeof object.copy == "function") {
+  if (typeof object.copy === "function") {
     return object.copy();
   }
 
@@ -17,7 +17,7 @@ function tryCopy(object) {
 
 /* ----------- Result --------------------------------------------------------- */
 function Result(value = undefined, error = undefined) {
-  var _value = value;
+  let _value = value;
   /**
    * Returns the value maintained in this result or 'undefined' if no
    * value is present. This last case means that the result should contain
@@ -29,7 +29,7 @@ function Result(value = undefined, error = undefined) {
     return _value;
   }
 
-  var _error = error;
+  let _error = error;
   /**
    * Returns the error maintained in this result or 'undefined' if no
    * error has been thrown. This last case means that the result has been calculated
@@ -78,7 +78,7 @@ function Result(value = undefined, error = undefined) {
    * @param {function} onValue 
    */
   this.withValue = (onValue) => {
-    if(typeof(onError) !== 'function') {
+    if(typeof(onValue) !== 'function') {
       throw new Error("Result.withValue() | onValue is not a function");
     }
 
@@ -104,7 +104,7 @@ Result.success = (value) => {
  * Creates and returns a failure Result object with the error
  * passed as parameter. Invoking the function 'isValue' on the returning
  * Result will return 'false' while 'isError' will return true
- * @param {*} value the value that represents the result of the computation
+ * @param {*} error the error of thw computation
  * @returns a failure Result object with the error
  * passed as parameter
  */
@@ -153,7 +153,7 @@ function Pair(first, second) {
    * @returns a deep copy of this pair
    */
   this.copy = function () {
-    return Pair(tryCopy(this.first), tryCopy(this.second));
+    return new Pair(tryCopy(this.first), tryCopy(this.second));
   };
 
   /**
@@ -172,7 +172,7 @@ function Pair(first, second) {
    * equals to this Pair
    */
   this.equals = function(other) {
-    if(other == null || other == undefined) {
+    if(other == null) {
       return false;
     }
 
@@ -198,10 +198,10 @@ Pair.of = function (first, second) {
 
 /**
  * Returns a Pair using the first two elements of the given array
- * @param {object} array the array to be used
+ * @param {Array.<number>} array the array to be used
  * @returns a Pair using the first two elements of the given array
  */
- Pair.fromArray = function(array) {
+Pair.fromArray = function(array) {
   return Pair.of(array[0], array[1]);
 }
 
@@ -232,7 +232,7 @@ function Triple(first, second, third) {
 
   /**
    * Returns an array that contains the elements of this Triple as the first three
-   * @returns an array that contains the elements of this Triple as the first three
+   * @returns {Array} an array that contains the elements of this Triple as the first three
    */
   this.toArray = function() {
     return [this.first, this.second, this.third];
@@ -246,7 +246,7 @@ function Triple(first, second, third) {
    * equals to this Triple
    */
    this.equals = function(other) {
-    if(other == null || other == undefined) {
+    if(other == null) {
       return false;
     }
 
@@ -301,21 +301,24 @@ const COORDINATE = {
 };
 
 /**
- * Represents a position in a 3-D reference system
- * @param {number} x the x coordinate
- * @param {number} y the y coordinate
- * @param {number} z the z coordinate
+ * A 3D Vector with three coordinates
+ * @param {number} x the `x` coordinate
+ * @param {number} y the `y` coordinate
+ * @param {number} z the `z` coordinate
+ * @constructor return a 3D vector with all the coordinates
  */
-function Position(x, y, z) {
-  /* ****************************************** */
+function Vector3D(x, y, z) {
+
   this.x = x;
   this.y = y;
   this.z = z;
 
+  /* GETTERS ---------------------------------------------------------------------------------------------- */
+
   /**
    * Get the coordinate of the type passed as param (COORDINATE.x, COORDINATE.y or COORDINATE.z)
    * @param {COORDINATE} coordinate the type of the coordinate
-   * @returns the coordinate of the type passed as param
+   * @returns {number} the coordinate of the type passed as param
    */
   this.getCoordinate = function (coordinate) {
     switch (coordinate) {
@@ -328,12 +331,38 @@ function Position(x, y, z) {
     }
 
     return undefined;
-  };
+  }
 
   /**
-   * Applies a translation on the x coordinate of this position
+   * Returns the `x` coordinate of this vector
+   * @returns {number} the `x` coordinate of this vector
+   */
+  this.getX = function () {
+    return this.x
+  }
+
+  /**
+   * Returns the `y` coordinate of this vector
+   * @returns {number} the `y` coordinate of this vector
+   */
+  this.getY = function () {
+    return this.y
+  }
+
+  /**
+   * Returns the `z` coordinate of this vector
+   * @returns {number} the `z` coordinate of this vector
+   */
+  this.getZ = function () {
+    return this.z
+  }
+
+  /* TRANSLATIONS ----------------------------------------------------------------------------------------- */
+
+  /**
+   * Applies a translation on the `x` coordinate of this vector
    * @param {number} xTranslation the value of the translation to apply to the x coordinate
-   * @returns this position
+   * @returns {Vector3D} this vector
    */
   this.translateX = function (xTranslation) {
     this.x += xTranslation;
@@ -341,9 +370,9 @@ function Position(x, y, z) {
   };
 
   /**
-   * Applies a translation on the y coordinate of this position
-   * @param {number} yTranslation the value of the translation to apply to the y coordinate
-   * @returns this position
+   * Applies a translation on the `y` coordinate of this vector
+   * @param {number} yTranslation the value of the translation to apply to the `y` coordinate
+   * @returns {Vector3D} this vector
    */
   this.translateY = function (yTranslation) {
     this.y += yTranslation;
@@ -351,9 +380,9 @@ function Position(x, y, z) {
   };
 
   /**
-   * Applies a translation on the z coordinate of this position
-   * @param {number} zTranslation the value of the translation to apply to the z coordinate
-   * @returns this position
+   * Applies a translation on the `z` coordinate of this vector
+   * @param {number} zTranslation the value of the translation to apply to the `z` coordinate
+   * @returns {Vector3D} this position
    */
   this.translateZ = function (zTranslation) {
     this.z += zTranslation;
@@ -361,11 +390,11 @@ function Position(x, y, z) {
   };
 
   /**
-   * Applies a translation on this position
+   * Applies a translation on this vector
    * @param {number} xTranslation the value of the translation to apply to the x coordinate
    * @param {number} yTranslation the value of the translation to apply to the y coordinate
-   * @param {numer} zTranslation the value of the translation to apply to the z coordinate
-   * @returns this position
+   * @param {number} zTranslation the value of the translation to apply to the z coordinate
+   * @returns {Vector3D} this vector
    */
   this.translate = function (xTranslation, yTranslation, zTranslation) {
     this.translateX(xTranslation);
@@ -375,48 +404,41 @@ function Position(x, y, z) {
   };
 
   /**
-   * Returns a new position that is the sum of this plus that passed as param.
-   * The resulting position is a translation of this position using the coordinates of
-   * that passed as parameter
-   * @param {Position} position the position to add
-   * @returns a new Position that is the sum of this plus that passed as param
+   * Returns a new vector that is the sum of this plus that passed as param.
+   * The resulting vector is a translation of this position using the coordinates of
+   * the one passed as parameter
+   * @param {Vector3D} vector3D the position to add
+   * @returns {Vector3D} a new vector that is the sum of this plus that passed as param
    */
-  this.plus = function (position) {
-    return new Positon(
-      this.x + position.x,
-      this.y + position.y,
-      this.z + position.z
+  this.plus = function (vector3D) {
+    return new Vector3D(
+        this.x + vector3D.x,
+        this.y + vector3D.y,
+        this.z + vector3D.z
     );
   };
 
   /**
-   * Returns a new position that has the coordinates of this plus the deltas passed as
-   * parameters. The resulting position is a translation of this position using the coordinates of
-   * that passed as parameter
-   * @param {number} deltaX the delta to add to the x coordinate of this position
-   * @param {number} deltaY the delta to add to the y coordinate of this position
-   * @param {number} deltaZ the delta to add to the z coordinate of this position
-   * @returns
+   * Returns a new vector that is the difference between this and the one passed as parameter.
+   * The resulting vector is a translation of this using the coordinates of
+   * the one passed as parameter
+   * @param {Vector3D} vector3D the vector to subtract
+   * @returns {Vector3D} a new vector that is the difference of this plus that passed as param
    */
-  this.plus = function (deltaX, deltaY, deltaZ) {
-    return new Position(this.x + deltaX, this.y + deltaY, this.z + deltaZ);
+  this.minus = function (vector3D) {
+    return new Vector3D(
+        this.x - vector3D.x,
+        this.y - vector3D.y,
+        this.z - vector3D.z
+    );
   };
 
   /**
-   * Returns this position as an array containing the three coordinates ([this.x, this.y, this.z])
-   * @returns an array containing the three coordinates of this position
+   * Returns this vector as an array containing the three coordinates ([this.x, this.y, this.z])
+   * @returns {Array.<number>} an array containing the three coordinates of this position
    */
   this.toArray = function () {
     return [this.x, this.y, this.z];
-  };
-
-  /**
-   * Returns a string representation of this position using the classical
-   * mathematical notation for points (X, Y, Z)
-   * @returns a string representation of this position
-   */
-  this.toString = function () {
-    return "(" + this.x + ", " + this.y + ", " + this.z + ")";
   };
 
   /**
@@ -426,36 +448,37 @@ function Position(x, y, z) {
    * @returns a copy of this position
    */
   this.copy = function () {
-    return new Position(this.x, this.y, this.z);
+    return new Vector3D(this.x, this.y, this.z);
   };
 
   /**
-   * Returns true if the given position has the same coordinates of this position
-   * (means that the two positions are equals)
-   * @param {Position} position the position to check
-   * @returns true if the given position has the same coordinates of this position
+   * Returns `true` if the given vector has the same coordinates of this
+   * (means that the two vectors are equals)
+   * @param {Vector3D} vector3D the position to check
+   * @returns {boolean} true if the given position has the same coordinates of this position
    */
-  this.equals = function(position) {
-    if(position == null || position == undefined) {
+  this.equals = function(vector3D) {
+    if(vector3D == null) {
       return false;
     }
 
-    if(Position.prototype.isPrototypeOf(position)) {
-      if(position.x === this.x && position.y === this.y && position.z === this.z) {
+    if(Vector3D.prototype.isPrototypeOf(vector3D)) {
+      if(vector3D.x === this.x && vector3D.y === this.y && vector3D.z === this.z) {
         return true;
       }
     }
 
     return false;
   }
+
 }
 
 /**
  * Returns a position with all coordinate set to zero (0, 0, 0)
  * @returns a position with all coordinate set to zero (0, 0, 0)
  */
-Position.zeroPosition = function () {
-  return new Position(0, 0, 0);
+Vector3D.origin = function () {
+  return new Vector3D(0, 0, 0);
 };
 
 /**
@@ -506,245 +529,6 @@ Position.difference = function (target, start) {
     target.y - start.y,
     target.z - start.z
   );
-};
-
-/**
- * Represents the speed of an object able to move in 3-D reference system
- * @param {number} vx the x component of the speed
- * @param {number} vy the y component of the speed
- * @param {number} vz the z component of the speed
- */
-function Speed(vx, vy, vz) {
-  /* ****************************************** */
-  this.vx = vx;
-  this.vy = vy;
-  this.vz = vz;
-
-  /**
-   * Applies a uniform motion to the x coordinate of the passed position using the
-   * x component of this speed.
-   * The unit of the time must be consistent with that of this speed to have a
-   * correct result
-   * @param {Position} position the position that has to be moved
-   * @param {number} time the time of the movement
-   * @returns the position passed as param after the movement
-   */
-  this.applyXUniformMotionStepTo = function (position, time) {
-    position.translateX(this.vx * time);
-    return position;
-  };
-
-  /**
-   * Applies a uniform motion to the y coordinate of the passed position using the
-   * y component of this speed.
-   * The unit of the time must be consistent with that of this speed to have a
-   * correct result
-   * @param {Position} position the position that has to be moved
-   * @param {number} time the time of the movement
-   * @returns the position passed as param after the movement
-   */
-  this.applyYUniformMotionStepTo = function (position, time) {
-    position.translateY(this.vy * time);
-    return position;
-  };
-
-  /**
-   * Applies a uniform motion to the z coordinate of the passed position using the
-   * z component of this speed.
-   * The unit of the time must be consistent with that of this speed to have a
-   * correct result
-   * @param {Position} position the position that has to be moved
-   * @param {number} time the time of the movement
-   * @returns the position passed as param after the movement
-   */
-  this.applyZUniformMotionStepTo = function (position, time) {
-    position.translateZ(this.vz * time);
-    return position;
-  };
-
-  /**
-   * Applies a uniform motion to the position passed as parameter using this speed.
-   * The unit of the time must be consistent with that of this speed to have a
-   * correct result
-   * @param {Position} position the position that has to be moved
-   * @param {number} time the time of the movement
-   * @returns the position passed as param after the movement
-   */
-  this.applyUniformMotionStepTo = function (position, time) {
-    position.translate(this.vx * time, this.vy * time, this.vz * time);
-    return position;
-  };
-
-  /**
-   * Applies a uniformly accelerated motion to the x coordinate of the passed position using the
-   * x component of this speed and the acceleration passed as parameter.
-   * The motion is applies also to this speed so, after the invocation of this function,
-   * the x component of this speed is updated.
-   * The unit of the time and the acceleration must be consistent with that of this speed to have a
-   * correct result
-   * @param {Position} position the position that has to be moved
-   * @param {number} accelerationX the acceleration of the x component of this speed
-   * @param {number} time the time of the movement
-   * @returns a Pair containing the passed position and this speed after the movement
-   */
-  this.applyXUniformlyAccelleratedMotionStepTo = function (
-    position,
-    accelerationX,
-    time
-  ) {
-    position.translateX(
-      position.x + this.vx * t + 0.5 * accelerationX * (time * time)
-    );
-    this.vx = this.vx + accelerationX * time;
-    return Pair.of(position, this);
-  };
-
-  /**
-   * Applies a uniformly accelerated motion to the y coordinate of the passed position using the
-   * y component of this speed and the acceleration passed as parameter.
-   * The motion is applies also to this speed so, after the invocation of this function,
-   * the y component of this speed is updated.
-   * The unit of the time and the acceleration must be consistent with that of this speed to have a
-   * correct result
-   * @param {Position} position the position that has to be moved
-   * @param {number} accelerationY the acceleration of the y component of this speed
-   * @param {number} time the time of the movement
-   * @returns a Pair containing the passed position and this speed after the movement
-   */
-  this.applyYUniformlyAccelleratedMotionStepTo = function (
-    position,
-    accelerationY,
-    time
-  ) {
-    position.translateY(
-      position.y + this.vy * t + 0.5 * accelerationY * (time * time)
-    );
-    this.vy = this.vy + accelerationY * time;
-    return Pair.of(position, this);
-  };
-
-  /**
-   * Applies a uniformly accelerated motion to the z coordinate of the passed position using the
-   * z component of this speed and the acceleration passed as parameter.
-   * The motion is applies also to this speed so, after the invocation of this function,
-   * the z component of this speed is updated.
-   * The unit of the time and the acceleration must be consistent with that of this speed to have a
-   * correct result
-   * @param {Position} position the position that has to be moved
-   * @param {number} accelerationZ the acceleration of the z component of this speed
-   * @param {number} time the time of the movement
-   * @returns a Pair containing the passed position and this speed after the movement
-   */
-  this.applyZUniformlyAccelleratedMotionStepTo = function (
-    position,
-    accelerationZ,
-    time
-  ) {
-    position.translateZ(
-      position.z + this.vz * t + 0.5 * accelerationZ * (time * time)
-    );
-    this.vz = this.vz + accelerationZ * time;
-    return Pair.of(position, this);
-  };
-
-  /**
-   * Applies a uniformly accelerated motion to the passed position using the
-   * this speed and the accelerations passed as parameter.
-   * The motion is applies also to this speed so, after the invocation of this function,
-   * all the components of this speed are updated.
-   * The unit of the time and the acceleration must be consistent with that of this speed to have a
-   * @param {*} position the position that has to be moved
-   * @param {*} accelerationX the acceleration of the x component of this speed
-   * @param {*} accelerationY the acceleration of the y component of this speed
-   * @param {*} accelerationZ the acceleration of the z component of this speed
-   * @param {*} time the time of the movement
-   * @returns a Pair containing the passed position and this speed after the movement
-   */
-  this.applyUniformlyAccelleratedMotionStepTo = function (
-    position,
-    accelerationX,
-    accelerationY = accelerationX,
-    accelerationZ = accelerationX,
-    time
-  ) {
-    this.applyUniformlyAccelleratedMotionTo(position, accelerationX, time);
-    this.applyYUniformlyAccelleratedMotionTo(position, accelerationY, time);
-    this.applyZUniformlyAccelleratedMotionTo(position, accelerationZ, time);
-
-    return Pair.of(position, this);
-  };
-
-  /**
-   * Creates and returns a copy of this speed.
-   *  All the changes applied to this new speed are not propagated
-   * to the original speed
-   * @returns a copy of this speed
-   */
-  this.copy = function () {
-    return new Speed(this.vx, this.vy, this.vz);
-  };
-
-  /**
-   * Returns true if the given speed has the same component of this speed
-   * (means that the two speeds are equals)
-   * @param {Speed} speed the speed to check
-   * @returns true if the given speed has the same component of this speed
-   */
-   this.equals = function(speed) {
-    if(speed == null || speed == undefined) {
-      return false;
-    }
-
-    if(Speed.prototype.isPrototypeOf(speed)) {
-      if(speed.vx === this.vx && speed.vy === this.vy && speed.vz === this.vz) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-}
-
-/**
- * Returns a speed with all components set to zero (0, 0, 0)
- * @returns a speed with all components set to zero (0, 0, 0)
- */
-Speed.zeroSpeed = function () {
-  return new Speed(0, 0, 0);
-};
-
-/**
- * Creates and returns a new speed checking if the passed parameters
- * are numbers. This function throws an error if one parameter is not a number.
- * It is better to use this function instead the normal creation with the 'new' operator.
- * @param {number} vx the x component of the new speed
- * @param {number} vy the y component of the new speed
- * @param {number} vz the z component of the new speed
- * @returns the new speed
- */
-Speed.newSpeed = function (vx, vy, vz) {
-  if (!(typeof vx == "number")) {
-    throw new Error("vx value '" + x + "' is not a number");
-  }
-  if (!(typeof vy == "number")) {
-    throw new Error("vy value '" + x + "' is not a number");
-  }
-  if (!(typeof vz == "number")) {
-    throw new Error("vz value '" + x + "' is not a number");
-  }
-
-  return new Speed(x, y, z);
-};
-
-/**
- * Returns a deep copy of this speed.
- * All the changes applied to this new speed are not propagated
- * to the original position
- * @param {Speed} speed the speed to copy
- * @returns a new speed that is the deep copy of that passed as parameter
- */
-Speed.copyOf = function (speed) {
-  return speed.copy();
 };
 
 const ANGLE_UNIT = {

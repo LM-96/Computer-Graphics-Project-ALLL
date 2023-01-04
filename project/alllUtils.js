@@ -91,7 +91,7 @@ function ShaderLocation(name, type, location) {
 
 function getShaderLocationFromName(locationArray, locationName) {
 	for(const location of locationArray) {
-		if(location.name == locationName) return location;
+		if(location.name === locationName) return location;
 	}
 
 	return null;

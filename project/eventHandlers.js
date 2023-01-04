@@ -471,8 +471,11 @@ function attachHandlers(canvas, p_target) {
 
   let lookingAtObject = camMgr.lookingAtObject();
   INPUTS.setAttributeOf(INPUT_NAMES.lookAtObject, "checked", camMgr.lookingAtObject())
+  element = CARDS.getElementById(CARD_NAMES.cameraDistance)
   if(!lookingAtObject) {
-    CARDS.getElementById(CARD_NAMES.cameraDistance).style.display = "none";
+    if(element != null) {
+      element.style.display = 'none'
+    }
   }
 
   INPUTS.setAttributeOf(INPUT_NAMES.followTranslation, "checked", camMgr.followObjectTranslation());
