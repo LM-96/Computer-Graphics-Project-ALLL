@@ -33,21 +33,12 @@ class IllegalModificationException extends Error {
 }
 exports.IllegalModificationException = IllegalModificationException;
 /**
- * An object that has also functional methods like `apply` or `map`
+ * The abstract implementation of a `FunctionalObject`
  */
-class FunctionalObject {
-    /**
-     * Calls the specified function block with this value as its argument and returns its result
-     * @param {(any) => any} mapper the function to be invoked
-     */
+class AbstractFunctionalObject {
     map(mapper) {
         return mapper(this);
     }
-    /**
-     * Calls the specified function `block` with this value as its argument and returns this value.
-     * The return value of `block` will be ignored
-     * @param {(any) => (any)} block the function to be applied on this object
-     */
     apply(block) {
         return block(this);
     }
@@ -121,7 +112,7 @@ function checkNotNullCoordinates(x, y, z, throwError = false) {
  * - **mutable**: in this case is possible to modify the values of the internal coordinates using all the
  * method for these kind of purposes; these methods will return `this`
  */
-class AbstractPoint3D extends FunctionalObject {
+class AbstractPoint3D extends AbstractFunctionalObject {
     dilate(mx, my, mz) {
         let result = this;
         if (mx != null) {

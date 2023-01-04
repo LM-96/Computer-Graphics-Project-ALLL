@@ -20,21 +20,32 @@ export class IllegalModificationException extends Error {
 /**
  * An object that has also functional methods like `apply` or `map`
  */
-class FunctionalObject<T> {
+interface FunctionalObject<T> {
 
     /**
      * Calls the specified function block with this value as its argument and returns its result
      * @param {(any) => any} mapper the function to be invoked
      */
-    map<R>(mapper: (T) => R): R {
-        return mapper(this)
-    }
+    map<R>(mapper: (T) => R): R
 
     /**
      * Calls the specified function `block` with this value as its argument and returns this value.
      * The return value of `block` will be ignored
      * @param {(any) => (any)} block the function to be applied on this object
      */
+    apply(block: (T) => any): T
+
+}
+
+/**
+ * The abstract implementation of a `FunctionalObject`
+ */
+abstract class AbstractFunctionalObject<T> implements FunctionalObject<T>{
+
+    map<R>(mapper: (T) => R): R {
+        return mapper(this)
+    }
+
     apply(block: (T) => any): T {
         return block(this)
     }
@@ -135,7 +146,7 @@ function checkNotNullCoordinates(x: number|null, y: number|null,
  * - **mutable**: in this case is possible to modify the values of the internal coordinates using all the
  * method for these kind of purposes; these methods will return `this`
  */
-export interface Point3D extends ReadablePoint3D {
+export interface Point3D extends ReadablePoint3D, FunctionalObject<Point3D> {
 
     /**
      * Sets the value of the coordinate of he specified axis of this point
@@ -353,7 +364,7 @@ export interface Point3D extends ReadablePoint3D {
  * - **mutable**: in this case is possible to modify the values of the internal coordinates using all the
  * method for these kind of purposes; these methods will return `this`
  */
-abstract class AbstractPoint3D extends FunctionalObject<Point3D> implements Point3D {
+abstract class AbstractPoint3D extends AbstractFunctionalObject<Point3D> implements Point3D {
 
     abstract getCoordinate(axis: Axis): number
     abstract dilateCoordinate(dilation: number, axis: Axis): Point3D;

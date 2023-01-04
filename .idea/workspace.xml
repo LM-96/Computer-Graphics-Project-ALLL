@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/project/alllUtils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/alllUtils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/eventHandlers.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/eventHandlers.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/resources/meshx-webglx-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/meshx-webglx-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/geometry-3d.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/geometry-3d.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/geometry-3d.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/geometry-3d.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/geometry-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/geometry-3d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/test.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/test.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +79,7 @@
       <updated>1672754965811</updated>
       <workItem from="1672754969451" duration="6832000" />
       <workItem from="1672761829331" duration="6391000" />
-      <workItem from="1672828891328" duration="13388000" />
+      <workItem from="1672828891328" duration="13750000" />
     </task>
     <servers />
   </component>
