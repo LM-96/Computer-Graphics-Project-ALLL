@@ -16,6 +16,7 @@ exports.PointFactory = exports.IllegalModificationException = void 0;
 /**
  * The enumeration that represents an axis
  */
+const types_1 = require("./types");
 var Axis;
 (function (Axis) {
     Axis[Axis["X"] = 0] = "X";
@@ -109,7 +110,7 @@ function checkNotNullCoordinates(x, y, z, throwError = false) {
  * - **mutable**: in this case is possible to modify the values of the internal coordinates using all the
  * method for these kind of purposes; these methods will return `this`
  */
-class AbstractPoint3D extends AbstractFunctionalObject {
+class AbstractPoint3D extends types_1.AbstractFunctionalObject {
     dilate(mx, my, mz) {
         let result = this;
         if (mx != null) {

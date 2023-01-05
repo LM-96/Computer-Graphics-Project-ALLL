@@ -136,6 +136,22 @@ export class Pair<F, S> extends AbstractFunctionalObject<Pair<F, S>> {
         return "Pair(" + this.#first + ", " + this.#second + ")"
     }
 
+    /**
+     * Returns `true` the `other` object is a `Pair` with the two elements that are
+     * equals (intended as `===`) to the ones in this pair
+     * @param {any} other the other object
+     * @return {boolean} `true` if the `other` is a pair equals to this
+     */
+    equals(other: any): boolean {
+        if(other != null) {
+            if(other instanceof Pair) {
+                return this.#first === other.#first && this.#second === other.#second
+            }
+        }
+
+        return false
+    }
+
 }
 
 /**

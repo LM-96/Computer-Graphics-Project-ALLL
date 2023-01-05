@@ -1,6 +1,8 @@
 /**
  * The enumeration that represents an axis
  */
+import {AbstractFunctionalObject, FunctionalObject} from "./types";
+
 enum Axis{
     X, Y, Z
 }

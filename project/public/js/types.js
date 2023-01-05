@@ -114,6 +114,20 @@ class Pair extends AbstractFunctionalObject {
     toString() {
         return "Pair(" + __classPrivateFieldGet(this, _Pair_first, "f") + ", " + __classPrivateFieldGet(this, _Pair_second, "f") + ")";
     }
+    /**
+     * Returns `true` the `other` object is a `Pair` with the two elements that are
+     * equals (intended as `===`) to the ones in this pair
+     * @param {any} other the other object
+     * @return {boolean} `true` if the `other` is a pair equals to this
+     */
+    equals(other) {
+        if (other != null) {
+            if (other instanceof Pair) {
+                return __classPrivateFieldGet(this, _Pair_first, "f") === __classPrivateFieldGet(other, _Pair_first, "f") && __classPrivateFieldGet(this, _Pair_second, "f") === __classPrivateFieldGet(other, _Pair_second, "f");
+            }
+        }
+        return false;
+    }
 }
 exports.Pair = Pair;
 _Pair_first = new WeakMap(), _Pair_second = new WeakMap();
