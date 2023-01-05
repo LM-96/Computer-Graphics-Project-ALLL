@@ -5,6 +5,11 @@ enum Axis{
     X, Y, Z
 }
 
+enum AngleUnit {
+    RAD, DEG
+}
+
+/* UTILITIES ***************************************************************************************************** */
 /**
  * An exception that is thrown when the modification of a certain value is not allowed
  */
@@ -52,26 +57,7 @@ abstract class AbstractFunctionalObject<T> implements FunctionalObject<T>{
 
 }
 
-/**
- * A point in a 3D reference system that is only readable
- */
-export interface ReadablePoint3D {
-
-    /**
-     * Returns the value of the specified coordinate of the point
-     * @param {Axis} axis the axis of the coordinate
-     * @return {number} the value of the specified coordinate of the point
-     */
-    getCoordinate(axis: Axis): number;
-
-    getX(): number;
-    getY(): number;
-    getZ(): number;
-
-    equals(other: any): boolean;
-    toString(): string;
-}
-
+/* POINTS ******************************************************************************************************** */
 /**
  * Returns `true` if the given `object` is a **point**
  * @param {any} object
@@ -133,6 +119,26 @@ function checkNotNullCoordinates(x: number|null, y: number|null,
         return false
     }
     return true
+}
+
+/**
+ * A point in a 3D reference system that is only readable
+ */
+export interface ReadablePoint3D {
+
+    /**
+     * Returns the value of the specified coordinate of the point
+     * @param {Axis} axis the axis of the coordinate
+     * @return {number} the value of the specified coordinate of the point
+     */
+    getCoordinate(axis: Axis): number;
+
+    getX(): number;
+    getY(): number;
+    getZ(): number;
+
+    equals(other: any): boolean;
+    toString(): string;
 }
 
 /**
@@ -311,6 +317,16 @@ export interface Point3D extends ReadablePoint3D, FunctionalObject<Point3D> {
     dilate(mx: number|null, my: number|null, mz: number|null): Point3D
 
     /**
+     * Dilates this point by applying a vector for the transformation
+     * @param {Point3D} vector the vector that will be used for the dilation intended as
+     * a point that contains `T(mx, my, mz)` (the coefficients of the dilation)
+     * @return {Point3D} `this` if this point is mutable, a modified copy if is frozen
+     * @throws {IllegalModificationException} if this point is **frozen** and the
+     * return of the modified copy is not allowed
+     */
+    dilateByVector(vector: Point3D): Point3D
+
+    /**
      * Returns:
      * - **this point** if is already frozen and has the same setting for the
      * `denyModifiedCopy`;
@@ -400,6 +416,13 @@ abstract class AbstractPoint3D extends AbstractFunctionalObject<Point3D> impleme
 
     dilateZ(mz: number): Point3D {
         return this.dilateCoordinate(mz, Axis.Z)
+    }
+
+    dilateByVector(vector: Point3D): Point3D {
+        return this
+            .dilateCoordinate(vector.getX(), Axis.X)
+            .dilateCoordinate(vector.getY(), Axis.Y)
+            .dilateCoordinate(vector.getZ(), Axis.Z)
     }
 
     getX(): number {
@@ -742,5 +765,4 @@ export class PointFactory {
     static newMutablePoint3D(x: number, y: number, z: number): Point3D {
         return new MutablePoint3D(x, y, z)
     }
-
 }

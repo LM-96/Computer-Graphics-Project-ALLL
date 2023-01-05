@@ -22,6 +22,12 @@ var Axis;
     Axis[Axis["Y"] = 1] = "Y";
     Axis[Axis["Z"] = 2] = "Z";
 })(Axis || (Axis = {}));
+var AngleUnit;
+(function (AngleUnit) {
+    AngleUnit[AngleUnit["RAD"] = 0] = "RAD";
+    AngleUnit[AngleUnit["DEG"] = 1] = "DEG";
+})(AngleUnit || (AngleUnit = {}));
+/* UTILITIES ***************************************************************************************************** */
 /**
  * An exception that is thrown when the modification of a certain value is not allowed
  */
@@ -43,6 +49,7 @@ class AbstractFunctionalObject {
         return block(this);
     }
 }
+/* POINTS ******************************************************************************************************** */
 /**
  * Returns `true` if the given `object` is a **point**
  * @param {any} object
@@ -134,6 +141,12 @@ class AbstractPoint3D extends AbstractFunctionalObject {
     }
     dilateZ(mz) {
         return this.dilateCoordinate(mz, Axis.Z);
+    }
+    dilateByVector(vector) {
+        return this
+            .dilateCoordinate(vector.getX(), Axis.X)
+            .dilateCoordinate(vector.getY(), Axis.Y)
+            .dilateCoordinate(vector.getZ(), Axis.Z);
     }
     getX() {
         return this.getCoordinate(Axis.X);

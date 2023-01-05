@@ -2,12 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/project/resources/geometry-3d.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/geometry-3d.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/resources/geometry-3d.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/geometry-3d.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/resources/geometry-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/geometry-3d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/resources/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/resources/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/test.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/resources/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/resources/test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/controls.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/css/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/dat.gui.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/dat.gui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/geometry-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/geometry-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/geometry-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry-3d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/glm_utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/glm_utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/jquery-3.6.0.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/jquery-3.6.0.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/jquery-3.6.1.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/jquery-3.6.1.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/load_mesh.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/load_mesh.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/m4.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/m4.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/mesh_utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/mesh_utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/meshx-webglx-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/meshx-webglx-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/renders.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/test.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/ui_components.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/ui_components.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/ui_style.css" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/css/ui_style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/ui_style2.css" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/css/ui_style2.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/webgl-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/webgl-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +70,10 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/project/lib/js" />
+      <recent name="$PROJECT_DIR$/project/public/css" />
+      <recent name="$PROJECT_DIR$/project/public/js" />
+      <recent name="$PROJECT_DIR$/project/src/ts" />
       <recent name="$PROJECT_DIR$/project/resources" />
     </key>
   </component>
@@ -79,20 +101,15 @@
       <updated>1672754965811</updated>
       <workItem from="1672754969451" duration="6832000" />
       <workItem from="1672761829331" duration="6391000" />
-      <workItem from="1672828891328" duration="13750000" />
+      <workItem from="1672828891328" duration="14134000" />
+      <workItem from="1672858824325" duration="557000" />
+      <workItem from="1672859393231" duration="1555000" />
+      <workItem from="1672877298504" duration="3081000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-    <option name="exactExcludedFiles">
-      <list>
-        <option value="$PROJECT_DIR$/project/resources/geometry-3d.js" />
-        <option value="$PROJECT_DIR$/project/resources/geometry-3d.js.map" />
-        <option value="$PROJECT_DIR$/project/resources/test.js" />
-        <option value="$PROJECT_DIR$/project/resources/test.js.map" />
-      </list>
-    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
