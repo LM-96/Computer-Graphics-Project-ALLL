@@ -22,40 +22,8 @@ export class IllegalModificationException extends Error {
 
 }
 
-/**
- * An object that has also functional methods like `apply` or `map`
- */
-interface FunctionalObject<T> {
+/* TRANSFORMATIONS *********************************************************************************************** */
 
-    /**
-     * Calls the specified function block with this value as its argument and returns its result
-     * @param {(any) => any} mapper the function to be invoked
-     */
-    map<R>(mapper: (T) => R): R
-
-    /**
-     * Calls the specified function `block` with this value as its argument and returns this value.
-     * The return value of `block` will be ignored
-     * @param {(any) => (any)} block the function to be applied on this object
-     */
-    apply(block: (T) => any): T
-
-}
-
-/**
- * The abstract implementation of a `FunctionalObject`
- */
-abstract class AbstractFunctionalObject<T> implements FunctionalObject<T>{
-
-    map<R>(mapper: (T) => R): R {
-        return mapper(this)
-    }
-
-    apply(block: (T) => any): T {
-        return block(this)
-    }
-
-}
 
 /* POINTS ******************************************************************************************************** */
 /**
@@ -325,6 +293,8 @@ export interface Point3D extends ReadablePoint3D, FunctionalObject<Point3D> {
      * return of the modified copy is not allowed
      */
     dilateByVector(vector: Point3D): Point3D
+
+
 
     /**
      * Returns:
@@ -764,5 +734,39 @@ export class PointFactory {
      */
     static newMutablePoint3D(x: number, y: number, z: number): Point3D {
         return new MutablePoint3D(x, y, z)
+    }
+
+    /**
+     * Returns the origin of a cartesian reference system
+     * @param {boolean} frozen a flag that indicates if the returning point have to be frozen (`false`
+     * by default)
+     * @param {boolean} denyModifiedCopy the flag to deny the return of a modified copy if
+     * the point is frozen (`true` by default)
+     */
+    static origin(frozen: boolean = false, denyModifiedCopy: boolean = true): Point3D {
+        if(frozen) {
+            return new FrozenPoint3D(0, 0, 0, denyModifiedCopy)
+        } else {
+            return new MutablePoint3D(0, 0, 0)
+        }
+    }
+
+    /**
+     * Creates and returns a new `Point3D`
+     * @param {number} x the value of the `x` coordinate
+     * @param {number} y the value of the `y` coordinate
+     * @param {number} z the value of the `z` coordinate
+     * @param {boolean} frozen a flag that indicates if the returning point have to be frozen (`false`
+     * by default)
+     * @param {boolean} denyModifiedCopy the flag to deny the return of a modified copy if
+     * the point is frozen (`true` by default)
+     */
+    static newPoint3D(x: number, y: number, z: number,
+                      frozen: boolean = false, denyModifiedCopy: boolean = true): Point3D {
+        if(frozen) {
+            return this.newFrozenPoint3D(x, y, z, denyModifiedCopy)
+        } else {
+            return this.newMutablePoint3D(x, y, z)
+        }
     }
 }

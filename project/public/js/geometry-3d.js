@@ -38,17 +38,7 @@ class IllegalModificationException extends Error {
     }
 }
 exports.IllegalModificationException = IllegalModificationException;
-/**
- * The abstract implementation of a `FunctionalObject`
- */
-class AbstractFunctionalObject {
-    map(mapper) {
-        return mapper(this);
-    }
-    apply(block) {
-        return block(this);
-    }
-}
+/* TRANSFORMATIONS *********************************************************************************************** */
 /* POINTS ******************************************************************************************************** */
 /**
  * Returns `true` if the given `object` is a **point**
@@ -444,6 +434,39 @@ class PointFactory {
      */
     static newMutablePoint3D(x, y, z) {
         return new MutablePoint3D(x, y, z);
+    }
+    /**
+     * Returns the origin of a cartesian reference system
+     * @param {boolean} frozen a flag that indicates if the returning point have to be frozen (`false`
+     * by default)
+     * @param {boolean} denyModifiedCopy the flag to deny the return of a modified copy if
+     * the point is frozen (`true` by default)
+     */
+    static origin(frozen = false, denyModifiedCopy = true) {
+        if (frozen) {
+            return new FrozenPoint3D(0, 0, 0, denyModifiedCopy);
+        }
+        else {
+            return new MutablePoint3D(0, 0, 0);
+        }
+    }
+    /**
+     * Creates and returns a new `Point3D`
+     * @param {number} x the value of the `x` coordinate
+     * @param {number} y the value of the `y` coordinate
+     * @param {number} z the value of the `z` coordinate
+     * @param {boolean} frozen a flag that indicates if the returning point have to be frozen (`false`
+     * by default)
+     * @param {boolean} denyModifiedCopy the flag to deny the return of a modified copy if
+     * the point is frozen (`true` by default)
+     */
+    static newPoint3D(x, y, z, frozen = false, denyModifiedCopy = true) {
+        if (frozen) {
+            return this.newFrozenPoint3D(x, y, z, denyModifiedCopy);
+        }
+        else {
+            return this.newMutablePoint3D(x, y, z);
+        }
     }
 }
 exports.PointFactory = PointFactory;
