@@ -12,7 +12,17 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _Pair_first, _Pair_second;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.coupleOf = exports.pairOf = exports.Pair = exports.AbstractFunctionalObject = void 0;
+exports.coupleOf = exports.pairOf = exports.Pair = exports.AbstractFunctionalObject = exports.IllegalArgumentException = void 0;
+/**
+ * An exception that is thrown when a column is not valid for a reason
+ */
+class IllegalArgumentException extends Error {
+    constructor(msg) {
+        super(msg);
+        Object.setPrototypeOf(this, IllegalArgumentException.prototype);
+    }
+}
+exports.IllegalArgumentException = IllegalArgumentException;
 /**
  * The abstract implementation of a `FunctionalObject`
  */
