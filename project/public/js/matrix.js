@@ -858,6 +858,18 @@ class Matrix extends types_1.AbstractFunctionalObject {
         return res;
     }
     /**
+     * Calculates and returns the cofactor of the element specified by `rowIndex` and `columnIndex`
+     * of this matrix
+     * @param {number} rowIndex the index of the row of the element
+     * @param {number} columnIndex the index of the column of the element
+     * @throws {IllegalRowIndexException} if the index of the row is not valid
+     * @throws {IllegalColumnIndexException} if the index of the column is not valid
+     */
+    getCofactor(rowIndex, columnIndex) {
+        this.checkValidIndexes(rowIndex, columnIndex, true);
+        return Math.pow(-1, rowIndex + columnIndex) * (this.getMinor(rowIndex, columnIndex).determinant());
+    }
+    /**
      * Calculates and returns the determinant of this matrix
      * This method will work properly **only if the two matrix contain only
      * numbers**: this means that the behaviour of this method is not predictable
