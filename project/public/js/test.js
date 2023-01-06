@@ -1,8 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const matrix_1 = require("./matrix");
-let m1 = new matrix_1.Matrix([[10, 2, 3, 4], [5, 21, 7, 9], [9, 10, 11, 12], [13, 43, 15, 16]]);
-let m2 = new matrix_1.Matrix([[5, 6], [7, 8]]);
-console.log(m1.trace());
-console.log(m1.determinant().toString());
+let matrix = matrix_1.Matrix.asMatrix([[1, 2, 3], [4, 5, 6]]);
+console.log("matrix: " + matrix.toString());
+console.log("flatten by rows: " + matrix.flatten());
+console.log("re-created by flatten: " + matrix_1.Matrix.flattenAsMatrix(matrix.flatten(), matrix.columnSize()).toString());
+console.log("flatten by columns: " + matrix.flatten(matrix_1.FlatType.BY_COLUMNS));
+console.log("re-created by flatten: " + matrix_1.Matrix.flattenAsMatrix(matrix.flatten(matrix_1.FlatType.BY_COLUMNS), matrix.rowSize(), matrix_1.FlatType.BY_COLUMNS).toString());
 //# sourceMappingURL=test.js.map

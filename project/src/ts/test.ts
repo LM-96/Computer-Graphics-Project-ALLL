@@ -1,7 +1,9 @@
-import {Pair, pairOf} from "./types";
-import {Matrix} from "./matrix";
+import {FlatType, Matrix} from "./matrix";
 
-let m1: Matrix<number> = new Matrix([[10, 2, 3, 4], [5, 21, 7, 9], [9, 10, 11, 12], [13, 43, 15, 16]])
-let m2: Matrix<number> = new Matrix([[5, 6], [7, 8]])
-console.log(m1.trace())
-console.log(m1.determinant().toString())
+let matrix: Matrix<number> = Matrix.asMatrix([[1, 2, 3], [4, 5, 6]])
+console.log("matrix: " + matrix.toString())
+console.log("flatten by rows: " + matrix.flatten())
+console.log("re-created by flatten: " + Matrix.flattenAsMatrix(matrix.flatten(), matrix.columnSize()).toString())
+console.log("flatten by columns: " + matrix.flatten(FlatType.BY_COLUMNS))
+console.log("re-created by flatten: " + Matrix.flattenAsMatrix(matrix.flatten(FlatType.BY_COLUMNS),
+    matrix.rowSize(), FlatType.BY_COLUMNS).toString())
