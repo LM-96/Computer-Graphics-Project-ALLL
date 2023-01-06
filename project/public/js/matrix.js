@@ -10,7 +10,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _Matrix_instances, _a, _Matrix_data, _Matrix_totColums, _Matrix_totRows, _Matrix_getCofactor, _Matrix_recDeterminant;
+var _Matrix_data, _Matrix_totColums, _Matrix_totRows;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Matrix = exports.InvalidColumnException = exports.InvalidRowException = exports.IllegalColumnIndexException = exports.IllegalRowIndexException = void 0;
 const types_1 = require("./types");
@@ -76,7 +76,6 @@ exports.InvalidColumnException = InvalidColumnException;
 class Matrix extends types_1.AbstractFunctionalObject {
     constructor(data = []) {
         super();
-        _Matrix_instances.add(this);
         _Matrix_data.set(this, []);
         _Matrix_totColums.set(this, 0);
         _Matrix_totRows.set(this, 0
@@ -152,6 +151,61 @@ class Matrix extends types_1.AbstractFunctionalObject {
      */
     static newSquaredNumMatrix(dim, fill = 0) {
         return Matrix.newNumMatrix(dim, dim, fill);
+    }
+    static determinant(matrix) {
+        if (!matrix.isSquared()) {
+            throw new types_1.IllegalArgumentException("this matrix is not squared [size: " + matrix.size().toArray() +
+                "]: determinant undefined for non-squared matrix");
+        }
+        let data = __classPrivateFieldGet(matrix, _Matrix_data, "f");
+        switch (__classPrivateFieldGet(matrix, _Matrix_totRows, "f")) {
+            case 1: {
+                return data[0][0];
+            }
+            case 2: {
+                return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+            }
+            case 3: {
+                return data[0][0] * (data[1][1] * data[2][2] - data[1][2] * data[2][1]) -
+                    data[0][1] * (data[1][0] * data[2][2] - data[1][2] * data[2][0]) +
+                    data[0][2] * (data[1][0] * data[2][1] - data[1][1] * data[2][0]);
+            }
+            case 4: {
+                return data[0][0] * data[1][1] * data[2][2] * data[3][3]
+                    + data[0][0] * data[1][2] * data[2][3] * data[3][1]
+                    + data[0][0] * data[1][3] * data[2][1] * data[3][2]
+                    - data[0][0] * data[1][3] * data[2][2] * data[3][1]
+                    - data[0][0] * data[1][2] * data[2][1] * data[3][3]
+                    - data[0][0] * data[1][1] * data[2][3] * data[3][1]
+                    - data[0][1] * data[1][0] * data[2][2] * data[3][3]
+                    - data[0][2] * data[1][0] * data[2][3] * data[3][1]
+                    - data[0][3] * data[1][0] * data[2][1] * data[3][2]
+                    + data[0][3] * data[1][0] * data[2][2] * data[3][1]
+                    + data[0][2] * data[1][0] * data[2][1] * data[3][3]
+                    + data[0][1] * data[1][0] * data[2][3] * data[3][2]
+                    + data[0][1] * data[1][2] * data[2][0] * data[3][3]
+                    + data[0][2] * data[1][3] * data[2][0] * data[3][1]
+                    + data[0][3] * data[1][1] * data[2][0] * data[3][2]
+                    - data[0][3] * data[1][2] * data[2][0] * data[3][1]
+                    - data[0][2] * data[1][1] * data[2][0] * data[3][3]
+                    - data[0][1] * data[1][3] * data[2][0] * data[3][2]
+                    - data[0][1] * data[1][2] * data[2][3] * data[3][0]
+                    - data[0][2] * data[1][3] * data[2][1] * data[3][0]
+                    - data[0][3] * data[1][1] * data[2][2] * data[3][0]
+                    + data[0][3] * data[1][2] * data[2][1] * data[3][0]
+                    + data[0][2] * data[1][1] * data[2][3] * data[3][0]
+                    + data[0][1] * data[1][3] * data[2][2] * data[3][0];
+            }
+            default: {
+                let res = 0;
+                let sign = 1;
+                for (let col = 0; col < __classPrivateFieldGet(matrix, _Matrix_totColums, "f"); col++) {
+                    res += (sign * data[0][col] * Matrix.determinant(matrix.getMinor(0, col)));
+                    sign *= -1;
+                }
+                return res;
+            }
+        }
     }
     /**
      * Returns a couple which contains the size of the matrix.
@@ -274,7 +328,7 @@ class Matrix extends types_1.AbstractFunctionalObject {
      * of the columns of this matrix
      */
     addRow(row) {
-        var _b;
+        var _a;
         if (__classPrivateFieldGet(this, _Matrix_totColums, "f") == 0) {
             __classPrivateFieldSet(this, _Matrix_totColums, row.length, "f");
         }
@@ -285,18 +339,18 @@ class Matrix extends types_1.AbstractFunctionalObject {
             }
         }
         __classPrivateFieldGet(this, _Matrix_data, "f").push(row);
-        __classPrivateFieldSet(this, _Matrix_totRows, (_b = __classPrivateFieldGet(this, _Matrix_totRows, "f"), _b++, _b), "f");
+        __classPrivateFieldSet(this, _Matrix_totRows, (_a = __classPrivateFieldGet(this, _Matrix_totRows, "f"), _a++, _a), "f");
     }
     /**
      * Removes the last row of this matrix.
      * If the matrix is empty, this method will perform nothing
      */
     removeRow() {
-        var _b;
+        var _a;
         if (__classPrivateFieldGet(this, _Matrix_totRows, "f") > 0) {
             __classPrivateFieldGet(this, _Matrix_data, "f").pop();
         }
-        __classPrivateFieldSet(this, _Matrix_totRows, (_b = __classPrivateFieldGet(this, _Matrix_totRows, "f"), _b--, _b), "f");
+        __classPrivateFieldSet(this, _Matrix_totRows, (_a = __classPrivateFieldGet(this, _Matrix_totRows, "f"), _a--, _a), "f");
     }
     /**
      * Get the row at the specified index
@@ -315,7 +369,7 @@ class Matrix extends types_1.AbstractFunctionalObject {
      * of the rows of this matrix
      */
     addColumn(column) {
-        var _b;
+        var _a;
         if (__classPrivateFieldGet(this, _Matrix_totRows, "f") == 0) {
             __classPrivateFieldSet(this, _Matrix_totRows, column.length, "f");
             for (let i = 0; i < __classPrivateFieldGet(this, _Matrix_totRows, "f"); i++) {
@@ -330,7 +384,7 @@ class Matrix extends types_1.AbstractFunctionalObject {
         for (let i = 0; i < column.length; i++) {
             __classPrivateFieldGet(this, _Matrix_data, "f")[i].push(column[i]);
         }
-        __classPrivateFieldSet(this, _Matrix_totColums, (_b = __classPrivateFieldGet(this, _Matrix_totColums, "f"), _b++, _b), "f");
+        __classPrivateFieldSet(this, _Matrix_totColums, (_a = __classPrivateFieldGet(this, _Matrix_totColums, "f"), _a++, _a), "f");
     }
     /**
      * Removes the last column of this matrix (the one at the right).
@@ -544,14 +598,39 @@ class Matrix extends types_1.AbstractFunctionalObject {
         }
         return res;
     }
-    determinant() {
-        if (!this.isSquared()) {
-            throw new types_1.IllegalArgumentException("this matrix is not squared [size: " + this.size().toArray() + "]");
+    /**
+     * Returns the *minor matrix* that is this matrix with the specified row and the specified
+     * column **dropped**
+     * @param {number} rowIndex the index of the row to be dropped
+     * @param {number} columnIndex the index of the column to be dropped
+     * @return {Matrix} the matrix with the specified row and column dropped
+     * @throws {IllegalRowIndexException} if the index of the row is not valid
+     * @throws {IllegalColumnIndexException} if the index of the column is not valid
+     */
+    getMinor(rowIndex, columnIndex) {
+        this.checkValidIndexes(rowIndex, columnIndex);
+        let res = Matrix.newMatrix(__classPrivateFieldGet(this, _Matrix_totRows, "f") - 1, __classPrivateFieldGet(this, _Matrix_totColums, "f") - 1);
+        let rR = 0;
+        let cR = 0;
+        for (let r = 0; r < __classPrivateFieldGet(this, _Matrix_totRows, "f"); r++) {
+            if (r != rowIndex) {
+                cR = 0;
+                for (let c = 0; c < __classPrivateFieldGet(this, _Matrix_totColums, "f"); c++) {
+                    if (c != columnIndex) {
+                        __classPrivateFieldGet(res, _Matrix_data, "f")[rR][cR] = __classPrivateFieldGet(this, _Matrix_data, "f")[r][c];
+                        cR++;
+                    }
+                }
+                rR++;
+            }
         }
-        return __classPrivateFieldGet(this, _Matrix_instances, "m", _Matrix_recDeterminant).call(this, this, this.rowSize());
+        return res;
+    }
+    determinant() {
+        return Matrix.determinant(this);
     }
     toString() {
-        let res = "[";
+        let res = "Matrix " + __classPrivateFieldGet(this, _Matrix_totRows, "f") + "x" + __classPrivateFieldGet(this, _Matrix_totColums, "f") + ": [";
         for (let row of __classPrivateFieldGet(this, _Matrix_data, "f")) {
             res += ("[" + row.join(", ") + "], ");
         }
@@ -560,32 +639,5 @@ class Matrix extends types_1.AbstractFunctionalObject {
     }
 }
 exports.Matrix = Matrix;
-_a = Matrix, _Matrix_data = new WeakMap(), _Matrix_totColums = new WeakMap(), _Matrix_totRows = new WeakMap(), _Matrix_instances = new WeakSet(), _Matrix_getCofactor = function _Matrix_getCofactor(mat, p, q, n) {
-    let i = 0;
-    let j = 0;
-    let res = Matrix.newNumMatrix(mat.rowSize(), mat.rowSize());
-    for (let r = 0; r < mat.rowSize(); r++) {
-        for (let c = 0; c < mat.columSize(); c++) {
-            if (r != p && c != q) {
-                __classPrivateFieldGet(res, _Matrix_data, "f")[i][j++] = __classPrivateFieldGet(mat, _Matrix_data, "f")[r][c];
-                if (j == (n - 1)) {
-                    j = 0;
-                    i++;
-                }
-            }
-        }
-    }
-    return res;
-}, _Matrix_recDeterminant = function _Matrix_recDeterminant(mat, n) {
-    if (n == 1)
-        return __classPrivateFieldGet(mat, _Matrix_data, "f")[0][0];
-    let res = 0;
-    let sign = 1;
-    for (let f = 0; f < n; f++) {
-        let temp = __classPrivateFieldGet(Matrix, _a, "m", _Matrix_getCofactor).call(Matrix, mat, 0, f, n);
-        res += (sign * __classPrivateFieldGet(mat, _Matrix_data, "f")[0][f]) * __classPrivateFieldGet(this, _Matrix_instances, "m", _Matrix_recDeterminant).call(this, temp, n - 1);
-        sign *= -1;
-    }
-    return res;
-};
+_Matrix_data = new WeakMap(), _Matrix_totColums = new WeakMap(), _Matrix_totRows = new WeakMap();
 //# sourceMappingURL=matrix.js.map

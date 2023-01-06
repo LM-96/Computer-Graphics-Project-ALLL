@@ -70,7 +70,7 @@ export class InvalidColumnException extends Error {
  */
 export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>>{
 
-    #data: Array<Row<T>> = []
+    #data: MatrixData<T> = []
     #totColums: number = 0
     #totRows: number = 0
 
@@ -132,23 +132,68 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>>{
         return Matrix.newNumMatrix(dim, dim, fill)
     }
 
-    static #getCofactor(mat: NumMatrix, p: number, q: number, n: number): NumMatrix {
-        let i: number = 0
-        let j: number = 0
-        let res: NumMatrix = Matrix.newNumMatrix(mat.rowSize(), mat.rowSize())
+    static determinant(matrix: NumMatrix): number {
+        if(!matrix.isSquared()) {
+            throw new IllegalArgumentException(
+                "this matrix is not squared [size: " + matrix.size().toArray() +
+                "]: determinant undefined for non-squared matrix")
+        }
+        let data: MatrixData<number> = matrix.#data
+        switch (matrix.#totRows) {
+            case 1: {
+                return data[0][0]
+            }
+            case 2: {
+                return data[0][0]*data[1][1] - data[0][1]*data[1][0]
+            }
+            case 3: {
+                return data[0][0]*(data[1][1]*data[2][2] - data[1][2]*data[2][1]) -
+                    data[0][1]*(data[1][0]*data[2][2] - data[1][2]*data[2][0]) +
+                    data[0][2]*(data[1][0]*data[2][1] - data[1][1]*data[2][0])
+            }
+            case 4: {
+                return data[0][0]*data[1][1]*data[2][2]*data[3][3]
+                    + data[0][0]*data[1][2]*data[2][3]*data[3][1]
+                    + data[0][0]*data[1][3]*data[2][1]*data[3][2]
 
-        for(let r = 0; r < mat.rowSize(); r++) {
-            for(let c = 0; c < mat.columSize(); c++) {
-                if(r != p && c != q) {
-                    res.#data[i][j++] = mat.#data[r][c]
-                    if(j == (n - 1)) {
-                        j = 0
-                        i++
-                    }
+                    - data[0][0]*data[1][3]*data[2][2]*data[3][1]
+                    - data[0][0]*data[1][2]*data[2][1]*data[3][3]
+                    - data[0][0]*data[1][1]*data[2][3]*data[3][1]
+
+                    - data[0][1]*data[1][0]*data[2][2]*data[3][3]
+                    - data[0][2]*data[1][0]*data[2][3]*data[3][1]
+                    - data[0][3]*data[1][0]*data[2][1]*data[3][2]
+
+                    + data[0][3]*data[1][0]*data[2][2]*data[3][1]
+                    + data[0][2]*data[1][0]*data[2][1]*data[3][3]
+                    + data[0][1]*data[1][0]*data[2][3]*data[3][2]
+
+                    + data[0][1]*data[1][2]*data[2][0]*data[3][3]
+                    + data[0][2]*data[1][3]*data[2][0]*data[3][1]
+                    + data[0][3]*data[1][1]*data[2][0]*data[3][2]
+
+                    - data[0][3]*data[1][2]*data[2][0]*data[3][1]
+                    - data[0][2]*data[1][1]*data[2][0]*data[3][3]
+                    - data[0][1]*data[1][3]*data[2][0]*data[3][2]
+
+                    - data[0][1]*data[1][2]*data[2][3]*data[3][0]
+                    - data[0][2]*data[1][3]*data[2][1]*data[3][0]
+                    - data[0][3]*data[1][1]*data[2][2]*data[3][0]
+
+                    + data[0][3]*data[1][2]*data[2][1]*data[3][0]
+                    + data[0][2]*data[1][1]*data[2][3]*data[3][0]
+                    + data[0][1]*data[1][3]*data[2][2]*data[3][0]
+            }
+            default: {
+                let res: number = 0
+                let sign: number = 1
+                for(let col = 0; col < matrix.#totColums; col++) {
+                    res += (sign*data[0][col] * Matrix.determinant(matrix.getMinor(0, col)))
+                    sign *= -1
                 }
+                return res
             }
         }
-        return res
     }
 
     constructor(data: Array<Row<T>> = []) {
@@ -587,28 +632,45 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>>{
         return res
     }
 
-    #recDeterminant(mat: NumMatrix, n: number): number {
-        if(n == 1) return mat.#data[0][0]
+    /**
+     * Returns the *minor matrix* that is this matrix with the specified row and the specified
+     * column **dropped**
+     * @param {number} rowIndex the index of the row to be dropped
+     * @param {number} columnIndex the index of the column to be dropped
+     * @return {Matrix} the matrix with the specified row and column dropped
+     * @throws {IllegalRowIndexException} if the index of the row is not valid
+     * @throws {IllegalColumnIndexException} if the index of the column is not valid
+     */
+    getMinor(rowIndex: number, columnIndex: number): Matrix<T> {
+        this.checkValidIndexes(rowIndex, columnIndex)
 
-        let res: number = 0
-        let sign: number = 1
-        for(let f = 0; f < n; f++) {
-            let temp: NumMatrix = Matrix.#getCofactor(mat, 0, f, n)
-            res += (sign * mat.#data[0][f]) * this.#recDeterminant(temp, n-1)
-            sign *= -1
+        let res: Matrix<T> = Matrix.newMatrix(this.#totRows - 1, this.#totColums - 1)
+        let rR: number = 0
+        let cR: number = 0
+        for(let r = 0; r < this.#totRows; r++) {
+            if(r != rowIndex) {
+                cR = 0
+                for(let c = 0; c < this.#totColums; c++) {
+                    if(c != columnIndex) {
+                        res.#data[rR][cR] = this.#data[r][c]
+                        cR++
+                    }
+                }
+                rR++
+            }
         }
+
         return res
     }
 
     determinant(): number {
-        if(!this.isSquared()) {
-            throw new IllegalArgumentException("this matrix is not squared [size: " + this.size().toArray() + "]")
-        }
-        return this.#recDeterminant(<NumMatrix>this, this.rowSize())
+        return Matrix.determinant(this as NumMatrix)
     }
 
+
+
     toString(): string {
-        let res: string = "["
+        let res: string = "Matrix " + this.#totRows + "x" + this.#totColums + ": ["
         for(let row of this.#data) {
             res += ("[" + row.join(", ") + "], ")
         }
@@ -621,3 +683,8 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>>{
  * A matrix of numbers
  */
 type NumMatrix = Matrix<number>
+
+/**
+ * The type for the internal data of a matrix
+ */
+type MatrixData<T> = Array<Row<T>>
