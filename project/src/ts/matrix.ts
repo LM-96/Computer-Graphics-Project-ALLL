@@ -372,6 +372,75 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>>{
         return this.#totRows === this.#totColums
     }
 
+    /**
+     * Returns `true` if this matrix is diagonal.
+     * This method will **work also with non-numerical matrices** by checking
+     * if all the elements outside the diagonal are `null`
+     */
+    isDiagonal(): boolean {
+        let element: T
+        for(let r = 0; r < this.#totColums; r++) {
+            for(let c = 0; c < this.#totRows; c++) {
+                if(r != c) {
+                    element = this.#data[r][c]
+                    if(element != null && element != 0)
+                        return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    /**
+     * Returns `true` if this matrix is **upper triangular**.
+     * This method will **work also with non-numerical matrices** by checking
+     * if all the elements upper to the diagonal are `null`
+     */
+    isUpperTriangular(): boolean {
+        let element: T
+        for(let r = 0; r < this.#totColums; r++) {
+            for(let c = 0; c < this.#totRows; c++) {
+                if(r > c) {
+                    element = this.#data[r][c]
+                    if(element != null && element != 0)
+                        return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    /**
+     * Returns `true` if this matrix is **upper triangular**.
+     * This method will **work also with non-numerical matrices** by checking
+     * if all the elements lower to the diagonal are `null`
+     */
+    isLowerTriangular(): boolean {
+        let element: T
+        for(let r = 0; r < this.#totColums; r++) {
+            for(let c = 0; c < this.#totRows; c++) {
+                if(r < c) {
+                    element = this.#data[r][c]
+                    if(element != null && element != 0)
+                        return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    /**
+     * Returns `true` if this matrix is **triangular** (*upper* or *lower*).
+     * This method will **work also with non-numerical matrices** by checking
+     * if all the elements upper or lower to the diagonal are `null`
+     */
+    isTriangular(): boolean {
+        return this.isUpperTriangular() || this.isLowerTriangular()
+    }
+
     /* COLLECTIONS-LIKE METHODS ********************************************************************************** */
 
     /**

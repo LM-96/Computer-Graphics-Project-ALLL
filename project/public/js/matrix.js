@@ -356,6 +356,68 @@ class Matrix extends types_1.AbstractFunctionalObject {
     isSquared() {
         return __classPrivateFieldGet(this, _Matrix_totRows, "f") === __classPrivateFieldGet(this, _Matrix_totColums, "f");
     }
+    /**
+     * Returns `true` if this matrix is diagonal.
+     * This method will **work also with non-numerical matrices** by checking
+     * if all the elements outside the diagonal are `null`
+     */
+    isDiagonal() {
+        let element;
+        for (let r = 0; r < __classPrivateFieldGet(this, _Matrix_totColums, "f"); r++) {
+            for (let c = 0; c < __classPrivateFieldGet(this, _Matrix_totRows, "f"); c++) {
+                if (r != c) {
+                    element = __classPrivateFieldGet(this, _Matrix_data, "f")[r][c];
+                    if (element != null && element != 0)
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+    /**
+     * Returns `true` if this matrix is **upper triangular**.
+     * This method will **work also with non-numerical matrices** by checking
+     * if all the elements upper to the diagonal are `null`
+     */
+    isUpperTriangular() {
+        let element;
+        for (let r = 0; r < __classPrivateFieldGet(this, _Matrix_totColums, "f"); r++) {
+            for (let c = 0; c < __classPrivateFieldGet(this, _Matrix_totRows, "f"); c++) {
+                if (r > c) {
+                    element = __classPrivateFieldGet(this, _Matrix_data, "f")[r][c];
+                    if (element != null && element != 0)
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+    /**
+     * Returns `true` if this matrix is **upper triangular**.
+     * This method will **work also with non-numerical matrices** by checking
+     * if all the elements lower to the diagonal are `null`
+     */
+    isLowerTriangular() {
+        let element;
+        for (let r = 0; r < __classPrivateFieldGet(this, _Matrix_totColums, "f"); r++) {
+            for (let c = 0; c < __classPrivateFieldGet(this, _Matrix_totRows, "f"); c++) {
+                if (r < c) {
+                    element = __classPrivateFieldGet(this, _Matrix_data, "f")[r][c];
+                    if (element != null && element != 0)
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+    /**
+     * Returns `true` if this matrix is **triangular** (*upper* or *lower*).
+     * This method will **work also with non-numerical matrices** by checking
+     * if all the elements upper or lower to the diagonal are `null`
+     */
+    isTriangular() {
+        return this.isUpperTriangular() || this.isLowerTriangular();
+    }
     /* COLLECTIONS-LIKE METHODS ********************************************************************************** */
     /**
      * Returns a couple which contains the size of the matrix.
