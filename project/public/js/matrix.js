@@ -76,7 +76,10 @@ class InvalidColumnException extends Error {
 }
 exports.InvalidColumnException = InvalidColumnException;
 /**
- * A NxN Matrix
+ * A NxN Matrix.
+ * This class contains also methods that makes sense only if the type of the element is `number`
+ * (like `determinant` or `trace`). Check the documentation before using a method and make
+ * sure that the matrix contains only numbers before using these kind of methods
  */
 class Matrix extends types_1.AbstractFunctionalObject {
     constructor(data = []) {
@@ -794,6 +797,9 @@ class Matrix extends types_1.AbstractFunctionalObject {
     }
     /**
      * Calculates and returns the determinant of this matrix
+     * This method will work properly **only if the two matrix contain only
+     * numbers**: this means that the behaviour of this method is not predictable
+     * using different types of matrices
      */
     determinant() {
         return Matrix.determinant(this);
