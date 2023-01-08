@@ -1,49 +1,82 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AbstractMatrix = void 0;
-const types_1 = require("../../../types/types");
+const illegal_column_index_exception_1 = require("./illegal-column-index-exception");
+const illegal_row_index_exception_1 = require("./illegal-row-index-exception");
 class AbstractMatrix {
-    add(toAdd) {
-        if (toAdd instanceof AbstractMatrix) {
-            if (!this.sameStructureOf(this)) {
-                throw new types_1.IllegalArgumentException("illegal matrix to be added: this matrix has size " +
-                    this.rowSize() + " x " + this.rowSize() + " while the argument has " + toAdd.rowSize() +
-                    " x " + toAdd.columnSize());
+    calculateAndFill(builder) {
+        for (let r = 0; r < this.rowSize(); r++) {
+            for (let c = 0; r < this.columnSize(); c++) {
+                this.set(builder(r, c), r, c);
             }
-            let res = this.getFactory().newNumMatrix(this.rowSize(), this.columnSize());
-            for (let r = 0; r < this.rowSize(); r++) {
-                for (let c = 0; c < this.columnSize(); c++) {
-                    res.set(this.get(r, c) + toAdd.get(r, c), r, c);
-                }
-            }
-            return res;
         }
     }
-    addColumn(column) {
-        return undefined;
-    }
-    addRow(row) {
-        return undefined;
-    }
-    calculateAndFill(builder) {
-    }
     checkValidColumnIndex(columnIndex, throwError) {
-        return false;
+        if (throwError == undefined) {
+            throwError = false;
+        }
+        if (columnIndex < 0 || columnIndex >= this.columnSize()) {
+            if (throwError) {
+                throw new illegal_column_index_exception_1.IllegalColumnIndexException(columnIndex, this.columnSize() - 1);
+            }
+            return true;
+        }
     }
     checkValidIndexes(rowIndex, columnIndex, throwError) {
+        if (throwError == undefined) {
+            throwError = false;
+        }
+        if (this.checkValidRowIndex(rowIndex, throwError))
+            return this.checkValidColumnIndex(columnIndex, throwError);
         return false;
     }
     checkValidRowIndex(rowIndex, throwError) {
-        return false;
+        if (throwError == undefined) {
+            throwError = false;
+        }
+        if (rowIndex < 0 || rowIndex >= this.rowSize()) {
+            if (throwError) {
+                throw new illegal_row_index_exception_1.IllegalRowIndexException(rowIndex, this.rowSize() - 1);
+            }
+            return true;
+        }
     }
     clone(rowIndexesToRemove, columnIndexesToRemove) {
-        return undefined;
-    }
-    columnSize() {
-        return 0;
-    }
-    determinant() {
-        return 0;
+        if (rowIndexesToRemove == undefined) {
+            rowIndexesToRemove = [];
+        }
+        if (columnIndexesToRemove == undefined) {
+            columnIndexesToRemove = [];
+        }
+        let res;
+        if (rowIndexesToRemove.length == 0 && columnIndexesToRemove.length == 0) {
+            /* Normal Clone *************************************************** */
+            res = this.getFactory().createMatrix(this.rowSize(), this.columnSize());
+            for (let r = 0; r < this.rowSize(); r++) {
+                for (let c = 0; c < this.columnSize(); c++) {
+                    res.set(this.get(r, c), r, c);
+                }
+            }
+        }
+        else {
+            /* Clone with cuts ************************************************ */
+            res = this.getFactory().createMatrix(this.rowSize() - rowIndexesToRemove.length, this.columnSize() - columnIndexesToRemove.length);
+            let rR = 0;
+            let cR = 0;
+            for (let r = 0; r < this.rowSize(); r++) {
+                if (!rowIndexesToRemove.includes(r)) {
+                    cR = 0;
+                    for (let c = 0; r < this.columnSize(); c++) {
+                        if (!columnIndexesToRemove.includes(c)) {
+                            res.set(this.get(r, c), rR, cR);
+                            cR++;
+                        }
+                    }
+                    rR++;
+                }
+            }
+        }
+        return res;
     }
     divide(scalar) {
         return undefined;

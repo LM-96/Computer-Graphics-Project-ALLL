@@ -1,70 +1,107 @@
 import {Matrix} from "../Matrix";
-import {Column, NumMatrix} from "../type-aliases";
-import {IllegalArgumentException} from "../../../types/types";
+import {Column, NumMatrix, Row} from "../type-aliases";
+import {IllegalArgumentException} from "../../../types/illegal-argument-exception";
+import {IllegalColumnIndexException} from "./illegal-column-index-exception";
+import {IllegalRowIndexException} from "./illegal-row-index-exception";
 
-export class AbstractMatrix<T> implements Matrix<T> {
+export abstract class AbstractMatrix<T> implements Matrix<T> {
 
-    add(scalar: number): NumMatrix;
-    add(other: NumMatrix): NumMatrix;
-    add(toAdd: number | NumMatrix): NumMatrix {
-        if(toAdd instanceof AbstractMatrix) {
-            if (!this.sameStructureOf(this)) {
-                throw new IllegalArgumentException("illegal matrix to be added: this matrix has size " +
-                    this.rowSize() + " x " + this.rowSize() + " while the argument has " + toAdd.rowSize() +
-                    " x " + toAdd.columnSize())
-            }
-            let res: NumMatrix = this.getFactory().newNumMatrix(this.rowSize(), this.columnSize())
-            for (let r = 0; r < this.rowSize(); r++) {
-                for (let c = 0; c < this.columnSize(); c++) {
-                    res.set((<number>this.get(r, c)) + toAdd.get(r, c), r, c)
-                }
-            }
-            return res
-        }
-    }
+    abstract add(scalar: number): NumMatrix;
+    abstract add(other: NumMatrix): NumMatrix;
 
-    addColumn(column: Column<T>): Matrix<T> {
-        return undefined;
-    }
-
-    addRow(row: Row<T>): Matrix<T> {
-        return undefined;
-    }
+    abstract addColumn(column: Column<T>): Matrix<T>
+    abstract addRow(row: Row<T>): Matrix<T>
 
     calculateAndFill(builder: (rowIndex: number, columnIndex: number) => T) {
+        for (let r = 0; r < this.rowSize(); r++) {
+            for (let c = 0; r < this.columnSize(); c++) {
+                this.set(builder(r, c), r, c)
+            }
+        }
     }
 
     checkValidColumnIndex(columnIndex: number): boolean;
     checkValidColumnIndex(columnIndex: number, throwError: boolean): boolean;
     checkValidColumnIndex(columnIndex: number, throwError?: boolean): boolean {
-        return false;
+        if(throwError == undefined) {
+            throwError = false
+        }
+        if (columnIndex < 0 || columnIndex >= this.columnSize()) {
+            if (throwError) {
+                throw new IllegalColumnIndexException(columnIndex, this.columnSize() - 1)
+            }
+            return true
+        }
     }
 
     checkValidIndexes(rowIndex: number, columnIndex: number): boolean;
     checkValidIndexes(rowIndex: number, columnIndex: number, throwError: boolean): boolean;
     checkValidIndexes(rowIndex: number, columnIndex: number, throwError?: boolean): boolean {
-        return false;
+        if(throwError == undefined) {
+            throwError = false
+        }
+        if (this.checkValidRowIndex(rowIndex, throwError))
+            return this.checkValidColumnIndex(columnIndex, throwError)
+        return false
     }
 
     checkValidRowIndex(rowIndex: number): boolean;
     checkValidRowIndex(rowIndex: number, throwError: boolean): boolean;
     checkValidRowIndex(rowIndex: number, throwError?: boolean): boolean {
-        return false;
+        if(throwError == undefined) {
+            throwError = false
+        }
+        if (rowIndex < 0 || rowIndex >= this.rowSize()) {
+            if (throwError) {
+                throw new IllegalRowIndexException(rowIndex, this.rowSize() - 1)
+            }
+            return true
+        }
     }
 
     clone(): Matrix<T>;
     clone(rowIndexesToRemove: Array<Number>, columnIndexesToRemove: Array<Number>): Matrix<T>;
     clone(rowIndexesToRemove?: Array<Number>, columnIndexesToRemove?: Array<Number>): Matrix<T> {
-        return undefined;
+        if(rowIndexesToRemove == undefined) { rowIndexesToRemove = [] }
+        if(columnIndexesToRemove == undefined) { columnIndexesToRemove = [] }
+
+        let res: Matrix<T>
+
+        if(rowIndexesToRemove.length == 0 && columnIndexesToRemove.length == 0) {
+            /* Normal Clone *************************************************** */
+            res = this.getFactory().createMatrix(this.rowSize(), this.columnSize())
+            for(let r = 0; r < this.rowSize(); r++) {
+                for(let c = 0; c < this.columnSize(); c++) {
+                    res.set(this.get(r, c), r, c)
+                }
+            }
+        } else {
+            /* Clone with cuts ************************************************ */
+            res = this.getFactory().createMatrix(
+                this.rowSize() - rowIndexesToRemove.length,
+                this.columnSize() - columnIndexesToRemove.length)
+            let rR: number = 0
+            let cR: number = 0
+            for(let r = 0; r < this.rowSize(); r++) {
+                if(!rowIndexesToRemove.includes(r)) {
+                    cR = 0
+                    for(let c = 0; r < this.columnSize(); c++) {
+                        if(!columnIndexesToRemove.includes(c)) {
+                            res.set(this.get(r, c), rR, cR)
+                            cR++
+                        }
+                    }
+                    rR++
+                }
+            }
+        }
+
+        return res
     }
 
-    columnSize(): number {
-        return 0;
-    }
+    abstract columnSize(): number
 
-    determinant(): number {
-        return 0;
-    }
+    abstract determinant(): number
 
     divide(scalar: number): NumMatrix;
     divide(other: NumMatrix): NumMatrix;
