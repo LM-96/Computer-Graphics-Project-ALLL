@@ -1,73 +1,10 @@
-import {AbstractFunctionalObject, Couple, coupleOf, IllegalArgumentException} from "./types";
-
-type Row<T> = Array<T>
-type Column<T> = Array<T>
-
-/**
- * An exception that is thrown when has been request access to an invalid row
- */
-export class IllegalRowIndexException extends Error {
-
-    constructor(triedRowIndex: number, maxAllowedRowIndex: number | null = null) {
-        let msg: string
-        if (maxAllowedRowIndex != null) {
-            msg = "invalid index [" + triedRowIndex + "] for row:  the index MUST be between [0] and [" +
-                maxAllowedRowIndex + "]"
-        } else {
-            msg = "invalid index [" + triedRowIndex + "]"
-        }
-        super(msg);
-        Object.setPrototypeOf(this, IllegalRowIndexException.prototype)
-    }
-
-}
-
-export enum FlatType {
-    BY_ROWS, BY_COLUMNS
-}
-
-/**
- * An exception that is thrown when has been request access to an invalid column
- */
-export class IllegalColumnIndexException extends Error {
-
-    constructor(triedColumnIndex: number, maxAllowedColumnIndex: number | null = null) {
-        let msg: string
-        if (maxAllowedColumnIndex != null) {
-            msg = "invalid index [" + triedColumnIndex + "] for column: the index MUST be between [0] and [" +
-                maxAllowedColumnIndex + "]"
-        } else {
-            msg = "invalid index [" + triedColumnIndex + "]"
-        }
-        super(msg);
-        Object.setPrototypeOf(this, IllegalColumnIndexException.prototype)
-    }
-
-}
-
-/**
- * An exception that is thrown when a row is not valid for a reason
- */
-export class InvalidRowException extends Error {
-
-    constructor(row: Row<any>, reason: string) {
-        super("invalid row {" + row + "}: " + reason);
-        Object.setPrototypeOf(this, InvalidRowException.prototype)
-    }
-
-}
-
-/**
- * An exception that is thrown when a column is not valid for a reason
- */
-export class InvalidColumnException extends Error {
-
-    constructor(column: Column<any>, reason: string) {
-        super("invalid column {" + column + "}: " + reason);
-        Object.setPrototypeOf(this, InvalidRowException.prototype)
-    }
-
-}
+import {Couple, coupleOf, IllegalArgumentException} from "../../types/types";
+import {MatrixData, NumMatrix} from "../../matrix";
+import {FlatType, AbstractMatrix} from "./abstract-matrix-old";
+import {MatrixFactory} from "./matrix-factory";
+import {Column, Row} from "./type-aliases";
+import {InvalidRowException} from "./exceptions/invalid-row-exception";
+import {InvalidColumnException} from "./exceptions/invalid-column-exception";
 
 /**
  * A NxN Matrix.
@@ -75,148 +12,33 @@ export class InvalidColumnException extends Error {
  * (like `determinant` or `trace`). Check the documentation before using a method and make
  * sure that the matrix contains only numbers before using these kind of methods
  */
-export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
+export class SimpleRowBasedMatrix<T> extends AbstractMatrix<T> {
+
+    static readonly factory : MatrixFactory = new class extends MatrixFactory {
+        createMatrix<T>(rows: number, columns: number): AbstractMatrix<T>;
+        createMatrix<T>(rows: number, columns: number, fill: T): AbstractMatrix<T>;
+        createMatrix<T>(rows: number, columns: number, fill?: T): AbstractMatrix<T> {
+            let data: Array<Row<T>> = Array(rows)
+            for (let r = 0; r < rows; r++) {
+                data[r] = Array(columns)
+                if (fill != null) {
+                    for (let c = 0; c < columns; c++) {
+                        data[r][c] = fill
+                    }
+                }
+            }
+            return new SimpleRowBasedMatrix<T>(data)
+        }
+    }
+
+    getFactory(): MatrixFactory {
+        return SimpleRowBasedMatrix.factory
+    }
 
     readonly #data: MatrixData<T> = []
-    #totColums: number = 0
+    #totColumns: number = 0
     #totRows: number = 0
 
-    /**
-     * Creates a new empty matrix with the specified numbers of `row` and `column`.
-     * This method let the possibility to specify the element to be used to fill the matrix
-     * @param {number} rows the number of the rows
-     * @param {number} columns the number of the columns
-     * @param {T|null} fill the value to be used to fill the matrix
-     */
-    static newMatrix<T>(rows: number, columns: number, fill: T = null): Matrix<T> {
-        let data: Array<Row<T>> = Array(rows)
-        for (let r = 0; r < rows; r++) {
-            data[r] = Array(columns)
-            if (fill != null) {
-                for (let c = 0; c < columns; c++) {
-                    data[r][c] = fill
-                }
-            }
-        }
-        return new Matrix<T>(data)
-    }
-
-    /**
-     * Creates a new empty matrix of numbers with the specified numbers of `row` and `column`.
-     * This method let the possibility to specify the value to be used to fill the matrix (`0` by default)
-     * @param {number} rows the number of the rows
-     * @param {number} columns the number of the columns
-     * @param {T|null} fill the value to be used to fill the matrix
-     */
-    static newNumMatrix(rows: number, columns: number, fill: number = 0): NumMatrix {
-        let data: Array<Row<number>> = Array(rows)
-        for (let r = 0; r < rows; r++) {
-            data[r] = Array(columns)
-            for (let c = 0; c < columns; c++) {
-                data[r][c] = fill
-            }
-        }
-        return new Matrix<number>(data)
-    }
-
-    /**
-     * Creates a new empty **squared** matrix with the specified numbers of `row` and `column`.
-     * This method let the possibility to specify the element to be used to fill the matrix
-     * @param {number} dim the dimension of the square of the matrix
-     * @param {T|null} fill the value to be used to fill the matrix
-     */
-    static newSquaredMatrix<T>(dim: number, fill: T = null): Matrix<T> {
-        return Matrix.newMatrix(dim, dim, fill)
-    }
-
-    /**
-     * Creates a new empty **squared** matrix of numbers with the specified numbers of `row` and `column`.
-     * This method let the possibility to specify the value to be used to fill the matrix (`0` by default)
-     * @param {number} dim the dimension of the square of the matrix
-     * @param {T|null} fill the value to be used to fill the matrix
-     */
-    static newSquaredNumMatrix(dim: number, fill: number = 0): NumMatrix {
-        return Matrix.newNumMatrix(dim, dim, fill)
-    }
-
-    /**
-     * Converts a *multi-dimensional* array to a `Matrix` instance.
-     * If `clone` is set to `true, the array will be cloned so every change on it
-     * will not affect the resulting matrix
-     * @param {Array<Array<T>>|MatrixData<T>|Array<Row<T>>} array the data of the matrix
-     * intended an array of array which contains each row of the matrix
-     * @param {boolean} cloned a flag that if `true` makes this method cloning the given data in order
-     * to prevent inconsistent changes between the `array` given as parameter and the resulting matrix
-     * @return the new matrix
-     */
-    static asMatrix<T>(array: Array<Array<T>> | MatrixData<T> | Array<Row<T>>, cloned: boolean = false): Matrix<T> {
-        let data: MatrixData<T>
-        if (cloned) {
-            data = Array(array.length)
-            for (let r = 0; r < array.length; r++) {
-                data[r] = Array(array[r].length)
-                for (let c = 0; c < array[0].length; c++) {
-                    data[r][c] = array[r][c]
-                }
-            }
-        } else {
-            data = array
-        }
-        return new Matrix(data)
-    }
-
-    /**
-     * Converts a flat array to a matrix by specifying the type of the flat and the numbers of the
-     * element of a group. This method performs the opposite operations of `flatten`.
-     * Precisely, if `flatType` is:
-     *
-     * - `FlatType.BY_ROWS` then the elements of the array will be split in groups, each with the
-     * dimension specified by `groupSize`; **each group will be a row** of the resulting matrix
-     * (for example `[1, 2, 3, 4, 5, 6]` with `groupSize=2` and `flatType=FlatType.BY_ROWS` will make
-     * this method returning the matrix `[[1, 2], [3, 4], [5, 6]]`);
-     * this means that in this case **`groupSize` will become the number of the columns** of the resulting matrix
-     *
-     * - `FlatType.BY_COLUMNS` then the elements of the array will be split in groups, each with the
-     * dimension specified by `groupSize`; **each group will be a column** of the resulting matrix
-     * (for example `[1, 2, 3, 4, 5, 6]` with `groupSize=2` and `flatType=FlatType.BY_COLUMNS` will make
-     * this method returning the matrix `[[1, 3, 5], [2, 4, 6]]`);
-     * this means that in this case **`groupSize` will become the number of the rows** of the resulting matrix
-     * @param array the flat array to be converted into a matrix
-     * @param groupSize the number of the elements of each group
-     * @param flatType the type of the groups (indicates if each group will be a *row* or a *column*
-     * of the new matrix
-     */
-    static flattenAsMatrix<T>(array: Array<T>, groupSize: number, flatType: FlatType = FlatType.BY_ROWS): Matrix<T> {
-        if (array.length % groupSize != 0) {
-            throw new IllegalArgumentException(
-                "the dimension of the given array is not a multiple of the size of the group")
-        }
-
-        let res: Matrix<T>
-        switch (flatType) {
-
-            case FlatType.BY_ROWS: {
-                let rows: number = array.length / groupSize
-                res = Matrix.newMatrix(rows, groupSize)
-                for (let i = 0; i < array.length; i++) {
-                    res.#data[Math.floor(i / groupSize)][i % groupSize] = array[i]
-                }
-                break;
-            }
-
-            case FlatType.BY_COLUMNS: {
-                let columns: number = array.length / groupSize
-                res = Matrix.newMatrix(groupSize, columns)
-                for (let i = 0; i < array.length; i++) {
-                    res.#data[i % groupSize][Math.floor(i / groupSize)] = array[i]
-                }
-                break;
-            }
-
-        }
-
-        return res
-    }
 
     /**
      * Calculates and return the determinant of a numeric matrix
@@ -279,8 +101,8 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
             default: {
                 let res: number = 0
                 let sign: number = 1
-                for (let col = 0; col < matrix.#totColums; col++) {
-                    res += (sign * data[0][col] * Matrix.determinant(matrix.getMinor(0, col)))
+                for (let col = 0; col < matrix.#totColumns; col++) {
+                    res += (sign * data[0][col] * SimpleRowBasedMatrix.determinant(matrix.getMinor(0, col)))
                     sign *= -1
                 }
                 return res
@@ -294,9 +116,9 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
 
         if (data.length > 0) {
             this.#totRows = data.length
-            this.#totColums = data[0].length
+            this.#totColumns = data[0].length
             for (let row of data) {
-                if (row.length != this.#totColums) {
+                if (row.length != this.#totColumns) {
                     throw Error("every row must have the same number of elements")
                 }
             }
@@ -305,234 +127,17 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
         }
     }
 
-    /* CHECKS **************************************************************************************************** */
-    /**
-     * Checks if the given `rowIndex` is valid for this matrix.
-     * If this method returns `true`, this mean that the index can be used to retrieve
-     * a row.
-     * If `throwError` is `true`, this method will throw an exception if the index is not valid
-     * instead of returning a value
-     * @param {number} rowIndex the index to be checked
-     * @param throwError a *flag* that, if `true`, make this method throwing an exception
-     * in case of invalid index
-     * @throws {IllegalRowIndexException} if the index is not valid and `throwError` is set to `true`
-     */
-    checkValidRowIndex(rowIndex: number, throwError: boolean = false): boolean {
-        if (rowIndex < 0 || rowIndex >= this.#totRows) {
-            if (throwError) {
-                throw new IllegalRowIndexException(rowIndex, this.#totRows - 1)
-            }
-            return true
-        }
-    }
 
-    /**
-     * Checks if the given `columnIndex` is valid for this matrix.
-     * If this method returns `true`, this mean that the index can be used to retrieve
-     * a column.
-     * If `throwError` is `true`, this method will throw an exception if the index is not valid
-     * instead of returning a value
-     * @param {number} columnIndex the index to be checked
-     * @param throwError a *flag* that, if `true`, make this method throwing an exception
-     * in case of invalid index
-     * @throws {IllegalColumnIndexException} if the index is not valid and `throwError` is set to `true`
-     */
-    checkValidColumnIndex(columnIndex: number, throwError: boolean = false): boolean {
-        if (columnIndex < 0 || columnIndex >= this.#totRows) {
-            if (throwError) {
-                throw new IllegalRowIndexException(columnIndex, this.#totRows - 1)
-            }
-            return true
-        }
-    }
 
-    /**
-     * Checks if both of the given `rowIndex` and `columnIndex` are valid for this matrix.
-     * If this method returns `true`, this mean that the indexes can be used to retrieve
-     * a valid element in this matrix.
-     * If `throwError` is `true`, this method will throw an exception if at least one the index is not valid
-     * instead of returning a value
-     * @param rowIndex the index of the row to be checked
-     * @param columnIndex the index of the column to be checked
-     * @param throwError  *flag* that, if `true`, make this method throwing an exception
-     * in case of one invalid index
-     * @throws {IllegalRowIndexException} if the index of the row is not valid and `throwError` is set to `true`
-     * @throws {IllegalColumnIndexException} if the index of the column is not valid and `throwError` is set to `true`
-     */
-    checkValidIndexes(rowIndex: number, columnIndex: number, throwError: boolean = false): boolean {
-        if (this.checkValidRowIndex(rowIndex, throwError))
-            return this.checkValidColumnIndex(columnIndex, throwError)
-        return false
-    }
-
-    /**
-     * Returns `true` if this matrix is **squared**
-     */
-    isSquared(): boolean {
-        return this.#totRows === this.#totColums
-    }
-
-    /**
-     * Returns `true` if this matrix is diagonal.
-     * This method will **work also with non-numerical matrices** by checking
-     * if all the elements outside the diagonal are `null`
-     */
-    isDiagonal(): boolean {
-        let element: T
-        for (let r = 0; r < this.#totColums; r++) {
-            for (let c = 0; c < this.#totRows; c++) {
-                if (r != c) {
-                    element = this.#data[r][c]
-                    if (element != null && element != 0)
-                        return false
-                }
-            }
-        }
-
-        return true
-    }
-
-    /**
-     * Returns `true` if this matrix is **upper triangular**.
-     * This method will **work also with non-numerical matrices** by checking
-     * if all the elements upper to the diagonal are `null`
-     */
-    isUpperTriangular(): boolean {
-        let element: T
-        for (let r = 0; r < this.#totColums; r++) {
-            for (let c = 0; c < this.#totRows; c++) {
-                if (r > c) {
-                    element = this.#data[r][c]
-                    if (element != null && element != 0)
-                        return false
-                }
-            }
-        }
-
-        return true
-    }
-
-    /**
-     * Returns `true` if this matrix is **upper triangular**.
-     * This method will **work also with non-numerical matrices** by checking
-     * if all the elements lower to the diagonal are `null`
-     */
-    isLowerTriangular(): boolean {
-        let element: T
-        for (let r = 0; r < this.#totColums; r++) {
-            for (let c = 0; c < this.#totRows; c++) {
-                if (r < c) {
-                    element = this.#data[r][c]
-                    if (element != null && element != 0)
-                        return false
-                }
-            }
-        }
-
-        return true
-    }
-
-    /**
-     * Returns `true` if this matrix is **triangular** (*upper* or *lower*).
-     * This method will **work also with non-numerical matrices** by checking
-     * if all the elements upper or lower to the diagonal are `null`
-     */
-    isTriangular(): boolean {
-        return this.isUpperTriangular() || this.isLowerTriangular()
-    }
-
-    /* COLLECTIONS-LIKE METHODS ********************************************************************************** */
-
-    /**
-     * Returns a couple which contains the size of the matrix.
-     * In particular:
-     * - the **first** element is the number of the **rows**
-     * - the **second** element is the number of the **columns**
-     */
-    size(): Couple<number> {
-        return coupleOf(this.#totRows, this.#totColums)
-    }
-
-    /**
-     * Returns the number of the rows of this matrix
-     */
     rowSize(): number {
         return this.#totRows
     }
 
-    /**
-     * Returns the number of the columns of this matrix
-     */
     columnSize(): number {
-        return this.#totColums
+        return this.#totColumns
     }
 
-    /**
-     * Returns the number of the elements in this matrix
-     */
-    elementSize(): number {
-        return this.#totRows * this.#totColums
-    }
 
-    /**
-     * Fills this matrix by overriding all the values with the one given as parameter
-     * @param {T} value the value to be used
-     */
-    fill(value: T) {
-        for (let r = 0; r < this.#totRows; r++) {
-            for (let c = 0; r < this.#totColums; c++) {
-                this.#data[r][c] = value
-            }
-        }
-    }
-
-    /**
-     * Fills this matrix by calculating each element using the `builder` function
-     * @param {(rowIndex: number, columnIndex: number) => T} builder the function that
-     * let to create each element of the matrix knowing its row and its column
-     */
-    calculateAndFill(builder: (rowIndex: number, columnIndex: number) => T) {
-        for (let r = 0; r < this.#totRows; r++) {
-            for (let c = 0; r < this.#totColums; c++) {
-                this.#data[r][c] = builder(r, c)
-            }
-        }
-    }
-
-    /**
-     * Flats this matrix to a one dimensional array.
-     * Depending on the `flatType` parameter, the returning array has a different order of element:
-     *
-     * - if `FlatType.BY_ROWS`: the array will contain **each row** of the matrix **concatenated** one
-     * after the other
-     * - if `FlatType.BY_COLUMNS`: the array will contain **each column** of the matrix **concatenated** one
-     * after the other
-     * @param {FlatType} flatType the type of the flat (`BY_ROWS` by default)
-     */
-    flatten(flatType: FlatType = FlatType.BY_ROWS): Array<T> {
-        let res: Array<T> = Array(this.elementSize())
-        switch (flatType) {
-            case FlatType.BY_ROWS: {
-                for (let r = 0; r < this.#totRows; r++) {
-                    for (let c = 0; c < this.#totColums; c++) {
-                        res[r * this.#totColums + c] = this.#data[r][c]
-                    }
-                }
-                break;
-            }
-            case FlatType.BY_COLUMNS: {
-                for (let r = 0; r < this.#totRows; r++) {
-                    for (let c = 0; c < this.#totColums; c++) {
-                        res[c * this.#totRows + r] = this.#data[r][c]
-                    }
-                }
-                break;
-            }
-        }
-        return res
-    }
-
-    /* SETTERS AND GETTERS *************************************************************************************** */
 
     /**
      * Get the element in the position specified by the indexes given as argument
@@ -568,13 +173,13 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * of the columns of this matrix
      */
     addRow(row: Row<T>) {
-        if (this.#totColums == 0) {
-            this.#totColums = row.length
+        if (this.#totColumns == 0) {
+            this.#totColumns = row.length
         } else {
-            if (row.length != this.#totColums) {
+            if (row.length != this.#totColumns) {
                 throw new InvalidRowException(row,
                     "the number of the element of the row [" + row.length +
-                    "] is not the same of the column of the matrix [" + this.#totColums + "]")
+                    "] is not the same of the column of the matrix [" + this.#totColumns + "]")
             }
         }
 
@@ -621,13 +226,13 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      */
     setRow(row: Row<T>, rowIndex: number) {
         this.checkValidRowIndex(rowIndex, true)
-        if (row.length != this.#totColums) {
+        if (row.length != this.#totColumns) {
             throw new InvalidRowException(row,
                 "the number of the element of the row [" + row.length +
-                "] is not the same of the column of the matrix [" + this.#totColums + "]")
+                "] is not the same of the column of the matrix [" + this.#totColumns + "]")
         }
 
-        for (let c = 0; c < this.#totColums; c++) {
+        for (let c = 0; c < this.#totColumns; c++) {
             this.#data[rowIndex][c] = row[c]
         }
     }
@@ -655,7 +260,7 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
         for (let i = 0; i < column.length; i++) {
             this.#data[i].push(column[i])
         }
-        this.#totColums++
+        this.#totColumns++
     }
 
     /**
@@ -663,7 +268,7 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * If the matrix is empty, this method will perform nothing
      */
     removeColumn() {
-        if (this.#totColums > 0) {
+        if (this.#totColumns > 0) {
             for (let row of this.#data) {
                 row.pop()
             }
@@ -710,16 +315,6 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
     /* MATRIX ALGEBRA ******************************************************************************************** */
 
     /**
-     * Compares the structure of this matrix with the one given as argument.
-     * Then, this method returns `true` only if the two matrix have the same number of row
-     * and the same number of columns
-     * @param other
-     */
-    sameStructureOf(other: Matrix<T>) {
-        return this.#totRows == other.#totRows && this.#totColums == other.#totColums
-    }
-
-    /**
      * Adds the given scalar to this matrix.
      * This method will work properly **only if this matrix contains only
      * numbers**: this means that the behaviour of this method is not predictable
@@ -727,9 +322,9 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * @param {number} scalar the scalar to be added
      */
     scalarAdd(scalar: number): NumMatrix {
-        let res: Matrix<number> = Matrix.newNumMatrix(this.#totRows, this.#totColums)
+        let res: SimpleRowBasedMatrix<number> = SimpleRowBasedMatrix.newNumMatrix(this.#totRows, this.#totColumns)
         for (let r = 0; r < this.#totRows; r++) {
-            for (let c = 0; c < this.#totColums; c++) {
+            for (let c = 0; c < this.#totColumns; c++) {
                 res.#data[r][c] = (<number>this.#data[r][c]) + scalar
             }
         }
@@ -749,12 +344,12 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
     matAdd(other: NumMatrix): NumMatrix {
         if (!this.sameStructureOf(this)) {
             throw new IllegalArgumentException("illegal matrix to be added: this matrix has size " +
-                this.#totRows + " x " + this.#totColums + " while the argument has " + other.#totRows +
-                " x " + other.#totColums)
+                this.#totRows + " x " + this.#totColumns + " while the argument has " + other.#totRows +
+                " x " + other.#totColumns)
         }
-        let res: Matrix<number> = Matrix.newNumMatrix(this.#totRows, this.#totColums)
+        let res: SimpleRowBasedMatrix<number> = SimpleRowBasedMatrix.newNumMatrix(this.#totRows, this.#totColumns)
         for (let r = 0; r < this.#totRows; r++) {
-            for (let c = 0; c < this.#totColums; c++) {
+            for (let c = 0; c < this.#totColumns; c++) {
                 res.#data[r][c] = (<number>this.#data[r][c]) + other.#data[r][c]
             }
         }
@@ -769,9 +364,9 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * @param {number} scalar the scalar to be used for the multiplication
      */
     scalarMultiply(scalar: number): NumMatrix {
-        let res: Matrix<number> = Matrix.newNumMatrix(this.#totRows, this.#totColums)
+        let res: SimpleRowBasedMatrix<number> = SimpleRowBasedMatrix.newNumMatrix(this.#totRows, this.#totColumns, 0)
         for (let r = 0; r < this.#totRows; r++) {
-            for (let c = 0; c < this.#totColums; c++) {
+            for (let c = 0; c < this.#totColumns; c++) {
                 res.#data[r][c] = (<number>this.#data[r][c]) * scalar
             }
         }
@@ -789,12 +384,12 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * number of columns of this
      */
     matMultiply(other: NumMatrix): NumMatrix {
-        if (this.#totColums != this.#totRows) {
+        if (this.#totColumns != this.#totRows) {
             throw new IllegalArgumentException("illegal matrix to be multiplied: this matrix has columns " +
-                this.#totColums + " while the argument has rows " + other.#totRows)
+                this.#totColumns + " while the argument has rows " + other.#totRows)
         }
 
-        let res: Matrix<number> = Matrix.newNumMatrix(this.#totRows, other.#totColums, 0)
+        let res: SimpleRowBasedMatrix<number> = SimpleRowBasedMatrix.newNumMatrix(this.#totRows, other.#totColumns, 0)
         for (let rT = 0; rT < this.#totRows; rT++) {
             for (let cO = 0; cO < this.#totRows; cO++) {
                 for (let rO = 0; rO < other.rowSize(); rO++) {
@@ -822,7 +417,7 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * is not valid with the specular one)
      */
     submatrix(topRow: number, leftColumn: number,
-              bottomRow: number = this.#totRows - 1, rightColumn: number = this.#totColums - 1): Matrix<T> {
+              bottomRow: number = this.#totRows - 1, rightColumn: number = this.#totColumns - 1): SimpleRowBasedMatrix<T> {
         // Check all >= 0
         if (topRow < 0) throw new IllegalArgumentException("top row [" + topRow + "] MUST be greater than 0")
         if (bottomRow < 0) throw new IllegalArgumentException("bottom row [" + bottomRow + "] MUST be greater than 0")
@@ -840,12 +435,12 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
             "top row [" + topRow + "] MUST NOT go outside the matrix")
         if (bottomRow >= this.#totRows) throw new IllegalArgumentException(
             "bottom row [" + bottomRow + "] MUST NOT go outside the matrix")
-        if (leftColumn >= this.#totColums) throw new IllegalArgumentException(
+        if (leftColumn >= this.#totColumns) throw new IllegalArgumentException(
             "left column [" + leftColumn + "] MUST NOT go outside the matrix")
-        if (rightColumn >= this.#totColums) throw new IllegalArgumentException(
+        if (rightColumn >= this.#totColumns) throw new IllegalArgumentException(
             "left column [" + rightColumn + "] MUST NOT go outside the matrix")
 
-        let res: Matrix<T> = Matrix.newMatrix(bottomRow - topRow + 1, rightColumn - leftColumn + 1)
+        let res: SimpleRowBasedMatrix<T> = SimpleRowBasedMatrix.newMatrix(bottomRow - topRow + 1, rightColumn - leftColumn + 1)
         for (let r = topRow; r <= bottomRow; r++) {
             for (let c = leftColumn; c <= rightColumn; c++) {
                 res.#data[r - topRow][c - leftColumn] = this.#data[r][c]
@@ -877,10 +472,10 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
     /**
      * Returns the transposition of this matrix
      */
-    transpose(): Matrix<T> {
-        let res: Matrix<T> = Matrix.newMatrix(this.#totColums, this.#totRows)
+    transpose(): SimpleRowBasedMatrix<T> {
+        let res: SimpleRowBasedMatrix<T> = SimpleRowBasedMatrix.newMatrix(this.#totColumns, this.#totRows)
         for (let r = 0; r < this.#totRows; r++) {
-            for (let c = 0; c < this.#totColums; c++) {
+            for (let c = 0; c < this.#totColumns; c++) {
                 res.#data[c][r] = this.#data[r][c]
             }
         }
@@ -892,20 +487,20 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * column **dropped**
      * @param {number} rowIndex the index of the row to be dropped
      * @param {number} columnIndex the index of the column to be dropped
-     * @return {Matrix} the matrix with the specified row and column dropped
+     * @return {SimpleRowBasedMatrix} the matrix with the specified row and column dropped
      * @throws {IllegalRowIndexException} if the index of the row is not valid
      * @throws {IllegalColumnIndexException} if the index of the column is not valid
      */
-    getMinor(rowIndex: number, columnIndex: number): Matrix<T> {
+    getMinor(rowIndex: number, columnIndex: number): SimpleRowBasedMatrix<T> {
         this.checkValidIndexes(rowIndex, columnIndex, true)
 
-        let res: Matrix<T> = Matrix.newMatrix(this.#totRows - 1, this.#totColums - 1)
+        let res: SimpleRowBasedMatrix<T> = SimpleRowBasedMatrix.newMatrix(this.#totRows - 1, this.#totColumns - 1)
         let rR: number = 0
         let cR: number = 0
         for (let r = 0; r < this.#totRows; r++) {
             if (r != rowIndex) {
                 cR = 0
-                for (let c = 0; c < this.#totColums; c++) {
+                for (let c = 0; c < this.#totColumns; c++) {
                     if (c != columnIndex) {
                         res.#data[rR][cR] = this.#data[r][c]
                         cR++
@@ -925,6 +520,8 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * @param {number} columnIndex the index of the column of the element
      * @throws {IllegalRowIndexException} if the index of the row is not valid
      * @throws {IllegalColumnIndexException} if the index of the column is not valid
+     * @throws {IllegalArgumentException} if the matrix is not squared (the determinant
+     * is not defined to **non-squared** matrix)
      */
     getCofactor(rowIndex: number, columnIndex: number): number {
         this.checkValidIndexes(rowIndex, columnIndex, true)
@@ -932,13 +529,57 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
     }
 
     /**
+     * Computes and returns the **cofactor matrix** which is the matrix that contains
+     * each method of this one replaced with its cofactor
+     * @return {NumMatrix} the *cofactor matrix*
+     * @throws {IllegalArgumentException} if the matrix is not squared (the determinant
+     * is not defined to **non-squared** matrix)
+     */
+    getCofactorMatrix(): NumMatrix {
+        let res: NumMatrix = SimpleRowBasedMatrix.newNumMatrix(this.#totRows, this.#totColumns)
+        for(let r = 0; r < this.#totColumns; r++) {
+            for(let c = 0; c < this.#totRows; c++) {
+                res.#data[r][c] = this.getCofactor(r, c)
+            }
+        }
+        return res
+    }
+
+    /**
      * Calculates and returns the determinant of this matrix
      * This method will work properly **only if the two matrix contain only
      * numbers**: this means that the behaviour of this method is not predictable
      * using different types of matrices
+     * @return {number} the determinant of the matrix
+     * @throws {IllegalArgumentException} if the matrix is not squared (the determinant
+     * is not defined to **non-squared** matrix)
      */
     determinant(): number {
-        return Matrix.determinant(this as NumMatrix)
+        return SimpleRowBasedMatrix.determinant(this as NumMatrix)
+    }
+
+    /**
+     * Calculates and returns the inverse matrix of this one.
+     * This method will work properly **only if the two matrix contain only
+     * numbers**: this means that the behaviour of this method is not predictable
+     * using different types of matrices
+     * @return {NumMatrix} the inverse matrix
+     * @throws {NotInvertibleMatrixException} if the matrix is not invertible
+     * (it's not squared or had a determinant that is 0)
+     */
+    invert(): NumMatrix {
+        if(!this.isSquared()) {
+            throw new NotInvertibleMatrixException(NotInvertibleReason.NOT_SQUARED)
+        }
+        let determinant: number = this.determinant()
+        if(determinant == 0) {
+            throw new NotInvertibleMatrixException(NotInvertibleReason.ZERO_DETERMINANT)
+        }
+
+        return this.getCofactorMatrix()             /* 1. Take the cofactor matrix */
+            .transpose()                            /* 2. Calculate the transposed cofactor matrix (added matrix) */
+            .scalarMultiply(1 / determinant) /* 3. Multiply by 1/det */
+
     }
 
     /* FUNCTIONAL ************************************************************************************************ */
@@ -964,7 +605,7 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * executed over each column of this matrix
      */
     forEachColumn(block: (column: Column<T>, columnIndex: number) => void) {
-        for (let c = 0; c < this.#totColums; c++) {
+        for (let c = 0; c < this.#totColumns; c++) {
             block(this.getColumn(c), c)
         }
     }
@@ -977,8 +618,8 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * transforms each row of the matrix
      * @return {Matrix<R>} the new matrix
      */
-    mapRowByRow<R>(mapper: (row: Row<T>, rowIndex: number) => Row<R>): Matrix<R> {
-        let result: Matrix<R> = Matrix.newMatrix(this.#totRows, this.#totColums)
+    mapRowByRow<R>(mapper: (row: Row<T>, rowIndex: number) => Row<R>): SimpleRowBasedMatrix<R> {
+        let result: SimpleRowBasedMatrix<R> = SimpleRowBasedMatrix.newMatrix(this.#totRows, this.#totColumns)
         for (let r = 0; r < this.#totRows; r++) {
             result.setRow(mapper(this.getRow(r), r), r)
         }
@@ -993,8 +634,8 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * transforms each column of the matrix
      * @return {Matrix<R>} the new matrix
      */
-    mapColumnByColumn<R>(mapper: (column: Column<T>, columnIndex: number) => Column<R>): Matrix<R> {
-        let result: Matrix<R> = Matrix.newMatrix(this.#totRows, this.#totColums)
+    mapColumnByColumn<R>(mapper: (column: Column<T>, columnIndex: number) => Column<R>): SimpleRowBasedMatrix<R> {
+        let result: SimpleRowBasedMatrix<R> = SimpleRowBasedMatrix.newMatrix(this.#totRows, this.#totColumns)
         for (let c = 0; c < this.#totRows; c++) {
             result.setColumn(mapper(this.getColumn(c), c), c)
         }
@@ -1009,10 +650,10 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
      * transforms each element of the matrix
      * @return {Matrix<R>} the new matrix
      */
-    mapElementByElement<R>(mapper: (element: T, rowIndex: number, columnIndex: number) => R): Matrix<R> {
-        let result: Matrix<R> = Matrix.newMatrix(this.#totRows, this.#totColums)
+    mapElementByElement<R>(mapper: (element: T, rowIndex: number, columnIndex: number) => R): SimpleRowBasedMatrix<R> {
+        let result: SimpleRowBasedMatrix<R> = SimpleRowBasedMatrix.newMatrix(this.#totRows, this.#totColumns)
         for (let r = 0; r < this.#totRows; r++) {
-            for (let c = 0; c < this.#totColums; c++) {
+            for (let c = 0; c < this.#totColumns; c++) {
                 result.#data[r][c] = mapper(this.#data[r][c], r, c)
             }
         }
@@ -1023,14 +664,14 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
 
     /**
      * Returns `true` if the two matrix are equals (contains the same elements)
-     * @param {Matrix} other the other matrix
+     * @param {SimpleRowBasedMatrix} other the other matrix
      */
     equals(other: any): boolean {
         if (other != null) {
-            if (other instanceof Matrix) {
+            if (other instanceof SimpleRowBasedMatrix) {
                 if (this.sameStructureOf(other)) {
                     for (let row = 0; row < this.#totRows; row++) {
-                        for (let col = 0; col < this.#totColums; col++) {
+                        for (let col = 0; col < this.#totColumns; col++) {
                             if (this.#data[row][col] !== other.#data[row][col]) {
                                 return false
                             }
@@ -1045,21 +686,52 @@ export class Matrix<T> extends AbstractFunctionalObject<Matrix<T>> {
     }
 
     toString(): string {
-        let res: string = "Matrix " + this.#totRows + "x" + this.#totColums + ": ["
+        let res: string = "Matrix " + this.#totRows + "x" + this.#totColumns + ": ["
         for (let row of this.#data) {
             res += ("[" + row.join(", ") + "], ")
         }
         res = res.substring(0, res.length - 2) + "]"
         return res
     }
+
+    /**
+     * Returns a clone of this matrix.
+     * This method also allow to specify some rows or column that have to be **dropped** but, by default,
+     * it clones the original matrix without drop anything
+     * @param {Array<Number>} rowIndexesToRemove the indices of the rows that have to be dropped (empty by default)
+     * @param {Array<Number>} columnIndexesToRemove the indices of the columns that have to be
+     * dropped (empty by default)
+     */
+    clone(rowIndexesToRemove: Array<Number> = [], columnIndexesToRemove: Array<Number> = []): SimpleRowBasedMatrix<T> {
+        let res: SimpleRowBasedMatrix<T>
+        if(rowIndexesToRemove.length == 0 && columnIndexesToRemove.length == 0) {
+            /* Normal Clone *************************************************** */
+            res = SimpleRowBasedMatrix.newMatrix(this.#totRows, this.#totColumns)
+            for(let r = 0; r < this.#totRows; r++) {
+                for(let c = 0; c < this.#totColumns; c++) {
+                    res.#data[r][c] = this.#data[r][c]
+                }
+            }
+        } else {
+            res = SimpleRowBasedMatrix.newMatrix(
+                this.#totRows - rowIndexesToRemove.length,
+                this.#totColumns - columnIndexesToRemove.length)
+            let rR: number = 0
+            let cR: number = 0
+            for(let r = 0; r < this.#totRows; r++) {
+                if(!rowIndexesToRemove.includes(r)) {
+                    cR = 0
+                    for(let c = 0; r < this.#totColumns; c++) {
+                        if(!columnIndexesToRemove.includes(c)) {
+                            res.#data[rR][cR] = this.#data[r][c]
+                            cR++
+                        }
+                    }
+                    rR++
+                }
+            }
+        }
+
+        return res
+    }
 }
-
-/**
- * A matrix of numbers
- */
-type NumMatrix = Matrix<number>
-
-/**
- * The type for the internal data of a matrix
- */
-type MatrixData<T> = Array<Row<T>>

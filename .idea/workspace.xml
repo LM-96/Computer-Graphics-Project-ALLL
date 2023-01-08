@@ -2,10 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry-3d.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry-3d.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry-3d.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry-3d.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/public/js/matrix.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/matrix.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/public/js/matrix.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/matrix.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/matrix.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/matrix.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/test.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry-3d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/matrix.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/types/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,8 +49,10 @@
     &quot;last_opened_file_path&quot;: &quot;/usr/bin/node&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;settings.typescriptcompiler&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/usr/local/lib/node_modules/typescript/lib&quot;,
@@ -50,11 +61,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/project/src/ts/geometry/matrix" />
+      <recent name="$PROJECT_DIR$/project/src/ts/types" />
       <recent name="$PROJECT_DIR$/project/lib/js" />
       <recent name="$PROJECT_DIR$/project/public/css" />
       <recent name="$PROJECT_DIR$/project/public/js" />
-      <recent name="$PROJECT_DIR$/project/src/ts" />
-      <recent name="$PROJECT_DIR$/project/resources" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.test.js (1)">
@@ -95,7 +106,9 @@
       <workItem from="1672877298504" duration="3168000" />
       <workItem from="1672912493589" duration="13165000" />
       <workItem from="1672962305928" duration="10381000" />
-      <workItem from="1673005604938" duration="14070000" />
+      <workItem from="1673005604938" duration="14478000" />
+      <workItem from="1673094217680" duration="4637000" />
+      <workItem from="1673171825785" duration="14636000" />
     </task>
     <servers />
   </component>

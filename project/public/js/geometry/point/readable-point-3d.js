@@ -1,3 +1,3 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=matrix.js.map
+//# sourceMappingURL=readable-point-3d.js.map

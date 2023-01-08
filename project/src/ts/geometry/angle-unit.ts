@@ -1,0 +1,3 @@
+enum AngleUnit {
+    RAD, DEG
+}
