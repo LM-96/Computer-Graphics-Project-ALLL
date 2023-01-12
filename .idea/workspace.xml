@@ -3,12 +3,21 @@
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/lib/js/jquery-3.6.0.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/jquery-3.6.0.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/lib/js/webgl-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/webgl-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/abstract-matrix.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/matrix/abstract-matrix.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/abstract-matrix.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/matrix/abstract-matrix.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-algebra.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-algebra.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/test/TestTs.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/test/TestTs.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/public/js/types/cloneable.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/types/cloneable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/cloneable.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/types/cloneable.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/types.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/types/types.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/types.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/types/types.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/matrix/abstract-matrix.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/matrix/abstract-matrix.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix-algebra.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix-algebra.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/test/TestTs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test/TestTs.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/types/cloneable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/types/cloneable.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/types/types.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +133,7 @@
       <workItem from="1673343113656" duration="1167000" />
       <workItem from="1673361918142" duration="3783000" />
       <workItem from="1673437587813" duration="31765000" />
-      <workItem from="1673531266801" duration="770000" />
+      <workItem from="1673531266801" duration="4820000" />
     </task>
     <servers />
   </component>

@@ -5,8 +5,8 @@ const matrix_1 = require("./matrix");
 const illegal_column_index_exception_1 = require("./exceptions/illegal-column-index-exception");
 const illegal_row_index_exception_1 = require("./exceptions/illegal-row-index-exception");
 const matrix_factory_1 = require("./matrix-factory");
-const types_1 = require("../../types/types");
 const illegal_argument_exception_1 = require("../../types/illegal-argument-exception");
+const pair_1 = require("../../types/pair");
 class AbstractMatrix {
     checkValidColumnIndex(columnIndex, throwError) {
         if (throwError == undefined) {
@@ -244,7 +244,7 @@ class AbstractMatrix {
         return this.rowSize() == other.rowSize() && this.columnSize() == other.columnSize();
     }
     size() {
-        return (0, types_1.coupleOf)(this.rowSize(), this.columnSize());
+        return (0, pair_1.coupleOf)(this.rowSize(), this.columnSize());
     }
     subMatrix(topRow, leftColumn, bottomRow, rightColumn) {
         if (bottomRow == undefined) {

@@ -128,7 +128,7 @@ class MatrixAlgebra {
      * Calculates and returns the determinant of the given matrix
      * This method will work properly **only if the two matrix contain only
      * numbers**: this means that the behaviour of this method is not predictable
-     * using different types of matrices and will throw errors
+     * using different types of matrices and will throw exceptions
      * @param {NumMatrix} matrix the original matrix
      * @return {number} the determinant of the matrix
      * @throws {IllegalArgumentException} if the matrix is not squared (the determinant
@@ -192,7 +192,7 @@ class MatrixAlgebra {
      * Returns the trace of this matrix.
      * This method will work properly **only if the two matrix contain only
      * numbers**: this means that the behaviour of this method is not predictable
-     * using different types of matrices and will throw errors
+     * using different types of matrices and will throw exceptions
      * @param {NumMatrix} mat the original matrix
      * @return the trace of this matrix
      * @throws {IllegalArgumentException} if this matrix is not squared
@@ -239,7 +239,7 @@ class MatrixAlgebra {
      * Calculates and returns the cofactor of the element specified by `row` and `column`
      * of the given matrix.
      * Make sure that the matrix given as parameter **contains only numbers** otherwise
-     * this method will throw errors
+     * this method will throw exceptions
      * @param {NumMatrix} mat the original matrix
      * @param {number} row the index of the row of the element
      * @param {number} column the index of the column of the element
@@ -298,7 +298,7 @@ class MatrixAlgebra {
      * Calculates and returns the inverse matrix of the one given as parameter.
      * This method will work properly **only if the two matrix contain only
      * numbers**: this means that the behaviour of this method is not predictable
-     * using different types of matrices and will throw errors
+     * using different types of matrices and will throw exceptions
      * @param {NumMatrix} mat the original matrix
      * @return {NumMatrix} the inverse matrix
      * @throws {NotInvertibleMatrixException} if the matrix is not invertible

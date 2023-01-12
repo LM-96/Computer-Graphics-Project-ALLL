@@ -3,10 +3,10 @@ import {Column, MatrixData, NumMatrix, Row} from "./matrix-types";
 import {IllegalColumnIndexException} from "./exceptions/illegal-column-index-exception";
 import {IllegalRowIndexException} from "./exceptions/illegal-row-index-exception";
 import {matrixData, MatrixFactory} from "./matrix-factory";
-import {Couple, coupleOf} from "../../types/types";
 import {IllegalArgumentException} from "../../types/illegal-argument-exception";
 import {Equatable} from "../../types/equatable";
 import {Cloneable} from "../../types/cloneable";
+import {Couple, coupleOf} from "../../types/pair";
 
 export abstract class AbstractMatrix<T> implements Matrix<T>, Cloneable<Matrix<T>>, Equatable {
 

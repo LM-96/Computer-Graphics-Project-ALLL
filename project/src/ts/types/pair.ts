@@ -1,42 +1,25 @@
-/**
- * An object that has also functional methods like `apply` or `map`
- */
-export interface FunctionalObject<T> {
-
-    /**
-     * Calls the specified function block with this value as its argument and returns its result
-     * @param {(any) => any} mapper the function to be invoked
-     */
-    map<R>(mapper: (T) => R): R
-
-    /**
-     * Calls the specified function `block` with this value as its argument and returns this value.
-     * The return value of `block` will be ignored
-     * @param {(any) => (any)} block the function to be applied on this object
-     */
-    apply(block: (T) => any): T
-
-}
+import {AbstractFunctionalObject} from "./functional";
+import {IndexOutOfBoundException} from "./exceptions/index-out-of-bound-exception";
+import {Equatable} from "./equatable";
+import {Cloneable, tryClone} from "./cloneable";
+import {Copiable} from "./copiable";
+import {Matrix} from "../geometry/matrix/matrix";
+import {MatrixData} from "../geometry/matrix/matrix-types";
+import {matrix} from "../geometry/matrix/matrix-factory";
 
 /**
- * The abstract implementation of a `FunctionalObject`
+ * An enumeration that allow to access the element to a specific position
+ * in a `Pair` instance
  */
-export abstract class AbstractFunctionalObject<T> implements FunctionalObject<T>{
-
-    map<R>(mapper: (T) => R): R {
-        return mapper(this)
-    }
-
-    apply(block: (T) => any): T {
-        return block(this)
-    }
-
+enum PairPosition {
+    FIRST, SECOND
 }
 
 /**
  * A pair of two elements
  */
-export class Pair<F, S> extends AbstractFunctionalObject<Pair<F, S>> {
+export class Pair<F, S> extends AbstractFunctionalObject<Pair<F, S>>
+    implements Equatable, Cloneable<Pair<F, S>>, Copiable<Pair<F, S>>{
 
     #first?: F|null = null
     #second?: S|null = null
@@ -45,6 +28,38 @@ export class Pair<F, S> extends AbstractFunctionalObject<Pair<F, S>> {
         super();
         this.#first = first
         this.#second = second
+    }
+
+    /**
+     * Gets the element at the specified position
+     * @param {PairPosition} position the position of the element to get
+     * @return {F|S} the desired element
+     * @throws {IndexOutOfBoundException} if the index is not valid
+     */
+    get(position: PairPosition|number): F|S {
+        switch (position) {
+            case PairPosition.FIRST || 0: return this.#first
+            case PairPosition.SECOND || 1: return this.#second
+            default:
+                throw new IndexOutOfBoundException(position)
+        }
+    }
+
+    /**
+     * Sets the element of this pair at the specified position.
+     * Please notice that **this method is not safe cause it is not possible to check the type** of
+     * the value to be set
+     * @param {F|S} value the value to be set
+     * @param {PairPosition} position the position in which put the new value
+     * @throws {IndexOutOfBoundException} if the index is not valid
+     */
+    set(value: F|S, position: PairPosition) {
+        switch (position) {
+            case PairPosition.FIRST: this.#first = value as F
+            case PairPosition.SECOND: this.#second = value as S
+            default:
+                throw new IndexOutOfBoundException(position)
+        }
     }
 
     /**
@@ -125,8 +140,19 @@ export class Pair<F, S> extends AbstractFunctionalObject<Pair<F, S>> {
     }
 
     /**
-     * Returns a copy of this pair. Every changes over the returning value **will not have effects** on
-     * this
+     * Returns a clone of this pair. Every changes over the returning value **will not have effects** on
+     * this.
+     * **Notice that the copy will be deep only if the two elements are `Cloneable` themselves**, otherwise
+     * the clone will be a shallow copy equivalent to the result of `copy()`
+     */
+    clone(): Pair<F,S> {
+        return new Pair<F,S>(tryClone(this.#first), tryClone(this.#second))
+    }
+
+    /**
+     * Returns a shallow copy of this pair.
+     * Every changes over the returning value **will not have effects** on this but changes on the elements
+     * can be propagated (is a *shallow copy*)
      */
     copy(): Pair<F,S> {
         return new Pair<F,S>(this.#first, this.#second)
@@ -177,4 +203,27 @@ export function pairOf<F, S>(first: F|null, second: S|null): Pair<F, S> {
  */
 export function coupleOf<T>(first: T|null, second: T|null): Couple<T> {
     return new Pair(first, second)
+}
+
+/**
+ * Creates and returns a row array intended as a *1x2* matrix
+ * @param {Couple<T>} couple the couple to be converted
+ * @return a *1x2* matrix with the elements of the given pair
+ */
+export function coupleAsRowArray<T>(couple: Couple<T>): Matrix<T> {
+    let data: MatrixData<T> = couple.toArray()
+    return matrix(data)
+}
+
+/**
+ * Creates and returns a column array intended as a *2x1* matrix
+ * @param {Couple<T>} couple the couple to be converted
+ * @return a *2x1* matrix with the elements of the given pair
+ */
+export function coupleAsColumnArray<T>(couple: Couple<T>): Matrix<T> {
+    let data: MatrixData<T> = new Array(2)
+    for(let r = 0; r < data.length; r++) {
+        data[r] = [couple.get(r)]
+    }
+    return matrix(data)
 }

@@ -263,7 +263,7 @@ export function assertNotTrows(errorClass: Function, fun: Function, ...args: any
 }
 
 /**
- * Assert the given function will **not** throw any errors
+ * Assert the given function will **not** throw any exceptions
  * @param {Function} fun the function that has not to throw the error
  * @param {any} args the arguments to be passed to `fun`
  */
