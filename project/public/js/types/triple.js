@@ -12,7 +12,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _Triple_first, _Triple_second, _Triple_third;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trioAsColumnArray = exports.trioAsRowArray = exports.Triple = void 0;
+exports.trioAsColumnArray = exports.trioAsRowArray = exports.trioOf = exports.tripleOf = exports.Triple = void 0;
 const functional_1 = require("./functional");
 const index_out_of_bound_exception_1 = require("./exceptions/index-out-of-bound-exception");
 const cloneable_1 = require("./cloneable");
@@ -201,6 +201,28 @@ class Triple extends functional_1.AbstractFunctionalObject {
 }
 exports.Triple = Triple;
 _Triple_first = new WeakMap(), _Triple_second = new WeakMap(), _Triple_third = new WeakMap();
+/**
+ * Creates and returns a new **triple** with the three elements given as parameters
+ * @param {F|null} first the first element
+ * @param {S|null} second the second element
+ * @param {T|null} third the third element
+ * @return {Triple<F, S, T>} the new created triple
+ */
+function tripleOf(first, second, third) {
+    return new Triple(first, second, third);
+}
+exports.tripleOf = tripleOf;
+/**
+ * Creates and returns a new **trio** with the three elements given as parameters
+ * @param {F|null} first the first element
+ * @param {S|null} second the second element
+ * @param {T|null} third the third element
+ * @return {Triple<F, S, T>} the new created trio
+ */
+function trioOf(first, second, third) {
+    return new Triple(first, second, third);
+}
+exports.trioOf = trioOf;
 /**
  * Creates and returns a row array intended as a *1x3* matrix
  * @param {Trio<T>} trio the trio to be converted

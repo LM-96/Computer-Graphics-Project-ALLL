@@ -6,6 +6,7 @@ import {Copiable} from "./copiable";
 import {Matrix} from "../geometry/matrix/matrix";
 import {MatrixData} from "../geometry/matrix/matrix-types";
 import {matrix} from "../geometry/matrix/matrix-factory";
+import {Couple, Pair} from "./pair";
 
 /**
  * An enumeration that allow to access the element to a specific position
@@ -214,6 +215,28 @@ export class Triple<F, S, T> extends AbstractFunctionalObject<Triple<F, S, T>>
  * A triple which contains objects with the same type
  */
 export type Trio<T> = Triple<T, T, T>
+
+/**
+ * Creates and returns a new **triple** with the three elements given as parameters
+ * @param {F|null} first the first element
+ * @param {S|null} second the second element
+ * @param {T|null} third the third element
+ * @return {Triple<F, S, T>} the new created triple
+ */
+export function tripleOf<F, S, T>(first: F|null, second: S|null, third: T|null): Triple<F, S, T> {
+    return new Triple<F, S, T>(first, second, third)
+}
+
+/**
+ * Creates and returns a new **trio** with the three elements given as parameters
+ * @param {F|null} first the first element
+ * @param {S|null} second the second element
+ * @param {T|null} third the third element
+ * @return {Triple<F, S, T>} the new created trio
+ */
+export function trioOf<T>(first: T|null, second: T|null, third: T|null): Trio<T> {
+    return new Triple<T, T, T>(first, second, third)
+}
 
 /**
  * Creates and returns a row array intended as a *1x3* matrix
