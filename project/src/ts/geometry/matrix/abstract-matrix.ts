@@ -6,6 +6,7 @@ import {matrixData, MatrixFactory} from "./matrix-factory";
 import {Couple, coupleOf} from "../../types/types";
 import {IllegalArgumentException} from "../../types/illegal-argument-exception";
 import {Equatable} from "../../types/equatable";
+import {Cloneable} from "../../types/cloneable";
 
 export abstract class AbstractMatrix<T> implements Matrix<T>, Cloneable<Matrix<T>>, Equatable {
 
