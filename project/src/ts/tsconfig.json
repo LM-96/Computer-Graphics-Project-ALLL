@@ -3,7 +3,8 @@
     "module": "commonjs",
     "target": "es2020",
     "sourceMap": true,
-    "outDir": "../../public/js"
+    "outDir": "../../public/js",
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules"

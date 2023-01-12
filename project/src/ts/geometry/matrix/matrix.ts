@@ -1,9 +1,16 @@
 import {MatrixFactory} from "./matrix-factory";
 import {Couple} from "../../types/types";
-import {Column, NumMatrix, Row} from "./type-aliases";
-import {FlatType} from "./abstract-matrix-old";
+import {Column, NumMatrix, Row} from "./matrix-types";
+import {Equatable} from "../../types/equatable";
 
-export interface Matrix<T> {
+export enum FlatType {
+    BY_ROWS, BY_COLUMNS
+}
+
+/**
+ * An NxN matrix
+ */
+export interface Matrix<T> extends Cloneable<Matrix<T>>, Equatable{
 
     /**
      * Returns the factory for this type of matrix
@@ -159,14 +166,14 @@ export interface Matrix<T> {
      * Fills this matrix by overriding all the values with the one given as parameter
      * @param {T} value the value to be used
      */
-    fill(value: T)
+    fill(value: T): Matrix<T>
 
     /**
      * Fills this matrix by calculating each element using the `builder` function
      * @param {(rowIndex: number, columnIndex: number) => T} builder the function that
      * let to create each element of the matrix knowing its row and its column
      */
-    calculateAndFill(builder: (rowIndex: number, columnIndex: number) => T)
+    calculateAndFill(builder: (rowIndex: number, columnIndex: number) => T): Matrix<T>
 
 
     /* GETTERS/SETTERS ************************************************************************************************/
@@ -229,7 +236,7 @@ export interface Matrix<T> {
      * @throws {InvalidRowException} if the number of the elements of the given column is not the same
      * of the rows of this matrix
      */
-    setColumn(column: Column<T>, columnIndex: number)
+    setColumn(column: Column<T>, columnIndex: number): Matrix<T>
 
     /* MATRIX STRUCTURE MODIFICATION **********************************************************************************/
 
@@ -246,7 +253,7 @@ export interface Matrix<T> {
      * Adds a column to this matrix by appending it at right
      * The added column will be the **last** one of the matrix
      * @param {Column<number>} column the column to be added
-     * @throws {InvalidRowException} if the number of the elements of the given column is not the same
+     * @throws {InvalidColumnException} if the number of the elements of the given column is not the same
      * of the rows of this matrix
      */
     addColumn(column: Column<T>): Matrix<T>
@@ -455,6 +462,11 @@ export interface Matrix<T> {
      */
     determinant(): number
 
+    /**
+     * Returns the characteristic polynomial of this matrix as a *function*
+     */
+    getCharacteristicPolynomial(): (lambda: number) => number
+
     /* FUNCTIONAL *****************************************************************************************************/
 
     /**
@@ -520,6 +532,9 @@ export interface Matrix<T> {
 
     /**
      * Returns a clone of this matrix.
+     * This method is different from `unfrozen` and `frozen` because it always returns
+     * a new copy that is the same type of matrix of this, keeping the eventual setting
+     * about the denying of the returning modified copy
      * @return {Matrix<T>} the clone of the matrix
      */
     clone(): Matrix<T>
@@ -550,7 +565,7 @@ export interface Matrix<T> {
      * after the other
      * @param {FlatType} flatType the type of the flat (`BY_ROWS` by default)
      */
-    flatten(flatType: FlatType)
+    flatten(flatType: FlatType): Array<T>
 
     /**
      * Returns this matrix as an *array-of-array*.
@@ -565,4 +580,44 @@ export interface Matrix<T> {
      * @return {Array<Column<T>>} the array of column
      */
     toArrayOfColumns(): Array<Column<T>>
+
+    /* FROZEN/MUTABLE *************************************************************************************************/
+
+    /**
+     * Returns:
+     * - **this matrix** if is already frozen;
+     * - a **new** frozen copy of this matrix if is not frozen.
+     *
+     * This method should be used only to **convert an `unfrozen` matrix to the `frozen`** equivalent:
+     * if is needed to obtain a copy, please consider using `deepCopy` instead.<br>
+     *
+     * Notice that every modification on the *unfrozen* version of the matrix **will be propagated** into
+     * the *frozen* version (they will be linked). To avoid this behaviour use `clone().frozen()`
+     */
+    frozen(): Matrix<T>
+
+    /**
+     * Returns:
+     * - **this matrix** if is already not frozen
+     * - a **new** unfrozen copy of the matrix if this is frozen
+     * This method should be used only to **convert a `frozen` matrix to the `unfrozen`** equivalent:
+     * if is needed to obtain a copy, please consider using `clone` instead.<br>
+     *
+     * Notice that every modification on the returned *unfrozen* version will be propagated into the
+     * *frozen* one (they will be linked). To avoid this behaviour use `clone().unfrozen()`
+     */
+    unfrozen(): Matrix<T>
+
+    /**
+     * Returns `true` if this matrix is frozen
+     */
+    isFrozen(): boolean
+
+    /**
+     * Returns `true` if this point is not frozen
+     */
+    isUnfrozen(): boolean
+
+    toString(): string
+
 }

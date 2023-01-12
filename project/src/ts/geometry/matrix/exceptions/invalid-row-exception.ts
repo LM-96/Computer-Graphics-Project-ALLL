@@ -1,7 +1,7 @@
 /**
  * An exception that is thrown when a row is not valid for a reason
  */
-import {Row} from "../type-aliases";
+import {Row} from "../matrix-types";
 
 export class InvalidRowException extends Error {
 

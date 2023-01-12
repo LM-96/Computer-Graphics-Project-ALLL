@@ -12,7 +12,7 @@ import {ReadablePoint3D} from "./readable-point-3d";
  * - **mutable**: in this case is possible to modify the values of the internal coordinates using all the
  * method for these kind of purposes; these methods will return `this`
  */
-export interface Point3D extends ReadablePoint3D, FunctionalObject<Point3D> {
+export interface Point3D extends ReadablePoint3D, FunctionalObject<Point3D>, Cloneable<Point3D> {
 
     /**
      * Sets the value of the coordinate of he specified axis of this point
@@ -228,7 +228,7 @@ export interface Point3D extends ReadablePoint3D, FunctionalObject<Point3D> {
      * a new copy that is the same type of point of this, keeping the eventual setting
      * about the denying of the returning modified copy
      */
-    deepCopy(): Point3D
+    clone(): Point3D
 }
 
 /**

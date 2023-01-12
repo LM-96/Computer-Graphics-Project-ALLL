@@ -1,5 +1,3 @@
-import {FlatType, SimpleRowBasedMatrix, NumMatrix, matrix} from "./matrix";
-
 /*
 let matrix: Matrix<number> = Matrix.asMatrix([[1, 2, 3], [4, 5, 6]])
 console.log("matrix: " + matrix.toString())
@@ -26,4 +24,17 @@ console.log("re-created by flatten: " + Matrix.flattenAsMatrix(matrix.flatten(Fl
 // console.log("transposed cofactor matrix. " + matrix.getCofactorMatrix().transpose().toString())
 // console.log("inverse: " + matrix.invert().toString())
 
-console.log(matrix<string>(10, 20))
+import {assertEquals, assertFalse, assertTrue, Test, TestCase} from "./test/TestTs";
+
+@TestCase
+class MyTestCase {
+    myString: string = "hello"
+    myNumber: number = 10
+    myBool: boolean = false
+
+    @Test() testString() { assertEquals("hello", this.myString) }
+
+    @Test() testNumber() { assertEquals(5, this.myNumber) }
+
+    @Test() testBool() { assertTrue(this.myBool); assertFalse(!this.myBool) }
+}

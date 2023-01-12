@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.matrix = exports.MatrixFactory = void 0;
-const abstract_matrix_old_1 = require("./abstract-matrix-old");
-const simple_row_based_matrix_1 = require("./simple-row-based-matrix");
+exports.identityMatrix = exports.checkValidMatrixData = exports.matrixData = exports.matrix = exports.MatrixFactory = void 0;
 const illegal_argument_exception_1 = require("../../types/illegal-argument-exception");
+const matrix_1 = require("./matrix");
 /**
  * A factory for a type of matrix.
  * Each class which extends `Matrix` should have a *static* factory
@@ -17,6 +16,20 @@ class MatrixFactory {
     }
     createSquaredNumberMatrix(dim, fill) {
         return this.createSquaredMatrix(dim, fill);
+    }
+    /**
+     * Creates and return the identity matrix with the given dimension
+     * @param {number} dim the dimension of the identity matrix
+     */
+    createIdentityMatrix(dim) {
+        return this.createSquaredNumberMatrix(dim).calculateAndFill((rowIndex, columnIndex) => {
+            if (rowIndex == columnIndex) {
+                return 1;
+            }
+            else {
+                return 0;
+            }
+        });
     }
     /**
      * Converts a flat array to a matrix by specifying the type of the flat and the numbers of the
@@ -39,13 +52,13 @@ class MatrixFactory {
      * @param flatType the type of the groups (indicates if each group will be a *row* or a *column*
      * of the new matrix
      */
-    createFromFlatten(array, groupSize, flatType = abstract_matrix_old_1.FlatType.BY_ROWS) {
+    createFromFlatten(array, groupSize, flatType = matrix_1.FlatType.BY_ROWS) {
         if (array.length % groupSize != 0) {
             throw new illegal_argument_exception_1.IllegalArgumentException("the dimension of the given array is not a multiple of the size of the group");
         }
         let res;
         switch (flatType) {
-            case abstract_matrix_old_1.FlatType.BY_ROWS: {
+            case matrix_1.FlatType.BY_ROWS: {
                 let rows = array.length / groupSize;
                 res = this.createMatrix(rows, groupSize);
                 for (let i = 0; i < array.length; i++) {
@@ -53,7 +66,7 @@ class MatrixFactory {
                 }
                 break;
             }
-            case abstract_matrix_old_1.FlatType.BY_COLUMNS: {
+            case matrix_1.FlatType.BY_COLUMNS: {
                 let columns = array.length / groupSize;
                 res = this.createMatrix(groupSize, columns);
                 for (let i = 0; i < array.length; i++) {
@@ -64,26 +77,120 @@ class MatrixFactory {
         }
         return res;
     }
-}
-exports.MatrixFactory = MatrixFactory;
-function matrix(arrayOrRows, columns) {
-    let factory = simple_row_based_matrix_1.SimpleRowBasedMatrix.factory;
-    if (arrayOrRows instanceof Array) {
-        let rRows = arrayOrRows.length;
-        let rColumns = Math.max(...arrayOrRows.map((array) => array.length));
-        let res = factory.createMatrix(rRows, rColumns);
-        let currRow;
-        for (let r = 0; r < rRows; r++) {
-            currRow = arrayOrRows[r];
-            for (let c = 0; c < currRow.length; c++) {
-                res.set(currRow[c], r, c);
+    /**
+     * Creates a new matrix starting from another one by transforming each element of the `other` matrix
+     * to the elements of the new one by applying the `elementMapper` function
+     * @param {Matrix<T>>} other the other matrix
+     * @param {element: T, row: number, column: number) => R} elementMapper the function to be applied on each
+     * element of the `other` matrix to create the new ones
+     * @return {Matrix<R>} the new matrix
+     */
+    createFromOther(other, elementMapper) {
+        let res = this.createMatrix(other.rowSize(), other.columnSize());
+        for (let r = 0; r < res.rowSize(); r++) {
+            for (let c = 0; c < res.columnSize(); c++) {
+                res = res.set(elementMapper(other.get(r, c), r, c), r, c);
             }
         }
         return res;
     }
-    else {
-        return factory.createMatrix(arrayOrRows, columns);
+    /**
+     * Creates and returns a new matrix with the same structure of the `other` given as parameter
+     * (with the same number of rows and columns)
+     * @param {Matrix<any>} other the other matrix
+     * @return {Matrix<T>} the new matrix with the same structure of the `other`
+     */
+    createWithSameStructureOf(other) {
+        return this.createMatrix(other.rowSize(), other.columnSize());
     }
 }
+exports.MatrixFactory = MatrixFactory;
+const frozen_row_based_matrix_1 = require("./frozen-row-based-matrix");
+function matrix(arrayOrRows, columns, fill) {
+    let factory = frozen_row_based_matrix_1.FrozenRowBasedMatrix.factory;
+    if (typeof arrayOrRows == "number") {
+        return factory.createMatrix(arrayOrRows, columns, fill);
+    }
+    else {
+        return factory.createMatrix(arrayOrRows);
+    }
+    /*
+    let factory: MatrixFactory = FrozenRowBasedMatrix.factory
+
+    if(arrayOrRows instanceof Array) {
+        let rRows = arrayOrRows.length
+        let rColumns = Math.max(...arrayOrRows.map((array: Array<T>) => array.length))
+        let res: Matrix<T> = factory.createMatrix(rRows, rColumns)
+        let currRow: Row<T>
+
+        for(let r = 0; r < rRows; r++) {
+            currRow = arrayOrRows[r]
+            for(let c = 0; c < currRow.length; c++) {
+                res.set(currRow[c], r, c)
+            }
+        }
+        return res
+
+    } else {
+        return factory.createMatrix<T>(arrayOrRows as number, columns, fill)
+    }*/
+}
 exports.matrix = matrix;
+function matrixData(rows, columns, fill) {
+    let res = new Array(rows);
+    if (fill == undefined) {
+        for (let r = 0; r < rows; r++) {
+            res[r] = new Array(columns);
+        }
+    }
+    else {
+        let row;
+        for (let r = 0; r < rows; r++) {
+            row = new Array(columns);
+            for (let c = 0; c < columns; c++) {
+                row[c] = fill;
+            }
+            res[r] = row;
+        }
+    }
+    return res;
+}
+exports.matrixData = matrixData;
+/**
+ * Checks if the given bi-dimensional array has a valid format to be the internal data af a matrix.
+ * This means that the bi-dimensional array given has parameter must have each element that is an
+ * array with the same length as the others,
+ * If `throwError` is true, this method will throw `IllegalArgumentException` if the given data
+ * is not valid instead of returning a boolean
+ * @param {Array<Array<T>>|Array<Row<T>>|MatrixData<T>} data the data to be checked
+ * @param {boolean} throwError a flag that, if `true` make this method throwing an exception
+ * @return {boolean} a boolean that indicates if the data is valid
+ * @throws {IllegalArgumentException} if `throwError` is `true` and the data is not valid
+ */
+function checkValidMatrixData(data, throwError = false) {
+    let totColumns = data[0].length;
+    for (let row of data) {
+        if (row.length != totColumns) {
+            if (throwError) {
+                throw new illegal_argument_exception_1.IllegalArgumentException("every row must have the same number of elements");
+            }
+            return false;
+        }
+    }
+    return true;
+}
+exports.checkValidMatrixData = checkValidMatrixData;
+/**
+ * Creates and returns the identity matrix
+ * @param {number} dim the dimension of the matrix to be created
+ * @return {NumMatrix} the identity matrix with the specified dimension
+ */
+function identityMatrix(dim) {
+    let res = matrix(dim, dim, 0);
+    for (let i = 0; i < dim; i++) {
+        res.set(1, i, i);
+    }
+    return res;
+}
+exports.identityMatrix = identityMatrix;
 //# sourceMappingURL=matrix-factory.js.map

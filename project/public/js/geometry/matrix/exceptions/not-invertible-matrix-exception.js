@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NotInvertibleMatrixException = void 0;
+exports.NotInvertibleMatrixException = exports.NotInvertibleReason = void 0;
 /**
  * The reason why is not possible to invert a matrix
  */
@@ -8,7 +8,7 @@ var NotInvertibleReason;
 (function (NotInvertibleReason) {
     NotInvertibleReason[NotInvertibleReason["NOT_SQUARED"] = 0] = "NOT_SQUARED";
     NotInvertibleReason[NotInvertibleReason["ZERO_DETERMINANT"] = 1] = "ZERO_DETERMINANT";
-})(NotInvertibleReason || (NotInvertibleReason = {}));
+})(NotInvertibleReason = exports.NotInvertibleReason || (exports.NotInvertibleReason = {}));
 /**
  * An exception that is thrown when a matrix is not invertible
  */

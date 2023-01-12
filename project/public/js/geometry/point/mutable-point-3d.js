@@ -106,7 +106,7 @@ class MutablePoint3D extends abstract_point_3d_1.AbstractPoint3D {
     unfrozen() {
         return this;
     }
-    deepCopy() {
+    clone() {
         return new MutablePoint3D(__classPrivateFieldGet(this, _MutablePoint3D_x, "f"), __classPrivateFieldGet(this, _MutablePoint3D_y, "f"), __classPrivateFieldGet(this, _MutablePoint3D_z, "f"));
     }
 }

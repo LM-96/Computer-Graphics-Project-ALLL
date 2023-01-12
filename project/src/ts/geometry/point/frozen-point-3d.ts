@@ -119,7 +119,7 @@ export class FrozenPoint3D extends AbstractPoint3D implements Point3D{
         return false
     }
 
-    deepCopy(): Point3D {
+    clone(): Point3D {
         return new FrozenPoint3D(this.#x, this.#y, this.#z)
     }
 

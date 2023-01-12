@@ -103,7 +103,7 @@ export class MutablePoint3D extends AbstractPoint3D implements Point3D {
         return this;
     }
 
-    deepCopy(): Point3D {
+    clone(): Point3D {
         return new MutablePoint3D(this.#x, this.#y, this.#z)
     }
 }

@@ -112,7 +112,7 @@ class FrozenPoint3D extends abstract_point_3d_1.AbstractPoint3D {
     isUnfrozen() {
         return false;
     }
-    deepCopy() {
+    clone() {
         return new FrozenPoint3D(__classPrivateFieldGet(this, _FrozenPoint3D_x, "f"), __classPrivateFieldGet(this, _FrozenPoint3D_y, "f"), __classPrivateFieldGet(this, _FrozenPoint3D_z, "f"));
     }
 }

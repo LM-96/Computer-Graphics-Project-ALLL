@@ -1,7 +1,7 @@
 /**
  * An exception that is thrown when a column is not valid for a reason
  */
-import {Column} from "../type-aliases";
+import {Column} from "../matrix-types";
 
 export class InvalidColumnException extends Error {
 

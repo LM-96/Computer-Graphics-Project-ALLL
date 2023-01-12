@@ -1,7 +1,7 @@
 /**
  * The reason why is not possible to invert a matrix
  */
-enum NotInvertibleReason {
+export enum NotInvertibleReason {
     NOT_SQUARED, ZERO_DETERMINANT
 }
 

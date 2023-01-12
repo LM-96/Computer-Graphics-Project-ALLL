@@ -23,7 +23,7 @@ export abstract class AbstractPoint3D extends AbstractFunctionalObject<Point3D> 
     abstract setCoordinate(newValue: number, axis: Axis): Point3D;
     abstract translateCoordinate(translation: number, axis: Axis): Point3D;
     abstract unfrozen(): Point3D;
-    abstract deepCopy(): Point3D;
+    abstract clone(): Point3D;
 
     dilate(mx: number | null, my: number | null, mz: number | null): Point3D {
         let result: Point3D = this
