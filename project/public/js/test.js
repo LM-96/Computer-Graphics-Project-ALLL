@@ -7,12 +7,6 @@ console.log("re-created by flatten: " + Matrix.flattenAsMatrix(matrix.flatten(),
 console.log("flatten by columns: " + matrix.flatten(FlatType.BY_COLUMNS))
 console.log("re-created by flatten: " + Matrix.flattenAsMatrix(matrix.flatten(FlatType.BY_COLUMNS),
     matrix.rowSize(), FlatType.BY_COLUMNS).toString())*/
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 // let matrix: Matrix<number> = Matrix.asMatrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
 // console.log("is diagonal: " + matrix.isDiagonal())
@@ -29,27 +23,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // console.log("cofactor matrix: " + matrix.getCofactorMatrix().toString())
 // console.log("transposed cofactor matrix. " + matrix.getCofactorMatrix().transpose().toString())
 // console.log("inverse: " + matrix.invert().toString())
-const TestTs_1 = require("./test/TestTs");
-let MyTestCase = class MyTestCase {
-    constructor() {
-        this.myString = "hello";
-        this.myNumber = 10;
-        this.myBool = false;
-    }
-    testString() { (0, TestTs_1.assertEquals)("hello", this.myString); }
-    testNumber() { (0, TestTs_1.assertEquals)(5, this.myNumber); }
-    testBool() { (0, TestTs_1.assertTrue)(this.myBool); (0, TestTs_1.assertFalse)(!this.myBool); }
-};
-__decorate([
-    (0, TestTs_1.Test)()
-], MyTestCase.prototype, "testString", null);
-__decorate([
-    (0, TestTs_1.Test)()
-], MyTestCase.prototype, "testNumber", null);
-__decorate([
-    (0, TestTs_1.Test)()
-], MyTestCase.prototype, "testBool", null);
-MyTestCase = __decorate([
-    TestTs_1.TestCase
-], MyTestCase);
+const angle_1 = require("./geometry/angle");
+let angle1 = new angle_1.Angle(180, angle_1.AngleUnit.DEG);
+let angle2 = new angle_1.Angle(Math.PI, angle_1.AngleUnit.RAD);
+console.log(angle1.equals(angle2));
 //# sourceMappingURL=test.js.map

@@ -35,6 +35,16 @@ class Angle extends functional_1.AbstractFunctionalObject {
         return __classPrivateFieldGet(this, _Angle_value, "f");
     }
     /**
+     * Returns the value of this angle in the desired unit
+     * @param {AngleUnit} unit the desired unit of the value of this angle
+     * @return {number} the value of this angle
+     */
+    getValueIn(unit) {
+        if (__classPrivateFieldGet(this, _Angle_unit, "f") == unit)
+            return __classPrivateFieldGet(this, _Angle_value, "f");
+        return this.cloneAndConvert(unit).getValue();
+    }
+    /**
      * Sets the value of this angle preserving the unit
      * @param {number} value the value of the angle
      */
@@ -209,4 +219,4 @@ function degree(value) {
     return angle(value, AngleUnit.DEG);
 }
 exports.degree = degree;
-//# sourceMappingURL=angle-unit.js.map
+//# sourceMappingURL=angle.js.map

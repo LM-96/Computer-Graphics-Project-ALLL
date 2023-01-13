@@ -1,5 +1,9 @@
-import {FunctionalObject} from "../../types/types";
+import {FunctionalObject} from "../../types/functional";
 import {ReadablePoint3D} from "./readable-point-3d";
+import {Cloneable} from "../../types/cloneable";
+import {Matrix} from "../matrix/matrix";
+import {NumMatrix} from "../matrix/matrix-types";
+import {Angle} from "../angle";
 
 /**
  * A point in a 3D system reference.
@@ -43,6 +47,16 @@ export interface Point3D extends ReadablePoint3D, FunctionalObject<Point3D>, Clo
      * return of the modified copy is not allowed
      */
     dilateCoordinate(dilation: number, axis: Axis): Point3D
+
+    /**
+     * Rotates this point around the specified axis with the given angle
+     * @param {Axis} axis the axis the point is rotating around
+     * @param {Angle} angle the angle of the rotation
+     * @return {Point3D} `this` if this point is mutable, a modified copy if is frozen
+     * @throws {IllegalModificationException} if this point is **frozen** and the
+     * return of the modified copy is not allowed
+     */
+    rotateAround(axis: Axis, angle: Angle): Point3D
 
     /**
      * Sets the `x` coordinate of this point
@@ -186,7 +200,32 @@ export interface Point3D extends ReadablePoint3D, FunctionalObject<Point3D>, Clo
      */
     dilateByVector(vector: Point3D): Point3D
 
+    /**
+     * Rotate this point around the `x` axis with the given angle
+     * @param {Angle} angle the angle of the rotation
+     * @return {Point3D} `this` if this point is mutable, a modified copy if is frozen
+     * @throws {IllegalModificationException} if this point is **frozen** and the
+     * return of the modified copy is not allowed
+     */
+    rotateAroundX(angle: Angle): Point3D
 
+    /**
+     * Rotate this point around the `y` axis with the given angle
+     * @param {Angle} angle the angle of the rotation
+     * @return {Point3D} `this` if this point is mutable, a modified copy if is frozen
+     * @throws {IllegalModificationException} if this point is **frozen** and the
+     * return of the modified copy is not allowed
+     */
+    rotateAroundY(angle: Angle): Point3D
+
+    /**
+     * Rotate this point around the `z` axis with the given angle
+     * @param {Angle} angle the angle of the rotation
+     * @return {Point3D} `this` if this point is mutable, a modified copy if is frozen
+     * @throws {IllegalModificationException} if this point is **frozen** and the
+     * return of the modified copy is not allowed
+     */
+    rotateAroundZ(angle: Angle): Point3D
 
     /**
      * Returns:
@@ -229,6 +268,18 @@ export interface Point3D extends ReadablePoint3D, FunctionalObject<Point3D>, Clo
      * about the denying of the returning modified copy
      */
     clone(): Point3D
+
+    /**
+     * Returns a `1x3` matrix that is a **row vector** with the values of the coordinates
+     * of this point
+     */
+    asRowVector(): NumMatrix
+
+    /**
+     * Returns a `3x1` matrix that is a **column vector** with the values of the coordinates
+     * of this point
+     */
+    asColumnVector(): NumMatrix
 }
 
 /**

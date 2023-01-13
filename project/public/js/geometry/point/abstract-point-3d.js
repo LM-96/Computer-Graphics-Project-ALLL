@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AbstractPoint3D = void 0;
-const types_1 = require("../../types/types");
+const functional_1 = require("../../types/functional");
 const point_3d_1 = require("./point-3d");
+const matrix_factory_1 = require("../matrix/matrix-factory");
 /**
  * The abstract implementation of a `Point3D`.
  * This point can be
@@ -14,7 +15,21 @@ const point_3d_1 = require("./point-3d");
  * - **mutable**: in this case is possible to modify the values of the internal coordinates using all the
  * method for these kind of purposes; these methods will return `this`
  */
-class AbstractPoint3D extends types_1.AbstractFunctionalObject {
+class AbstractPoint3D extends functional_1.AbstractFunctionalObject {
+    asRowVector() {
+        let matrixData = new Array(1);
+        matrixData[0][0] = this.getX();
+        matrixData[0][1] = this.getY();
+        matrixData[0][2] = this.getZ();
+        return (0, matrix_factory_1.frozenMatrix)(matrixData);
+    }
+    asColumnVector() {
+        let matrixData = new Array(3);
+        matrixData[0] = [this.getX()];
+        matrixData[1] = [this.getY()];
+        matrixData[2] = [this.getZ()];
+        return (0, matrix_factory_1.frozenMatrix)(matrixData);
+    }
     dilate(mx, my, mz) {
         let result = this;
         if (mx != null) {
@@ -51,6 +66,15 @@ class AbstractPoint3D extends types_1.AbstractFunctionalObject {
     }
     getZ() {
         return this.getCoordinate(Axis.Z);
+    }
+    rotateAroundX(angle) {
+        return this.rotateAround(Axis.X, angle);
+    }
+    rotateAroundY(angle) {
+        return this.rotateAround(Axis.X, angle);
+    }
+    rotateAroundZ(angle) {
+        return this.rotateAround(Axis.X, angle);
     }
     set(newX, newY, newZ) {
         let result = this;

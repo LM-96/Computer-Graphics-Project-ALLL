@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.identityMatrix = exports.checkValidMatrixData = exports.matrixData = exports.matrix = exports.MatrixFactory = void 0;
+exports.identityMatrix = exports.checkValidMatrixData = exports.matrixData = exports.mutableMatrix = exports.frozenMatrix = exports.matrix = exports.MatrixFactory = void 0;
 const illegal_argument_exception_1 = require("../../types/illegal-argument-exception");
 const matrix_1 = require("./matrix");
 /**
@@ -106,6 +106,7 @@ class MatrixFactory {
 }
 exports.MatrixFactory = MatrixFactory;
 const frozen_row_based_matrix_1 = require("./frozen-row-based-matrix");
+const mutable_row_based_matrix_1 = require("./mutable-row-based-matrix");
 function matrix(arrayOrRows, columns, fill) {
     let factory = frozen_row_based_matrix_1.FrozenRowBasedMatrix.factory;
     if (typeof arrayOrRows == "number") {
@@ -136,6 +137,26 @@ function matrix(arrayOrRows, columns, fill) {
     }*/
 }
 exports.matrix = matrix;
+function frozenMatrix(arrayOrRows, columns, fill) {
+    let factory = frozen_row_based_matrix_1.FrozenRowBasedMatrix.factory;
+    if (typeof arrayOrRows == "number") {
+        return factory.createMatrix(arrayOrRows, columns, fill);
+    }
+    else {
+        return factory.createMatrix(arrayOrRows);
+    }
+}
+exports.frozenMatrix = frozenMatrix;
+function mutableMatrix(arrayOrRows, columns, fill) {
+    let factory = mutable_row_based_matrix_1.MutableRowBasedMatrix.factory;
+    if (typeof arrayOrRows == "number") {
+        return factory.createMatrix(arrayOrRows, columns, fill);
+    }
+    else {
+        return factory.createMatrix(arrayOrRows);
+    }
+}
+exports.mutableMatrix = mutableMatrix;
 function matrixData(rows, columns, fill) {
     let res = new Array(rows);
     if (fill == undefined) {

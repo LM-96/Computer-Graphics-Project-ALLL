@@ -1,6 +1,9 @@
-import {AbstractFunctionalObject} from "../../types/types";
+import {AbstractFunctionalObject} from "../../types/functional";
 import {Point3D, samePoints} from "./point-3d";
 import {ReadablePoint3D} from "./readable-point-3d";
+import {NumMatrix} from "../matrix/matrix-types";
+import {frozenMatrix} from "../matrix/matrix-factory";
+import {Angle} from "../angle";
 
 /**
  * The abstract implementation of a `Point3D`.
@@ -17,6 +20,7 @@ export abstract class AbstractPoint3D extends AbstractFunctionalObject<Point3D> 
 
     abstract getCoordinate(axis: Axis): number
     abstract dilateCoordinate(dilation: number, axis: Axis): Point3D;
+    abstract rotateAround(axis: Axis, angle: Angle): Point3D
     abstract frozen(denyModifiedCopy: boolean): Point3D;
     abstract isFrozen(): boolean;
     abstract isUnfrozen(): boolean;
@@ -24,6 +28,18 @@ export abstract class AbstractPoint3D extends AbstractFunctionalObject<Point3D> 
     abstract translateCoordinate(translation: number, axis: Axis): Point3D;
     abstract unfrozen(): Point3D;
     abstract clone(): Point3D;
+    
+    asRowVector(): NumMatrix {
+        let matrixData: Array<Array<number>>  = new Array<Array<number>>(1)
+        matrixData[0][0] = this.getX(); matrixData[0][1] = this.getY(); matrixData[0][2] = this.getZ()
+        return frozenMatrix(matrixData)        
+    }
+    
+    asColumnVector(): NumMatrix {
+        let matrixData: Array<Array<number>>  = new Array<Array<number>>(3)
+        matrixData[0] = [this.getX()]; matrixData[1] = [this.getY()]; matrixData[2] = [this.getZ()]
+        return frozenMatrix(matrixData)
+    }
 
     dilate(mx: number | null, my: number | null, mz: number | null): Point3D {
         let result: Point3D = this
@@ -68,6 +84,18 @@ export abstract class AbstractPoint3D extends AbstractFunctionalObject<Point3D> 
 
     getZ(): number {
         return this.getCoordinate(Axis.Z)
+    }
+    
+    rotateAroundX(angle: Angle): Point3D {
+        return this.rotateAround(Axis.X, angle)
+    }
+
+    rotateAroundY(angle: Angle): Point3D {
+        return this.rotateAround(Axis.X, angle)
+    }
+
+    rotateAroundZ(angle: Angle): Point3D {
+        return this.rotateAround(Axis.X, angle)
     }
 
     set(newX: number | null, newY: number | null, newZ: number | null): Point3D {

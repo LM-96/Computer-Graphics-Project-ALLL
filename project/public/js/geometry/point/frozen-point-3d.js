@@ -17,6 +17,7 @@ const point_3d_1 = require("./point-3d");
 const abstract_point_3d_1 = require("./abstract-point-3d");
 const illegal_modification_exception_1 = require("../../types/illegal-modification-exception");
 const mutable_point_3d_1 = require("./mutable-point-3d");
+const rotation_matrices_1 = require("../matrix/rotation-matrices");
 /**
  * The frozen implementation of a point in 3D reference system.
  * This class extends `AbstractPoint3D` and implement `Point3D`.
@@ -81,6 +82,9 @@ class FrozenPoint3D extends abstract_point_3d_1.AbstractPoint3D {
                 return new FrozenPoint3D(__classPrivateFieldGet(this, _FrozenPoint3D_z, "f"), __classPrivateFieldGet(this, _FrozenPoint3D_y, "f"), __classPrivateFieldGet(this, _FrozenPoint3D_z, "f") * dilation);
             }
         }
+    }
+    rotateAround(axis, angle) {
+        return this.asColumnVector().multiply(rotation_matrices_1.RotationMatrices.R(axis, angle));
     }
     getCoordinate(axis) {
         switch (axis) {

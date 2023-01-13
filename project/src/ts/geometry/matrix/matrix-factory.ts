@@ -187,6 +187,7 @@ export abstract class MatrixFactory {
 }
 
 import {FrozenRowBasedMatrix} from "./frozen-row-based-matrix";
+import {MutableRowBasedMatrix} from "./mutable-row-based-matrix";
 
 /**
  * Create a matrix starting from an array of array.
@@ -236,6 +237,63 @@ export function matrix<T>(arrayOrRows: Array<Array<T>> | MatrixData<T> | Array<R
         return factory.createMatrix<T>(arrayOrRows as number, columns, fill)
     }*/
 }
+
+/**
+ * Create a **frozen** matrix starting from an array of array.
+ * Each element of the external array **is considered as a row** of the resulting matrix
+ * (so it is an array of row).
+ * If the internals array have different sizes, the resulting matrix will have a number of columns
+ * that is *the length of the row with the maximum size*: the row with a smaller number of elements
+ * will be automatically filled with `undefined` elements to arrive to the size of the column length
+ * @param {Array<Array<T>>} array the array of rows
+ * @return {Matrix<T>} the nre matrix
+ */
+export function frozenMatrix<T>(array: Array<Array<T>> | MatrixData<T> | Array<Row<T>>): Matrix<T>
+/**
+ * Create an empty **frozen** matrix with the given number of rows and columns
+ * @param rows the number of the row
+ * @param columns the number of the columns
+ * @return {Matrix<T>} a new empty matrix
+ */
+export function frozenMatrix<T>(rows: number, columns: number): Matrix<T>
+export function frozenMatrix<T>(rows: number, columns: number, fill: T): Matrix<T>
+export function frozenMatrix<T>(arrayOrRows: Array<Array<T>> | MatrixData<T> | Array<Row<T>>|number, columns?: number, fill?: T): Matrix<T>{
+    let factory: MatrixFactory = FrozenRowBasedMatrix.factory
+    if(typeof  arrayOrRows == "number") {
+        return factory.createMatrix(arrayOrRows, columns, fill)
+    } else {
+        return factory.createMatrix(arrayOrRows)
+    }
+}
+
+/**
+ * Create a **mutable** matrix starting from an array of array.
+ * Each element of the external array **is considered as a row** of the resulting matrix
+ * (so it is an array of row).
+ * If the internals array have different sizes, the resulting matrix will have a number of columns
+ * that is *the length of the row with the maximum size*: the row with a smaller number of elements
+ * will be automatically filled with `undefined` elements to arrive to the size of the column length
+ * @param {Array<Array<T>>} array the array of rows
+ * @return {Matrix<T>} the nre matrix
+ */
+export function mutableMatrix<T>(array: Array<Array<T>> | MatrixData<T> | Array<Row<T>>): Matrix<T>
+/**
+ * Create an empty **mutable** matrix with the given number of rows and columns
+ * @param rows the number of the row
+ * @param columns the number of the columns
+ * @return {Matrix<T>} a new empty matrix
+ */
+export function mutableMatrix<T>(rows: number, columns: number): Matrix<T>
+export function mutableMatrix<T>(rows: number, columns: number, fill: T): Matrix<T>
+export function mutableMatrix<T>(arrayOrRows: Array<Array<T>> | MatrixData<T> | Array<Row<T>>|number, columns?: number, fill?: T): Matrix<T>{
+    let factory: MatrixFactory = MutableRowBasedMatrix.factory
+    if(typeof  arrayOrRows == "number") {
+        return factory.createMatrix(arrayOrRows, columns, fill)
+    } else {
+        return factory.createMatrix(arrayOrRows)
+    }
+}
+
 
 /**
  * Creates an empty `MatrixData` instance with the given number of `rows` and `columns`.

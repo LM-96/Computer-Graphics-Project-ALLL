@@ -1,5 +1,5 @@
 import {MatrixFactory} from "./matrix-factory";
-import {Couple} from "../../types/types";
+import {Couple} from "../../types/pair";
 import {Column, NumMatrix, Row} from "./matrix-types";
 import {Equatable} from "../../types/equatable";
 import {Cloneable} from "../../types/cloneable"

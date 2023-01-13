@@ -24,17 +24,8 @@ console.log("re-created by flatten: " + Matrix.flattenAsMatrix(matrix.flatten(Fl
 // console.log("transposed cofactor matrix. " + matrix.getCofactorMatrix().transpose().toString())
 // console.log("inverse: " + matrix.invert().toString())
 
-import {assertEquals, assertFalse, assertTrue, Test, TestCase} from "./test/TestTs";
+import {Angle, AngleUnit} from "./geometry/angle";
 
-@TestCase
-class MyTestCase {
-    myString: string = "hello"
-    myNumber: number = 10
-    myBool: boolean = false
-
-    @Test() testString() { assertEquals("hello", this.myString) }
-
-    @Test() testNumber() { assertEquals(5, this.myNumber) }
-
-    @Test() testBool() { assertTrue(this.myBool); assertFalse(!this.myBool) }
-}
+let angle1 = new Angle(180, AngleUnit.DEG)
+let angle2 = new Angle(Math.PI, AngleUnit.RAD)
+console.log(angle1.equals(angle2))
