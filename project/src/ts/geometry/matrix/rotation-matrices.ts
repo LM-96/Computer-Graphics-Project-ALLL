@@ -1,6 +1,7 @@
 import {Angle, AngleUnit} from "../angle";
 import {NumMatrix} from "./matrix-types";
-import {matrix} from "./matrix-factory";
+import {matrix} from "./matrix";
+import {Axis} from "../axis";
 
 export class RotationMatrices {
     /**

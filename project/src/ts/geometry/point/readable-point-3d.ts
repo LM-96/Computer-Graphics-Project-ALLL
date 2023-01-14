@@ -1,6 +1,8 @@
 /**
  * A point in a 3D reference system that is only readable
  */
+import {Axis} from "../axis";
+
 export interface ReadablePoint3D {
 
     /**

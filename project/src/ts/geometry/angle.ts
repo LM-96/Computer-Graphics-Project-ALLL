@@ -3,18 +3,16 @@
  */
 import {Cloneable} from "../types/cloneable";
 import {Equatable} from "../types/equatable";
-import {AbstractFunctionalObject} from "../types/functional";
 
 export enum AngleUnit {
     RAD = "rad", DEG = "deg"
 }
 
-export class Angle extends AbstractFunctionalObject<Angle> implements Cloneable<Angle>, Equatable {
+export class Angle implements Cloneable<Angle>, Equatable {
     #value: number
     #unit: AngleUnit
 
     constructor(value: number, unit: AngleUnit) {
-        super()
         this.#value = value
         this.#unit = unit
     }
@@ -254,7 +252,8 @@ export function angle(value: number, unit: AngleUnit = AngleUnit.RAD): Angle {
  * @return {number} the value of the angle in degree
  */
 export function rad2Deg(angle: number): number {
-    return (180*angle)/Math.PI
+    //return (180*angle)/Math.PI
+    return
 }
 
 /**

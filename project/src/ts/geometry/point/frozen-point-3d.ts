@@ -5,6 +5,7 @@ import {MutablePoint3D} from "./mutable-point-3d";
 import {Angle} from "../angle";
 import {RotationMatrices} from "../matrix/rotation-matrices";
 import {NumMatrix} from "../matrix/matrix-types";
+import {Axis} from "../axis"
 
 /**
  * The frozen implementation of a point in 3D reference system.

@@ -1,5 +1,4 @@
-import {matrix} from "./geometry/matrix/matrix-factory";
-import {Matrix} from "./geometry/matrix/matrix";
+import {Matrix, matrix} from "./geometry/matrix/matrix";
 import {MutableRowBasedMatrix} from "./geometry/matrix/mutable-row-based-matrix";
 import {FrozenRowBasedMatrix} from "./geometry/matrix/frozen-row-based-matrix";
 import {MatrixData, NumMatrix} from "./geometry/matrix/matrix-types";

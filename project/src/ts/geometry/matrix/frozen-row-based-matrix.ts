@@ -1,6 +1,5 @@
 import {AbstractMatrix} from "./abstract-matrix";
-import {Matrix} from "./matrix";
-import {checkValidMatrixData, matrixData, MatrixFactory} from "./matrix-factory";
+import {Matrix, checkValidMatrixData, matrixData, MatrixFactory} from "./matrix";
 import {NumMatrix, Column, Row, MatrixData} from "./matrix-types";
 import {MatrixAlgebra} from "./matrix-algebra";
 import {InvalidRowException} from "./exceptions/invalid-row-exception";

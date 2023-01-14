@@ -1,9 +1,9 @@
-import {AbstractFunctionalObject} from "../../types/functional";
 import {Point3D, samePoints} from "./point-3d";
 import {ReadablePoint3D} from "./readable-point-3d";
 import {NumMatrix} from "../matrix/matrix-types";
-import {frozenMatrix} from "../matrix/matrix-factory";
+import {frozenMatrix} from "../matrix/matrix";
 import {Angle} from "../angle";
+import {Axis} from "../axis";
 
 /**
  * The abstract implementation of a `Point3D`.
@@ -16,7 +16,7 @@ import {Angle} from "../angle";
  * - **mutable**: in this case is possible to modify the values of the internal coordinates using all the
  * method for these kind of purposes; these methods will return `this`
  */
-export abstract class AbstractPoint3D extends AbstractFunctionalObject<Point3D> implements Point3D {
+export abstract class AbstractPoint3D implements Point3D {
 
     abstract getCoordinate(axis: Axis): number
     abstract dilateCoordinate(dilation: number, axis: Axis): Point3D;
@@ -91,11 +91,11 @@ export abstract class AbstractPoint3D extends AbstractFunctionalObject<Point3D> 
     }
 
     rotateAroundY(angle: Angle): Point3D {
-        return this.rotateAround(Axis.X, angle)
+        return this.rotateAround(Axis.Y, angle)
     }
 
     rotateAroundZ(angle: Angle): Point3D {
-        return this.rotateAround(Axis.X, angle)
+        return this.rotateAround(Axis.Z, angle)
     }
 
     set(newX: number | null, newY: number | null, newZ: number | null): Point3D {

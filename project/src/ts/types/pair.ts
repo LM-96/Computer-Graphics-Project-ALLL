@@ -1,11 +1,9 @@
-import {AbstractFunctionalObject} from "./functional";
 import {IndexOutOfBoundException} from "./exceptions/index-out-of-bound-exception";
 import {Equatable} from "./equatable";
 import {Cloneable, tryClone} from "./cloneable";
 import {Copiable} from "./copiable";
-import {Matrix} from "../geometry/matrix/matrix";
+import {Matrix, matrix} from "../geometry/matrix/matrix";
 import {MatrixData} from "../geometry/matrix/matrix-types";
-import {matrix} from "../geometry/matrix/matrix-factory";
 
 /**
  * An enumeration that allow to access the element to a specific position
@@ -18,14 +16,12 @@ enum PairPosition {
 /**
  * A pair of two elements
  */
-export class Pair<F, S> extends AbstractFunctionalObject<Pair<F, S>>
-    implements Equatable, Cloneable<Pair<F, S>>, Copiable<Pair<F, S>>{
+export class Pair<F, S> implements Equatable, Cloneable<Pair<F, S>>, Copiable<Pair<F, S>>{
 
     #first?: F|null = null
     #second?: S|null = null
 
     constructor(first?: F|null, second?: S|null) {
-        super();
         this.#first = first
         this.#second = second
     }

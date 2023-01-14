@@ -4,6 +4,7 @@ import {FrozenPoint3D} from "./frozen-point-3d";
 import {Angle} from "../angle";
 import {NumMatrix} from "../matrix/matrix-types";
 import {RotationMatrices} from "../matrix/rotation-matrices";
+import {Axis} from "../axis";
 
 /**
  * The implementation of a mutable point in a 3D reference system.
@@ -91,7 +92,7 @@ export class MutablePoint3D extends AbstractPoint3D implements Point3D {
     }
 
     rotateAround(axis: Axis, angle: Angle): Point3D {
-        let rotated: NumMatrix = this.asColumnVector().multiply(RotationMatrices.R(axis, angle))
+        let rotated: NumMatrix = RotationMatrices.R(axis, angle).multiply(this.asColumnVector())
         this.#x = rotated.get(0, 0)
         this.#y = rotated.get(1, 0)
         this.#z = rotated.get(2, 0)

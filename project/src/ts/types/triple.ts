@@ -1,13 +1,9 @@
-import {AbstractFunctionalObject} from "./functional";
 import {Equatable} from "./equatable";
 import {IndexOutOfBoundException} from "./exceptions/index-out-of-bound-exception";
 import {Cloneable, tryClone} from "./cloneable";
 import {Copiable} from "./copiable";
-import {Matrix} from "../geometry/matrix/matrix";
+import {Matrix, matrix} from "../geometry/matrix/matrix";
 import {MatrixData} from "../geometry/matrix/matrix-types";
-import {matrix} from "../geometry/matrix/matrix-factory";
-import {Couple, Pair} from "./pair";
-import {AbstractMatrix} from "../geometry/matrix/abstract-matrix";
 
 /**
  * An enumeration that allow to access the element to a specific position
@@ -20,15 +16,13 @@ enum TriplePosition {
 /***
  * A set of three objects
  */
-export class Triple<F, S, T> extends AbstractFunctionalObject<Triple<F, S, T>>
-    implements Equatable, Cloneable<Triple<F, S, T>>, Copiable<Triple<F, S, T>> {
+export class Triple<F, S, T> implements Equatable, Cloneable<Triple<F, S, T>>, Copiable<Triple<F, S, T>> {
 
     #first: F|null
     #second: S|null
     #third: T|null
 
     constructor(first: F|null, second: S|null, third: T|null) {
-        super()
         this.#first = first
         this.#second = second
         this.#third = third

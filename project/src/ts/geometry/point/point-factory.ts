@@ -65,7 +65,7 @@ export class PointFactory {
      * the point is frozen (`true` by default)
      */
     static newPoint3D(x: number, y: number, z: number,
-                      frozen: boolean = false, denyModifiedCopy: boolean = true): Point3D {
+                      frozen: boolean = true, denyModifiedCopy: boolean = false): Point3D {
         if(frozen) {
             return this.newFrozenPoint3D(x, y, z, denyModifiedCopy)
         } else {
@@ -249,4 +249,16 @@ export function mutablePoint3D(xOrData: number|Trio<number>|Array<number>|NumMat
         }
     }
     throw new IllegalArgumentException("invalid parameter type [" + getTypeName(xOrData) + "]")
+}
+
+/**
+ * Creates and returns a new `Point3D` that is located into the **origin** (0, 0, 0)
+ * @param {boolean} frozen a flag that indicates if the returning point have to be frozen (`false`
+ * by default)
+ * @param {boolean} denyModifiedCopy the flag to deny the return of a modified copy if
+ * the point is frozen (`true` by default)
+ * @return the new point that coincide with the origin
+ */
+export function origin(frozen: boolean = true, denyModifiedCopy: boolean = false): Point3D {
+    return PointFactory.newPoint3D(0, 0, 0, frozen, denyModifiedCopy)
 }

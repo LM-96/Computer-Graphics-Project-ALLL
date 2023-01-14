@@ -1,6 +1,5 @@
 import {AbstractMatrix} from "./abstract-matrix";
-import {Matrix} from "./matrix";
-import {matrixData, MatrixFactory} from "./matrix-factory";
+import {Matrix, matrixData, MatrixFactory} from "./matrix";
 import {Column, MatrixData, NumMatrix, Row} from "./matrix-types";
 import {IllegalArgumentException} from "../../types/illegal-argument-exception"
 import {InvalidColumnException} from "./exceptions/invalid-column-exception";
@@ -254,9 +253,10 @@ export class MutableRowBasedMatrix<T> extends AbstractMatrix<T> implements Matri
         return this.#totRows
     }
 
-    set(value: T, rowIndex: number, columnIndex: number) {
+    set(value: T, rowIndex: number, columnIndex: number): Matrix<T> {
         this.checkValidIndexes(rowIndex, columnIndex)
         this.#data[rowIndex][columnIndex] = value
+        return this
     }
 
     setColumn(column: Column<T>, columnIndex: number): Matrix<T> {

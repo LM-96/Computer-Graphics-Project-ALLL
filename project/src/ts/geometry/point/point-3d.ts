@@ -1,9 +1,8 @@
-import {FunctionalObject} from "../../types/functional";
 import {ReadablePoint3D} from "./readable-point-3d";
 import {Cloneable} from "../../types/cloneable";
-import {Matrix} from "../matrix/matrix";
 import {NumMatrix} from "../matrix/matrix-types";
 import {Angle} from "../angle";
+import {Axis} from "../axis";
 
 /**
  * A point in a 3D system reference.
@@ -16,7 +15,7 @@ import {Angle} from "../angle";
  * - **mutable**: in this case is possible to modify the values of the internal coordinates using all the
  * method for these kind of purposes; these methods will return `this`
  */
-export interface Point3D extends ReadablePoint3D, FunctionalObject<Point3D>, Cloneable<Point3D> {
+export interface Point3D extends ReadablePoint3D, Cloneable<Point3D> {
 
     /**
      * Sets the value of the coordinate of he specified axis of this point

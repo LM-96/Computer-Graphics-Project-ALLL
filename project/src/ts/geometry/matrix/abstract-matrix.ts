@@ -1,8 +1,7 @@
-import {FlatType, Matrix} from "./matrix";
+import {FlatType, Matrix, matrixData, MatrixFactory} from "./matrix";
 import {Column, MatrixData, NumMatrix, Row} from "./matrix-types";
 import {IllegalColumnIndexException} from "./exceptions/illegal-column-index-exception";
 import {IllegalRowIndexException} from "./exceptions/illegal-row-index-exception";
-import {matrixData, MatrixFactory} from "./matrix-factory";
 import {IllegalArgumentException} from "../../types/illegal-argument-exception";
 import {Equatable} from "../../types/equatable";
 import {Cloneable} from "../../types/cloneable";
@@ -333,9 +332,9 @@ export abstract class AbstractMatrix<T> implements Matrix<T>, Cloneable<Matrix<T
         return this.rowSize() == other.rowSize() && this.columnSize() == other.columnSize()
     }
 
-    abstract set(value: T, rowIndex: number, columnIndex: number);
+    abstract set(value: T, rowIndex: number, columnIndex: number): Matrix<T>;
 
-    abstract setColumn(column: Column<T>, columnIndex: number);
+    abstract setColumn(column: Column<T>, columnIndex: number): Matrix<T>;
 
     abstract setRow(row: Row<T>, rowIndex: number): Matrix<T>;
 

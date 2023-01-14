@@ -33,7 +33,7 @@ export function Test() {
  * executed
  */
 export function TestCase<T extends { new(...args: any[]): {} }>(clazz: T) {
-    let instance = new clazz()
+    let instance: any = new clazz()
 
     let lines: Array<string> = new Array<string>()
     let passed: Array<string> = new Array<string>()

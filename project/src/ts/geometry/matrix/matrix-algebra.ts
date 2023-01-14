@@ -1,7 +1,6 @@
 import {MatrixData, NumMatrix} from "./matrix-types";
-import {identityMatrix, matrix, matrixData} from "./matrix-factory";
 import {IllegalArgumentException} from "../../types/illegal-argument-exception";
-import {Matrix} from "./matrix";
+import {Matrix, identityMatrix, matrix, matrixData} from "./matrix";
 import {NotInvertibleMatrixException, NotInvertibleReason} from "./exceptions/not-invertible-matrix-exception";
 
 /**
@@ -128,18 +127,19 @@ export class MatrixAlgebra {
             }
         } else {
             let mat2: NumMatrix = <NumMatrix> mat2OrScalar
-            if(mat1.columnSize() != mat2.columnSize()) {
+            if(mat1.columnSize() != mat2.rowSize()) {
                 throw new IllegalArgumentException("illegal matrix to be multiplied: this matrix has columns " +
                     mat1.columnSize() + " while the argument has rows " + mat2.rowSize())
             }
-            res = matrix<number>(mat1.rowSize(), mat2.columnSize(), 0)
-            for (let rT = 0; rT < mat1.rowSize(); rT++) {
-                for (let cO = 0; cO < mat1.rowSize(); cO++) {
-                    for (let rO = 0; rO < mat2.rowSize(); rO++) {
-                        res.set(res.get(rT, cO) + mat1.get(rT, rO) * mat2.get(rO, cO), rT, cO)
+            let data: MatrixData<number> = matrixData(mat1.rowSize(), mat2.columnSize(), 0)
+            for(let i = 0; i < mat1.rowSize(); i++) {
+                for(let j = 0; j < mat2.columnSize(); j++) {
+                    for(let k = 0; k < mat2.rowSize(); k++) {
+                        data[i][j] += mat1.get(i, k)*mat2.get(k, j)
                     }
                 }
             }
+            res = matrix(data)
         }
 
         return res
