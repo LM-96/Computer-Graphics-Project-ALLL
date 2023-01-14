@@ -2,26 +2,101 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/project/src/ts/geometry/angle.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/angle-unit.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/angle-unit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/angle-unit.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/angle-unit.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-factory.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-factory.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-factory.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-factory.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/abstract-point-3d.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/point/abstract-point-3d.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/abstract-point-3d.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/point/abstract-point-3d.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/frozen-point-3d.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/point/frozen-point-3d.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/frozen-point-3d.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/point/frozen-point-3d.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/point-3d.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/geometry/point/point-3d.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/js/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/js/test.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/angle-unit.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix-factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix-factory.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/point/abstract-point-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/point/abstract-point-3d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/angle-unit.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/angle-unit.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/angle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/angle.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/axis.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/axis.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/abstract-matrix.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/abstract-matrix.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/exceptions/illegal-column-index-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/exceptions/illegal-column-index-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/exceptions/illegal-row-index-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/exceptions/illegal-row-index-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/exceptions/invalid-column-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/exceptions/invalid-column-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/exceptions/invalid-row-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/exceptions/invalid-row-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/exceptions/not-invertible-matrix-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/exceptions/not-invertible-matrix-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/frozen-row-based-matrix.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/frozen-row-based-matrix.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-algebra.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-algebra.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-factory.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-factory.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-types.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix-types.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/matrix.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/mutable-row-based-matrix.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/mutable-row-based-matrix.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/rotation-matrices.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/matrix/rotation-matrices.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/ObservablePoint3D.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/ObservablePoint3D.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/abstract-point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/abstract-point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/frozen-point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/frozen-point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/mutable-point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/mutable-point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/observable-point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/observable-point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/point-factory.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/point-factory.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/readable-point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/geometry/point/readable-point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/main-test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/main-test.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/test.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/test/TestTs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/test/TestTs.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/Mutability.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/Mutability.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/arrays.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/arrays.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/cloneable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/cloneable.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/constructor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/constructor.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/copiable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/copiable.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/equatable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/equatable.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/exceptions/InvalidIndexException.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/exceptions/InvalidIndexException.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/exceptions/index-out-of-bound-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/exceptions/index-out-of-bound-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/functional.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/functional.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/illegal-argument-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/illegal-argument-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/illegal-modification-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/illegal-modification-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/pair.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/pair.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/triple.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/triple.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/types.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/js/types/types.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/matrix/mutable-row-based-matrix.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/matrix/mutable-row-based-matrix.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/matrix/rotation-matrices.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/matrix/rotation-matrices.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/point/frozen-point-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/point/frozen-point-3d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/point/point-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/point/point-3d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/point/mutable-point-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/point/mutable-point-3d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/point/point-factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/point/point-factory.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/main-test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/main-test.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/types/triple.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/types/triple.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,8 +106,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="tsconfig.json" />
+        <option value="JavaScript File" />
         <option value="TypeScript File" />
+        <option value="tsconfig.json" />
       </list>
     </option>
   </component>
@@ -50,44 +126,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/mnt/Data/Users/Luca/Download/idea-run-typescript.jar&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/usr/local/lib/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/mnt/Data/Users/Luca/Download/idea-run-typescript.jar",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "settings.typescriptcompiler",
+    "ts.external.directory.path": "/home/luca/.local/share/JetBrains/Toolbox/apps/WebStorm/ch-0/222.4345.14/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/project/src/ts" />
+      <recent name="$PROJECT_DIR$/project/src" />
+      <recent name="$PROJECT_DIR$/project" />
       <recent name="$PROJECT_DIR$/project/src/ts/geometry/matrix" />
       <recent name="$PROJECT_DIR$/project/src/ts/types" />
-      <recent name="$PROJECT_DIR$/project/lib/js" />
-      <recent name="$PROJECT_DIR$/project/public/css" />
-      <recent name="$PROJECT_DIR$/project/public/js" />
     </key>
   </component>
-  <component name="RunManager" selected="Node.js.test.js (1)">
-    <configuration name="main-test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/project/public/js/main-test.js" working-dir="$PROJECT_DIR$/project/public/js">
+  <component name="RunManager" selected="JavaScript Debug.test.html">
+    <configuration name="test.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Computer-Graphics-Project-ALLL/project/src/ts/test.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
     <configuration name="main-test.ts" type="NodeJSConfigurationType" temporary="true" node-parameters="--require ts-node/register " path-to-js-file="$PROJECT_DIR$/project/src/ts/main-test.ts" working-dir="$PROJECT_DIR$/project/src/ts">
       <method v="2" />
     </configuration>
     <configuration name="test.js (1)" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/project/public/js/test.js" working-dir="$PROJECT_DIR$/project/public/js">
-      <method v="2" />
-    </configuration>
-    <configuration name="types.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/project/public/js/types.js" working-dir="$PROJECT_DIR$/project/public/js">
       <method v="2" />
     </configuration>
     <configuration name="main-test.ts" type="TypeScriptProgramRunner" factoryName="TypeScript" temporary="true">
@@ -102,13 +175,26 @@
       <option name="programParameters" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test.ts" type="TypeScriptProgramRunner" factoryName="TypeScript" temporary="true">
+      <module name="Computer-Graphics-Project-ALLL" />
+      <option name="interpreterRef" value="project" />
+      <option name="enabledTsNodeEsmLoader" value="false" />
+      <option name="interpreterOptions" value="" />
+      <option name="workingDirectory" value="$PROJECT_DIR$/project/src/ts" />
+      <option name="tsconfigFile" value="" />
+      <option name="extraTypeScriptOptions" value="" />
+      <option name="scriptName" value="$PROJECT_DIR$/project/src/ts/test.ts" />
+      <option name="programParameters" value="" />
+      <option name="tsnodePackage" value="~/Github/Computer-Graphics-Project-ALLL/node_modules/ts-node" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JavaScript Debug.test.html" />
+        <item itemvalue="TypeScript.test.ts" />
         <item itemvalue="Node.js.test.js (1)" />
         <item itemvalue="Node.js.main-test.ts" />
         <item itemvalue="TypeScript.main-test.ts" />
-        <item itemvalue="Node.js.main-test.js" />
-        <item itemvalue="Node.js.types.js" />
       </list>
     </recent_temporary>
   </component>
@@ -139,12 +225,90 @@
       <workItem from="1673531266801" duration="5852000" />
       <workItem from="1673545084177" duration="2094000" />
       <workItem from="1673602371100" duration="945000" />
-      <workItem from="1673603427247" duration="7639000" />
+      <workItem from="1673603427247" duration="12635000" />
+      <workItem from="1673695563521" duration="691000" />
+      <workItem from="1673696266535" duration="3633000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/project/src/ts/test.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix-types.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/mutable-row-based-matrix.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix-factory.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/frozen-row-based-matrix.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix-algebra.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/abstract-matrix.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/rotation-matrices.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/exceptions/illegal-row-index-exception.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/exceptions/invalid-column-exception.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/exceptions/invalid-row-exception.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/exceptions/not-invertible-matrix-exception.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/exceptions/illegal-column-index-exception.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/angle.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/mutable-point-3d.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/readable-point-3d.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/frozen-point-3d.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/point-3d.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/abstract-point-3d.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/exceptions/index-out-of-bound-exception.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/pair.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/arrays.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/illegal-modification-exception.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/equatable.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/illegal-argument-exception.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/functional.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/copiable.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/cloneable.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/constructor.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/point-factory.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/types.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/triple.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/test/TestTs.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/axis.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/main-test.js" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/exceptions/invalid-row-exception.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/exceptions/invalid-column-exception.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/exceptions/illegal-row-index-exception.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/exceptions/not-invertible-matrix-exception.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/exceptions/illegal-column-index-exception.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/main-test.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/test.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/test/TestTs.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/equatable.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/constructor.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/types.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/triple.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/copiable.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/cloneable.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/illegal-modification-exception.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/pair.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/functional.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/arrays.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/illegal-argument-exception.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/angle.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/axis.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/types/exceptions/index-out-of-bound-exception.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/mutable-point-3d.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/abstract-point-3d.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/readable-point-3d.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/point-factory.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/frozen-point-3d.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/point/point-3d.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/frozen-row-based-matrix.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix-types.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix-factory.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix-algebra.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/abstract-matrix.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/rotation-matrices.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/mutable-row-based-matrix.js.map" />
+        <option value="$PROJECT_DIR$/project/src/ts/geometry/matrix/matrix.js.map" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

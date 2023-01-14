@@ -16,6 +16,7 @@ exports.MutablePoint3D = void 0;
 const abstract_point_3d_1 = require("./abstract-point-3d");
 const point_3d_1 = require("./point-3d");
 const frozen_point_3d_1 = require("./frozen-point-3d");
+const rotation_matrices_1 = require("../matrix/rotation-matrices");
 /**
  * The implementation of a mutable point in a 3D reference system.
  * This class extends `AbstractPoint3D` and implements `Point3D`.
@@ -92,6 +93,13 @@ class MutablePoint3D extends abstract_point_3d_1.AbstractPoint3D {
                 break;
             }
         }
+        return this;
+    }
+    rotateAround(axis, angle) {
+        let rotated = this.asColumnVector().multiply(rotation_matrices_1.RotationMatrices.R(axis, angle));
+        __classPrivateFieldSet(this, _MutablePoint3D_x, rotated.get(0, 0), "f");
+        __classPrivateFieldSet(this, _MutablePoint3D_y, rotated.get(1, 0), "f");
+        __classPrivateFieldSet(this, _MutablePoint3D_z, rotated.get(2, 0), "f");
         return this;
     }
     frozen(denyModifiedCopy = true) {

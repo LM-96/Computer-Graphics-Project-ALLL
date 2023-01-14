@@ -7,6 +7,7 @@ import {Matrix} from "../geometry/matrix/matrix";
 import {MatrixData} from "../geometry/matrix/matrix-types";
 import {matrix} from "../geometry/matrix/matrix-factory";
 import {Couple, Pair} from "./pair";
+import {AbstractMatrix} from "../geometry/matrix/abstract-matrix";
 
 /**
  * An enumeration that allow to access the element to a specific position

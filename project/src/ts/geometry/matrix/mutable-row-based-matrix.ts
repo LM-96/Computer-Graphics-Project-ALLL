@@ -1,4 +1,3 @@
-import {Couple} from "../../types/types";
 import {AbstractMatrix} from "./abstract-matrix";
 import {Matrix} from "./matrix";
 import {matrixData, MatrixFactory} from "./matrix-factory";

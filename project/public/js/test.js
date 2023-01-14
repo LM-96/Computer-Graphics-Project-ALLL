@@ -23,8 +23,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // console.log("cofactor matrix: " + matrix.getCofactorMatrix().toString())
 // console.log("transposed cofactor matrix. " + matrix.getCofactorMatrix().transpose().toString())
 // console.log("inverse: " + matrix.invert().toString())
-const angle_1 = require("./geometry/angle");
-let angle1 = new angle_1.Angle(180, angle_1.AngleUnit.DEG);
-let angle2 = new angle_1.Angle(Math.PI, angle_1.AngleUnit.RAD);
-console.log(angle1.equals(angle2));
+const hello_1 = require("../../lib/js/hello");
+console.log('started');
+(0, hello_1.sayHello)();
 //# sourceMappingURL=test.js.map

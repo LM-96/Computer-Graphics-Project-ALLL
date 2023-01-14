@@ -1,11 +1,10 @@
-import {matrix, MatrixFactory} from "./geometry/matrix/matrix-factory";
+import {matrix} from "./geometry/matrix/matrix-factory";
 import {Matrix} from "./geometry/matrix/matrix";
 import {MutableRowBasedMatrix} from "./geometry/matrix/mutable-row-based-matrix";
 import {FrozenRowBasedMatrix} from "./geometry/matrix/frozen-row-based-matrix";
 import {MatrixData, NumMatrix} from "./geometry/matrix/matrix-types";
 import {Arrays} from "./types/arrays";
 import {assertEquals, Test, TestCase} from "./test/TestTs";
-import {MatrixAlgebra} from "./geometry/matrix/matrix-algebra";
 
 @TestCase
 class MatrixTestCase {

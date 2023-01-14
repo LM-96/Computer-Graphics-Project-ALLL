@@ -24,8 +24,7 @@ console.log("re-created by flatten: " + Matrix.flattenAsMatrix(matrix.flatten(Fl
 // console.log("transposed cofactor matrix. " + matrix.getCofactorMatrix().transpose().toString())
 // console.log("inverse: " + matrix.invert().toString())
 
-import {Angle, AngleUnit} from "./geometry/angle";
+import {sayHello} from "../../lib/js/hello";
 
-let angle1 = new Angle(180, AngleUnit.DEG)
-let angle2 = new Angle(Math.PI, AngleUnit.RAD)
-console.log(angle1.equals(angle2))
+console.log('started')
+sayHello()

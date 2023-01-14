@@ -46,6 +46,13 @@ class RotationMatrices {
             [0, 0, 1]
         ]);
     }
+    /**
+     * Return the matrix for the elementary rotation around the specified axis for the specified axis.
+     * Multiply a point for this matrix will return the coordinates of the point after the rotation
+     * @param {Axis} axis the axis around which the rotation is desired to be performed
+     * @param {Angle} angle the angle of the rotation
+     * @return {NumMatrix} the matrix for the rotation
+     */
     static R(axis, angle) {
         switch (axis) {
             case Axis.X: {

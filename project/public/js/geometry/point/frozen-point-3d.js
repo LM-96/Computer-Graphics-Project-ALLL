@@ -84,7 +84,8 @@ class FrozenPoint3D extends abstract_point_3d_1.AbstractPoint3D {
         }
     }
     rotateAround(axis, angle) {
-        return this.asColumnVector().multiply(rotation_matrices_1.RotationMatrices.R(axis, angle));
+        let rotated = this.asColumnVector().multiply(rotation_matrices_1.RotationMatrices.R(axis, angle));
+        return new FrozenPoint3D(rotated.get(0, 0), rotated.get(1, 0), rotated.get(2, 0), __classPrivateFieldGet(this, _FrozenPoint3D_denyModCopy, "f"));
     }
     getCoordinate(axis) {
         switch (axis) {

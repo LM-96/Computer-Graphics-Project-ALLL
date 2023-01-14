@@ -3,8 +3,8 @@ import {AbstractPoint3D} from "./abstract-point-3d";
 import {IllegalModificationException} from "../../types/illegal-modification-exception";
 import {MutablePoint3D} from "./mutable-point-3d";
 import {Angle} from "../angle";
-import {Matrix} from "../matrix/matrix";
 import {RotationMatrices} from "../matrix/rotation-matrices";
+import {NumMatrix} from "../matrix/matrix-types";
 
 /**
  * The frozen implementation of a point in 3D reference system.
@@ -88,7 +88,9 @@ export class FrozenPoint3D extends AbstractPoint3D implements Point3D{
     }
 
     rotateAround(axis: Axis, angle: Angle): Point3D {
-        return this.asColumnVector().multiply(RotationMatrices.R(axis, angle))
+        let rotated: NumMatrix = this.asColumnVector().multiply(RotationMatrices.R(axis, angle))
+        return new FrozenPoint3D(rotated.get(0, 0), rotated.get(1, 0),
+            rotated.get(2, 0), this.#denyModCopy)
     }
 
     getCoordinate(axis: Axis): number {

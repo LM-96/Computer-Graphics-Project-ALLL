@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "target": "es2020",
+        "sourceMap": true,
+        "outDir": "public/js",
+        "outFile": "public/bundle.js",
+        "experimentalDecorators": true
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "src", "lib"
+    ]
+}
