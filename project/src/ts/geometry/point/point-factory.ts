@@ -3,7 +3,7 @@ import {FrozenPoint3D} from "./frozen-point-3d";
 import {MutablePoint3D} from "./mutable-point-3d";
 import {Trio, Triple} from "../../types/triple";
 import {NumMatrix} from "../matrix/matrix-types";
-import {IllegalArgumentException} from "../../types/illegal-argument-exception";
+import {IllegalArgumentException} from "../../types/exceptions/illegal-argument-exception";
 import {AbstractMatrix} from "../matrix/abstract-matrix";
 import {getTypeName} from "../../types/types";
 

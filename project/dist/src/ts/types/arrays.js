@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Arrays = void 0;
-const illegal_argument_exception_1 = require("./illegal-argument-exception");
+const illegal_argument_exception_1 = require("./exceptions/illegal-argument-exception");
 class Arrays {
     /**
      * Copies the `src` array into `dst`.

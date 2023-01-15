@@ -1,7 +1,7 @@
 import {AbstractMatrix} from "./abstract-matrix";
 import {Matrix, matrixData, MatrixFactory} from "./matrix";
 import {Column, MatrixData, NumMatrix, Row} from "./matrix-types";
-import {IllegalArgumentException} from "../../types/illegal-argument-exception"
+import {IllegalArgumentException} from "../../types/exceptions/illegal-argument-exception"
 import {InvalidColumnException} from "./exceptions/invalid-column-exception";
 import {InvalidRowException} from "./exceptions/invalid-row-exception";
 import {MatrixAlgebra} from "./matrix-algebra";

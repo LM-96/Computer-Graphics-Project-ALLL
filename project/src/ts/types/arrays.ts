@@ -1,4 +1,4 @@
-import {IllegalArgumentException} from "./illegal-argument-exception";
+import {IllegalArgumentException} from "./exceptions/illegal-argument-exception";
 
 export class Arrays {
 

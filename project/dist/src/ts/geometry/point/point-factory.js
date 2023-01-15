@@ -4,7 +4,7 @@ exports.origin = exports.mutablePoint3D = exports.frozenPoint3D = exports.point3
 const frozen_point_3d_1 = require("./frozen-point-3d");
 const mutable_point_3d_1 = require("./mutable-point-3d");
 const triple_1 = require("../../types/triple");
-const illegal_argument_exception_1 = require("../../types/illegal-argument-exception");
+const illegal_argument_exception_1 = require("../../types/exceptions/illegal-argument-exception");
 const abstract_matrix_1 = require("../matrix/abstract-matrix");
 const types_1 = require("../../types/types");
 /**

@@ -1,0 +1,1 @@
+{"version":3,"file":"illegal-argument-exception.js","sourceRoot":"","sources":["../../../../../src/ts/types/exceptions/illegal-argument-exception.ts"],"names":[],"mappings":";;;AAAA;;GAEG;AACH,MAAa,wBAAyB,SAAQ,KAAK;IAE/C,YAAY,GAAW;QACnB,KAAK,CAAC,GAAG,CAAC,CAAC;QACX,MAAM,CAAC,cAAc,CAAC,IAAI,EAAE,wBAAwB,CAAC,SAAS,CAAC,CAAA;IACnE,CAAC;CAEJ;AAPD,4DAOC"}

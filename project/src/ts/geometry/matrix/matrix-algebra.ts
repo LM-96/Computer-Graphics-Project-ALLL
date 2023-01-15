@@ -1,5 +1,5 @@
 import {MatrixData, NumMatrix} from "./matrix-types";
-import {IllegalArgumentException} from "../../types/illegal-argument-exception";
+import {IllegalArgumentException} from "../../types/exceptions/illegal-argument-exception";
 import {Matrix, identityMatrix, matrix, matrixData} from "./matrix";
 import {NotInvertibleMatrixException, NotInvertibleReason} from "./exceptions/not-invertible-matrix-exception";
 

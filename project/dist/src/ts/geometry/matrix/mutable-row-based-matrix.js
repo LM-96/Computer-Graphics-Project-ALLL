@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MutableRowBasedMatrix = void 0;
 const abstract_matrix_1 = require("./abstract-matrix");
 const matrix_1 = require("./matrix");
-const illegal_argument_exception_1 = require("../../types/illegal-argument-exception");
+const illegal_argument_exception_1 = require("../../types/exceptions/illegal-argument-exception");
 const invalid_column_exception_1 = require("./exceptions/invalid-column-exception");
 const invalid_row_exception_1 = require("./exceptions/invalid-row-exception");
 const matrix_algebra_1 = require("./matrix-algebra");

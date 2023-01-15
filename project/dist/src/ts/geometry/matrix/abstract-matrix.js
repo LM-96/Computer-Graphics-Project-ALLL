@@ -4,7 +4,7 @@ exports.AbstractMatrix = void 0;
 const matrix_1 = require("./matrix");
 const illegal_column_index_exception_1 = require("./exceptions/illegal-column-index-exception");
 const illegal_row_index_exception_1 = require("./exceptions/illegal-row-index-exception");
-const illegal_argument_exception_1 = require("../../types/illegal-argument-exception");
+const illegal_argument_exception_1 = require("../../types/exceptions/illegal-argument-exception");
 const pair_1 = require("../../types/pair");
 class AbstractMatrix {
     checkValidColumnIndex(columnIndex, throwError) {

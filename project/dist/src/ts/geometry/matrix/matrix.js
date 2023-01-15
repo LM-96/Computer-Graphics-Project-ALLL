@@ -110,7 +110,7 @@ class MatrixFactory {
 exports.MatrixFactory = MatrixFactory;
 const frozen_row_based_matrix_1 = require("./frozen-row-based-matrix");
 const mutable_row_based_matrix_1 = require("./mutable-row-based-matrix");
-const illegal_argument_exception_1 = require("../../types/illegal-argument-exception");
+const illegal_argument_exception_1 = require("../../types/exceptions/illegal-argument-exception");
 function matrix(arrayOrRows, columns, fill) {
     let factory = frozen_row_based_matrix_1.FrozenRowBasedMatrix.factory;
     if (typeof arrayOrRows == "number") {

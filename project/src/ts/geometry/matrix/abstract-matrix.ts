@@ -2,7 +2,7 @@ import {FlatType, Matrix, matrixData, MatrixFactory} from "./matrix";
 import {Column, MatrixData, NumMatrix, Row} from "./matrix-types";
 import {IllegalColumnIndexException} from "./exceptions/illegal-column-index-exception";
 import {IllegalRowIndexException} from "./exceptions/illegal-row-index-exception";
-import {IllegalArgumentException} from "../../types/illegal-argument-exception";
+import {IllegalArgumentException} from "../../types/exceptions/illegal-argument-exception";
 import {Equatable} from "../../types/equatable";
 import {Cloneable} from "../../types/cloneable";
 import {Couple, coupleOf} from "../../types/pair";

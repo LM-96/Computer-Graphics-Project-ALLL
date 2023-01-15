@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MatrixAlgebra = void 0;
-const illegal_argument_exception_1 = require("../../types/illegal-argument-exception");
+const illegal_argument_exception_1 = require("../../types/exceptions/illegal-argument-exception");
 const matrix_1 = require("./matrix");
 const not_invertible_matrix_exception_1 = require("./exceptions/not-invertible-matrix-exception");
 /**

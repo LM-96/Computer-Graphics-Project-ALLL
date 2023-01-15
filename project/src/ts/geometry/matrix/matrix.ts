@@ -811,7 +811,7 @@ export abstract class MatrixFactory {
 
 import {FrozenRowBasedMatrix} from "./frozen-row-based-matrix";
 import {MutableRowBasedMatrix} from "./mutable-row-based-matrix";
-import {IllegalArgumentException} from "../../types/illegal-argument-exception";
+import {IllegalArgumentException} from "../../types/exceptions/illegal-argument-exception";
 
 /**
  * Create a matrix starting from an array of array.
