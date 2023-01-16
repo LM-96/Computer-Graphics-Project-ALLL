@@ -3,36 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/m4.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/m4.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/m4.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/m4.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/math.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/math.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/math.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/math.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/rotation-matrices.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/rotation-matrices.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/rotation-matrices.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/rotation-matrices.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/frozen-point-3d.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/frozen-point-3d.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/frozen-point-3d.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/frozen-point-3d.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/equatable.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/equatable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/equatable.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/equatable.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/pair.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/pair.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/pair.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/pair.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/triple.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/triple.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/triple.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/triple.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/m4.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/m4.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/math.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/math.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/proveCubo.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/proveCubo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/public/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/public/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/angle.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/angle/angle.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/matrix/rotation-matrices.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/matrix/rotation-matrices.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/point/abstract-point-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/point/abstract-point-3d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/point/frozen-point-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/point/frozen-point-3d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/point/mutable-point-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/point/mutable-point-3d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/point/point-3d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/point/point-3d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/types/constructor.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/types/equatable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/types/equatable.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/types/illegal-argument-exception.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/types/illegal-modification-exception.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/types/exceptions/illegal-modification-exception.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/types/pair.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/types/pair.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/types/triple.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/types/triple.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +132,7 @@
       <workItem from="1673716377152" duration="1788000" />
       <workItem from="1673718209122" duration="15559000" />
       <workItem from="1673771311941" duration="9858000" />
-      <workItem from="1673814021881" duration="3375000" />
+      <workItem from="1673814021881" duration="5203000" />
     </task>
     <servers />
   </component>
