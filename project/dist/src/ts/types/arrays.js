@@ -162,6 +162,18 @@ class Arrays {
         }
         return res;
     }
+    /**
+     * Searches for the given element into the given array and removes it
+     * @param {Array<T>} array the array
+     * @param {T} obj the object to remove
+     * @return {T|null} the removed object or `null` if the object is not present into the array
+     */
+    static removeFrom(array, obj) {
+        let idx = array.indexOf(obj);
+        if (idx == -1)
+            return null;
+        return array.splice(idx, 1)[0];
+    }
 }
 exports.Arrays = Arrays;
 //# sourceMappingURL=arrays.js.map
