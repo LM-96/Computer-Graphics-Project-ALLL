@@ -1,8 +1,8 @@
 /**
  * Indicates a measurement unit for angles
  */
-import {Cloneable} from "../types/cloneable";
-import {Equatable} from "../types/equatable";
+import {Cloneable} from "../../types/cloneable";
+import {Equatable} from "../../types/equatable";
 
 export enum AngleUnit {
     RAD = "rad", DEG = "deg"

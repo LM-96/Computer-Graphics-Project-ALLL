@@ -1,7 +1,7 @@
 import {ReadablePoint3D} from "./readable-point-3d";
 import {Cloneable} from "../../types/cloneable";
 import {NumMatrix} from "../matrix/matrix-types";
-import {Angle} from "../angle";
+import {Angle} from "../angle/angle";
 import {Axis} from "../axis";
 
 /**
@@ -50,7 +50,7 @@ export interface Point3D extends ReadablePoint3D, Cloneable<Point3D> {
     /**
      * Rotates this point around the specified axis with the given angle
      * @param {Axis} axis the axis the point is rotating around
-     * @param {Angle} angle the angle of the rotation
+     * @param {Angle} angle the angle of the angle
      * @return {Point3D} `this` if this point is mutable, a modified copy if is frozen
      * @throws {IllegalModificationException} if this point is **frozen** and the
      * return of the modified copy is not allowed
@@ -201,7 +201,7 @@ export interface Point3D extends ReadablePoint3D, Cloneable<Point3D> {
 
     /**
      * Rotate this point around the `x` axis with the given angle
-     * @param {Angle} angle the angle of the rotation
+     * @param {Angle} angle the angle of the angle
      * @return {Point3D} `this` if this point is mutable, a modified copy if is frozen
      * @throws {IllegalModificationException} if this point is **frozen** and the
      * return of the modified copy is not allowed
@@ -210,7 +210,7 @@ export interface Point3D extends ReadablePoint3D, Cloneable<Point3D> {
 
     /**
      * Rotate this point around the `y` axis with the given angle
-     * @param {Angle} angle the angle of the rotation
+     * @param {Angle} angle the angle of the angle
      * @return {Point3D} `this` if this point is mutable, a modified copy if is frozen
      * @throws {IllegalModificationException} if this point is **frozen** and the
      * return of the modified copy is not allowed
@@ -219,7 +219,7 @@ export interface Point3D extends ReadablePoint3D, Cloneable<Point3D> {
 
     /**
      * Rotate this point around the `z` axis with the given angle
-     * @param {Angle} angle the angle of the rotation
+     * @param {Angle} angle the angle of the angle
      * @return {Point3D} `this` if this point is mutable, a modified copy if is frozen
      * @throws {IllegalModificationException} if this point is **frozen** and the
      * return of the modified copy is not allowed

@@ -1,4 +1,4 @@
-import {Equatable} from "./equatable";
+import {Equatable, equals} from "./equatable";
 import {IndexOutOfBoundException} from "./exceptions/index-out-of-bound-exception";
 import {Cloneable, tryClone} from "./cloneable";
 import {Copiable} from "./copiable";
@@ -9,7 +9,7 @@ import {MatrixData} from "../geometry/matrix/matrix-types";
  * An enumeration that allow to access the element to a specific position
  * in a `Pair` instance
  */
-enum TriplePosition {
+export enum TriplePosition {
     FIRST, SECOND, THIRD
 }
 
@@ -115,6 +115,35 @@ export class Triple<F, S, T> implements Equatable, Cloneable<Triple<F, S, T>>, C
      */
     switched(): Triple<T, F, S> {
         return new Triple<T, F, S>(this.#third, this.#first, this.#second)
+    }
+
+    /**
+     * Check if the given `element` is present in somewhere in this triple.<br>
+     * It is better if the types of the element of the `Triple` implements `Equatable` otherwise
+     * it will be used the `===` equality operator
+     * @param {F|S} element the element to check for the presence
+     * @return {boolean} `true` if the element id present in this pair
+     */
+    contains(element: F|S): boolean {
+        return (equals(this.#first, element) || equals(this.#second, element) || equals(this.#third, element))
+    }
+
+    /**
+     * Searches for the given `element` returning its position if present.
+     * If the element is not present, this method returns `null`.<br>
+     * It is better if the types of the element of the `Triple` implements `Equatable` otherwise
+     * it will be used the `===` equality operator
+     * @param {F|S|T} element the element to search for
+     * @return {PairPosition|null} the position of the element of `null` if not present
+     **/
+    search(element: F|S|T): TriplePosition|null {
+        if(equals(this.#first, element))
+            return TriplePosition.FIRST
+        if(equals(this.#first, element))
+            return TriplePosition.SECOND
+        if(equals(this.#third, element))
+            return TriplePosition.THIRD
+        return null
     }
 
     /**

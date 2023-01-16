@@ -1,8 +1,8 @@
 import {checkNotNullCoordinates, Point3D} from "./point-3d";
 import {AbstractPoint3D} from "./abstract-point-3d";
-import {IllegalModificationException} from "../../types/illegal-modification-exception";
+import {IllegalModificationException} from "../../types/exceptions/illegal-modification-exception";
 import {MutablePoint3D} from "./mutable-point-3d";
-import {Angle} from "../angle";
+import {Angle} from "../angle/angle";
 import {RotationMatrices} from "../matrix/rotation-matrices";
 import {NumMatrix} from "../matrix/matrix-types";
 import {Axis} from "../axis"

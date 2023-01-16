@@ -1,7 +1,7 @@
 import {AbstractPoint3D} from "./abstract-point-3d";
 import {checkNotNullCoordinates, Point3D} from "./point-3d";
 import {FrozenPoint3D} from "./frozen-point-3d";
-import {Angle} from "../angle";
+import {Angle} from "../angle/angle";
 import {NumMatrix} from "../matrix/matrix-types";
 import {RotationMatrices} from "../matrix/rotation-matrices";
 import {Axis} from "../axis";

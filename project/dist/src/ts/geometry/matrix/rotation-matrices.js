@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RotationMatrices = void 0;
-const angle_1 = require("../angle");
+const angle_1 = require("../angle/angle");
 const matrix_1 = require("./matrix");
 const axis_1 = require("../axis");
 class RotationMatrices {
     /**
-     * Returns the matrix for the elementary rotation around the `x` axis for the specified
-     * angle. Multiply a point for this matrix will return the coordinates of the point after the rotation
-     * @param {Angle} angle the angle of the rotation
-     * @return {NumMatrix} the matrix for the rotation
+     * Returns the matrix for the elementary angle around the `x` axis for the specified
+     * angle. Multiply a point for this matrix will return the coordinates of the point after the angle
+     * @param {Angle} angle the angle of the angle
+     * @return {NumMatrix} the matrix for the angle
      */
     static RX(angle) {
         let theta = angle.getValueIn(angle_1.AngleUnit.RAD);
@@ -20,10 +20,10 @@ class RotationMatrices {
         ]);
     }
     /**
-     * Returns the matrix for the elementary rotation around the `y` axis for the specified
-     * angle. Multiply a point for this matrix will return the coordinates of the point after the rotation
-     * @param {Angle} angle the angle of the rotation
-     * @return {NumMatrix} the matrix for the rotation
+     * Returns the matrix for the elementary angle around the `y` axis for the specified
+     * angle. Multiply a point for this matrix will return the coordinates of the point after the angle
+     * @param {Angle} angle the angle of the angle
+     * @return {NumMatrix} the matrix for the angle
      */
     static RY(angle) {
         let theta = angle.getValueIn(angle_1.AngleUnit.RAD);
@@ -34,10 +34,10 @@ class RotationMatrices {
         ]);
     }
     /**
-     * Returns the matrix for the elementary rotation around the `z` axis for the specified
-     * angle. Multiply a point for this matrix will return the coordinates of the point after the rotation
-     * @param {Angle} angle the angle of the rotation
-     * @return {NumMatrix} the matrix for the rotation
+     * Returns the matrix for the elementary angle around the `z` axis for the specified
+     * angle. Multiply a point for this matrix will return the coordinates of the point after the angle
+     * @param {Angle} angle the angle of the angle
+     * @return {NumMatrix} the matrix for the angle
      */
     static RZ(angle) {
         let theta = angle.getValueIn(angle_1.AngleUnit.RAD);
@@ -48,11 +48,11 @@ class RotationMatrices {
         ]);
     }
     /**
-     * Return the matrix for the elementary rotation around the specified axis for the specified axis.
-     * Multiply a point for this matrix will return the coordinates of the point after the rotation
-     * @param {Axis} axis the axis around which the rotation is desired to be performed
-     * @param {Angle} angle the angle of the rotation
-     * @return {NumMatrix} the matrix for the rotation
+     * Return the matrix for the elementary angle around the specified axis for the specified axis.
+     * Multiply a point for this matrix will return the coordinates of the point after the angle
+     * @param {Axis} axis the axis around which the angle is desired to be performed
+     * @param {Angle} angle the angle of the angle
+     * @return {NumMatrix} the matrix for the angle
      */
     static R(axis, angle) {
         switch (axis) {

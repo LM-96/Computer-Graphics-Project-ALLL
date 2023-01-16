@@ -12,10 +12,12 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _Pair_first, _Pair_second;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.coupleAsColumnArray = exports.coupleAsRowArray = exports.coupleOf = exports.pairOf = exports.Pair = void 0;
+exports.coupleAsColumnArray = exports.coupleAsRowArray = exports.coupleOf = exports.pairOf = exports.Pair = exports.PairPosition = void 0;
 const index_out_of_bound_exception_1 = require("./exceptions/index-out-of-bound-exception");
+const equatable_1 = require("./equatable");
 const cloneable_1 = require("./cloneable");
 const matrix_1 = require("../geometry/matrix/matrix");
+const triple_1 = require("./triple");
 /**
  * An enumeration that allow to access the element to a specific position
  * in a `Pair` instance
@@ -24,7 +26,7 @@ var PairPosition;
 (function (PairPosition) {
     PairPosition[PairPosition["FIRST"] = 0] = "FIRST";
     PairPosition[PairPosition["SECOND"] = 1] = "SECOND";
-})(PairPosition || (PairPosition = {}));
+})(PairPosition = exports.PairPosition || (exports.PairPosition = {}));
 /**
  * A pair of two elements
  */
@@ -90,6 +92,37 @@ class Pair {
      */
     setSecond(second) {
         __classPrivateFieldSet(this, _Pair_second, second, "f");
+    }
+    /**
+     * Adds an element to this couple producing a `Triple` with the two element of this
+     * couple *plus* the one given as parameter
+     * @param element
+     */
+    plus(element) {
+        return new triple_1.Triple(__classPrivateFieldGet(this, _Pair_first, "f"), __classPrivateFieldGet(this, _Pair_second, "f"), element);
+    }
+    /**
+     * Check if the given `element` is present in somewhere in this pair.<br>
+     * It is better if the types of the element of the `Pair` implements `Equatable` otherwise
+     * it will be used the `===` equality operator
+     * @param {F|S} element the element to check for the presence
+     * @return {boolean} `true` if the element id present in this pair
+     */
+    contains(element) {
+        return ((0, equatable_1.equals)(__classPrivateFieldGet(this, _Pair_first, "f"), element) || (0, equatable_1.equals)(__classPrivateFieldGet(this, _Pair_second, "f"), element));
+    }
+    /**
+     * Searches for the given `element` returning its position if present.<br>
+     * If the element is not present, this method returns `null`
+     * @param {F|S} element the element to search for
+     * @return {PairPosition|null} the position of the element of `null` if not present
+     **/
+    search(element) {
+        if ((0, equatable_1.equals)(__classPrivateFieldGet(this, _Pair_first, "f"), element))
+            return PairPosition.FIRST;
+        if ((0, equatable_1.equals)(__classPrivateFieldGet(this, _Pair_first, "f"), element))
+            return PairPosition.SECOND;
+        return null;
     }
     /**
      * Returns a copy of this pair which contains the same elements in this but with
@@ -166,6 +199,25 @@ class Pair {
             }
         }
         return false;
+    }
+    /**
+     * Apply the `mapper` function to this object and returns the result.
+     * This function basically let to *transforms* this object into another thanks to
+     * the `mapper` function
+     * @param {(pair: Pair<F, S>) => R} mapper the transformation function
+     * @return {R} the result of the transformation
+     */
+    map(mapper) {
+        return mapper(this);
+    }
+    /**
+     * Executes the given `block` passing this object to it, then returns this object
+     * @param {Pair<F, S>) => void} block the function to be executed on this object
+     * @return {Pair<F, S>} this object
+     */
+    apply(block) {
+        block(this);
+        return this;
     }
 }
 exports.Pair = Pair;

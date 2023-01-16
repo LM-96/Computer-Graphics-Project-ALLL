@@ -1,0 +1,1 @@
+{"version":3,"file":"illegal-modification-exception.js","sourceRoot":"","sources":["../../../../../src/ts/types/exceptions/illegal-modification-exception.ts"],"names":[],"mappings":";;;AAAA;;GAEG;AACH,MAAa,4BAA6B,SAAQ,KAAK;IAEnD,YAAY,OAAe;QACvB,KAAK,CAAC,OAAO,CAAC,CAAC;QACf,MAAM,CAAC,cAAc,CAAC,IAAI,EAAE,4BAA4B,CAAC,SAAS,CAAC,CAAA;IACvE,CAAC;CAEJ;AAPD,oEAOC"}

@@ -12,7 +12,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _Triple_first, _Triple_second, _Triple_third;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.trioAsColumnArray = exports.trioAsRowArray = exports.trioOf = exports.tripleOf = exports.Triple = void 0;
+exports.trioAsColumnArray = exports.trioAsRowArray = exports.trioOf = exports.tripleOf = exports.Triple = exports.TriplePosition = void 0;
+const equatable_1 = require("./equatable");
 const index_out_of_bound_exception_1 = require("./exceptions/index-out-of-bound-exception");
 const cloneable_1 = require("./cloneable");
 const matrix_1 = require("../geometry/matrix/matrix");
@@ -25,7 +26,7 @@ var TriplePosition;
     TriplePosition[TriplePosition["FIRST"] = 0] = "FIRST";
     TriplePosition[TriplePosition["SECOND"] = 1] = "SECOND";
     TriplePosition[TriplePosition["THIRD"] = 2] = "THIRD";
-})(TriplePosition || (TriplePosition = {}));
+})(TriplePosition = exports.TriplePosition || (exports.TriplePosition = {}));
 /***
  * A set of three objects
  */
@@ -117,6 +118,33 @@ class Triple {
      */
     switched() {
         return new Triple(__classPrivateFieldGet(this, _Triple_third, "f"), __classPrivateFieldGet(this, _Triple_first, "f"), __classPrivateFieldGet(this, _Triple_second, "f"));
+    }
+    /**
+     * Check if the given `element` is present in somewhere in this triple.<br>
+     * It is better if the types of the element of the `Triple` implements `Equatable` otherwise
+     * it will be used the `===` equality operator
+     * @param {F|S} element the element to check for the presence
+     * @return {boolean} `true` if the element id present in this pair
+     */
+    contains(element) {
+        return ((0, equatable_1.equals)(__classPrivateFieldGet(this, _Triple_first, "f"), element) || (0, equatable_1.equals)(__classPrivateFieldGet(this, _Triple_second, "f"), element) || (0, equatable_1.equals)(__classPrivateFieldGet(this, _Triple_third, "f"), element));
+    }
+    /**
+     * Searches for the given `element` returning its position if present.
+     * If the element is not present, this method returns `null`.<br>
+     * It is better if the types of the element of the `Triple` implements `Equatable` otherwise
+     * it will be used the `===` equality operator
+     * @param {F|S|T} element the element to search for
+     * @return {PairPosition|null} the position of the element of `null` if not present
+     **/
+    search(element) {
+        if ((0, equatable_1.equals)(__classPrivateFieldGet(this, _Triple_first, "f"), element))
+            return TriplePosition.FIRST;
+        if ((0, equatable_1.equals)(__classPrivateFieldGet(this, _Triple_first, "f"), element))
+            return TriplePosition.SECOND;
+        if ((0, equatable_1.equals)(__classPrivateFieldGet(this, _Triple_third, "f"), element))
+            return TriplePosition.THIRD;
+        return null;
     }
     /**
      * Collects the three element of this triple to produce a single result

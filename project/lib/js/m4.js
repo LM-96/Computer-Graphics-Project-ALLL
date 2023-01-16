@@ -582,7 +582,7 @@
   }
 
   /**
-   * Makes an x rotation matrix
+   * Makes an x angle matrix
    * @param {number} angleInRadians amount to rotate
    * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix if none provided
@@ -614,7 +614,7 @@
   }
 
   /**
-   * Multiply by an x rotation matrix
+   * Multiply by an x angle matrix
    * @param {Matrix4} m matrix to multiply
    * @param {number} angleInRadians amount to rotate
    * @param {Matrix4} [dst] optional matrix to store result
@@ -661,7 +661,7 @@
   }
 
   /**
-   * Makes an y rotation matrix
+   * Makes an y angle matrix
    * @param {number} angleInRadians amount to rotate
    * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix if none provided
@@ -693,7 +693,7 @@
   }
 
   /**
-   * Multiply by an y rotation matrix
+   * Multiply by an y angle matrix
    * @param {Matrix4} m matrix to multiply
    * @param {number} angleInRadians amount to rotate
    * @param {Matrix4} [dst] optional matrix to store result
@@ -740,7 +740,7 @@
   }
 
   /**
-   * Makes an z rotation matrix
+   * Makes an z angle matrix
    * @param {number} angleInRadians amount to rotate
    * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix if none provided
@@ -772,7 +772,7 @@
   }
 
   /**
-   * Multiply by an z rotation matrix
+   * Multiply by an z angle matrix
    * @param {Matrix4} m matrix to multiply
    * @param {number} angleInRadians amount to rotate
    * @param {Matrix4} [dst] optional matrix to store result
@@ -819,7 +819,7 @@
   }
 
   /**
-   * Makes an rotation matrix around an arbitrary axis
+   * Makes an angle matrix around an arbitrary axis
    * @param {Vector3} axis axis to rotate around
    * @param {number} angleInRadians amount to rotate
    * @param {Matrix4} [dst] optional matrix to store result
@@ -864,7 +864,7 @@
   }
 
   /**
-   * Multiply by an axis rotation matrix
+   * Multiply by an axis angle matrix
    * @param {Matrix4} m matrix to multiply
    * @param {Vector3} axis axis to rotate around
    * @param {number} angleInRadians amount to rotate
@@ -1039,7 +1039,7 @@ function flatten( v, dst)
   /**
    * creates a matrix from translation, quaternion, scale
    * @param {Number[]} translation [x, y, z] translation
-   * @param {Number[]} quaternion [x, y, z, z] quaternion rotation
+   * @param {Number[]} quaternion [x, y, z, z] quaternion angle
    * @param {Number[]} scale [x, y, z] scale
    * @param {Matrix4} [dst] optional matrix to store result
    * @return {Matrix4} dst or a new matrix if none provided
@@ -1098,7 +1098,7 @@ function flatten( v, dst)
   function quatFromRotationMatrix(m, dst) {
     // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
 
-    // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
+    // assumes the upper 3x3 of m is a pure angle matrix (i.e, unscaled)
     const m11 = m[0];
     const m12 = m[4];
     const m13 = m[8];
@@ -1153,7 +1153,7 @@ function flatten( v, dst)
     translation[1] = mat[13];
     translation[2] = mat[14];
 
-    // scale the rotation part
+    // scale the angle part
     const matrix = m4.copy(mat);
 
     const invSX = 1 / sx;
@@ -1362,7 +1362,7 @@ function flatten( v, dst)
    * Takes a 4-by-4 matrix and a vector with 3 entries, interprets the vector as a
    * direction, transforms that direction by the matrix, and returns the result;
    * assumes the transformation of 3-dimensional space represented by the matrix
-   * is parallel-preserving, i.e. any combination of rotation, scaling and
+   * is parallel-preserving, i.e. any combination of angle, scaling and
    * translation, but not a perspective distortion. Returns a vector with 3
    * entries.
    * @param {Matrix4} m The matrix.
@@ -1391,7 +1391,7 @@ function flatten( v, dst)
    * transforming that surface by the matrix. The effect of this function is the
    * same as transforming v (as a direction) by the inverse-transpose of m.  This
    * function assumes the transformation of 3-dimensional space represented by the
-   * matrix is parallel-preserving, i.e. any combination of rotation, scaling and
+   * matrix is parallel-preserving, i.e. any combination of angle, scaling and
    * translation, but not a perspective distortion.  Returns a vector with 3
    * entries.
    * @param {Matrix4} m The matrix.

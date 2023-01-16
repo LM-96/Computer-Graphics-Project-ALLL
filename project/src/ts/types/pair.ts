@@ -1,15 +1,16 @@
 import {IndexOutOfBoundException} from "./exceptions/index-out-of-bound-exception";
-import {Equatable} from "./equatable";
+import {equals, Equatable} from "./equatable";
 import {Cloneable, tryClone} from "./cloneable";
 import {Copiable} from "./copiable";
 import {Matrix, matrix} from "../geometry/matrix/matrix";
 import {MatrixData} from "../geometry/matrix/matrix-types";
+import {Triple} from "./triple";
 
 /**
  * An enumeration that allow to access the element to a specific position
  * in a `Pair` instance
  */
-enum PairPosition {
+export enum PairPosition {
     FIRST, SECOND
 }
 
@@ -86,6 +87,40 @@ export class Pair<F, S> implements Equatable, Cloneable<Pair<F, S>>, Copiable<Pa
      */
     setSecond(second: S|null) {
         this.#second = second
+    }
+
+    /**
+     * Adds an element to this couple producing a `Triple` with the two element of this
+     * couple *plus* the one given as parameter
+     * @param element
+     */
+    plus<T>(element: T): Triple<F, S, T> {
+        return new Triple<F, S, T>(this.#first, this.#second, element)
+    }
+
+    /**
+     * Check if the given `element` is present in somewhere in this pair.<br>
+     * It is better if the types of the element of the `Pair` implements `Equatable` otherwise
+     * it will be used the `===` equality operator
+     * @param {F|S} element the element to check for the presence
+     * @return {boolean} `true` if the element id present in this pair
+     */
+    contains(element: F|S): boolean {
+        return (equals(this.#first, element) || equals(this.#second, element))
+    }
+
+    /**
+     * Searches for the given `element` returning its position if present.<br>
+     * If the element is not present, this method returns `null`
+     * @param {F|S} element the element to search for
+     * @return {PairPosition|null} the position of the element of `null` if not present
+     **/
+    search(element: F|S): PairPosition|null {
+        if(equals(this.#first, element))
+            return PairPosition.FIRST
+        if(equals(this.#first, element))
+            return PairPosition.SECOND
+        return null
     }
 
     /**
@@ -172,6 +207,27 @@ export class Pair<F, S> implements Equatable, Cloneable<Pair<F, S>>, Copiable<Pa
         }
 
         return false
+    }
+
+    /**
+     * Apply the `mapper` function to this object and returns the result.
+     * This function basically let to *transforms* this object into another thanks to
+     * the `mapper` function
+     * @param {(pair: Pair<F, S>) => R} mapper the transformation function
+     * @return {R} the result of the transformation
+     */
+    map<R>(mapper:(pair: Pair<F, S>) => R): R {
+        return mapper(this)
+    }
+
+    /**
+     * Executes the given `block` passing this object to it, then returns this object
+     * @param {Pair<F, S>) => void} block the function to be executed on this object
+     * @return {Pair<F, S>} this object
+     */
+    apply(block: (pair: Pair<F, S>) => void): Pair<F, S> {
+        block(this)
+        return this
     }
 
 }

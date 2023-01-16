@@ -15,3 +15,17 @@ export function isEquatable(obj: any): obj is Equatable {
     }
     return false
 }
+
+/**
+ * Checks if the two objects implement `Equatable` and, in that case, uses the `equals` of
+ * `Equatable` to check if the two objects are equals; otherwise it will use the normal `===` operator
+ * @param {any} obj1 the first object
+ * @param {any} obj2 the second object
+ * @return {boolean} `true` if two object are equals following the explained criteria, `false` otherwise
+ */
+export function equals(obj1: any, obj2: any): boolean {
+    if(isEquatable(obj1) && isEquatable(obj2)) {
+        return obj1.equals(obj2)
+    }
+    return obj1 === obj2
+}

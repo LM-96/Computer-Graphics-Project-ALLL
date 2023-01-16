@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FrozenPoint3D = void 0;
 const point_3d_1 = require("./point-3d");
 const abstract_point_3d_1 = require("./abstract-point-3d");
-const illegal_modification_exception_1 = require("../../types/illegal-modification-exception");
+const illegal_modification_exception_1 = require("../../types/exceptions/illegal-modification-exception");
 const mutable_point_3d_1 = require("./mutable-point-3d");
 const rotation_matrices_1 = require("../matrix/rotation-matrices");
 const axis_1 = require("../axis");

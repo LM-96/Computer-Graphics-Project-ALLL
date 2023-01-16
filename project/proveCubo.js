@@ -109,7 +109,7 @@ old_x=e.pageX, old_y=e.pageY;
 e.preventDefault();
 };
 
-/*=========================rotation================*/
+/*=========================angle================*/
    function rotateX(m, angle) {
    var c=Math.cos(angle);
    var s=Math.sin(angle);

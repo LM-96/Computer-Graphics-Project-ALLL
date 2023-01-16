@@ -1,14 +1,14 @@
-import {Angle, AngleUnit} from "../angle";
+import {Angle, AngleUnit} from "../angle/angle";
 import {NumMatrix} from "./matrix-types";
 import {matrix} from "./matrix";
 import {Axis} from "../axis";
 
 export class RotationMatrices {
     /**
-     * Returns the matrix for the elementary rotation around the `x` axis for the specified
-     * angle. Multiply a point for this matrix will return the coordinates of the point after the rotation
-     * @param {Angle} angle the angle of the rotation
-     * @return {NumMatrix} the matrix for the rotation
+     * Returns the matrix for the elementary angle around the `x` axis for the specified
+     * angle. Multiply a point for this matrix will return the coordinates of the point after the angle
+     * @param {Angle} angle the angle of the angle
+     * @return {NumMatrix} the matrix for the angle
      */
     static RX(angle: Angle): NumMatrix {
         let theta: number = angle.getValueIn(AngleUnit.RAD)
@@ -20,10 +20,10 @@ export class RotationMatrices {
     }
 
     /**
-     * Returns the matrix for the elementary rotation around the `y` axis for the specified
-     * angle. Multiply a point for this matrix will return the coordinates of the point after the rotation
-     * @param {Angle} angle the angle of the rotation
-     * @return {NumMatrix} the matrix for the rotation
+     * Returns the matrix for the elementary angle around the `y` axis for the specified
+     * angle. Multiply a point for this matrix will return the coordinates of the point after the angle
+     * @param {Angle} angle the angle of the angle
+     * @return {NumMatrix} the matrix for the angle
      */
     static RY(angle: Angle): NumMatrix {
         let theta: number = angle.getValueIn(AngleUnit.RAD)
@@ -35,10 +35,10 @@ export class RotationMatrices {
     }
 
     /**
-     * Returns the matrix for the elementary rotation around the `z` axis for the specified
-     * angle. Multiply a point for this matrix will return the coordinates of the point after the rotation
-     * @param {Angle} angle the angle of the rotation
-     * @return {NumMatrix} the matrix for the rotation
+     * Returns the matrix for the elementary angle around the `z` axis for the specified
+     * angle. Multiply a point for this matrix will return the coordinates of the point after the angle
+     * @param {Angle} angle the angle of the angle
+     * @return {NumMatrix} the matrix for the angle
      */
     static RZ(angle: Angle): NumMatrix {
         let theta: number = angle.getValueIn(AngleUnit.RAD)
@@ -50,11 +50,11 @@ export class RotationMatrices {
     }
 
     /**
-     * Return the matrix for the elementary rotation around the specified axis for the specified axis.
-     * Multiply a point for this matrix will return the coordinates of the point after the rotation
-     * @param {Axis} axis the axis around which the rotation is desired to be performed
-     * @param {Angle} angle the angle of the rotation
-     * @return {NumMatrix} the matrix for the rotation
+     * Return the matrix for the elementary angle around the specified axis for the specified axis.
+     * Multiply a point for this matrix will return the coordinates of the point after the angle
+     * @param {Axis} axis the axis around which the angle is desired to be performed
+     * @param {Angle} angle the angle of the angle
+     * @return {NumMatrix} the matrix for the angle
      */
     static R(axis: Axis, angle: Angle): NumMatrix {
         switch (axis) {

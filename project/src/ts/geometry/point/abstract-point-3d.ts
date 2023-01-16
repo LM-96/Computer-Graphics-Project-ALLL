@@ -2,7 +2,7 @@ import {Point3D, samePoints} from "./point-3d";
 import {ReadablePoint3D} from "./readable-point-3d";
 import {NumMatrix} from "../matrix/matrix-types";
 import {frozenMatrix} from "../matrix/matrix";
-import {Angle} from "../angle";
+import {Angle} from "../angle/angle";
 import {Axis} from "../axis";
 
 /**
