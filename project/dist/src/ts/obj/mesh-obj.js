@@ -1,10 +1,11 @@
 "use strict";
-var _MeshObj_name, _MeshObj_data, _MeshObj_position, _MeshObj_rotation, _MeshObj_scale, _MeshObj_limitChecker;
+var _MeshObj_name, _MeshObj_data, _MeshObj_position, _MeshObj_rotation, _MeshObj_scale, _MeshObj_limitChecker, _MeshObj_callbacks;
 Object.defineProperty(exports, "__esModule", { value: true });
 const point_factory_1 = require("../geometry/point/point-factory");
 const number_couple_1 = require("../types/numbers/number-couple");
 const number_trio_1 = require("../types/numbers/number-trio");
 const limits_checkers_1 = require("../geometry/limits/limits-checkers");
+const array_mesh_object_callback_1 = require("./array-mesh-object-callback");
 class MeshObj {
     constructor() {
         /**
@@ -65,8 +66,16 @@ class MeshObj {
          * The limits that constraint the movement of this object.
          * By default, the object has no limit [limits.type = "unlimited"]
          */
-        _MeshObj_limitChecker.set(this, limits_checkers_1.LimitsCheckers.unlimited());
+        _MeshObj_limitChecker.set(this, limits_checkers_1.LimitsCheckers.unlimited()
+        /**
+         * A container for all the callbacks of this object about translation, rotation and scale
+         */
+        );
+        /**
+         * A container for all the callbacks of this object about translation, rotation and scale
+         */
+        _MeshObj_callbacks.set(this, new array_mesh_object_callback_1.ArrayMeshObjectCallbackContainer());
     }
 }
-_MeshObj_name = new WeakMap(), _MeshObj_data = new WeakMap(), _MeshObj_position = new WeakMap(), _MeshObj_rotation = new WeakMap(), _MeshObj_scale = new WeakMap(), _MeshObj_limitChecker = new WeakMap();
+_MeshObj_name = new WeakMap(), _MeshObj_data = new WeakMap(), _MeshObj_position = new WeakMap(), _MeshObj_rotation = new WeakMap(), _MeshObj_scale = new WeakMap(), _MeshObj_limitChecker = new WeakMap(), _MeshObj_callbacks = new WeakMap();
 //# sourceMappingURL=mesh-obj.js.map

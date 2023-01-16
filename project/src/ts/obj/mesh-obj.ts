@@ -4,6 +4,8 @@ import {numberCouple, NumberCouple} from "../types/numbers/number-couple";
 import {numberTrio, NumberTrio} from "../types/numbers/number-trio";
 import {LimitsChecker} from "../geometry/limits/limits-checker";
 import {LimitsCheckers} from "../geometry/limits/limits-checkers";
+import {NotifiableMeshObjCallbackContainer} from "./mesh-obj-callbacks";
+import {ArrayMeshObjectCallbackContainer} from "./array-mesh-object-callback";
 
 class MeshObj {
 
@@ -51,6 +53,11 @@ class MeshObj {
      * By default, the object has no limit [limits.type = "unlimited"]
      */
     #limitChecker: LimitsChecker = LimitsCheckers.unlimited()
+
+    /**
+     * A container for all the callbacks of this object about translation, rotation and scale
+     */
+    #callbacks: NotifiableMeshObjCallbackContainer = new ArrayMeshObjectCallbackContainer()
 
 
 }

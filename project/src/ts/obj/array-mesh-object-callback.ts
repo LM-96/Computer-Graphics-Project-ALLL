@@ -44,10 +44,12 @@ export class ArrayMeshObjectCallbackContainer implements NotifiableMeshObjCallba
         for(let callback of this.#onTranslation)
             callback(oldPosition, delta, newPosition)
     }
+
     notifyRotation(startRotation: Couple<Angle>, delta: Couple<Angle>, endRotation: Couple<Angle>): void {
         for(let callback of this.#onRotation)
             callback(startRotation, delta, endRotation)
     }
+
     notifyScale(startScale: NumberTrio, delta: NumberTrio, endScale: NumberTrio): void {
         for(let callback of this.#onScale)
             callback(startScale, delta, endScale)
