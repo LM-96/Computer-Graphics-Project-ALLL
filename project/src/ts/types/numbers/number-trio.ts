@@ -1039,3 +1039,13 @@ export class NumberTrio extends Triple<number, number, number>{
     }
 
 }
+
+/**
+ * Creates and returns a new trio of numbers
+ * @param {number} number1 the first number
+ * @param {number} number2 the second number
+ * @param {number} number3 the third number
+ */
+export function numberTrio(number1: number, number2: number, number3: number): NumberTrio {
+    return new NumberTrio(number1, number2, number3)
+}

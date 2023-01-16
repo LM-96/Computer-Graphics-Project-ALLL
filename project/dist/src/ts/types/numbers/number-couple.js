@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NumberCouple = void 0;
+exports.numberCouple = exports.NumberCouple = void 0;
 const pair_1 = require("../pair");
 const illegal_argument_exception_1 = require("../exceptions/illegal-argument-exception");
 class NumberCouple extends pair_1.Pair {
@@ -544,6 +544,45 @@ class NumberCouple extends pair_1.Pair {
             case pair_1.PairPosition.SECOND: return new NumberCouple(this.getFirst(), operator(this.getSecond(), ...args));
         }
     }
+    /**
+     * Returns `true` if the given `number` is *between* the ones in this couple.
+     * This method basically chef if the number is `>` or `>=` then the minimum in this
+     * couple and `<` or `<=` then the maximum. The two parameters `leftEq` and `rightEq`
+     * allow to specify:
+     *
+     * - if `leftEq` is `true`, then the *left* check will be `MIN <= number`
+     * - if `rightEq` is `true`, then the *right* check will be `number <= MAX`
+     * @param {number} number the number to be checked
+     * @param {boolean} leftEq if `true`, the check will include the case in which `number` is equal to the minimum
+     * (`true` by default)
+     * @param {boolean} rightEq if `true`, the check will include the case in which `number` is equal to the maximum
+     * (`true` by default)
+     * @return `true` if the given `number` is *between* the ones in this couple, `false` otherwise
+     */
+    isBetween(number, leftEq = true, rightEq = true) {
+        let min;
+        let max;
+        if (this.getFirst() < this.getSecond()) {
+            min = this.getFirst();
+            max = this.getSecond();
+        }
+        else {
+            min = this.getSecond();
+            max = this.getFirst();
+        }
+        return (number > min || (number == min && leftEq))
+            && (number < this.getSecond() || (number == this.getSecond() && rightEq));
+    }
 }
 exports.NumberCouple = NumberCouple;
+/**
+ * Creates and return a new couple of numbers
+ * @param {number} number1 the first number
+ * @param {number} number2 the second number
+ * @return the new `NumberCouple`
+ */
+function numberCouple(number1, number2) {
+    return new NumberCouple(number1, number2);
+}
+exports.numberCouple = numberCouple;
 //# sourceMappingURL=number-couple.js.map

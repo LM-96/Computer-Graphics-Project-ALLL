@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NumberTrio = void 0;
+exports.numberTrio = exports.NumberTrio = void 0;
 const illegal_argument_exception_1 = require("../exceptions/illegal-argument-exception");
 const triple_1 = require("../triple");
 class NumberTrio extends triple_1.Triple {
@@ -713,4 +713,14 @@ class NumberTrio extends triple_1.Triple {
     }
 }
 exports.NumberTrio = NumberTrio;
+/**
+ * Creates and returns a new trio of numbers
+ * @param {number} number1 the first number
+ * @param {number} number2 the second number
+ * @param {number} number3 the third number
+ */
+function numberTrio(number1, number2, number3) {
+    return new NumberTrio(number1, number2, number3);
+}
+exports.numberTrio = numberTrio;
 //# sourceMappingURL=number-trio.js.map
