@@ -3,17 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/jquery-3.6.0.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/jquery-3.6.0.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/jquery-3.6.0.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/jquery-3.6.0.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/ui_components.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/ui_components.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/ui_components.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/ui_components.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/load-mesh-wrapper.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/load-mesh-wrapper.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/jquery-3.6.0.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/jquery-3.6.0.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/ui_components.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/ui_components.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/array-mesh-object-callback.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/load-mesh-wrapper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/load-mesh-wrapper.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-obj-callbacks.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-obj.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/signal.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/signals/signal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/signal.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/signals/signal.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/signals/signal-flow.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/signals/signal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/signals/signal.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,11 +62,11 @@
       <recent name="$PROJECT_DIR$/project/src/ts/types/exceptions" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/project/src/ts/signals" />
       <recent name="$PROJECT_DIR$/project/src/ts/types/numbers" />
       <recent name="$PROJECT_DIR$/project/src/ts/types/exceptions" />
       <recent name="$PROJECT_DIR$/project/src/ts/geometry/rotation" />
       <recent name="$PROJECT_DIR$/project/src/ts" />
-      <recent name="$PROJECT_DIR$/project/src" />
     </key>
   </component>
   <component name="RunManager" selected="TypeScript.test.ts">
@@ -148,6 +141,7 @@
       <workItem from="1673885321327" duration="8631000" />
       <workItem from="1673941676196" duration="4773000" />
       <workItem from="1673963299271" duration="5471000" />
+      <workItem from="1673978588644" duration="8610000" />
     </task>
     <servers />
   </component>

@@ -1,18 +1,20 @@
-import {Arrays} from "../types/arrays";
+import {Equatable} from "../types/equatable";
 
-export interface SignalHandler<S, D> {
-    handle(signal: Signal<S, D>): void
-}
-
-export interface AsyncSignalHandler<S, D, R> {
-    handle(signal: Signal<S, D>): Promise<R>
-}
-
-export class SignalName {
+export class SignalName implements Equatable{
     readonly name: string
+
+    equals(other: any): boolean {
+        if(other != undefined) {
+            if(other instanceof SignalName) {
+                return other.name == this.name
+            }
+        }
+
+        return false
+    }
 }
 
-export class Signal<S, D> {
+export class Signal<S, D, R> {
     readonly name: SignalName
     readonly source: S
     readonly data: D
@@ -24,44 +26,18 @@ export class Signal<S, D> {
     }
 }
 
-export class FiredSignal<S, D> {
-    readonly signal: Signal<S, D>
-    readonly handlerPromises: Array<Promise<void>>
+export class FiredSignal<S, D, R> {
+    readonly signal: Signal<S, D, R>
+    readonly results: Map<string, Promise<R>>
 
-    constructor(signal: Signal<S, D>, handlerPromises: Array<Promise<void>>) {
+    constructor(signal: Signal<S, D, R>, results: Map<string, Promise<R>>) {
         this.signal = signal
-        this.handlerPromises = handlerPromises
+        this.results = results
     }
 
 }
 
-export interface SignalSubscriber<S, D> {
-    subscribe(handler: SignalHandler<S, D>): void
-    unsubscribe(handler: SignalHandler<S, D>): void
-}
 
-export interface SignalTrigger<S, D> {
-    fire(signalName: SignalName, source: S, data: D): void
-}
 
-export class ArraySignalSubscriber<S, D> implements SignalSubscriber<S, D>, SignalTrigger<S, D>{
 
-    readonly #handlers: Array<SignalHandler<S, D>> = []
 
-    subscribe(handler: SignalHandler<S, D>): void {
-        this.#handlers.push(handler)
-    }
-
-    unsubscribe(handler: SignalHandler<S, D>): void {
-        Arrays.removeFrom(this.#handlers, handler)
-    }
-
-    fire(signalName: SignalName, source: S, data: D): FiredSignal<S, D> {
-        let signal: Signal<S, D> = new Signal<S, D>(signalName, source, data)
-        let promises: Array<Promise<any>> = []
-        for(let handler of this.#handlers)
-            promises.push(handler.handle(signal))
-        return new FiredSignal<S, D>(signal, promises)
-    }
-
-}

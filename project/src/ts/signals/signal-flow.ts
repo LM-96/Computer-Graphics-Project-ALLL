@@ -1,5 +1,0 @@
-interface SignalFlow {
-
-    subscribe()
-
-}
