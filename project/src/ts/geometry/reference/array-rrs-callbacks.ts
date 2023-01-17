@@ -1,27 +1,21 @@
-import {
-    NotifiableMeshObjCallbackContainer,
-    RotationCallback,
-    ScaleCallback,
-    TranslationCallback
-} from "./mesh-obj-callbacks";
-import {Arrays} from "../types/arrays";
-import { Angle } from "../geometry/angle/angle";
-import { Point3D } from "../geometry/point/point-3d";
-import { NumberTrio } from "../types/numbers/number-trio";
-import { Couple } from "../types/pair";
+import {RotationCallback, DilationCallback, TranslationCallback} from "./rrs-callbacks";
+import {Arrays} from "../../types/arrays";
+import {Point3D} from "../point/point-3d";
+import {NumberTrio} from "../../types/numbers/number-trio";
+import {Couple} from "../../types/pair";
+import {Angle} from "../angle/angle";
 
-export class ArrayMeshObjectCallbackContainer implements NotifiableMeshObjCallbackContainer {
-
+export class ArrayRRSCallbackContainer {
     #onTranslation: Array<TranslationCallback> = new Array<TranslationCallback>()
     #onRotation: Array<RotationCallback> = new Array<RotationCallback>()
-    #onScale: Array<ScaleCallback> = new Array<ScaleCallback>()
+    #onDilation: Array<DilationCallback> = new Array<DilationCallback>()
 
     addOnRotation(block: RotationCallback): void {
         this.#onRotation.push(block)
     }
 
-    addOnScaled(block: ScaleCallback): void {
-        this.#onScale.push(block)
+    addOnDilation(block: DilationCallback): void {
+        this.#onDilation.push(block)
     }
 
     addOnTranslation(block: TranslationCallback): void {
@@ -32,8 +26,8 @@ export class ArrayMeshObjectCallbackContainer implements NotifiableMeshObjCallba
         Arrays.removeFrom(this.#onRotation, block)
     }
 
-    removeOnScaled(block: ScaleCallback): void {
-        Arrays.removeFrom(this.#onScale, block)
+    removeOnDilation(block: DilationCallback): void {
+        Arrays.removeFrom(this.#onDilation, block)
     }
 
     removeOnTranslation(block: TranslationCallback): void {
@@ -51,7 +45,7 @@ export class ArrayMeshObjectCallbackContainer implements NotifiableMeshObjCallba
     }
 
     notifyScale(startScale: NumberTrio, delta: NumberTrio, endScale: NumberTrio): void {
-        for(let callback of this.#onScale)
+        for(let callback of this.#onDilation)
             callback(startScale, delta, endScale)
     }
 }

@@ -1,11 +1,11 @@
-import {Point3D} from "../geometry/point/point-3d";
-import {NumberTrio} from "../types/numbers/number-trio";
-import {Couple} from "../types/pair";
-import {Angle} from "../geometry/angle/angle";
+import {Point3D} from "../point/point-3d";
+import {NumberTrio} from "../../types/numbers/number-trio";
+import {Couple} from "../../types/pair";
+import {Angle} from "../angle/angle";
 
 export type TranslationCallback = (oldPosition: Point3D, delta: NumberTrio, newPosition: Point3D) => void
 export type RotationCallback = (startRotation: Couple<Angle>, delta: Couple<Angle>, endRotation: Couple<Angle>) => void
-export type ScaleCallback = (startScale: NumberTrio, delta: NumberTrio, endScale: NumberTrio) => void
+export type DilationCallback = (startDilation: NumberTrio, delta: NumberTrio, endDilation: NumberTrio) => void
 
 /**
  * A container of callback for a mesh object that can be:
@@ -13,10 +13,10 @@ export type ScaleCallback = (startScale: NumberTrio, delta: NumberTrio, endScale
  * - rotated
  * - scaled
  */
-export interface MeshObjCallbacksContainer {
+export interface RRSCallbackContainer {
 
     /**
-     * Adds a *callback* that will be called when an object is **translated**
+     * Adds a *callback* that will be called when a relative reference system is **translated**
      * @param {TranslationCallback} block the function that has to be executed when the object is translated
      */
     addOnTranslation(block: TranslationCallback): void
@@ -28,7 +28,7 @@ export interface MeshObjCallbacksContainer {
     removeOnTranslation(block: TranslationCallback): void
 
     /**
-     * Adds a *callback* that will be called when an object is **rotated**
+     * Adds a *callback* that will be called when a relative reference system is **rotated**
      * @param {RotationCallback} block the function that has to be executed when the object is rotated
      */
     addOnRotation(block: RotationCallback): void
@@ -41,16 +41,16 @@ export interface MeshObjCallbacksContainer {
     removeOnRotation(block: RotationCallback): void
 
     /**
-     * Adds a *callback* that will be called when an object is **scaled**
+     * Adds a *callback* that will be called when a relative reference system is **dilated**
      * @param {ScaleCallback} block the function that has to be executed when the object is scaled
      */
-    addOnScaled(block: ScaleCallback): void
+    addOnDilation(block: DilationCallback): void
 
     /**
      * Removes a *callback* that was previously registered for the scale
      * @param {ScaleCallback} block the function to be removed
      */
-    removeOnScaled(block: ScaleCallback): void
+    removeOnDilation(block: DilationCallback): void
 
 }
 
@@ -63,7 +63,7 @@ export interface MeshObjCallbacksContainer {
  * This container can also be *notified* when an operation is performed over the object, so each `notify`
  * method invokes the relative set of callbacks
  */
-export interface NotifiableMeshObjCallbackContainer extends MeshObjCallbacksContainer {
+export interface NotifiableRRSCallbackContainer extends RRSCallbackContainer {
 
     /**
      * Notify a translation, invoking all the *callbacks* for the translation
@@ -83,12 +83,10 @@ export interface NotifiableMeshObjCallbackContainer extends MeshObjCallbacksCont
 
     /**
      * Notify a scale, invoking all the *callbacks* for the scale
-     * @param {NumberTrio} startScale the scale before the *re-scale*
-     * @param {NumberTrio} delta the three deltas for the scale (`scaleX`, `scaleY`, `scaleZ`)
-     * @param {NumberTrio} endScale the scale after the *re-scale*
+     * @param {NumberTrio} startDilation the dilation before the *transformation*
+     * @param {NumberTrio} delta the three deltas for the scale (`mX`, `mY`, `mZ`)
+     * @param {NumberTrio} endDilation the dilation after the *transformation*
      */
-    notifyScale(startScale: NumberTrio, delta: NumberTrio, endScale: NumberTrio): void
-
+    notifyDilation(startDilation: NumberTrio, delta: NumberTrio, endDilation: NumberTrio): void
 
 }
-

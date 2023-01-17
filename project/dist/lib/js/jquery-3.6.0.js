@@ -2648,7 +2648,7 @@
      *	options: an optional list of space-separated options that will change how
      *			the callback list behaves or a more traditional option object
      *
-     * By default a callback list will act like an event callback list and can be
+     * By default a callback list will act like an signals callback list and can be
      * "fired" multiple times.
      *
      * Possible options:
@@ -3144,7 +3144,7 @@
         // Is the DOM ready to be used? Set to true once it occurs.
         isReady: false,
         // A counter to track how many items to wait for before
-        // the ready event fires. See #6781
+        // the ready signals fires. See #6781
         readyWait: 1,
         // Handle when the DOM is ready
         ready: function (wait) {
@@ -3154,7 +3154,7 @@
             }
             // Remember that the DOM is ready
             jQuery.isReady = true;
-            // If a normal DOM Ready event fired, decrement, and wait if need be
+            // If a normal DOM Ready signals fired, decrement, and wait if need be
             if (wait !== true && --jQuery.readyWait > 0) {
                 return;
             }
@@ -3163,14 +3163,14 @@
         }
     });
     jQuery.ready.then = readyList.then;
-    // The ready event handler and self cleanup method
+    // The ready signals handler and self cleanup method
     function completed() {
         document.removeEventListener("DOMContentLoaded", completed);
         window.removeEventListener("load", completed);
         jQuery.ready();
     }
     // Catch cases where $(document).ready() is called
-    // after the browser event has already occurred.
+    // after the browser signals has already occurred.
     // Support: IE <=9 - 10 only
     // Older IE sometimes signals "interactive" too soon
     if (document.readyState === "complete" ||
@@ -3179,7 +3179,7 @@
         window.setTimeout(jQuery.ready);
     }
     else {
-        // Use the handy event callback
+        // Use the handy signals callback
         document.addEventListener("DOMContentLoaded", completed);
         // A fallback to window.onload, that will always work
         window.addEventListener("load", completed);
@@ -3981,7 +3981,7 @@
         if (one === 1) {
             origFn = fn;
             fn = function (event) {
-                // Can use an empty set, since event contains the info
+                // Can use an empty set, since signals contains the info
                 jQuery().off(event);
                 return origFn.apply(this, arguments);
             };
@@ -4019,14 +4019,14 @@
             if (!handler.guid) {
                 handler.guid = jQuery.guid++;
             }
-            // Init the element's event structure and main handler, if this is the first
+            // Init the element's signals structure and main handler, if this is the first
             if (!(events = elemData.events)) {
                 events = elemData.events = Object.create(null);
             }
             if (!(eventHandle = elemData.handle)) {
                 eventHandle = elemData.handle = function (e) {
-                    // Discard the second event of a jQuery.event.trigger() and
-                    // when an event is called after a page has unloaded
+                    // Discard the second signals of a jQuery.signals.trigger() and
+                    // when an signals is called after a page has unloaded
                     return typeof jQuery !== "undefined" && jQuery.event.triggered !== e.type ?
                         jQuery.event.dispatch.apply(elem, arguments) : undefined;
                 };
@@ -4042,13 +4042,13 @@
                 if (!type) {
                     continue;
                 }
-                // If event changes its type, use the special event handlers for the changed type
+                // If signals changes its type, use the special signals handlers for the changed type
                 special = jQuery.event.special[type] || {};
-                // If selector defined, determine special event api type, otherwise given type
+                // If selector defined, determine special signals api type, otherwise given type
                 type = (selector ? special.delegateType : special.bindType) || type;
                 // Update special based on newly reset type
                 special = jQuery.event.special[type] || {};
-                // handleObj is passed to all event handlers
+                // handleObj is passed to all signals handlers
                 handleObj = jQuery.extend({
                     type: type,
                     origType: origType,
@@ -4059,7 +4059,7 @@
                     needsContext: selector && jQuery.expr.match.needsContext.test(selector),
                     namespace: namespaces.join(".")
                 }, handleObjIn);
-                // Init the event handler queue if we're the first
+                // Init the signals handler queue if we're the first
                 if (!(handlers = events[type])) {
                     handlers = events[type] = [];
                     handlers.delegateCount = 0;
@@ -4084,11 +4084,11 @@
                 else {
                     handlers.push(handleObj);
                 }
-                // Keep track of which events have ever been used, for event optimization
+                // Keep track of which events have ever been used, for signals optimization
                 jQuery.event.global[type] = true;
             }
         },
-        // Detach an event or set of events from an element
+        // Detach an signals or set of events from an element
         remove: function (elem, types, handler, selector, mappedTypes) {
             var j, origCount, tmp, events, t, handleObj, special, handlers, type, namespaces, origType, elemData = dataPriv.hasData(elem) && dataPriv.get(elem);
             if (!elemData || !(events = elemData.events)) {
@@ -4131,8 +4131,8 @@
                         }
                     }
                 }
-                // Remove generic event handler if we removed something and no more handlers exist
-                // (avoids potential for endless recursion during removal of special event handlers)
+                // Remove generic signals handler if we removed something and no more handlers exist
+                // (avoids potential for endless recursion during removal of special signals handlers)
                 if (origCount && !handlers.length) {
                     if (!special.teardown ||
                         special.teardown.call(elem, namespaces, elemData.handle) === false) {
@@ -4148,9 +4148,9 @@
         },
         dispatch: function (nativeEvent) {
             var i, j, ret, matched, handleObj, handlerQueue, args = new Array(arguments.length), 
-            // Make a writable jQuery.Event from the native event object
+            // Make a writable jQuery.Event from the native signals object
             event = jQuery.event.fix(nativeEvent), handlers = (dataPriv.get(this, "events") || Object.create(null))[event.type] || [], special = jQuery.event.special[event.type] || {};
-            // Use the fix-ed jQuery.Event rather than the (read-only) native event
+            // Use the fix-ed jQuery.Event rather than the (read-only) native signals
             args[0] = event;
             for (i = 1; i < arguments.length; i++) {
                 args[i] = arguments[i];
@@ -4169,8 +4169,8 @@
                 j = 0;
                 while ((handleObj = matched.handlers[j++]) &&
                     !event.isImmediatePropagationStopped()) {
-                    // If the event is namespaced, then each handler is only invoked if it is
-                    // specially universal or its namespaces are a superset of the event's.
+                    // If the signals is namespaced, then each handler is only invoked if it is
+                    // specially universal or its namespaces are a superset of the signals's.
                     if (!event.rnamespace || handleObj.namespace === false ||
                         event.rnamespace.test(handleObj.namespace)) {
                         event.handleObj = handleObj;
@@ -4273,7 +4273,7 @@
                 noBubble: true
             },
             click: {
-                // Utilize native event to ensure correct state for checkable inputs
+                // Utilize native signals to ensure correct state for checkable inputs
                 setup: function (data) {
                     // For mutual compressibility with _default, replace `this` access with a local var.
                     // `|| data` is dead code meant only to preserve the variable through minification.
@@ -4296,11 +4296,11 @@
                         el.click && nodeName(el, "input")) {
                         leverageNative(el, "click");
                     }
-                    // Return non-false to allow normal event-path propagation
+                    // Return non-false to allow normal signals-path propagation
                     return true;
                 },
                 // For cross-browser consistency, suppress native .click() on links
-                // Also prevent it if we're currently inside a leveraged native-event stack
+                // Also prevent it if we're currently inside a leveraged native-signals stack
                 _default: function (event) {
                     var target = event.target;
                     return rcheckableType.test(target.type) &&
@@ -4320,35 +4320,35 @@
             }
         }
     };
-    // Ensure the presence of an event listener that handles manually-triggered
+    // Ensure the presence of an signals listener that handles manually-triggered
     // synthetic events by interrupting progress until reinvoked in response to
     // *native* events that it fires directly, ensuring that state changes have
     // already occurred before other listeners are invoked.
     function leverageNative(el, type, expectSync) {
-        // Missing expectSync indicates a trigger call, which must force setup through jQuery.event.add
+        // Missing expectSync indicates a trigger call, which must force setup through jQuery.signals.add
         if (!expectSync) {
             if (dataPriv.get(el, type) === undefined) {
                 jQuery.event.add(el, type, returnTrue);
             }
             return;
         }
-        // Register the controller as a special universal handler for all event namespaces
+        // Register the controller as a special universal handler for all signals namespaces
         dataPriv.set(el, type, false);
         jQuery.event.add(el, type, {
             namespace: false,
             handler: function (event) {
                 var notAsync, result, saved = dataPriv.get(this, type);
                 if ((event.isTrigger & 1) && this[type]) {
-                    // Interrupt processing of the outer synthetic .trigger()ed event
+                    // Interrupt processing of the outer synthetic .trigger()ed signals
                     // Saved data should be false in such cases, but might be a leftover capture object
                     // from an async native handler (gh-4350)
                     if (!saved.length) {
-                        // Store arguments for use when handling the inner native event
-                        // There will always be at least one argument (an event object), so this array
+                        // Store arguments for use when handling the inner native signals
+                        // There will always be at least one argument (an signals object), so this array
                         // will not be confused with a leftover capture object.
                         saved = slice.call(arguments);
                         dataPriv.set(this, type, saved);
-                        // Trigger the native event and capture its result
+                        // Trigger the native signals and capture its result
                         // Support: IE <=9 - 11+
                         // focus() and blur() are asynchronous
                         notAsync = expectSync(this, type);
@@ -4361,7 +4361,7 @@
                             result = {};
                         }
                         if (saved !== result) {
-                            // Cancel the outer synthetic event
+                            // Cancel the outer synthetic signals
                             event.stopImmediatePropagation();
                             event.preventDefault();
                             // Support: Chrome 86+
@@ -4371,9 +4371,9 @@
                             // leaving `result` undefined. We need to guard against this.
                             return result && result.value;
                         }
-                        // If this is an inner synthetic event for an event with a bubbling surrogate
+                        // If this is an inner synthetic signals for an signals with a bubbling surrogate
                         // (focus or blur), assume that the surrogate already propagated from triggering the
-                        // native event and prevent that from happening again here.
+                        // native signals and prevent that from happening again here.
                         // This technically gets the ordering wrong w.r.t. to `.trigger()` (in which the
                         // bubbling surrogate propagates *after* the non-bubbling base), but that seems
                         // less bad than duplication.
@@ -4381,8 +4381,8 @@
                     else if ((jQuery.event.special[type] || {}).delegateType) {
                         event.stopPropagation();
                     }
-                    // If this is a native event triggered above, everything is now in order
-                    // Fire an inner synthetic event with the original arguments
+                    // If this is a native signals triggered above, everything is now in order
+                    // Fire an inner synthetic signals with the original arguments
                 }
                 else if (saved.length) {
                     // ...and capture the result
@@ -4392,7 +4392,7 @@
                         // Extend with the prototype to reset the above stopImmediatePropagation()
                         jQuery.extend(saved[0], jQuery.Event.prototype), saved.slice(1), this)
                     });
-                    // Abort handling of the native event
+                    // Abort handling of the native signals
                     event.stopImmediatePropagation();
                 }
             }
@@ -4434,11 +4434,11 @@
         else {
             this.type = src;
         }
-        // Put explicitly provided properties onto the event object
+        // Put explicitly provided properties onto the signals object
         if (props) {
             jQuery.extend(this, props);
         }
-        // Create a timestamp if incoming event doesn't have one
+        // Create a timestamp if incoming signals doesn't have one
         this.timeStamp = src && src.timeStamp || Date.now();
         // Mark it as fixed
         this[jQuery.expando] = true;
@@ -4474,7 +4474,7 @@
             this.stopPropagation();
         }
     };
-    // Includes all common event props including KeyEvent and MouseEvent specific props
+    // Includes all common signals props including KeyEvent and MouseEvent specific props
     jQuery.each({
         altKey: true,
         bubbles: true,
@@ -4510,7 +4510,7 @@
     }, jQuery.event.addProp);
     jQuery.each({ focus: "focusin", blur: "focusout" }, function (type, delegateType) {
         jQuery.event.special[type] = {
-            // Utilize native event if possible so blur/focus sequence is correct
+            // Utilize native signals if possible so blur/focus sequence is correct
             setup: function () {
                 // Claim the first handler
                 // dataPriv.set( this, "focus", ... )
@@ -4522,7 +4522,7 @@
             trigger: function () {
                 // Force setup before trigger
                 leverageNative(this, type);
-                // Return non-false to allow normal event-path propagation
+                // Return non-false to allow normal signals-path propagation
                 return true;
             },
             // Suppress native focus or blur as it's already being fired
@@ -4533,8 +4533,8 @@
             delegateType: delegateType
         };
     });
-    // Create mouseenter/leave events using mouseover/out and event-time checks
-    // so that event delegation works in jQuery.
+    // Create mouseenter/leave events using mouseover/out and signals-time checks
+    // so that signals delegation works in jQuery.
     // Do the same for pointerenter/pointerleave and pointerover/pointerout
     //
     // Support: Safari 7 only
@@ -4573,7 +4573,7 @@
         off: function (types, selector, fn) {
             var handleObj, type;
             if (types && types.preventDefault && types.handleObj) {
-                // ( event )  dispatched jQuery.Event
+                // ( signals )  dispatched jQuery.Event
                 handleObj = types.handleObj;
                 jQuery(types.delegateTarget).off(handleObj.namespace ?
                     handleObj.origType + "." + handleObj.namespace :
@@ -4797,7 +4797,7 @@
                             for (type in data.events) {
                                 if (special[type]) {
                                     jQuery.event.remove(elem, type);
-                                    // This is a shortcut to avoid jQuery.event.remove's overhead
+                                    // This is a shortcut to avoid jQuery.signals.remove's overhead
                                 }
                                 else {
                                     jQuery.removeEvent(elem, type, data.handle);
@@ -6680,13 +6680,13 @@
                 return;
             }
             if (type.indexOf(".") > -1) {
-                // Namespaced trigger; create a regexp to match event type in handle()
+                // Namespaced trigger; create a regexp to match signals type in handle()
                 namespaces = type.split(".");
                 type = namespaces.shift();
                 namespaces.sort();
             }
             ontype = type.indexOf(":") < 0 && "on" + type;
-            // Caller can pass in a jQuery.Event object, Object, or just an event type string
+            // Caller can pass in a jQuery.Event object, Object, or just an signals type string
             event = event[jQuery.expando] ?
                 event :
                 new jQuery.Event(type, typeof event === "object" && event);
@@ -6696,12 +6696,12 @@
             event.rnamespace = event.namespace ?
                 new RegExp("(^|\\.)" + namespaces.join("\\.(?:.*\\.|)") + "(\\.|$)") :
                 null;
-            // Clean up the event in case it is being reused
+            // Clean up the signals in case it is being reused
             event.result = undefined;
             if (!event.target) {
                 event.target = elem;
             }
-            // Clone any incoming data and prepend the event, creating the handler arg list
+            // Clone any incoming data and prepend the signals, creating the handler arg list
             data = data == null ?
                 [event] :
                 jQuery.makeArray(data, [event]);
@@ -6710,7 +6710,7 @@
             if (!onlyHandlers && special.trigger && special.trigger.apply(elem, data) === false) {
                 return;
             }
-            // Determine event propagation path in advance, per W3C events spec (#9951)
+            // Determine signals propagation path in advance, per W3C events spec (#9951)
             // Bubble up to document, then to window; watch for a global ownerDocument var (#9724)
             if (!onlyHandlers && !special.noBubble && !isWindow(elem)) {
                 bubbleType = special.delegateType || type;
@@ -6726,7 +6726,7 @@
                     eventPath.push(tmp.defaultView || tmp.parentWindow || window);
                 }
             }
-            // Fire handlers on the event path
+            // Fire handlers on the signals path
             i = 0;
             while ((cur = eventPath[i++]) && !event.isPropagationStopped()) {
                 lastElement = cur;
@@ -6754,15 +6754,15 @@
                 if ((!special._default ||
                     special._default.apply(eventPath.pop(), data) === false) &&
                     acceptData(elem)) {
-                    // Call a native DOM method on the target with the same name as the event.
+                    // Call a native DOM method on the target with the same name as the signals.
                     // Don't do default actions on window, that's where global variables be (#6170)
                     if (ontype && isFunction(elem[type]) && !isWindow(elem)) {
-                        // Don't re-trigger an onFOO event when we call its FOO() method
+                        // Don't re-trigger an onFOO signals when we call its FOO() method
                         tmp = elem[ontype];
                         if (tmp) {
                             elem[ontype] = null;
                         }
-                        // Prevent re-triggering of the same event, since we already bubbled it above
+                        // Prevent re-triggering of the same signals, since we already bubbled it above
                         jQuery.event.triggered = type;
                         if (event.isPropagationStopped()) {
                             lastElement.addEventListener(type, stopPropagationCallback);
@@ -6780,7 +6780,7 @@
             }
             return event.result;
         },
-        // Piggyback on a donor event to simulate a different one
+        // Piggyback on a donor signals to simulate a different one
         // Used only for `focus(in | out)` events
         simulate: function (type, elem, event) {
             var e = jQuery.extend(new jQuery.Event(), event, {
@@ -7395,7 +7395,7 @@
                 return jqXHR;
             }
             // We can fire global events as of now if asked to
-            // Don't fire events if jQuery.event is undefined in an AMD-usage scenario (#15118)
+            // Don't fire events if jQuery.signals is undefined in an AMD-usage scenario (#15118)
             fireGlobals = jQuery.event && s.global;
             // Watch for a new set of requests
             if (fireGlobals && jQuery.active++ === 0) {
@@ -7475,7 +7475,7 @@
             }
             else {
                 jqXHR.readyState = 1;
-                // Send global event
+                // Send global signals
                 if (fireGlobals) {
                     globalEventContext.trigger("ajaxSend", [jqXHR, s]);
                 }
@@ -7994,7 +7994,7 @@
         }
         var base, parsed, scripts;
         if (!context) {
-            // Stop scripts or inline event handlers from being executed immediately
+            // Stop scripts or inline signals handlers from being executed immediately
             // by using document.implementation
             if (support.createHTMLDocument) {
                 context = document.implementation.createHTMLDocument("");
@@ -8313,7 +8313,7 @@
     jQuery.each(("blur focus focusin focusout resize scroll click dblclick " +
         "mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
         "change select submit keydown keypress keyup contextmenu").split(" "), function (_i, name) {
-        // Handle event binding
+        // Handle signals binding
         jQuery.fn[name] = function (data, fn) {
             return arguments.length > 0 ?
                 this.on(name, null, data, fn) :

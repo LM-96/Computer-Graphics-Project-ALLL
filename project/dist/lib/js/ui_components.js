@@ -144,7 +144,7 @@ function txt(id, x, y, w, h, value) {
     textbox.classList.add('extra');
     //aggiungere input disabled
 }
-//select event change
+//select signals change
 function slc(id, x, y, w, h, array, callback) {
     let list = array;
     let select = document.createElement('select');
