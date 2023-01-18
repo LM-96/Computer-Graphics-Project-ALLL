@@ -1,4 +1,4 @@
-import {FiredSignal, Signal, SignalName} from "./signal";
+import {SyncFiredSignal, Signal, SignalName} from "./signal";
 import {
     SingleSignalSubscriber,
     Subscription,
@@ -6,19 +6,22 @@ import {
     SubscriptionStatus,
     withSubscriptionStatusChanged
 } from "./subscriptions";
-import {SingleSignalTrigger} from "./trigger";
 import {SubscriptionOptions} from "./options";
+import {SingleSignalFlow} from "./flow";
+import {Result, resultOf} from "../types/result";
 
 /**
- * A `flow` of signal intended as a component able to *accept* subscriptions and to *trigger* signals notifying
- * the subscribers.
- * This flow is *single* in the sense that is dedicated only to a specific *SignalName*
+ * An implementation of `SingleSignalFlow` based on a map
  */
-export class ArraySingleSignalFlow<S, D, R> implements SingleSignalSubscriber<S, D, R>, SingleSignalTrigger<S, D, R>{
+export class MappedSingleSignalFlow<S, D, R> implements SingleSignalFlow<S, D, R> {
 
     readonly signalName: SignalName
-    #id: number
+    #id: number = 0
     readonly #subscriptions: Map<string, Subscription<S, D, R>> = new Map<string, Subscription<S, D, R>>()
+
+    constructor(signalName: SignalName) {
+        this.signalName = signalName
+    }
 
     subscribe(options: SubscriptionOptions<S, D, R>): SubscriptionReceipt<S, D, R> {
         let res: SubscriptionReceipt<S, D, R> = new SubscriptionReceipt<S, D, R>(
@@ -37,15 +40,15 @@ export class ArraySingleSignalFlow<S, D, R> implements SingleSignalSubscriber<S,
         return null
     }
 
-    fire(source: S, data: D): FiredSignal<S, D, R> {
+    fire(source: S, data: D): SyncFiredSignal<S, D, R> {
         let signal: Signal<S, D, R> = new Signal<S, D, R>(this.signalName, source, data)
-        let results: Map<string, Promise<R>> = new Map<string, Promise<R>>()
-        let currentResult: Promise<R>
+        let results: Map<string, Result<R>> = new Map<string, Result<R>>()
+        let currentResult: Result<R>
         for(let subscription of this.#subscriptions.values()) {
-            currentResult = subscription.options.handler(signal)
+            currentResult = resultOf(subscription.options.handler, signal)
             results.set(subscription.receipt.subscriptionId, currentResult)
         }
-        return new FiredSignal<S, D, R>(signal, results)
+        return new SyncFiredSignal<S, D, R>(signal, results)
     }
 
 }

@@ -1,4 +1,4 @@
-import {FiredSignal, SignalName} from "./signal";
+import {SyncFiredSignal, SignalName} from "./signal";
 import {UnsupportedSignalException} from "./exceptions/unsupported-signal-exception";
 
 /**
@@ -15,9 +15,9 @@ export interface SingleSignalTrigger<S, D, R> {
      * Triggers the signal from the given `source` and with the given `data`
      * @param {S} source the source that causes the trigger
      * @param {D} data the data associated to the signal
-     * @return {FiredSignal<S, D, R>} the fired signal
+     * @return {SyncFiredSignal<S, D, R>} the fired signal with the results
      */
-    fire(source: S, data: D): FiredSignal<S, D, R>
+    fire(source: S, data: D): SyncFiredSignal<S, D, R>
 }
 
 /**
@@ -31,8 +31,8 @@ export interface MultipleSignalTrigger {
      * @param {SignalName} signalName the `SignalName` that has to be fired
      * @param {S} source the source that causes the trigger
      * @param {D} data the data associated to the signal
-     * @return {FiredSignal<S, D, R>} the fired signal
+     * @return {SyncFiredSignal<S, D, R>} the fired signal
      * @throws {UnsupportedSignalException} if the `signalName` is not supported from this trigger
      */
-    fire<S, D, R>(signalName: SignalName, source: S, data: D): FiredSignal<S, D, R>
+    fire<S, D, R>(signalName: SignalName, source: S, data: D): SyncFiredSignal<S, D, R>
 }

@@ -3,7 +3,13 @@ import {MutableRowBasedMatrix} from "./geometry/matrix/mutable-row-based-matrix"
 import {FrozenRowBasedMatrix} from "./geometry/matrix/frozen-row-based-matrix";
 import {MatrixData, NumMatrix} from "./geometry/matrix/matrix-types";
 import {Arrays} from "./types/arrays";
-import {assertEquals, Test, TestCase} from "./test/TestTs";
+import {assertEquals, assertTrue, Test, TestCase} from "./test/TestTs";
+import SignalFlows, {SingleSignalFlow} from "./signals/flow";
+import {handler, SignalHandler} from "./signals/options";
+import {getTypeName} from "./types/types";
+import {SyncFiredSignal, Signal, SignalName} from "./signals/signal";
+import {SubscriptionReceipt} from "./signals/subscriptions";
+import {resultOf} from "./types/result";
 
 @TestCase
 class MatrixTestCase {
@@ -60,30 +66,55 @@ class MatrixTestCase {
 
     @Test()
     determinant2x2Test() {
-        let rigthDeterminant: number = -2
-        assertEquals(rigthDeterminant, this.matrix1_2x2.determinant())
-        assertEquals(rigthDeterminant, this.matrix2_2x2.determinant())
+        let rightDeterminant: number = -2
+        assertEquals(rightDeterminant, this.matrix1_2x2.determinant())
+        assertEquals(rightDeterminant, this.matrix2_2x2.determinant())
     }
 
     @Test()
     determinant3x3Test() {
-        let rigthDeterminant: number = 25
-        assertEquals(rigthDeterminant, this.matrix1_3x3.determinant())
-        assertEquals(rigthDeterminant, this.matrix2_3x3.determinant())
+        let rightDeterminant: number = 25
+        assertEquals(rightDeterminant, this.matrix1_3x3.determinant())
+        assertEquals(rightDeterminant, this.matrix2_3x3.determinant())
     }
 
     @Test()
     determinant4x4Test() {
-        let rigthDeterminant: number = -4
-        assertEquals(rigthDeterminant, this.matrix1_4x4.determinant())
-        assertEquals(rigthDeterminant, this.matrix2_4x4.determinant())
+        let rightDeterminant: number = -4
+        assertEquals(rightDeterminant, this.matrix1_4x4.determinant())
+        assertEquals(rightDeterminant, this.matrix2_4x4.determinant())
     }
 
     @Test()
     determinant5x5Test() {
-        let rigthDeterminant: number = 4
-        assertEquals(rigthDeterminant, this.matrix1_5x5.determinant())
-        assertEquals(rigthDeterminant, this.matrix2_5x5.determinant())
+        let rightDeterminant: number = 4
+        assertEquals(rightDeterminant, this.matrix1_5x5.determinant())
+        assertEquals(rightDeterminant, this.matrix2_5x5.determinant())
+    }
+
+    @Test()
+    signalSystemTest() {
+        let signalNameString: string = 'test-signal'
+        let flow: SingleSignalFlow<MatrixTestCase, string, string> =
+            SignalFlows.newSingleFlow<MatrixTestCase, string, string>(signalNameString)
+        let eventHandled: boolean = false
+        let data: string = 'data'
+        let result: string = 'result'
+        let receivedData: string = undefined
+
+        function handlerFun(signal: Signal<MatrixTestCase, string, string>): string {
+            eventHandled = true
+            receivedData = signal.data
+            return result
+        }
+
+        let receipt: SubscriptionReceipt<MatrixTestCase, string, string> = flow.subscribe(handler(handlerFun))
+        assertEquals(flow.signalName.name, receipt.signalName.name)
+
+        let fired: SyncFiredSignal<MatrixTestCase, string, string> = flow.fire(this, data)
+        assertEquals(data, receivedData)
+        assertEquals("result", fired.getResultOf(receipt.subscriptionId).getValue())
+        assertTrue(eventHandled)
     }
 
 }
