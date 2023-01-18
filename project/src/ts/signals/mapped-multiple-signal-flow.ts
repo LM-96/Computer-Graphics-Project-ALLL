@@ -1,5 +1,5 @@
 import {MultipleSignalTrigger} from "./trigger";
-import {MultipleSignalSubscriber, Subscription, SubscriptionReceipt} from "./subscriptions";
+import {MultipleSignalSubscriber, SubscriptionReceipt} from "./subscriptions";
 import {SyncFiredSignal, SignalName} from "./signal";
 import {SubscriptionOptions} from "./options";
 import {SingleSignalFlow} from "./flow";

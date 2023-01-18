@@ -3,7 +3,7 @@ import {Angle} from "../angle/angle";
 import {Trio} from "../../types/triple";
 import {NumberTrio} from "../../types/numbers/number-trio";
 
-interface RelativeReferenceSystem {
+export interface RelativeReferenceSystem {
 
     /**
      * Returns the point with the absolute coordinates of the origin of the

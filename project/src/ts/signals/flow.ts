@@ -58,4 +58,18 @@ export default class SignalFlows {
         return this.#getOrThrow(signalName).getSecond()
     }
 
+    /**
+     * Gets an array containing all the signals that have correctly been registered
+     * @return {Array<SignalName>} the array with all the registered signals
+     */
+    static getRegisteredSignals(): Array<SignalName> {
+        let res: Array<SignalName> = []
+        this.#singleSignalFlows.forEach(
+            (value: Pair<SignalName, SingleSignalFlow<any, any, any>>, _: string) => {
+            res.push(value.getFirst())
+        })
+
+        return res
+    }
+
 }

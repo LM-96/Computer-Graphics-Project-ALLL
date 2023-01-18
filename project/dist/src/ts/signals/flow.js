@@ -36,6 +36,17 @@ class SignalFlows {
     static getSubscriber(signalName) {
         return __classPrivateFieldGet(this, _a, "m", _SignalFlows_getOrThrow).call(this, signalName).getSecond();
     }
+    /**
+     * Gets an array containing all the signals that have correctly been registered
+     * @return {Array<SignalName>} the array with all the registered signals
+     */
+    static getRegisteredSignals() {
+        let res = [];
+        __classPrivateFieldGet(this, _a, "f", _SignalFlows_singleSignalFlows).forEach((value, _) => {
+            res.push(value.getFirst());
+        });
+        return res;
+    }
 }
 exports.default = SignalFlows;
 _a = SignalFlows, _SignalFlows_getOrThrow = function _SignalFlows_getOrThrow(signalName) {
