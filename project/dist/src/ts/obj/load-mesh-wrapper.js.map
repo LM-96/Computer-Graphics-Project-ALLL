@@ -1,1 +1,1 @@
-{"version":3,"file":"load-mesh-wrapper.js","sourceRoot":"","sources":["../../../../src/ts/obj/load-mesh-wrapper.ts"],"names":[],"mappings":";;;AAQA,SAAgB,QAAQ,CAAC,EAAyB,EAAE,IAAY;IAC5D,OAAO,QAAQ,CAAC,EAAE,EAAE,IAAI,CAAC,CAAA;AAC7B,CAAC;AAFD,4BAEC"}
+{"version":3,"file":"load-mesh-wrapper.js","sourceRoot":"","sources":["../../../../src/ts/obj/load-mesh-wrapper.ts"],"names":[],"mappings":";;;AA4BA,SAAgB,QAAQ,CAAC,EAAyB,EAAE,IAAY;IAC5D,OAAO,QAAQ,CAAC,EAAE,EAAE,IAAI,CAAC,CAAA;AAC7B,CAAC;AAFD,4BAEC"}

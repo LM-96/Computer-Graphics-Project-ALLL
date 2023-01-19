@@ -1,1 +1,1 @@
-{"version":3,"file":"trigger.js","sourceRoot":"","sources":["../../../../src/ts/signals/trigger.ts"],"names":[],"mappings":""}
+{"version":3,"file":"trigger.js","sourceRoot":"","sources":["../../../../src/ts/signals/trigger.ts"],"names":[],"mappings":";;;AAuCA;;;;;;GAMG;AACH,SAAgB,OAAO,CAAU,MAAS,EAAE,IAAO,EAClB,GAAG,QAA6C;IAC7E,IAAI,GAAG,GAAoC,EAAE,CAAA;IAC7C,KAAK,IAAI,OAAO,IAAI,QAAQ,EAAE;QAC1B,GAAG,CAAC,IAAI,CAAC,OAAO,CAAC,IAAI,CAAC,MAAM,EAAE,IAAI,CAAC,CAAC,CAAA;KACvC;IAED,OAAO,GAAG,CAAA;AACd,CAAC;AARD,0BAQC"}

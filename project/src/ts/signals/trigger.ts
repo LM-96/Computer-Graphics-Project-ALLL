@@ -36,3 +36,20 @@ export interface MultipleSignalTrigger {
      */
     fire<S, D, R>(signalName: SignalName, source: S, data: D): SyncFiredSignal<S, D, R>
 }
+
+/**
+ * Fires multiple triggers
+ * @param {S} source the source that causes the trigger
+ * @param {D} data the data associated to the signal
+ * @param {Array<SingleSignalTrigger<S, D, R>>} triggers the triggers to be fired
+ * @return {Array<SyncFiredSignal<S, D, R>>} the fired signals
+ */
+export function fireAll<S, D, R>(source: S, data: D,
+                                 ...triggers: Array<SingleSignalTrigger<S, D, R>>): Array<SyncFiredSignal<S, D, R>> {
+    let res: Array<SyncFiredSignal<S, D, R>> = []
+    for (let trigger of triggers) {
+        res.push(trigger.fire(source, data))
+    }
+
+    return res
+}

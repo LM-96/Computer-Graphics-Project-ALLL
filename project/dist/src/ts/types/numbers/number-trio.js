@@ -711,6 +711,9 @@ class NumberTrio extends triple_1.Triple {
             case triple_1.TriplePosition.THIRD: return new NumberTrio(this.getFirst(), this.getSecond(), operator(this.getThird(), ...args));
         }
     }
+    clone() {
+        return new NumberTrio(this.getFirst(), this.getSecond(), this.getThird());
+    }
 }
 exports.NumberTrio = NumberTrio;
 /**

@@ -2,11 +2,227 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/flow.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/signals/flow.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/flow.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/signals/flow.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/reference/relative-reference-system.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/reference/relative-reference-system.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/signals/flow.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/signals/flow.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/signals/mapped-multiple-signal-flow.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/signals/mapped-multiple-signal-flow.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/dat.gui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/dat.gui.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/glm_utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/glm_utils.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/hello.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/hello.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/jquery-3.6.0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/jquery-3.6.0.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/jquery-3.6.1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/jquery-3.6.1.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/load_mesh.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/load_mesh.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/m4.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/m4.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/math.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/math.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/mesh_utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/mesh_utils.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/ui_components.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/ui_components.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/webgl-utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/webgl-utils.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/Event.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/Event.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/event/EventFlow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/event/EventFlow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/event/event.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/event/event.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/event/signal-flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/event/signal-flow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/event/signal.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/event/signal.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/angle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/angle.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/angle/angle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/angle/angle.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/axis.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/axis.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/exceptions/position-out-of-limit-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/exceptions/position-out-of-limit-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/limit-checker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/limit-checker.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/limit.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/limit.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/limits-checker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/limits-checker.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/limits-checkers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/limits-checkers.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/limits.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/limits.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/linear-limit-checker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/linear-limit-checker.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/unlimited-limit-checker.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/limits/unlimited-limit-checker.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/abstract-matrix.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/abstract-matrix.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/exceptions/illegal-column-index-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/exceptions/illegal-column-index-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/exceptions/illegal-row-index-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/exceptions/illegal-row-index-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/exceptions/invalid-column-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/exceptions/invalid-column-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/exceptions/invalid-row-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/exceptions/invalid-row-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/exceptions/not-invertible-matrix-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/exceptions/not-invertible-matrix-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/frozen-row-based-matrix.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/frozen-row-based-matrix.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/matrix-algebra.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/matrix-algebra.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/matrix-types.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/matrix-types.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/matrix.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/matrix.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/mutable-row-based-matrix.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/mutable-row-based-matrix.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/rotation-matrices.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/matrix/rotation-matrices.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/abstract-point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/abstract-point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/frozen-point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/frozen-point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/mutable-point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/mutable-point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/point-factory.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/point-factory.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/readable-point-3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/point/readable-point-3d.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/array-rrs-callback.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/array-rrs-callback.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/array-rrs-callbacks.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/array-rrs-callbacks.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/event-based-rrs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/event-based-rrs.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/observable-rrs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/observable-rrs.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/reference-system.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/reference-system.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/relative-reference-system.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/relative-reference-system.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/rrs-callbacks.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/reference/rrs-callbacks.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/rotation/angle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/rotation/angle.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/main-test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/main-test.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/MeshObj.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/MeshObj.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/array-mesh-object-callback.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/array-mesh-object-callback.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/load-mesh-wrapper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/load-mesh-wrapper.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-obj-callback.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-obj-callback.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-obj-callbacks.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-obj-callbacks.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-obj-impl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-obj-impl.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-obj.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-obj.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/SignalFlow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/SignalFlow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/array-multiple-signal-flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/array-multiple-signal-flow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/array-signal-flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/array-signal-flow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/array-single-signal-flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/array-single-signal-flow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/exceptions/array-multiple-signal-flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/exceptions/array-multiple-signal-flow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/exceptions/illegal-signal-name-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/exceptions/illegal-signal-name-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/exceptions/subscription-not-accepted-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/exceptions/subscription-not-accepted-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/exceptions/unsupported-signal-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/exceptions/unsupported-signal-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/flow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/handler.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/handler.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/mapped-multiple-signal-flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/mapped-multiple-signal-flow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/mapped-single-signal-flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/mapped-single-signal-flow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/options.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/options.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/signal-flow.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/signal-flow.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/signal.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/signal.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/subscriptions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/subscriptions.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/trigger.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/trigger.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test/TestTs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test/TestTs.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/arrays.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/arrays.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/cloneable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/cloneable.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/constructor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/constructor.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/copiable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/copiable.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/couple.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/couple.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/equatable.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/equatable.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/exceptions/illegal-argument-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/exceptions/illegal-argument-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/exceptions/illegal-modification-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/exceptions/illegal-modification-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/exceptions/illegal-state-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/exceptions/illegal-state-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/exceptions/index-out-of-bound-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/exceptions/index-out-of-bound-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/illegal-argument-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/illegal-argument-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/illegal-modification-exception.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/illegal-modification-exception.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/number-collections.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/number-collections.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/numbers/number-collections.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/numbers/number-collections.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/numbers/number-couple.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/numbers/number-couple.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/numbers/number-operator.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/numbers/number-operator.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/numbers/number-trio.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/numbers/number-trio.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/numbers/numeric-operator.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/numbers/numeric-operator.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/pair.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/pair.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/result.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/result.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/triple.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/triple.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/types.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/types.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/lib/js/webgl-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/webgl-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/reference/array-rrs-callbacks.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/reference/event-based-rrs.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/reference/relative-reference-system.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/reference/rrs-callbacks.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/load-mesh-wrapper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/load-mesh-wrapper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-object.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/mesh-object.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/signals/trigger.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/signals/trigger.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/types/numbers/number-couple.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/types/numbers/number-couple.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/types/numbers/number-trio.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/types/numbers/number-trio.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/project/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,9 +232,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="tsconfig.json" />
         <option value="HTTP Request" />
+        <option value="JavaScript File" />
         <option value="TypeScript File" />
       </list>
     </option>
@@ -51,7 +267,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.typescriptcompiler&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/usr/local/lib/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -69,14 +285,14 @@
       <recent name="$PROJECT_DIR$/project/src/ts" />
     </key>
   </component>
-  <component name="RunManager" selected="TypeScript.main-test.ts">
+  <component name="RunManager" selected="Node.js.WebGLMeshObject.ts">
     <configuration name="test.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Computer-Graphics-Project-ALLL/project/src/ts/test.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
-    <configuration name="bundle.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/project/dist/bundle.js" working-dir="$PROJECT_DIR$/project/dist">
+    <configuration name="WebGLMeshObject.ts" type="NodeJSConfigurationType" temporary="true" node-parameters="--require ts-node/register " path-to-js-file="$PROJECT_DIR$/project/src/ts/obj/WebGLMeshObject.ts" working-dir="$PROJECT_DIR$/project/src/ts/obj">
       <method v="2" />
     </configuration>
-    <configuration name="test.js (2)" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/project/dist/src/ts/test.js" working-dir="$PROJECT_DIR$/project/dist/src/ts">
+    <configuration name="bundle.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/project/dist/bundle.js" working-dir="$PROJECT_DIR$/project/dist">
       <method v="2" />
     </configuration>
     <configuration name="main-test.ts" type="TypeScriptProgramRunner" factoryName="TypeScript" temporary="true">
@@ -89,7 +305,6 @@
       <option name="extraTypeScriptOptions" value="" />
       <option name="scriptName" value="$PROJECT_DIR$/project/src/ts/main-test.ts" />
       <option name="programParameters" value="" />
-      <option name="tsnodePackage" value="/usr/local/lib/node_modules/ts-node" />
       <method v="2" />
     </configuration>
     <configuration name="test.ts" type="TypeScriptProgramRunner" factoryName="TypeScript" temporary="true">
@@ -106,11 +321,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Node.js.WebGLMeshObject.ts" />
         <item itemvalue="TypeScript.main-test.ts" />
         <item itemvalue="TypeScript.test.ts" />
         <item itemvalue="JavaScript Debug.test.html" />
         <item itemvalue="Node.js.bundle.js" />
-        <item itemvalue="Node.js.test.js (2)" />
       </list>
     </recent_temporary>
   </component>
@@ -152,6 +367,11 @@
       <workItem from="1673941676196" duration="4773000" />
       <workItem from="1673963299271" duration="5471000" />
       <workItem from="1673978588644" duration="21855000" />
+      <workItem from="1674068457109" duration="322000" />
+      <workItem from="1674073334688" duration="783000" />
+      <workItem from="1674074201985" duration="4443000" />
+      <workItem from="1674117111862" duration="5067000" />
+      <workItem from="1674122192127" duration="11168000" />
     </task>
     <servers />
   </component>

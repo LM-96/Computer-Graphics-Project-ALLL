@@ -1,8 +1,9 @@
 import {Pair, PairPosition} from "../pair";
 import {IllegalArgumentException} from "../exceptions/illegal-argument-exception";
 import {NumericOperator} from "./numeric-operator";
+import {Cloneable} from "../cloneable";
 
-export class NumberCouple extends Pair<number, number>{
+export class NumberCouple extends Pair<number, number> implements Cloneable<NumberCouple>{
 
     constructor(number1: number, number2: number) {
         super(number1, number2);
@@ -844,6 +845,10 @@ export class NumberCouple extends Pair<number, number>{
         return (number > min || (number == min && leftEq))
             && (number < this.getSecond() || (number == this.getSecond() && rightEq)
         )
+    }
+
+    clone(): NumberCouple {
+        return new NumberCouple(this.getFirst(), this.getSecond())
     }
 }
 

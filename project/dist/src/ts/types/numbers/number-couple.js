@@ -573,6 +573,9 @@ class NumberCouple extends pair_1.Pair {
         return (number > min || (number == min && leftEq))
             && (number < this.getSecond() || (number == this.getSecond() && rightEq));
     }
+    clone() {
+        return new NumberCouple(this.getFirst(), this.getSecond());
+    }
 }
 exports.NumberCouple = NumberCouple;
 /**

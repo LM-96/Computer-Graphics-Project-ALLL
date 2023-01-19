@@ -1,8 +1,10 @@
 import {IllegalArgumentException} from "../exceptions/illegal-argument-exception";
 import {NumericOperator} from "./numeric-operator";
 import {Triple, TriplePosition} from "../triple";
+import {Cloneable} from "../cloneable";
+import {NumberCouple} from "./number-couple";
 
-export class NumberTrio extends Triple<number, number, number>{
+export class NumberTrio extends Triple<number, number, number> implements Cloneable<NumberTrio>{
 
     constructor(number1: number, number2: number, number3: number) {
         super(number1, number2, number3);
@@ -1036,6 +1038,10 @@ export class NumberTrio extends Triple<number, number, number>{
             case TriplePosition.THIRD: return new NumberTrio(this.getFirst(),
                 this.getSecond(), operator(this.getThird(), ...args))
         }
+    }
+
+    clone(): NumberTrio {
+        return new NumberTrio(this.getFirst(), this.getSecond(), this.getThird())
     }
 
 }
