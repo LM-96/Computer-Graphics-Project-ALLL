@@ -33,7 +33,7 @@ function menu() {
         const cameraPosition = [settings.cameraX, settings.cameraY, 7];
         const target = [0, 0, 0];
         const up = [0, 1, 0];
-        const cameraMatrix = m4.lookAt(cameraPosition, target, up);
+        //const cameraMatrix = m4.lookAt(cameraPosition, target, up);
     }
     render();
 }

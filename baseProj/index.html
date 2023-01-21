@@ -11,11 +11,16 @@
   </head>
 <body>
   <div id="parent_div">
+
     <canvas width="1500" height="600" id="my_Canvas" class="canvas"></canvas>
-    <div id="uiContainer">
-      <div id="ui">
+    <div class="container">
+      <div id="uiContainer" class="menu menuInv">
+        <div id="ui">
+        </div>
       </div>
+      <span class="menuButton" onclick="toggleMenu()">Menu</span>
     </div>
+
   </div>
 
 <!-- JS Import -->
@@ -26,6 +31,23 @@
 
   <!-- main -->
   <script type="text/javascript" src="main.js"></script>
+  <script>
+    function toggleMenu(){
+      let menu = document.getElementById("uiContainer");
+        if(menu.className=="menu menuInv")
+          menuVisible(true);
+        else
+          menuVisible(false);
+    }
+    function menuVisible(bool) {
+      log("Toggle menu:" + bool)
+      let menu = document.getElementById("uiContainer");
+      if(bool)
+        menu.className = "menu";
+      else
+        menu.className = "menu menuInv";
+    }
+  </script>
 </body>
 
 </html>
