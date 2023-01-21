@@ -10,7 +10,8 @@ body {
 }
 
 #parent_div {
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     padding: 10px;
     display: block;
     position: relative;
@@ -122,6 +123,23 @@ body {
 
     #ui * {
         font-size: 0.15em;
+    }
+
+    .container {
+        right: -1px;
+        top: 0;
+        height: 100vh;
+        margin: 0;
+    }
+
+    #my_Canvas {
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+    }
+
+    #parent_div {
+        padding: 0;
     }
 }
 
