@@ -24,7 +24,7 @@
   </div>
 
 <!-- JS Import -->
-  <script src="https://webglfundamentals.org/webgl/resources/webgl-lessons-ui.js"></script>
+  <script type="text/javascript" src="./webglUtils/webgl-lessons-ui.js"></script>
   <script type="text/javascript" src="./myJsScript/menuInterface.js"></script>
   <script type="text/javascript" src="./myJsScript/userInput.js"></script>
   <script type="text/javascript" src="./myJsScript/logutils.js"></script>
@@ -34,7 +34,7 @@
   <script>
     function toggleMenu(){
       let menu = document.getElementById("uiContainer");
-        if(menu.className=="menu menuInv")
+        if(menu.className==="menu menuInv")
           menuVisible(true);
         else
           menuVisible(false);
