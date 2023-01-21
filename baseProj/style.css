@@ -24,7 +24,7 @@ body {
 
 #my_Canvas {
     width: 98%;
-    height: 90%;
+    height: 96vh;
     margin: 0 auto;
     display: block;
 }
@@ -36,7 +36,7 @@ body {
     right: 10px;
     margin: auto 1%;
     width: 35%;
-    height: 87.7%;
+    height: 96vh;
     max-width: 450px;
     min-width: 350px;
 }
