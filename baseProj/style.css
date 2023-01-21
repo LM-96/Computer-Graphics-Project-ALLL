@@ -30,12 +30,14 @@ body {
 
 .container {
     position: absolute;
-    overflow: hidden;
+    overflow: scroll;
     top: 10px;
     right: 10px;
     margin: 0 0.8%;
-    width: 400px;
-    height: 300px;
+    width: 35%;
+    height: 85%;
+    max-width: 400px;
+    min-width: 350px;
 }
 
 .container:hover > #uiContainer {
@@ -51,6 +53,10 @@ body {
     width: auto;
 }
 
+#ui * {
+    font-size: 0.2em;
+}
+
 #uiContainer {
     position: relative;
     top: 0 !important;
@@ -60,7 +66,7 @@ body {
 .menu {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: 70%;
     height: 100%;
     align-items: flex-end;
     border: 2px solid rgba(170, 170, 170, 0.40);
@@ -86,7 +92,8 @@ body {
 
 .menuButton {
     display: inline-block;
-    width: auto;
+    width: 20%;
+    max-width: 25px;
     text-align: center;
     writing-mode: vertical-lr;
     text-orientation: upright;
