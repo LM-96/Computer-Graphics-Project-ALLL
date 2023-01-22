@@ -9,7 +9,7 @@ var ENV, ENV2;
 //var SHADERS;
 var GL;
 var then = 0;
-var CAMERA_MANAGER, CAMERA_MANAGER2, CubeController;
+var CAMERA_MANAGER; //CAMERA_MANAGER2, CubeController;
 var CAMERA_MODE = 0;			//0 visuale in terza persona, //1 visuale dall'alto, //2 visuale in prima persona
 var targetObject = null;
 
@@ -53,9 +53,9 @@ async function render(time) {
 
     canvas1.CAMERA_MANAGER.updateGL_DRAWER();
     //canvas2.CAMERA_MANAGER.updateGL_DRAWER();
-
     canvas1.GlDrawer.drawScene();
     //canvas2.GlDrawer.drawScene();
+
     requestAnimationFrame(render);
 }
 
@@ -66,17 +66,20 @@ function canvasMain() {
     canvas1.main();
     //canvas2.main();
 
+
+    CAMERA_MANAGER = canvas1.CAMERA_MANAGER;
     //Start rendering loop
     requestAnimationFrame(render);
 }
 
 function main(){
     log("CIAO!")
-    attachHandler(canvas, "onkeydown", log);
+    attachHandler(canvas, "onkeydown", keydownMapLog);
     // attachHandlers(canvas, "onmousemove", log);
     attachHandler(canvas, "onmousedown", ciao);
     attachHandler(canvas, "onmouseup", log);
     attachHandler(canvas, "onmouseout", log);
+
 
     menu();
     canvasMain();

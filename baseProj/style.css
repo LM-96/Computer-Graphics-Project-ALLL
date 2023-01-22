@@ -3,6 +3,7 @@
 html, body {
     margin: 0;
     height: 100%;
+    overflow: hidden;
 }
 
 body {
@@ -18,9 +19,9 @@ body {
 }
 
 .canvas {
-    padding: 2px;
+    /*padding: 2px;*/
     background: #ffffff;
-    border: thin inset #aaaaaa;
+    border: 2px inset #aaaaaa;
 }
 
 #my_Canvas {
@@ -32,10 +33,9 @@ body {
 
 .container {
     position: absolute;
-    overflow: scroll;
     top: 10px;
     right: 10px;
-    margin: auto 1%;
+    margin: 0 1%;
     width: 35%;
     height: 96vh;
     max-width: 450px;
@@ -43,7 +43,7 @@ body {
 }
 
 .container:hover > #uiContainer {
-    background-color: rgba(221, 221, 221, 0.70);
+    background-color: rgba(221, 221, 221, 1);
 }
 
 
@@ -52,6 +52,7 @@ body {
     display: block;
     /*border: 2px solid black;*/
     width: auto;
+    overflow: scroll;
 }
 
 #ui * {
@@ -60,6 +61,7 @@ body {
 
 #uiContainer {
     position: relative;
+    overflow: scroll;
     top: 0 !important;
     right: 0 !important;
 }
@@ -72,7 +74,7 @@ body {
     align-items: flex-end;
     border: 2px solid rgba(170, 170, 170, 0.40);
     /*margin: 35px 2%;*/
-    background-color: rgba(221, 221, 221, 0.10);
+    background-color: rgba(221, 221, 221, 0.70);
     overflow: hidden;
     transition: 1s;
     float: right;

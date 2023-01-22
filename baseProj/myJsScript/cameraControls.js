@@ -13,14 +13,16 @@ function CameraManager(GlDrawer, objTarget, cameraPos, cameraup, target){
   this.followObjTraslation = false;
   this.distanceVector = [1,1,1];
 
-  
+
+
+
   //DRAWER UPDATE FUNCTION (to call in the render function)
   this.updateGL_DRAWER = function(){
     
-    if(CAMERA_MODE == 2){
+    if(CAMERA_MODE === 2){
       var objPosition = this.objTarget.position, angle = this.objTarget.rotation.phi;
       this.cameraPosition = objPosition.plus((0.25 * Math.sin(angle)), -(0.25 * Math.cos(angle)), 0); //new Position(this.objTarget.position.x - (2 * -Math.sin(angle) ), this.objTarget.position.y - (2 * Math.cos(angle)), this.objTarget.position.z);
-      this.cameraTargetPos = this.cameraPosition.plus((1 * Math.sin(angle)), -(1 * Math.cos(angle)), 0);
+      this.cameraTargetPos = this.cameraPosition.plus((Math.sin(angle)), -(Math.cos(angle)), 0);
     }
 
     if(this.followObjTarget)
@@ -36,8 +38,47 @@ function CameraManager(GlDrawer, objTarget, cameraPos, cameraup, target){
     this.GlDrawer.up = this.cameraUP;
     this.GlDrawer.fov = this.fov;
 
+
+
+    if(settings.Active_Menu){
+      this.updateGLOnMenu();
+    }
+    this.updateMenuSettings();
+
     this.GlDrawer.updateViewMatrix();
   }
+
+  this.updateGLOnMenu = function() {
+    //Camera
+    this.GlDrawer.cameraPosition = new Position(settings.cameraX, settings.cameraY, settings.cameraZ);
+    //Obj pos
+    this.objTarget.setPosition(settings.posX, settings.posY, settings.posZ);
+    //Target
+    this.GlDrawer.target = [settings.targetX, settings.targetY, settings.targetZ];
+    //FOV
+    this.GlDrawer.fov = degToRad(settings.fieldOfView);
+  }
+
+  this.updateMenuSettings = function() {
+    //Camera
+    settings.cameraX = this.GlDrawer.cameraPosition.x;
+    settings.cameraY = this.GlDrawer.cameraPosition.y;
+    settings.cameraZ = this.GlDrawer.cameraPosition.z;
+    //Obj pos
+    settings.posX = this.objTarget.position.x;
+    settings.posY = this.objTarget.position.y;
+    settings.posZ = this.objTarget.position.z;
+    //Target
+    settings.targetX = this.GlDrawer.target[0];
+    settings.targetY = this.GlDrawer.target[1];
+    settings.targetZ = this.GlDrawer.target[2];
+    //FOV
+    settings.fieldOfView = radToDeg(this.GlDrawer.fov);
+
+    webglLessonsUI.updateUI(widgets, settings);
+  }
+
+
 
   //GETTER AND SETTER
   this.setObjTarget = function(objTarget){
