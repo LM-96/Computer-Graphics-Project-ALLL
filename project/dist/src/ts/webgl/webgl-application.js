@@ -10,7 +10,6 @@ const log_1 = require("../log/log");
 const point_factory_1 = require("../geometry/point/point-factory");
 const pair_1 = require("../types/pair");
 const number_trio_1 = require("../types/numbers/number-trio");
-const camera_controls_1 = require("../controls/camera-controls");
 const ObjToLoad = Symbol("ObjToLoad");
 class WebGLApplication {
     constructor(applicationName = null, environment = null) {
@@ -181,7 +180,7 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
                 instance[continuation.propertyKey] = obj;
             }
             log_1.Log.log("starting application " + applicationName + " ...");
-            camera_controls_1.CameraControls.init(instance);
+            //CameraControls.init(instance)
             appSignalFlow.fire(instance, "STARTED");
             instance.start();
         }

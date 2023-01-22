@@ -244,7 +244,7 @@ export function WebGL(applicationName: string, canvasHtmlElementName: string, we
             }
 
             Log.log("starting application " + applicationName + " ...")
-            CameraControls.init(instance)
+            //CameraControls.init(instance)
             appSignalFlow.fire(instance, "STARTED")
             instance.start()
         } catch (e) {
