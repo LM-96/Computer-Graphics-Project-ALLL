@@ -24,21 +24,25 @@ function CanvasEnv(canvasName){
 
     this.main = function(){
         this.init();
-        
-        const L = 3;
-        var floor = this.meshManager.loadFromObj('floor', './assets/plane-2m.obj');
-        floor.scalate(L, L, 0);
-        let obj = this.meshManager.loadFromObj('cube1', './assets/cubo_con_assi.obj');
-        obj.limits = Limits.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, 3, 3);
+
+        let obj = this.meshManager.loadFromObj("elmetto", "./assets/AntoniosObj/helmet.obj")
+        const L = 30;
+        var floor = this.meshManager.loadFromObj('floor', './assets/AntoniosObj/world_tiger.obj');
+        floor.scalate(L, L, 50);
+        // floor.rotate(180, 180, false);
+        // let obj = this.meshManager.loadFromObj('cube1', './assets/cubo_con_assi.obj');
+
         obj.setPosition(0, 0, 0.25);
         obj.scalate(0.25, 0.25, 0.25);
-        log("main() | cube created");
+        obj.rotate(90,0,false);
+        obj.limits = Limits.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, 3, 3);
+        log(obj.name + " | cube created");
 
-    
+
+
 	    this.controller = new Controller(obj);
 	    this.CAMERA_MANAGER = createCameraManager(this.GlDrawer, obj);
 	    attachHandlers(this.ENV.canvas, obj);
-
         targetObject = obj;
     }
 }

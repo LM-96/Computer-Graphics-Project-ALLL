@@ -1,5 +1,5 @@
 const settings = {
-    Active_Menu: false, //TODO. change active background color (as hover)
+    Active_Menu: false,
     cameraX: 2.75,
     cameraY: 5,
     cameraZ: 1,
@@ -22,7 +22,7 @@ function activateColor(active){
 
 }
 
-
+//TODO. Input of menu do not update the slider
 function menu() {
     widgets = webglLessonsUI.setupUI(document.querySelector('#ui'), settings, [
         { type: 'checkbox', key: 'Active_Menu', change: render, },

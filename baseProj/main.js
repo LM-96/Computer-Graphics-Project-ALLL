@@ -70,7 +70,8 @@ function canvasMain() {
 
     CAMERA_MANAGER = canvas1.CAMERA_MANAGER;
     //Start rendering loop
-    requestAnimationFrame(render);
+    // requestAnimationFrame(render);
+    render(0);
 }
 
 function main(){

@@ -1,4 +1,5 @@
 /** PUBLIC FUNC: Attach handlers to the canvas **/
+var drag = false;
 function attachHandler(canvas, handlerType, handlerFunc) {
     switch (handlerType.toLowerCase()) {
         case "onmousedown": canvas.onmousedown=handlerFunc; break;
@@ -40,11 +41,11 @@ var mouseUp1 = function(e) {
 }
 
 var mouseMove1= function(e) {
-    // var env = canvas2.ENV;
-    // if(!drag) return false;
-    // dX=(e.pageX-old_x)*2*Math.PI/env.canvas.width;
-    // dY=(e.pageY-old_y)*2*Math.PI/env.canvas.height;
-    // target.rotate(dX, dY, true);
+    var env = canvas1.ENV;
+    if(!drag) return false;
+    dX=(e.pageX-old_x)*2*Math.PI/env.canvas.width;
+    dY=(e.pageY-old_y)*2*Math.PI/env.canvas.height;
+    target.rotate(0,dX, true);
     old_x=e.pageX;
     old_y=e.pageY;
     e.preventDefault();
