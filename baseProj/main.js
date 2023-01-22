@@ -55,6 +55,7 @@ async function render(time) {
     //canvas2.CAMERA_MANAGER.updateGL_DRAWER();
     canvas1.GlDrawer.drawScene();
     //canvas2.GlDrawer.drawScene();
+    activateColor(settings.Active_Menu);
 
     requestAnimationFrame(render);
 }

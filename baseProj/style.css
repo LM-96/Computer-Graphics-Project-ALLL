@@ -74,7 +74,7 @@ body {
     align-items: flex-end;
     border: 2px solid rgba(170, 170, 170, 0.40);
     /*margin: 35px 2%;*/
-    background-color: rgba(221, 221, 221, 0.70);
+    /*background-color: rgba(221, 221, 221, 0.70);*/
     overflow: hidden;
     transition: 1s;
     float: right;

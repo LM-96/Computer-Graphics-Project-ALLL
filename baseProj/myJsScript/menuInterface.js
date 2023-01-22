@@ -13,6 +13,15 @@ const settings = {
 };
 
 var widgets = null;
+function activateColor(active){
+    let uiContainer = document.getElementById("uiContainer");
+    if(active){
+        uiContainer.style.backgroundColor = "rgba(149,171,149,0.65)";
+    }else
+        uiContainer.style.backgroundColor = "rgba(162,117,117,0.3)";
+
+}
+
 
 function menu() {
     widgets = webglLessonsUI.setupUI(document.querySelector('#ui'), settings, [
@@ -28,4 +37,6 @@ function menu() {
         { type: 'slider',   key: 'targetZ',    min: -10, max: 20, change: render, precision: 2, step: 0.001, },
         { type: 'slider',   key: 'fieldOfView', min:  1, max: 179, change: render, },
     ]);
+
+
 }
