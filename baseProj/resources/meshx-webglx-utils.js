@@ -654,6 +654,19 @@ function MeshObject(name, data) {
     if(clear) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
+    let u_world = this.data.uniforms.u_world;
+
+    // for (const {bufferInfo, material} of parts) {
+    //   // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    //   webglUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+    //   // calls gl.uniform
+    //   webglUtils.setUniforms(programInfo, {
+    //     u_world,
+    //   }, material);
+    //   // calls gl.drawArrays or gl.drawElements
+    //   webglUtils.drawBufferInfo(gl, bufferInfo);
+    // }
+
 
     webglUtils.setBuffersAndAttributes(gl, programInfo, this.bufferInfo);
     webglUtils.setUniforms(programInfo, this.data.uniforms);
@@ -669,7 +682,7 @@ function MeshManager(gl, programInfo) {
   this.objects = new Map();
 
   this.loadFromObj = function(name, path) {
-    var meshObj = new MeshObject(name, LoadMesh(this.gl, path));
+    var meshObj = new MeshObject(name, LoadMesh(this.gl, path));//loadMeshMain2(gl, path))//
     this.objects.set(name, meshObj);
     meshObj.init(this.gl);
     return meshObj;

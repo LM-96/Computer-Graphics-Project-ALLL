@@ -59,7 +59,7 @@
 
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4) {
-        glmReadMTL(xhr.response, mesh);
+        mesh.material = parseMTL(xhr.response); //glmReadMTL(xhr.response, mesh);
       }
     };
     xhr.open("GET", MTLfileName, false);
@@ -79,31 +79,31 @@
 //Funzione che utilizza la libreria glm_utils per leggere un file OBJ
 //contenente la definizione della mesh
    function loadMeshFromOBJ(mesh) {
-      /*return $.ajax({
-         type: "GET",
-         url: mesh.sourceMesh,
-         dataType: "text",
-         async: false,
-         success: parseobjFile,
-         error: handleError,
-      });
-      function parseobjFile(result, status, xhr){
-         var result = glmReadOBJ(result,new subd_mesh());
-//scommentare/commentare per utilizzare o meno la LoadSubdivMesh
-//         mesh.data = LoadSubdivMesh(result.mesh);
-         mesh.data = result.mesh;
-         mesh.fileMTL = result.fileMtl;
-      }
-      function handleError(jqXhr, textStatus, errorMessage){
-         console.error('Error : ' + errorMessage);
-      }*/
+//       return $.ajax({
+//          type: "GET",
+//          url: mesh.sourceMesh,
+//          dataType: "text",
+//          async: false,
+//          success: parseobjFile,
+//          error: handleError,
+//       });
+//       function parseobjFile(result, status, xhr){
+//          var result = glmReadOBJ(result,new subd_mesh());
+// //scommentare/commentare per utilizzare o meno la LoadSubdivMesh
+// //         mesh.data = LoadSubdivMesh(result.mesh);
+//          mesh.data = result.mesh;
+//          mesh.fileMTL = result.fileMtl;
+//       }
+//       function handleError(jqXhr, textStatus, errorMessage){
+//          console.error('Error : ' + errorMessage);
+//       }
       var xhr = new XMLHttpRequest();
 
     	xhr.onreadystatechange = function() {
     		if(xhr.readyState == 4) {
-    			var result = glmReadOBJ(xhr.response,new subd_mesh());
-    			mesh.data = result.mesh;
-    			mesh.fileMTL = result.fileMtl;
+    			var result = parseOBJ(xhr.response); //glmReadOBJ(xhr.response,new subd_mesh());
+    			mesh.data = result.geometries;
+    			mesh.fileMTL = result.materialLibs;
     		}
     	};
     	xhr.open("GET", mesh.sourceMesh, false);
@@ -111,7 +111,7 @@
    }
 
 /*========== Loading and storing the geometry ==========*/
-   function LoadMesh(gl,path) {
+   function LoadMesh(gl, path) {
 
      var mesh = new Array();
      mesh.sourceMesh = path;
@@ -204,5 +204,129 @@
       numVertices : numVertices,
       uniforms : uniforms
     };
+
+}
+
+async function loadMeshFromObjMia(gl, pathObj, pathMtl) {
+    const objText = (await fetch(pathObj)).text();
+    const mtlText = (await fetch(pathMtl)).text();
+       parseOBJ2(objText);
+       parseMTL(mtlText);
+}
+
+async function loadMeshMain(gl, objPath) {
+    const objHref = objPath;
+    const response = await fetch(objHref);
+    const text = await response.text();
+    const obj = parseOBJ2(text);
+    const baseHref = new URL(objHref, window.location.href);
+    const matTexts = await Promise.all(obj.materialLibs.map(async filename => {
+        const matHref = new URL(filename, baseHref).href;
+        const response = await fetch(matHref);
+        return await response.text();
+    }));
+    const materials = parseMTL(matTexts.join('\n'));
+
+    const textures = {
+        defaultWhite: create1PixelTexture(gl, [255, 255, 255, 255]),
+    };
+
+    for (const material of Object.values(materials)) {
+        Object.entries(material)
+            .filter(([key]) => key.endsWith('Map'))
+            .forEach(([key, filename]) => {
+                let texture = textures[filename];
+                if (!texture) {
+                    const textureHref = new URL(filename, baseHref).href;
+                    texture = createTexture(gl, textureHref);
+                    textures[filename] = texture;
+                }
+                material[key] = texture;
+            });
+    }
+
+    const defaultMaterial = {
+        diffuse: [1, 1, 1],
+        diffuseMap: textures.defaultWhite,
+        ambient: [0, 0, 0],
+        specular: [1, 1, 1],
+        shininess: 400,
+        opacity: 1,
+    };
+
+    const parts = obj.geometries.map(({material, data}) => {
+        if (data.color) {
+            if (data.position.length === data.color.length) {
+                data.color = {numComponents: 3, data: data.color};
+            }
+        } else {
+            data.color = {value: [1, 1, 1, 1]};
+        }
+        const bufferInfo = webglUtils.createBufferInfoFromArrays(gl, data);
+        return {
+            material: {
+                ...defaultMaterial,
+                ...materials[material],
+            },
+            bufferInfo,
+        };
+    });
+
+    return parts;
+
+}
+
+function loadMeshMain2(gl, objPath) {
+    mesh.sourceMesh = objPath;
+    retrieveDataFromSource(mesh);
+    const obj = mesh.data;
+    const materials = mesh.materials;
+
+    const textures = {
+        defaultWhite: create1PixelTexture(gl, [255, 255, 255, 255]),
+    };
+
+    for (const material of Object.values(materials)) {
+        Object.entries(material)
+            .filter(([key]) => key.endsWith('Map'))
+            .forEach(([key, filename]) => {
+                let texture = textures[filename];
+                if (!texture) {
+                    const textureHref = new URL(filename, baseHref).href;
+                    texture = createTexture(gl, textureHref);
+                    textures[filename] = texture;
+                }
+                material[key] = texture;
+            });
+    }
+
+    const defaultMaterial = {
+        diffuse: [1, 1, 1],
+        diffuseMap: textures.defaultWhite,
+        ambient: [0, 0, 0],
+        specular: [1, 1, 1],
+        shininess: 400,
+        opacity: 1,
+    };
+
+    const parts = obj.geometries.map(({material, data}) => {
+        if (data.color) {
+            if (data.position.length === data.color.length) {
+                data.color = {numComponents: 3, data: data.color};
+            }
+        } else {
+            data.color = {value: [1, 1, 1, 1]};
+        }
+        const bufferInfo = webglUtils.createBufferInfoFromArrays(gl, data);
+        return {
+            material: {
+                ...defaultMaterial,
+                ...materials[material],
+            },
+            bufferInfo,
+        };
+    });
+
+    return parts;
 
 }

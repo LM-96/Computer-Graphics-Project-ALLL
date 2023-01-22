@@ -60,6 +60,7 @@ async function render(time) {
     requestAnimationFrame(render);
 }
 
+
 function canvasMain() {
     canvas1 = new CanvasEnv("my_Canvas");
     //canvas2 = new CanvasEnv("obj_canvas");
