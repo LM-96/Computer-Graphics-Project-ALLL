@@ -74,7 +74,7 @@
     parent.innerHTML = `
       <div class="gman-widget-outer">
         <div class="gman-widget-label">${name}</div>
-        <input class="gman-widget-value">
+        <input class="gman-widget-value" style="width: 30px;">
         <input class="gman-widget-slider" type="range" min="${min}" max="${max}" value="${value}" />
       </div>
     `;

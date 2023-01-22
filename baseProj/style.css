@@ -56,7 +56,7 @@ body {
 }
 
 #ui * {
-    font-size: 0.8vw;
+    font-size: 9pt;
 }
 
 #uiContainer {
@@ -124,7 +124,7 @@ body {
     }
 
     #ui * {
-        font-size: 0.15em;
+        font-size: 9pt;
     }
 
     .container {
@@ -132,6 +132,15 @@ body {
         top: 0;
         height: 100vh;
         margin: 0;
+        width: 100vw;
+    }
+
+    .menu {
+        width: 88%;
+    }
+
+    .menuInv {
+        width: 0;
     }
 
     #my_Canvas {
