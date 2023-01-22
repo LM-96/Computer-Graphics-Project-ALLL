@@ -5,14 +5,15 @@ import {Point3D} from "../geometry/point/point-3d";
 import {SingleSignalSubscriber} from "../signals/subscriptions";
 import {MeshData} from "./load-mesh-wrapper";
 import {Couple, coupleOf} from "../types/pair";
-import {angle, Angle} from "../geometry/angle/angle";
+import {angle, Angle, AngleUnit} from "../geometry/angle/angle";
 import {LimitsChecker} from "../geometry/limits/limits-checker";
 import SignalFlows, {SingleSignalFlow} from "../signals/flow";
 import PerformedTranslation, {PerformedTranslationBuilder} from "../geometry/data/performed-translation";
 import {PerformedPolarRotation, PerformedPolarRotationBuilder} from "../geometry/data/performed-polar-rotation";
-import {mutablePoint3D, point3D} from "../geometry/point/point-factory";
+import {mutablePoint3D} from "../geometry/point/point-factory";
 import PerformedScale, {PerformedScaleBuilder} from "../geometry/data/performed-scale";
 import {MeshObjectSignals} from "./mesh-object-signals";
+import {Log} from "../log/log";
 
 export class FlowedMeshObject implements MeshObject {
 
@@ -63,8 +64,15 @@ export class FlowedMeshObject implements MeshObject {
     }
 
     WebGLUtils.setBuffersAndAttributes(gl, programInfo, this.#bufferInfo);
+    Log.log("MeshObject[" + this.#name + "] buffers set: " + this.#bufferInfo)
+
     WebGLUtils.setUniforms(programInfo, this.#data.uniforms);
+    Log.log("MeshObject[" + this.#name + "] uniforms set: " + this.#data.uniforms)
+
     gl.drawArrays(gl.TRIANGLES, 0, this.#bufferInfo.numElements);
+    Log.log("MeshObject[" + this.#name + "] | drawArrays with " + this.#bufferInfo.numElements + " elements")
+
+    Log.log("MeshObject[" + this.#name + "] | drawn")
   }
 
   getCurrentScale(): NumberTrio {
@@ -105,6 +113,7 @@ export class FlowedMeshObject implements MeshObject {
         this.#data.attributes
     );
     this.#data.uniforms.u_world = M4.identity();
+    Log.log("MeshObject[" + this.#name + "] initialized")
   }
 
   setLimitsChecker(limitsChecker: LimitsChecker): void {
@@ -118,6 +127,8 @@ export class FlowedMeshObject implements MeshObject {
     this.#polarRotation.setSecond(phi)
     this.#performedPolarRotationBuilder.to = this.#polarRotation.clone()
     this.#polarRotationFlow.fire(this, this.#performedPolarRotationBuilder.build())
+
+    this.updateUMatrix()
   }
 
   setPosition(position: Point3D): void;
@@ -132,6 +143,8 @@ export class FlowedMeshObject implements MeshObject {
     }
     this.#performedTranslationBuilder.to = this.#position.clone()
     this.#translationFlow.fire(this, this.#performedTranslationBuilder.build())
+
+    this.updateUMatrix()
   }
 
   setScale(scale: NumberTrio): void;
@@ -150,5 +163,25 @@ export class FlowedMeshObject implements MeshObject {
     }
     this.#performedScaleBuilder.to = this.#scale.clone()
     this.#scaleFlow.fire(this, this.#performedScaleBuilder.build())
+
+    this.updateUMatrix()
+  }
+
+  updateUMatrix(u_world: number[] = M4.identity(),
+                position: boolean = true,
+                rotation: boolean = true,
+                scale: boolean = true) {
+    if(position) {
+      u_world = M4.translate(u_world, this.#position.getX(), this.#position.getY(), this.#position.getZ())
+    }
+    if(rotation) {
+        u_world = M4.xRotate(u_world, this.#polarRotation.getFirst().getValueIn(AngleUnit.RAD))
+        u_world = M4.yRotate(u_world, this.#polarRotation.getSecond().getValueIn(AngleUnit.RAD))
+    }
+    if(scale) {
+        u_world = M4.scale(u_world, this.#scale.getFirst(), this.#scale.getSecond(), this.#scale.getThird())
+    }
+    this.#data.uniforms.u_world = u_world
+    Log.log("MeshObject[" + this.#name + "] | u_world updated: " + u_world)
   }
 }

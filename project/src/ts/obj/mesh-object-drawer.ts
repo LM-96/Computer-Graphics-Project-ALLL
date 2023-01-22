@@ -46,6 +46,17 @@ export class MeshObjectDrawer {
      */
     startDrawing() {
         Log.log("MeshObjectDrawer[" + this.applicationName + "] | starting drawing...")
+        Log.log("MeshObjectDrawer[" + this.applicationName + "]\n" +
+            "\tcanvas size: " + this.#glEnvironment.getCanvas().width + "x" + this.#glEnvironment.getCanvas().height + "\n" +
+            "\tcanvas aspect ratio: " + this.#glEnvironment.calculateAspectRatio() + "\n" +
+            "\tcamera position: " + this.#camera.getCurrentPosition().toString() + "\n" +
+            "\tcamera up: " + this.#camera.getCurrentUp().toString() + "\n" +
+            "\tcamera target: " + this.#camera.getCurrentTarget().toString() + "\n" +
+            "\tfov: " + this.#camera.getCurrentFov().getValueIn(AngleUnit.DEG) + "°\n" +
+            "\tzNear: " + this.zNear + "\n" +
+            "\tzFar: " + this.zFar
+        )
+
         let gl: WebGLRenderingContext = this.#glEnvironment.getContext()
         Log.log("MeshObjectDrawer[" + this.applicationName + "] | context obtained [" + gl + "]")
 
@@ -73,8 +84,11 @@ export class MeshObjectDrawer {
         let programInfo: ProgramInfo = this.#glEnvironment.getProgramInfo()
         this.startDrawing()
         for(let meshObject of this.#meshObjectManager.getAll()) {
+            Log.log("MeshObjectDrawer[" + this.applicationName + "] | drawing mesh object [" + meshObject.getName() + "]")
             meshObject.draw(gl, programInfo, false)
         }
+
+        Log.log("MeshObjectDrawer[" + this.applicationName + "] | scene drawn")
     }
 
     /**

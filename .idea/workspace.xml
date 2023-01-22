@@ -5,13 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/triple.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/triple.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/triple.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/triple.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/flowed-mesh-object.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/flowed-mesh-object.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-drawer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-drawer.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/types/triple.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/types/triple.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/webgl/webgl-environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/webgl/webgl-environment.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +117,6 @@
       <option name="extraTypeScriptOptions" value="" />
       <option name="scriptName" value="$PROJECT_DIR$/project/src/ts/test.ts" />
       <option name="programParameters" value="" />
-      <option name="tsnodePackage" value="/usr/local/lib/node_modules/ts-node" />
       <method v="2" />
     </configuration>
     <recent_temporary>
@@ -170,7 +180,8 @@
       <workItem from="1674239937675" duration="609000" />
       <workItem from="1674289727147" duration="11300000" />
       <workItem from="1674371678090" duration="240000" />
-      <workItem from="1674371933978" duration="25137000" />
+      <workItem from="1674371933978" duration="25890000" />
+      <workItem from="1674410261890" duration="6551000" />
     </task>
     <servers />
   </component>

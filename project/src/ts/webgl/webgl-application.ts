@@ -16,6 +16,7 @@ import {Couple, coupleOf} from "../types/pair";
 import {Angle} from "../geometry/angle/angle";
 import {numberTrio, NumberTrio} from "../types/numbers/number-trio";
 import {LimitsChecker} from "../geometry/limits/limits-checker";
+import {CameraControls} from "../controls/camera-controls";
 
 const ObjToLoad = Symbol("ObjToLoad")
 
@@ -55,7 +56,7 @@ export abstract class WebGLApplication {
      * Returns the mesh object manager
      * @protected
      */
-    protected getMeshObjectManager(): MeshObjectManager {
+    getMeshObjectManager(): MeshObjectManager {
         return this.meshObjectManager
     }
 
@@ -63,7 +64,7 @@ export abstract class WebGLApplication {
      * Returns the mesh object drawer
      * @protected
      */
-    protected getMeshObjectDrawer(): MeshObjectDrawer {
+    getMeshObjectDrawer(): MeshObjectDrawer {
         return this.meshObjectDrawer
     }
 
@@ -71,7 +72,7 @@ export abstract class WebGLApplication {
      * Returns the camera
      * @protected
      */
-    protected getCamera(): Camera {
+    getCamera(): Camera {
         return this.camera
     }
 
@@ -82,7 +83,7 @@ export abstract class WebGLApplication {
      * @return {MeshObject} the loaded object
      * @protected
      */
-    protected loadObj(name: string, url: string): MeshObject {
+    loadObj(name: string, url: string): MeshObject {
         Log.log(this.applicationName + " | loading object [" + name + "] from þ" + url + "]...")
         let res: MeshObject = this.meshObjectManager.loadObj(name, url)
         Log.log(this.applicationName + " | object [" + name + "] loaded!")
@@ -96,7 +97,7 @@ export abstract class WebGLApplication {
      * otherwise returns `undefined`
      * @protected
      */
-    protected getObj(name: string): MeshObject | undefined {
+    getObj(name: string): MeshObject | undefined {
         return this.meshObjectManager.get(name)
     }
 
@@ -104,7 +105,7 @@ export abstract class WebGLApplication {
      * Draws the scene
      * @protected
      */
-    protected drawScene() {
+    drawScene() {
         Log.log(this.applicationName + " | drawing scene...")
         this.meshObjectDrawer.drawScene()
         Log.log(this.applicationName + " | scene drawn!")
@@ -218,6 +219,7 @@ export function WebGL(applicationName: string, canvasHtmlElementName: string, we
             instance["environment"] = webGLEnvironment
             instance["meshObjectManager"] = meshObjectManager
             instance["meshObjectDrawer"] = meshObjectDrawer
+            instance["camera"] = meshObjectDrawer.getCamera()
             instance["applicationName"] = applicationName
 
             Log.log("loading objects for " + applicationName + " ...")
@@ -242,6 +244,7 @@ export function WebGL(applicationName: string, canvasHtmlElementName: string, we
             }
 
             Log.log("starting application " + applicationName + " ...")
+            CameraControls.init(instance)
             appSignalFlow.fire(instance, "STARTED")
             instance.start()
         } catch (e) {

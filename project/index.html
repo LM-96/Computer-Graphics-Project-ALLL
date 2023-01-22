@@ -157,7 +157,7 @@ precision highp float;
     <div class="accordion-item">
       <h2 class="accordion-header" id="cameraHeader">
         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          FlowedCamera
+          Camera
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="cameraHeader" data-bs-parent="#mainAccordion">
@@ -166,23 +166,23 @@ precision highp float;
           <div class="btn-toolbar mb-3 justify-content-between">
 
             <!-- CAMERA POSITION -------------------------------------------------------------------------------------->
-            <div id="cameraPositionCard" class="card center mt-2 mb-1" > 
-              <b>FlowedCamera Position</b>
+            <div id="cameraPositionCard" class="card center mt-2 mb-1" >
+              <b>Camera Position</b>
               <div class="row m-2">
                 <div class="col">
-                  <button class="btn" type="button" onclick="increment('xCam',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <button id="xCamDecBtn" class="btn" type="button"><img src="resources/images/dash-circle.svg" /></button>
                   <input class="form-control center" id="xCamInput" type="text" disabled="true" value="0"\>
-                  <button class="btn" type="button" onclick="increment('xCam')"><img src="resources/images/plus-circle.svg" /></button>
+                  <button id="xCamIncBtn" class="btn" type="button"><img src="resources/images/plus-circle.svg" /></button>
                 </div>
                 <div class="col">
-                  <button class="btn" type="button" onclick="increment('yCam',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <button id="yCamDecBtn" class="btn" type="button"><img src="resources/images/dash-circle.svg" /></button>
                   <input class="form-control center" id="yCamInput" type="text" disabled="true" value="0"\>
-                  <button class="btn" type="button" onclick="increment('yCam')"><img src="resources/images/plus-circle.svg" /></button>
+                  <button id="yCamIncBtn" class="btn" type="button"><img src="resources/images/plus-circle.svg" /></button>
                 </div>
                 <div class="col">
-                  <button class="btn" type="button" onclick="increment('zCam',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <button id="zCamDecBtn" class="btn" type="button"><img src="resources/images/dash-circle.svg" /></button>
                   <input class="form-control center" id="zCamInput" type="text" disabled="true" value="0"\>
-                  <button class="btn" type="button" onclick="increment('zCam')"><img src="resources/images/plus-circle.svg" /></button>
+                  <button id="zCamIncBtn" class="btn" type="button"><img src="resources/images/plus-circle.svg" /></button>
                 </div>
               </div>
             </div>
@@ -192,19 +192,19 @@ precision highp float;
               <b>UP</b>
               <div class="row m-2">
                 <div class="col">
-                  <button class="btn" type="button" onclick="increment('xUp',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <button id="xUpDecBtn" class="btn" type="button"><img src="resources/images/dash-circle.svg" /></button>
                   <input class="form-control center" id="xUpInput" type="text" disabled="true" value="0"\>
-                  <button class="btn" type="button" onclick="increment('xUp')"><img src="resources/images/plus-circle.svg" /></button>
+                  <button id="xUpIncBtn" class="btn" type="button"><img src="resources/images/plus-circle.svg" /></button>
                 </div>
                 <div class="col">
-                  <button class="btn" type="button" onclick="increment('yUp',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <button id="yUpDecBtn" class="btn" type="button"><img src="resources/images/dash-circle.svg" /></button>
                   <input class="form-control center" id="yUpInput" type="text" disabled="true" value="0"\>
-                  <button class="btn" type="button" onclick="increment('yUp')"><img src="resources/images/plus-circle.svg" /></button>
+                  <button id="yUpIncBtn" class="btn" type="button"><img src="resources/images/plus-circle.svg" /></button>
                 </div>
                 <div class="col">
-                  <button class="btn" type="button" onclick="increment('zUp',true)"><img src="resources/images/dash-circle.svg" /></button>
+                  <button id="zUpDecBtn" class="btn" type="button"><img src="resources/images/dash-circle.svg" /></button>
                   <input class="form-control center" id="zUpInput" type="text" disabled="true" value="0"\>
-                  <button class="btn" type="button" onclick="increment('zUp')"><img src="resources/images/plus-circle.svg" /></button>
+                  <button id="zUpIncBtn" class="btn" type="button"><img src="resources/images/plus-circle.svg" /></button>
                 </div>
               </div>
             </div>
@@ -232,9 +232,9 @@ precision highp float;
             <div id="fovCard" class="card center mt-2 mb-1" >
               <b>FOV</b>
               <div class="input-group mb-2 p-1">
-                <button class="btn" type="button" onclick="increment('fov',true)"><img src="resources/images/dash-circle.svg" /></button>
+                <button id="fovDecBtn" class="btn" type="button"><img src="resources/images/dash-circle.svg" /></button>
                 <input class="form-control center" id="fovInput" type="text" disabled="true" value="0"\>
-                <button class="btn" type="button" onclick="increment('fov')"><img src="resources/images/plus-circle.svg" /></button>
+                <button id="fovIncBtn" class="btn" type="button"><img src="resources/images/plus-circle.svg" /></button>
               </div>
             </div>
 
@@ -255,7 +255,7 @@ precision highp float;
             </div>
 
             <!-- CAMERA DISTANCE -------------------------------------------------------------------------------------->
-            <div id="cameraDistanceCard" class="card center mt-2 mb-1" > 
+            <div id="cameraDistanceCard" class="card center mt-2 mb-1" >
               <b>FlowedCamera Distance from Target</b>
               <div class="row m-2">
                 <div class="col">

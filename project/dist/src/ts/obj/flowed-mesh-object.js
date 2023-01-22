@@ -23,6 +23,7 @@ const performed_polar_rotation_1 = require("../geometry/data/performed-polar-rot
 const point_factory_1 = require("../geometry/point/point-factory");
 const performed_scale_1 = require("../geometry/data/performed-scale");
 const mesh_object_signals_1 = require("./mesh-object-signals");
+const log_1 = require("../log/log");
 class FlowedMeshObject {
     constructor(name, data) {
         _FlowedMeshObject_name.set(this, void 0);
@@ -62,8 +63,12 @@ class FlowedMeshObject {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         }
         WebGLUtils.setBuffersAndAttributes(gl, programInfo, __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f"));
+        log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] buffers set: " + __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f"));
         WebGLUtils.setUniforms(programInfo, __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").uniforms);
+        log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] uniforms set: " + __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").uniforms);
         gl.drawArrays(gl.TRIANGLES, 0, __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f").numElements);
+        log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] | drawArrays with " + __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f").numElements + " elements");
+        log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] | drawn");
     }
     getCurrentScale() {
         return __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").clone();
@@ -92,6 +97,7 @@ class FlowedMeshObject {
     glInit(gl) {
         __classPrivateFieldSet(this, _FlowedMeshObject_bufferInfo, WebGLUtils.createBufferInfoFromArrays(gl, __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").attributes), "f");
         __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").uniforms.u_world = M4.identity();
+        log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] initialized");
     }
     setLimitsChecker(limitsChecker) {
         __classPrivateFieldSet(this, _FlowedMeshObject_limitChecker, limitsChecker, "f");
@@ -103,6 +109,7 @@ class FlowedMeshObject {
         __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").setSecond(phi);
         __classPrivateFieldGet(this, _FlowedMeshObject_performedPolarRotationBuilder, "f").to = __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").clone();
         __classPrivateFieldGet(this, _FlowedMeshObject_polarRotationFlow, "f").fire(this, __classPrivateFieldGet(this, _FlowedMeshObject_performedPolarRotationBuilder, "f").build());
+        this.updateUMatrix();
     }
     setPosition(position, y, z) {
         __classPrivateFieldGet(this, _FlowedMeshObject_performedTranslationBuilder, "f").clear();
@@ -115,6 +122,7 @@ class FlowedMeshObject {
         }
         __classPrivateFieldGet(this, _FlowedMeshObject_performedTranslationBuilder, "f").to = __classPrivateFieldGet(this, _FlowedMeshObject_position, "f").clone();
         __classPrivateFieldGet(this, _FlowedMeshObject_translationFlow, "f").fire(this, __classPrivateFieldGet(this, _FlowedMeshObject_performedTranslationBuilder, "f").build());
+        this.updateUMatrix();
     }
     setScale(scale, y, z) {
         __classPrivateFieldGet(this, _FlowedMeshObject_performedScaleBuilder, "f").clear();
@@ -131,6 +139,21 @@ class FlowedMeshObject {
         }
         __classPrivateFieldGet(this, _FlowedMeshObject_performedScaleBuilder, "f").to = __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").clone();
         __classPrivateFieldGet(this, _FlowedMeshObject_scaleFlow, "f").fire(this, __classPrivateFieldGet(this, _FlowedMeshObject_performedScaleBuilder, "f").build());
+        this.updateUMatrix();
+    }
+    updateUMatrix(u_world = M4.identity(), position = true, rotation = true, scale = true) {
+        if (position) {
+            u_world = M4.translate(u_world, __classPrivateFieldGet(this, _FlowedMeshObject_position, "f").getX(), __classPrivateFieldGet(this, _FlowedMeshObject_position, "f").getY(), __classPrivateFieldGet(this, _FlowedMeshObject_position, "f").getZ());
+        }
+        if (rotation) {
+            u_world = M4.xRotate(u_world, __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").getFirst().getValueIn(angle_1.AngleUnit.RAD));
+            u_world = M4.yRotate(u_world, __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").getSecond().getValueIn(angle_1.AngleUnit.RAD));
+        }
+        if (scale) {
+            u_world = M4.scale(u_world, __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").getFirst(), __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").getSecond(), __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").getThird());
+        }
+        __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").uniforms.u_world = u_world;
+        log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] | u_world updated: " + u_world);
     }
 }
 exports.FlowedMeshObject = FlowedMeshObject;

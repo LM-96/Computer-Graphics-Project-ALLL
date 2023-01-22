@@ -29,6 +29,7 @@ class WebGLEnvironment {
             throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
         }
         __classPrivateFieldSet(this, _WebGLEnvironment_programInfo, WebGLUtils.createProgramInfo(__classPrivateFieldGet(this, _WebGLEnvironment_gl, "f"), webGLShaders), "f");
+        __classPrivateFieldGet(this, _WebGLEnvironment_gl, "f").useProgram(__classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f").program);
     }
     /**
      * Returns the `HtmlCanvasElement` associated to this environment

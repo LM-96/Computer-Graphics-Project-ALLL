@@ -19,6 +19,7 @@ export class WebGLEnvironment {
             throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
         }
         this.#programInfo = WebGLUtils.createProgramInfo(this.#gl, webGLShaders);
+        this.#gl.useProgram(this.#programInfo.program)
     }
 
     /**

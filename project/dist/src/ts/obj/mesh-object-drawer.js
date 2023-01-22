@@ -50,6 +50,15 @@ class MeshObjectDrawer {
      */
     startDrawing() {
         log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | starting drawing...");
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "]\n" +
+            "\tcanvas size: " + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getCanvas().width + "x" + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getCanvas().height + "\n" +
+            "\tcanvas aspect ratio: " + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").calculateAspectRatio() + "\n" +
+            "\tcamera position: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentPosition().toString() + "\n" +
+            "\tcamera up: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentUp().toString() + "\n" +
+            "\tcamera target: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentTarget().toString() + "\n" +
+            "\tfov: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentFov().getValueIn(angle_1.AngleUnit.DEG) + "°\n" +
+            "\tzNear: " + this.zNear + "\n" +
+            "\tzFar: " + this.zFar);
         let gl = __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getContext();
         log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | context obtained [" + gl + "]");
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -72,8 +81,10 @@ class MeshObjectDrawer {
         let programInfo = __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getProgramInfo();
         this.startDrawing();
         for (let meshObject of __classPrivateFieldGet(this, _MeshObjectDrawer_meshObjectManager, "f").getAll()) {
+            log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | drawing mesh object [" + meshObject.getName() + "]");
             meshObject.draw(gl, programInfo, false);
         }
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | scene drawn");
     }
     /**
      * Returns the `Camera` associated of this drawer
