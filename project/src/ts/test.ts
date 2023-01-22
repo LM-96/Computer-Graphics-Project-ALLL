@@ -31,7 +31,8 @@ class MyApp extends WebGLApplication {
 
     @onSignal("mesh-objects.cube.translation")
     handler(signal: Signal<MeshObject, PerformedTranslation, void>): void {
-        console.log("Handler called (obj: " + signal.source.getName() + ")")
+        console.log("Handler called (obj: " + signal.source.getName() + ", translation: " +
+            signal.data.translationVector.toString() + ")")
     }
     protected main(args: string[]): void {
         console.log("Hello world! [" + this.applicationName + "]")

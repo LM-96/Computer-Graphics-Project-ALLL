@@ -17,7 +17,8 @@ let MyApp = class MyApp extends webgl_application_1.WebGLApplication {
         super();
     }
     handler(signal) {
-        console.log("Handler called (obj: " + signal.source.getName() + ")");
+        console.log("Handler called (obj: " + signal.source.getName() + ", translation: " +
+            signal.data.translationVector.toString() + ")");
     }
     main(args) {
         console.log("Hello world! [" + this.applicationName + "]");

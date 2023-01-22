@@ -237,7 +237,7 @@ export class Triple<F, S, T> implements Equatable, Cloneable<Triple<F, S, T>>, C
     }
 
     toString(): string {
-        return "Pair(" + this.#first + ", " + this.#second + ")"
+        return "Triple(" + this.#first + ", " + this.#second + ", " + this.#third + ")"
     }
 
     /**

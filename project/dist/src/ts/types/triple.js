@@ -228,7 +228,7 @@ class Triple {
         return new Triple(__classPrivateFieldGet(this, _Triple_first, "f"), __classPrivateFieldGet(this, _Triple_second, "f"), __classPrivateFieldGet(this, _Triple_third, "f"));
     }
     toString() {
-        return "Pair(" + __classPrivateFieldGet(this, _Triple_first, "f") + ", " + __classPrivateFieldGet(this, _Triple_second, "f") + ")";
+        return "Triple(" + __classPrivateFieldGet(this, _Triple_first, "f") + ", " + __classPrivateFieldGet(this, _Triple_second, "f") + ", " + __classPrivateFieldGet(this, _Triple_third, "f") + ")";
     }
     /**
      * Returns `true` the `other` object is a `Triple` with the two elements that are
