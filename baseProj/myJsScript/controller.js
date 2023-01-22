@@ -74,10 +74,10 @@ this.moveFirstPerson = function(keyMove){
 
 this.moveThirdPerson = function(keyMove){
     switch(keyMove){
-        case KEYMOVE.upArrow : this.target.translateL(step*Math.sin(this.target.rotation.phi),this.stepSize*Math.cos(this.target.rotation.phi), 0); break;
-        case KEYMOVE.downArrow : this.target.translateL(0,-this.stepSize, 0); break;
-        case KEYMOVE.leftArrow : this.target.translateL(-this.stepSize, 0, 0); break;
-        case KEYMOVE.rightArrow : this.target.translateL(this.stepSize, 0, 0); break;
+        case KEYMOVE.upArrow : this.target.translateL(-step*Math.sin(this.target.rotation.phi),step*Math.cos(this.target.rotation.phi), 0); break;
+        case KEYMOVE.downArrow : this.target.translateL(step*Math.sin(this.target.rotation.phi),-step*Math.cos(this.target.rotation.phi), 0); break;
+        case KEYMOVE.leftArrow : this.target.translateL(-step*Math.cos(this.target.rotation.phi), -step*Math.sin(this.target.rotation.phi), 0); break;
+        case KEYMOVE.rightArrow : this.target.translateL(step*Math.cos(this.target.rotation.phi), step*Math.sin(this.target.rotation.phi), 0); break;
     }
 }
 
