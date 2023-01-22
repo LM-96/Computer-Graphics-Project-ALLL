@@ -56,6 +56,8 @@ function CameraManager(GlDrawer, objTarget, cameraPos, cameraup, target){
     this.GlDrawer.target = [settings.targetX, settings.targetY, settings.targetZ];
     //FOV
     this.GlDrawer.fov = degToRad(settings.fieldOfView);
+    this.cameraPosition = this.GlDrawer.cameraPosition;
+    this.distanceVector = this.cameraPosition.distanceVector(this.objTarget.position);
   }
 
   this.updateMenuSettings = function() {

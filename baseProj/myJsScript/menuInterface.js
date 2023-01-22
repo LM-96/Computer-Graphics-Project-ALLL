@@ -17,9 +17,9 @@ var widgets = null;
 function menu() {
     widgets = webglLessonsUI.setupUI(document.querySelector('#ui'), settings, [
         { type: 'checkbox', key: 'Active_Menu', change: render, },
-        { type: 'slider',   key: 'cameraX',    min: -10, max: 10, change: render, input: render, precision: 2, step: 0.001, },
-        { type: 'slider',   key: 'cameraY',    min:   1, max: 20, change: render, precision: 2, step: 0.001, },
-        { type: 'slider',   key: 'cameraZ',    min:   1, max: 20, change: render, precision: 2, step: 0.001, },
+        { type: 'slider',   key: 'cameraX',    min: -10, max: 10, change: render, precision: 2, step: 0.001, },
+        { type: 'slider',   key: 'cameraY',    min:   -10, max: 10, change: render, precision: 2, step: 0.001, },
+        { type: 'slider',   key: 'cameraZ',    min:   -10, max: 10, change: render, precision: 2, step: 0.001, },
         { type: 'slider',   key: 'posX',       min: -10, max: 10, change: render, precision: 2, step: 0.001, },
         { type: 'slider',   key: 'posY',       min:   -10, max: 10, change: render, precision: 2, step: 0.001, },
         { type: 'slider',   key: 'posZ',       min:   0.25, max: 5, change: render, precision: 2, step: 0.001, },
