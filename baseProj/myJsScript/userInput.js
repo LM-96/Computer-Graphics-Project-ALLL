@@ -1,13 +1,27 @@
 /** PUBLIC FUNC: Attach handlers to the canvas **/
-function attachHandlers(canvas, handlerType, handlerFunc) {
+function attachHandler(canvas, handlerType, handlerFunc) {
     switch (handlerType.toLowerCase()) {
         case "onmousedown": canvas.onmousedown=handlerFunc; break;
         case "onmouseup": canvas.onmouseup=handlerFunc;  break;
         case "onmouseout": canvas.mouseout=handlerFunc;  break;
         case "onmousemove": canvas.onmousemove=handlerFunc;  break;
         case "onkeydown": document.addEventListener('keydown', handlerFunc);  break;
+        case "ontouchmove": document.addEventListener("ontouchmove", handlerFunc); break;
+        case "ontouchstart": document.addEventListener("ontouchstart", handlerFunc); break;
+        case "ontouchend": document.addEventListener("ontouchend", handlerFunc); break;
     }
     log("Attached Handler: " + handlerType.toLowerCase());
+}
+
+//Imported
+function attachHandlers(canvas, p_target) {
+    canvas.onmousedown=mouseDown;
+    canvas.onmouseup=mouseUp;
+    canvas.mouseout=mouseUp;
+    canvas.onmousemove=mouseMove;
+    target = p_target;
+
+    document.addEventListener('keydown', keydown);
 }
 
 
@@ -70,3 +84,4 @@ const keydownMapLog = function(e) {
         default: log("Tasto:" + e.keyCode)
     }
 }
+

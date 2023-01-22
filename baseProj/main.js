@@ -3,15 +3,83 @@ var ciao = function (e){
     log(e.type);
 }
 
+
+/*============= ENV ============================*/
+var ENV, ENV2;
+//var SHADERS;
+var GL;
+var then = 0;
+var CAMERA_MANAGER, CAMERA_MANAGER2, CubeController;
+var CAMERA_MODE = 0;			//0 visuale in terza persona, //1 visuale dall'alto, //2 visuale in prima persona
+var targetObject = null;
+
+var GL_DRAWER2, MESH_MANAGER2;
+
+
+
+var canvas1;// canvas2;
+
+
+function createEnv(canvasId) {
+    log("createEnv() | creating environment...");
+
+    var canvas = document.getElementById(canvasId);
+    log("createEnv() | canvas: " + canvas);
+    gl = canvas.getContext('webgl');
+    if(!gl) {
+        throw new Error("WegGL not supported");
+    }
+    log("createEnv() | canvas and GL context created");
+
+    log("createShaders() | creating shader programs...");
+    var programInfo = webglUtils.createProgramInfo(gl, ["vertex-shader", "fragment-shader"]);
+    var program = programInfo.program;
+    gl.useProgram(program);
+    log("createShaders() | shader programs created and used");
+
+    return {
+        canvas : canvas,
+        gl : gl,
+        programInfo : programInfo,
+        program: program
+    }
+}
+
+async function render(time) {
+
+    time *= 0.001;
+    var delta = time - then;
+    then = time;
+
+    canvas1.CAMERA_MANAGER.updateGL_DRAWER();
+    //canvas2.CAMERA_MANAGER.updateGL_DRAWER();
+
+    canvas1.GlDrawer.drawScene();
+    //canvas2.GlDrawer.drawScene();
+    requestAnimationFrame(render);
+}
+
+function canvasMain() {
+    canvas1 = new CanvasEnv("my_Canvas");
+    //canvas2 = new CanvasEnv("obj_canvas");
+
+    canvas1.main();
+    //canvas2.main();
+
+    //Start rendering loop
+    requestAnimationFrame(render);
+}
+
 function main(){
     log("CIAO!")
-    attachHandlers(canvas, "onkeydown", log);
+    attachHandler(canvas, "onkeydown", log);
     // attachHandlers(canvas, "onmousemove", log);
-    attachHandlers(canvas, "onmousedown", ciao);
-    attachHandlers(canvas, "onmouseup", log);
-    attachHandlers(canvas, "onmouseout", log);
+    attachHandler(canvas, "onmousedown", ciao);
+    attachHandler(canvas, "onmouseup", log);
+    attachHandler(canvas, "onmouseout", log);
 
     menu();
+    canvasMain();
 }
 
 
