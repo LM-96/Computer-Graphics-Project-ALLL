@@ -38,12 +38,11 @@ function CameraManager(GlDrawer, objTarget, cameraPos, cameraup, target){
     this.GlDrawer.up = this.cameraUP;
     this.GlDrawer.fov = this.fov;
 
-
-
+    //Menu change
     if(settings.Active_Menu){
       this.updateGLOnMenu();
-    }
-    this.updateMenuSettings();
+    }else
+      this.updateMenuSettings();
 
     this.GlDrawer.updateViewMatrix();
   }
@@ -60,6 +59,8 @@ function CameraManager(GlDrawer, objTarget, cameraPos, cameraup, target){
   }
 
   this.updateMenuSettings = function() {
+
+
     //Camera
     settings.cameraX = this.GlDrawer.cameraPosition.x;
     settings.cameraY = this.GlDrawer.cameraPosition.y;

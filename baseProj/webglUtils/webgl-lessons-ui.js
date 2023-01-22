@@ -74,7 +74,7 @@
     parent.innerHTML = `
       <div class="gman-widget-outer">
         <div class="gman-widget-label">${name}</div>
-        <div class="gman-widget-value"></div>
+        <input class="gman-widget-value">
         <input class="gman-widget-slider" type="range" min="${min}" max="${max}" value="${value}" />
       </div>
     `;
@@ -82,7 +82,7 @@
     var sliderElem = parent.querySelector(".gman-widget-slider");
 
     function updateValue(value) {
-      valueElem.textContent = (value * step * uiMult).toFixed(uiPrecision);
+      valueElem.value = (value * step * uiMult).toFixed(uiPrecision);
     }
 
     updateValue(value);
@@ -93,6 +93,12 @@
       fn(event, { value: value * step });
     }
 
+    function handleInputChange(event) {
+      let value = parseInt(event.target.value);
+      fn(event, { value: value});
+    }
+
+    valueElem.addEventListener('change', handleInputChange);
     sliderElem.addEventListener('input', handleChange);
     sliderElem.addEventListener('change', handleChange);
 

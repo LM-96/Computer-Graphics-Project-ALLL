@@ -1,5 +1,5 @@
 const settings = {
-    Active_Menu: false,
+    Active_Menu: false, //TODO. change active background color (as hover)
     cameraX: 2.75,
     cameraY: 5,
     cameraZ: 1,
@@ -9,7 +9,7 @@ const settings = {
     targetX: 0,
     targetY: 0,
     targetZ: 0,
-    fieldOfView: 60,
+    fieldOfView: 60
 };
 
 var widgets = null;

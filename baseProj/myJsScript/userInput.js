@@ -53,23 +53,24 @@ var mouseMove1= function(e) {
 }
 
 var keydownMap = function(e) {
-    switch(e.keyCode) {
-        case 40 : canvas1.controller.move(KEYMOVE.downArrow); break;      	//Freccia Giù
-        case 38 : canvas1.controller.move(KEYMOVE.upArrow); break;       	//Freccia Su
-        case 37 : canvas1.controller.move(KEYMOVE.leftArrow); break;       //Freccia Sx
-        case 39 : canvas1.controller.move(KEYMOVE.rightArrow); break;       	//Ferccia Dx
-        // case 104 : trans(0,0,0.1); break;		//NUmpad 8
-        // case 189:  trans(0,0,-0.1); break;		//-
-        case 96 : 	CAMERA_MANAGER.changeCameraView(0); break;        //NUMpad 0
-        case 49 : 	CAMERA_MANAGER.changeCameraView(1); break;         	//NUMpad 1
-        case 50 : 	CAMERA_MANAGER.changeCameraView(2); break;      	//NUMpad 2
-        case 51 : 	CAMERA_MANAGER.changeCameraView(3); break;          //NumPad 3
-        case 52 :	CAMERA_MANAGER.changeCameraView(4); break;        	//NumPad 4
-        case 53 :	CAMERA_MANAGER.changeCameraView(5); break;			//NumPad 5
-        case 54 :	CAMERA_MANAGER.changeCameraView(0); break;			//NumPad 6
-        case 188: 	CAMERA_MANAGER.incrementCameraFov(-1); break;		//,
-        case 190:	CAMERA_MANAGER.incrementCameraFov(1); break;		//.
-    }
+    if(!settings.Active_Menu)
+        switch(e.keyCode) {
+            case 40 : canvas1.controller.move(KEYMOVE.downArrow); break;      	//Freccia Giù
+            case 38 : canvas1.controller.move(KEYMOVE.upArrow); break;       	//Freccia Su
+            case 37 : canvas1.controller.move(KEYMOVE.leftArrow); break;       //Freccia Sx
+            case 39 : canvas1.controller.move(KEYMOVE.rightArrow); break;       	//Ferccia Dx
+            // case 104 : trans(0,0,0.1); break;		//NUmpad 8
+            // case 189:  trans(0,0,-0.1); break;		//-
+            case 96 : 	CAMERA_MANAGER.changeCameraView(0); break;        //NUMpad 0
+            case 49 : 	CAMERA_MANAGER.changeCameraView(1); break;         	//NUMpad 1
+            case 50 : 	CAMERA_MANAGER.changeCameraView(2); break;      	//NUMpad 2
+            case 51 : 	CAMERA_MANAGER.changeCameraView(3); break;          //NumPad 3
+            case 52 :	CAMERA_MANAGER.changeCameraView(4); break;        	//NumPad 4
+            case 53 :	CAMERA_MANAGER.changeCameraView(5); break;			//NumPad 5
+            case 54 :	CAMERA_MANAGER.changeCameraView(0); break;			//NumPad 6
+            case 188: 	CAMERA_MANAGER.incrementCameraFov(-1); break;		//,
+            case 190:	CAMERA_MANAGER.incrementCameraFov(1); break;		//.
+        }
     log("pos: " + target.position.toString());
 }
 
