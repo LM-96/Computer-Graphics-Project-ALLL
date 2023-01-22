@@ -93,7 +93,7 @@ export class Triple<F, S, T> implements Equatable, Cloneable<Triple<F, S, T>>, C
 
     /**
      * Sets the **second** element of this pair
-     * @param {S|null} second the first element
+     * @param {S|null} second the second element
      */
     setSecond(second: S|null) {
         this.#second = second
@@ -101,9 +101,31 @@ export class Triple<F, S, T> implements Equatable, Cloneable<Triple<F, S, T>>, C
 
     /**
      * Sets the **third** element of this pair
-     * @param {T|null} second the first element
+     * @param {T|null} third the third element
      */
     setThird(third: T|null) {
+        this.#third = third
+    }
+
+    /**
+     * Sets the elements of this pair to the values of the given `Triple`
+     * @param {Triple<F, S, T>} other the triple to copy
+     */
+    setFrom(other: Triple<F, S, T>) {
+        this.#first = other.#first
+        this.#second = other.#second
+        this.#third = other.#third
+    }
+
+    /**
+     * Sets the **first**, the **second** and the **third** element of this triple
+     * @param {F|null} first the first element
+     * @param {S|null} second the second element
+     * @param {T|null} third the third element
+     */
+    setAll(first: F, second: S, third: T) {
+        this.#first = first
+        this.#second = second
         this.#third = third
     }
 

@@ -1,5 +1,8 @@
 import {SignalName} from "../signals/signal";
 import SignalFlows from "../signals/flow";
+import {MeshObject} from "./mesh-object";
+import {SingleSignalSubscriber} from "../signals/subscriptions";
+import PerformedTranslation from "../geometry/data/performed-translation";
 
 export class MeshObjectSignals {
 
@@ -32,7 +35,7 @@ export class MeshObjectSignals {
      * @returns {string} the string name of the signal that is emitted when the object is scaled
      */
     static scaleSignalNameOf(name: string): string {
-        return "mesh-objects." + name + ".translation"
+        return "mesh-objects." + name + ".scale"
     }
 
     /**
@@ -60,6 +63,15 @@ export class MeshObjectSignals {
      */
     static getScaleSignalNameOf(name: string): SignalName {
         return SignalFlows.getSignalName(MeshObjectSignals.scaleSignalNameOf(name))
+    }
+
+    /**
+     * Returns the subscriber for the translation signal of the given object
+     * @param {MeshObject} obj the object
+     * @returns {SingleSignalSubscriber<PerformedTranslation>} the subscriber for the translation signal of the given object     *
+     */
+    static getTranslationSubscriberOf(obj: MeshObject): SingleSignalSubscriber<MeshObject, PerformedTranslation, void> {
+        return SignalFlows.getSubscriber(MeshObjectSignals.translationSignalNameOf(obj.getName()))
     }
 
 }

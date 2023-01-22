@@ -24,9 +24,9 @@ export class FlowedMeshObject implements MeshObject {
   #limitChecker: LimitsChecker
   #bufferInfo: any = null
 
-  #translationFlow: SingleSignalFlow<MeshObject, PerformedTranslation, void>
-  #polarRotationFlow: SingleSignalFlow<MeshObject, PerformedPolarRotation, void>
-  #scaleFlow: SingleSignalFlow<MeshObject, PerformedScale, void>
+  readonly #translationFlow: SingleSignalFlow<MeshObject, PerformedTranslation, void>
+  readonly #polarRotationFlow: SingleSignalFlow<MeshObject, PerformedPolarRotation, void>
+  readonly #scaleFlow: SingleSignalFlow<MeshObject, PerformedScale, void>
   #performedTranslationBuilder: PerformedTranslationBuilder
   #performedPolarRotationBuilder: PerformedPolarRotationBuilder
   #performedScaleBuilder: PerformedScaleBuilder

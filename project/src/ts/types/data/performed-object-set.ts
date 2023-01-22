@@ -9,12 +9,12 @@ export class PerformedObjectSet<T> {
 }
 
 export class PerformedObjectSetBuilder<T> {
-    oldValue: T
-    newValue: T
+    oldValue: T|null
+    newValue: T|null
 
-    constructor() {
-        this.oldValue = null
-        this.newValue = null
+    constructor(oldValue: T|null = null, newValue: T|null = null) {
+        this.oldValue = oldValue
+        this.newValue = newValue
     }
 
     /**

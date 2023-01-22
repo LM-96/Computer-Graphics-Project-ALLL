@@ -94,6 +94,23 @@ class Pair {
         __classPrivateFieldSet(this, _Pair_second, second, "f");
     }
     /**
+     * Sets the **first** and the **second** element of this pair
+     * @param {F|null} first the first element
+     * @param {S|null} second the second element
+     */
+    setAll(first, second) {
+        __classPrivateFieldSet(this, _Pair_first, first, "f");
+        __classPrivateFieldSet(this, _Pair_second, second, "f");
+    }
+    /**
+     * Sets the elements of this pair to the values of the given `pair`
+     * @param {Pair<F, S>} other the pair to take the values from
+     */
+    setFrom(other) {
+        __classPrivateFieldSet(this, _Pair_first, __classPrivateFieldGet(other, _Pair_first, "f"), "f");
+        __classPrivateFieldSet(this, _Pair_second, __classPrivateFieldGet(other, _Pair_second, "f"), "f");
+    }
+    /**
      * Adds an element to this couple producing a `Triple` with the two element of this
      * couple *plus* the one given as parameter
      * @param element

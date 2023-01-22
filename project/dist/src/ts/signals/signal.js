@@ -39,6 +39,9 @@ class Signal {
         this.source = source;
         this.data = data;
     }
+    clone() {
+        return new Signal(this.name, this.source, this.data);
+    }
 }
 exports.Signal = Signal;
 /**

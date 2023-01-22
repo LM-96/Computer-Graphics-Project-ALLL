@@ -90,6 +90,25 @@ export class Pair<F, S> implements Equatable, Cloneable<Pair<F, S>>, Copiable<Pa
     }
 
     /**
+     * Sets the **first** and the **second** element of this pair
+     * @param {F|null} first the first element
+     * @param {S|null} second the second element
+     */
+    setAll(first: F|null, second: S|null) {
+        this.#first = first
+        this.#second = second
+    }
+
+    /**
+     * Sets the elements of this pair to the values of the given `pair`
+     * @param {Pair<F, S>} other the pair to take the values from
+     */
+    setFrom(other: Pair<F, S>) {
+        this.#first = other.#first
+        this.#second = other.#second
+    }
+
+    /**
      * Adds an element to this couple producing a `Triple` with the two element of this
      * couple *plus* the one given as parameter
      * @param element

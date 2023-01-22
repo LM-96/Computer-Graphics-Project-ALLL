@@ -98,16 +98,36 @@ class Triple {
     }
     /**
      * Sets the **second** element of this pair
-     * @param {S|null} second the first element
+     * @param {S|null} second the second element
      */
     setSecond(second) {
         __classPrivateFieldSet(this, _Triple_second, second, "f");
     }
     /**
      * Sets the **third** element of this pair
-     * @param {T|null} second the first element
+     * @param {T|null} third the third element
      */
     setThird(third) {
+        __classPrivateFieldSet(this, _Triple_third, third, "f");
+    }
+    /**
+     * Sets the elements of this pair to the values of the given `Triple`
+     * @param {Triple<F, S, T>} other the triple to copy
+     */
+    setFrom(other) {
+        __classPrivateFieldSet(this, _Triple_first, __classPrivateFieldGet(other, _Triple_first, "f"), "f");
+        __classPrivateFieldSet(this, _Triple_second, __classPrivateFieldGet(other, _Triple_second, "f"), "f");
+        __classPrivateFieldSet(this, _Triple_third, __classPrivateFieldGet(other, _Triple_third, "f"), "f");
+    }
+    /**
+     * Sets the **first**, the **second** and the **third** element of this triple
+     * @param {F|null} first the first element
+     * @param {S|null} second the second element
+     * @param {T|null} third the third element
+     */
+    setAll(first, second, third) {
+        __classPrivateFieldSet(this, _Triple_first, first, "f");
+        __classPrivateFieldSet(this, _Triple_second, second, "f");
         __classPrivateFieldSet(this, _Triple_third, third, "f");
     }
     /**

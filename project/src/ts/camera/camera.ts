@@ -95,8 +95,8 @@ export interface Camera {
     setTarget(x: number, y: number, z: number): void;
 
     /**
-     * Sets the distance from the target of the camera to the given vector
-     * @param {NumberTrio} distanceFromTarget the new distance from target
+     * Sets the position of the camera to the given distance from the target
+     * @param {NumberTrio} distanceFromTarget the distance from target
      */
     setDistanceFromTarget(distanceFromTarget: NumberTrio): void;
 
@@ -128,7 +128,7 @@ export interface Camera {
      * If this camera is also *following* the object, this method will return the same object as
      * `getFollowedObject()`
      */
-    getLookedObject(): MeshObject;
+    getLookedObject(): MeshObject|null;
 
     /**
      * Makes the camera follow the translation of the given object until
@@ -141,7 +141,7 @@ export interface Camera {
     startFollowingObject(obj: MeshObject): void;
 
     /**
-     * Makes the camera stop following the translation of the object it is currently following
+     * Makes the camera stop following the translation of the object it is currently following.
      * The target of the camera will be set to the current object's position, but it will not
      * follow the object's translation (same for the distance from target)
      */
@@ -159,21 +159,59 @@ export interface Camera {
      * that is fired when the camera's position changes
      */
     getCameraPositionSubscriber(): SingleSignalSubscriber<Camera, PerformedTranslation, void>
-    
+
+    /**
+     * Returns the subscriber for the signal that is fired when the camera's up vector changes
+     * @returns {SingleSignalSubscriber<PerformedNumberTrioChange>} the subscriber for the signal
+     * that is fired when the camera's up vector changes
+     */
     getUpSubscriber(): SingleSignalSubscriber<Camera, PerformedNumberTrioChange, void>
 
+    /**
+     * Returns the subscriber for the signal that is fired when the camera's target changes
+     * @returns {SingleSignalSubscriber<PerformedObjectSet<Point3D>>} the subscriber for the signal
+     * that is fired when the camera's target changes
+     */
     getTargetSubscriber(): SingleSignalSubscriber<Camera, PerformedObjectSet<Point3D>, void>
 
+    /**
+     * Returns the subscriber for the signal that is fired when the camera's field of view changes
+     * @returns {SingleSignalSubscriber<PerformedObjectSet<Angle>>} the subscriber for the signal
+     * that is fired when the camera's field of view changes
+     */
     getFovSubscriber(): SingleSignalSubscriber<Camera, PerformedObjectSet<Angle>, void>
 
-    getDistanceFromTargetSubscriber(): SingleSignalSubscriber<Camera, PerformedNumberTrioChange, void>
-
+    /**
+     * Returns the subscriber for the signal that is fired when the camera starts or stops looking at an object
+     * @returns {SingleSignalSubscriber<PerformedObjectSet<boolean>>} the subscriber for the signal
+     * that is fired when the camera starts or stops looking at an object
+     */
     getLookingAtObjectSubscriber(): SingleSignalSubscriber<Camera, PerformedObjectSet<boolean>, void>
 
+    /**
+     * Returns the subscriber for the signal that is fired when the camera starts or stops following an object
+     * @returns {SingleSignalSubscriber<PerformedObjectSet<boolean>>} the subscriber for the signal
+     * that is fired when the camera starts or stops following an object
+     */
     getFollowingObjectSubscriber(): SingleSignalSubscriber<Camera, PerformedObjectSet<boolean>, void>
 
+    /**
+     * Returns the subscriber for the signal that is fired when the object the camera is looking at is changed
+     * @returns {SingleSignalSubscriber<PerformedObjectSet<MeshObject>>} the subscriber for the signal
+     * that is fired when the object the camera is looking at is changed
+     */
+    getLookedObjectSubscriber(): SingleSignalSubscriber<Camera, PerformedObjectSet<MeshObject|null>, void>
+
+    /**
+     * Returns the subscriber for the signal that is fired when the object the camera has to follow is changed
+     * @returns {SingleSignalSubscriber<PerformedObjectSet<MeshObject>>} the subscriber for the signal
+     * that is fired when the object the camera has to follow is changed
+     */
     getFollowedObjectSubscriber(): SingleSignalSubscriber<Camera, PerformedObjectSet<MeshObject|null>, void>
 
+    /**
+     * Calculates the camera matrix for `WebGL`
+     */
     calculateCameraMatrix(): number[]
 
 }

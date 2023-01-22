@@ -10,6 +10,7 @@ exports.MappedSingleSignalFlow = void 0;
 const signal_1 = require("./signal");
 const subscriptions_1 = require("./subscriptions");
 const result_1 = require("../types/result");
+const log_1 = require("../log/log");
 /**
  * An implementation of `SingleSignalFlow` based on a map
  */
@@ -32,13 +33,16 @@ class MappedSingleSignalFlow {
         return null;
     }
     fire(source, data) {
+        log_1.Log.log("SignalSystem | firing signal " + this.signalName.name);
         let signal = new signal_1.Signal(this.signalName, source, data);
         let results = new Map();
         let currentResult;
         for (let subscription of __classPrivateFieldGet(this, _MappedSingleSignalFlow_subscriptions, "f").values()) {
-            currentResult = (0, result_1.resultOf)(subscription.options.handler, signal);
+            log_1.Log.log("SignalSystem | firing signal " + this.signalName.name + " to subscriber " + subscription.receipt.subscriptionId);
+            currentResult = (0, result_1.resultOf)(subscription.options.handler, signal.clone());
             results.set(subscription.receipt.subscriptionId, currentResult);
         }
+        log_1.Log.log("SignalSystem | signal " + this.signalName.name + " fired");
         return new signal_1.SyncFiredSignal(signal, results);
     }
 }

@@ -9,9 +9,9 @@ class PerformedObjectSet {
 }
 exports.PerformedObjectSet = PerformedObjectSet;
 class PerformedObjectSetBuilder {
-    constructor() {
-        this.oldValue = null;
-        this.newValue = null;
+    constructor(oldValue = null, newValue = null) {
+        this.oldValue = oldValue;
+        this.newValue = newValue;
     }
     /**
      * Builds a new PerformedObjectSet instance throwing an error if the oldValue or newValue is null

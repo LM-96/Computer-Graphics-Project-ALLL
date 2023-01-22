@@ -1,5 +1,6 @@
 import {Equatable} from "../types/equatable";
 import {Result, resultOf} from "../types/result";
+import {Cloneable} from "../types/cloneable";
 
 /**
  * The name of a signal
@@ -25,7 +26,7 @@ export class SignalName implements Equatable{
 /**
  * A signal that is currently firing
  */
-export class Signal<S, D, R> {
+export class Signal<S, D, R> implements Cloneable<Signal<S, D, R>>{
 
     /**
      * The name of the signal
@@ -46,6 +47,10 @@ export class Signal<S, D, R> {
         this.name = name
         this.source = source
         this.data = data
+    }
+
+    clone(): Signal<S, D, R> {
+        return new Signal<S, D, R>(this.name, this.source, this.data);
     }
 }
 

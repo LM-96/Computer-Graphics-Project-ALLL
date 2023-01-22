@@ -3,6 +3,8 @@ import {Attributes, loadMesh, MeshData} from "./load-mesh-wrapper";
 import {FlowedMeshObject} from "./flowed-mesh-object";
 import SignalFlows, {SingleSignalFlow} from "../signals/flow";
 import {MeshObjectSignals} from "./mesh-object-signals";
+import {WebGLEnvironment} from "../webgl/webgl-environment";
+import {Log} from "../log/log";
 
 /**
  * A manager for the mesh object able to load them maintaining their data.
@@ -10,28 +12,14 @@ import {MeshObjectSignals} from "./mesh-object-signals";
  * an internal map and can be retrieved as needed simply calling the 'get' function
  */
 export class MeshObjectManager {
-    #gl: WebGLRenderingContext
-    #programInfo: any
-    #program: WebGLProgram
+    readonly applicationName: string
+    #glEnvironment: WebGLEnvironment
     #objects: Map<string, MeshObject>
     #loadedObjectFlow: SingleSignalFlow<MeshObjectManager, MeshObject, void>
 
-    static #instance: MeshObjectManager = null;
-    static get(gl: WebGLRenderingContext = null, programInfo: any = null): MeshObjectManager {
-        if(MeshObjectManager.#instance == null) {
-            if(gl == null || programInfo == null) {
-                throw new Error(
-                    "The MeshObjectManager cannot be created without a WebGLRenderingContext and a programInfo");
-            }
-            MeshObjectManager.#instance = new MeshObjectManager(gl, programInfo);
-        }
-        return MeshObjectManager.#instance;
-    }
-
-    private constructor(gl: WebGLRenderingContext, programInfo: any) {
-        this.#gl = gl
-        this.#programInfo = programInfo
-        this.#program = programInfo.program
+    constructor(applicationName: string, environment: WebGLEnvironment) {
+        this.applicationName = applicationName
+        this.#glEnvironment = environment
         this.#objects = new Map()
         this.#loadedObjectFlow = SignalFlows.newSingleFlow(MeshObjectSignals.OBJECT_LOADED_SIGNAL_STRING_NAME)
     }
@@ -46,9 +34,11 @@ export class MeshObjectManager {
      * @returns the new MeshObject that is also stored into the manager
      */
     loadObj(name: string, path: string): MeshObject {
-        let data: MeshData = loadMesh(this.#gl, path)
+        Log.log("MeshObjectManager[" + this.applicationName + "] | loading object '" + name + "' from '" + path + "'")
+        let data: MeshData = loadMesh(this.#glEnvironment.getContext(), path)
         let res: MeshObject = new FlowedMeshObject(name, data)
-        res.glInit(this.#gl)
+        this.#objects.set(name, res)
+        res.glInit(this.#glEnvironment.getContext())
         this.#loadedObjectFlow.fire(this, res)
         return res
     }
@@ -89,7 +79,7 @@ export class MeshObjectManager {
         };
         let meshObj = new FlowedMeshObject(name, data);
         this.#objects.set(name, meshObj);
-        meshObj.glInit(this.#gl);
+        meshObj.glInit(this.#glEnvironment.getContext());
         this.#loadedObjectFlow.fire(this, meshObj);
         return meshObj;
     };

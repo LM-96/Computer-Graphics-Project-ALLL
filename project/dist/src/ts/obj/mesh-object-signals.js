@@ -25,7 +25,7 @@ class MeshObjectSignals {
      * @returns {string} the string name of the signal that is emitted when the object is scaled
      */
     static scaleSignalNameOf(name) {
-        return "mesh-objects." + name + ".translation";
+        return "mesh-objects." + name + ".scale";
     }
     /**
      * Returns the registered `SignalName` for the translation signal of the given object
@@ -50,6 +50,14 @@ class MeshObjectSignals {
      */
     static getScaleSignalNameOf(name) {
         return flow_1.default.getSignalName(MeshObjectSignals.scaleSignalNameOf(name));
+    }
+    /**
+     * Returns the subscriber for the translation signal of the given object
+     * @param {MeshObject} obj the object
+     * @returns {SingleSignalSubscriber<PerformedTranslation>} the subscriber for the translation signal of the given object     *
+     */
+    static getTranslationSubscriberOf(obj) {
+        return flow_1.default.getSubscriber(MeshObjectSignals.translationSignalNameOf(obj.getName()));
     }
 }
 exports.MeshObjectSignals = MeshObjectSignals;
