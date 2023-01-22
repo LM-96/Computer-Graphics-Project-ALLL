@@ -69,7 +69,8 @@ export class FlowedMeshObject implements MeshObject {
     WebGLUtils.setUniforms(programInfo, this.#data.uniforms);
     Log.log("MeshObject[" + this.#name + "] uniforms set: " + this.#data.uniforms)
 
-    gl.drawArrays(gl.TRIANGLES, 0, this.#bufferInfo.numElements);
+    //gl.drawArrays(gl.TRIANGLES, 0, this.#bufferInfo.numElements);
+    WebGLUtils.drawBufferInfo(gl, this.#bufferInfo);
     Log.log("MeshObject[" + this.#name + "] | drawArrays with " + this.#bufferInfo.numElements + " elements")
 
     Log.log("MeshObject[" + this.#name + "] | drawn")

@@ -63,7 +63,7 @@ class FlowedCamera {
         __classPrivateFieldGet(this, _FlowedCamera_performedTranslationBuilder, "f").who = "camera";
     }
     calculateCameraMatrix() {
-        return M4.lookAt(__classPrivateFieldGet(this, _FlowedCamera_position, "f"), __classPrivateFieldGet(this, _FlowedCamera_target, "f"), __classPrivateFieldGet(this, _FlowedCamera_up, "f"));
+        return M4.lookAt(__classPrivateFieldGet(this, _FlowedCamera_position, "f").toArray(), __classPrivateFieldGet(this, _FlowedCamera_target, "f").toArray(), __classPrivateFieldGet(this, _FlowedCamera_up, "f").toArray());
     }
     getCameraPositionSubscriber() {
         return __classPrivateFieldGet(this, _FlowedCamera_positionFlow, "f");

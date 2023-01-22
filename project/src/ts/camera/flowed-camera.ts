@@ -74,7 +74,7 @@ export default class FlowedCamera implements Camera {
     }
 
     calculateCameraMatrix(): number[] {
-        return M4.lookAt(this.#position, this.#target, this.#up);
+        return M4.lookAt(this.#position.toArray(), this.#target.toArray(), this.#up.toArray());
     }
 
     getCameraPositionSubscriber(): SingleSignalSubscriber<Camera, PerformedTranslation, void> {

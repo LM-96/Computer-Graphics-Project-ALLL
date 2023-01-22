@@ -279,6 +279,11 @@ export interface Point3D extends ReadablePoint3D, Cloneable<Point3D> {
      * of this point
      */
     asColumnVector(): NumMatrix
+
+    /**
+     * Returns an array with the values of the coordinates of this point
+     */
+    toArray(): number[]
 }
 
 /**

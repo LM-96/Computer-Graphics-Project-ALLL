@@ -66,7 +66,8 @@ class FlowedMeshObject {
         log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] buffers set: " + __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f"));
         WebGLUtils.setUniforms(programInfo, __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").uniforms);
         log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] uniforms set: " + __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").uniforms);
-        gl.drawArrays(gl.TRIANGLES, 0, __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f").numElements);
+        //gl.drawArrays(gl.TRIANGLES, 0, this.#bufferInfo.numElements);
+        WebGLUtils.drawBufferInfo(gl, __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f"));
         log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] | drawArrays with " + __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f").numElements + " elements");
         log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] | drawn");
     }

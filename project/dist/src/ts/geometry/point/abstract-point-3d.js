@@ -132,6 +132,9 @@ class AbstractPoint3D {
     toString() {
         return "(" + this.getX() + ", " + this.getY() + ", " + this.getZ() + ")";
     }
+    toArray() {
+        return [this.getX(), this.getY(), this.getZ()];
+    }
 }
 exports.AbstractPoint3D = AbstractPoint3D;
 //# sourceMappingURL=abstract-point-3d.js.map

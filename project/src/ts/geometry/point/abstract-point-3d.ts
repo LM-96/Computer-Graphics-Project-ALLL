@@ -165,4 +165,8 @@ export abstract class AbstractPoint3D implements Point3D {
         return "(" + this.getX() + ", " + this.getY() + ", " + this.getZ() + ")"
     }
 
+    toArray(): number[] {
+        return [this.getX(), this.getY(), this.getZ()]
+    }
+
 }

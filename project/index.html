@@ -71,7 +71,6 @@ precision highp float;
     vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
     vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * u_colorLight.rgb;
     float effectiveOpacity = opacity * diffuseMapColor.a;
-
     gl_FragColor = vec4(
         emissive +
         ambient * u_ambientLight +
