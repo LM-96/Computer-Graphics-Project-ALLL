@@ -14,9 +14,9 @@ Log.enableLog()
     ["vertex-shader", "fragment-shader"])
 class MyApp extends WebGLApplication {
 
-    //@WebGLMesh("./assets/plane-2m.obj")
-    //@ObjScale(L, L, 0)
-    //private floor: MeshObject
+    @WebGLMesh("./assets/plane-2m.obj")
+    @ObjScale(L, L, 0)
+    private floor: MeshObject
 
     @WebGLMesh("./assets/cubo_con_assi.obj")
     @ObjPosition(0, 0, 0.25)

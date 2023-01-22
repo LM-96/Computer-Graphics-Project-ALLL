@@ -26,6 +26,10 @@ let MyApp = class MyApp extends webgl_application_1.WebGLApplication {
     }
 };
 __decorate([
+    (0, webgl_application_1.WebGLMesh)("./assets/plane-2m.obj"),
+    (0, webgl_application_1.ObjScale)(L, L, 0)
+], MyApp.prototype, "floor", void 0);
+__decorate([
     (0, webgl_application_1.WebGLMesh)("./assets/cubo_con_assi.obj"),
     (0, webgl_application_1.ObjPosition)(0, 0, 0.25),
     (0, webgl_application_1.ObjScale)(0.25, 0.25, 0.25),

@@ -4,7 +4,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _a, _CameraControls_initPositionControls, _CameraControls_initUpControls, _CameraControls_initFovControls;
+var _a, _CameraControls_initPositionControls, _CameraControls_initUpControls, _CameraControls_initFovControls, _CameraControls_initTargetControls;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CameraControls = void 0;
 const options_1 = require("../signals/options");
@@ -34,6 +34,7 @@ const BUTTONS = {
     yUpIncBtn: "yUpIncBtn", yUpDecBtn: "yUpDecBtn",
     zUpIncBtn: "zUpIncBtn", zUpDecBtn: "zUpDecBtn",
     fovIncBtn: "fovIncBtn", fovDecBtn: "fovDecBtn",
+    setXTargetBtn: "setXTargetBtn", setYTargetBtn: "setYTargetBtn", setZTargetBtn: "setZTargetBtn",
 };
 class CameraControls {
     static init(application) {
@@ -42,6 +43,7 @@ class CameraControls {
         __classPrivateFieldGet(this, _a, "m", _CameraControls_initPositionControls).call(this, application);
         __classPrivateFieldGet(this, _a, "m", _CameraControls_initUpControls).call(this, application);
         __classPrivateFieldGet(this, _a, "m", _CameraControls_initFovControls).call(this, application);
+        __classPrivateFieldGet(this, _a, "m", _CameraControls_initTargetControls).call(this, application);
     }
 }
 exports.CameraControls = CameraControls;
@@ -136,6 +138,31 @@ _a = CameraControls, _CameraControls_initPositionControls = function _CameraCont
     updateFovViewers(camera.getCurrentFov());
     camera.getFovSubscriber().subscribe((0, options_1.handler)((signal) => {
         updateFovViewers(signal.data.newValue);
+        application.getMeshObjectDrawer().drawScene();
+    }));
+}, _CameraControls_initTargetControls = function _CameraControls_initTargetControls(application) {
+    var _b, _c, _d;
+    let camera = application.getCamera();
+    (_b = document.getElementById(BUTTONS.setXTargetBtn)) === null || _b === void 0 ? void 0 : _b.addEventListener("click", (e) => {
+        camera
+            .setTarget(+(0, dom_utils_1.getInputElementById)(INPUT_NAMES.xTarget).value + 1, camera.getCurrentTarget().getY(), camera.getCurrentTarget().getZ());
+    });
+    (_c = document.getElementById(BUTTONS.setYTargetBtn)) === null || _c === void 0 ? void 0 : _c.addEventListener("click", (e) => {
+        camera
+            .setTarget(camera.getCurrentTarget().getX(), +(0, dom_utils_1.getInputElementById)(INPUT_NAMES.yTarget).value + 1, camera.getCurrentTarget().getZ());
+    });
+    (_d = document.getElementById(BUTTONS.setZTargetBtn)) === null || _d === void 0 ? void 0 : _d.addEventListener("click", (e) => {
+        camera
+            .setTarget(camera.getCurrentTarget().getX(), camera.getCurrentTarget().getY(), +(0, dom_utils_1.getInputElementById)(INPUT_NAMES.zTarget).value + 1);
+    });
+    let updateTargetViewers = function (x, y, z) {
+        (0, dom_utils_1.getInputElementById)(INPUT_NAMES.xTarget).value = x.toString();
+        (0, dom_utils_1.getInputElementById)(INPUT_NAMES.yTarget).value = y.toString();
+        (0, dom_utils_1.getInputElementById)(INPUT_NAMES.zTarget).value = z.toString();
+    };
+    updateTargetViewers(camera.getCurrentTarget().getX(), camera.getCurrentTarget().getY(), camera.getCurrentTarget().getZ());
+    camera.getTargetSubscriber().subscribe((0, options_1.handler)((signal) => {
+        updateTargetViewers(signal.data.newValue.getX(), signal.data.newValue.getY(), signal.data.newValue.getZ());
         application.getMeshObjectDrawer().drawScene();
     }));
 };

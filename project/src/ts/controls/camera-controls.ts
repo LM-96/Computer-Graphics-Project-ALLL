@@ -8,6 +8,7 @@ import {Log} from "../log/log";
 import {PerformedNumberTrioChange} from "../types/data/performed-number-trio-change";
 import {Angle, AngleUnit} from "../geometry/angle/angle";
 import {PerformedObjectSet} from "../types/data/performed-object-set";
+import {Point3D} from "../geometry/point/point-3d";
 
 const INPUT_NAMES = {
     xCam : "xCamInput", yCam : "yCamInput", zCam : "zCamInput",
@@ -34,6 +35,7 @@ const BUTTONS = {
     yUpIncBtn: "yUpIncBtn", yUpDecBtn : "yUpDecBtn",
     zUpIncBtn: "zUpIncBtn", zUpDecBtn : "zUpDecBtn",
     fovIncBtn: "fovIncBtn", fovDecBtn : "fovDecBtn",
+    setXTargetBtn: "setXTargetBtn", setYTargetBtn : "setYTargetBtn", setZTargetBtn : "setZTargetBtn",
 }
 
 export class CameraControls {
@@ -182,6 +184,47 @@ export class CameraControls {
         }))
     }
 
+    static #initTargetControls(application: WebGLApplication) {
+        let camera: Camera = application.getCamera()
+
+        document.getElementById(BUTTONS.setXTargetBtn)?.addEventListener("click", (e) => {
+            camera
+                .setTarget(+getInputElementById(INPUT_NAMES.xTarget).value + 1,
+                    camera.getCurrentTarget().getY(),
+                    camera.getCurrentTarget().getZ());
+        })
+
+        document.getElementById(BUTTONS.setYTargetBtn)?.addEventListener("click", (e) => {
+            camera
+                .setTarget(camera.getCurrentTarget().getX(),
+                    +getInputElementById(INPUT_NAMES.yTarget).value + 1,
+                    camera.getCurrentTarget().getZ());
+        })
+
+        document.getElementById(BUTTONS.setZTargetBtn)?.addEventListener("click", (e) => {
+            camera
+                .setTarget(camera.getCurrentTarget().getX(),
+                    camera.getCurrentTarget().getY(),
+                    +getInputElementById(INPUT_NAMES.zTarget).value + 1);
+        })
+
+        let updateTargetViewers = function(x: number, y: number, z: number) {
+            getInputElementById(INPUT_NAMES.xTarget).value = x.toString();
+            getInputElementById(INPUT_NAMES.yTarget).value = y.toString();
+            getInputElementById(INPUT_NAMES.zTarget).value = z.toString();
+        }
+
+        updateTargetViewers(camera.getCurrentTarget().getX(),
+            camera.getCurrentTarget().getY(),
+            camera.getCurrentTarget().getZ())
+        camera.getTargetSubscriber().subscribe(handler((signal: Signal<Camera, PerformedObjectSet<Point3D>, void>) => {
+            updateTargetViewers(signal.data.newValue.getX(),
+                signal.data.newValue.getY(),
+                signal.data.newValue.getZ())
+            application.getMeshObjectDrawer().drawScene()
+        }))
+    }
+
     static init(application: WebGLApplication) {
         Log.log("CameraControls | init")
         let camera = application.getCamera()
@@ -189,6 +232,7 @@ export class CameraControls {
         this.#initPositionControls(application)
         this.#initUpControls(application)
         this.#initFovControls(application)
+        this.#initTargetControls(application)
     }
 
 }
