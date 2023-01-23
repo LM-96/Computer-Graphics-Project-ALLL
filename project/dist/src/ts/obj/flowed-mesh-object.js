@@ -10,7 +10,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _FlowedMeshObject_name, _FlowedMeshObject_data, _FlowedMeshObject_position, _FlowedMeshObject_polarRotation, _FlowedMeshObject_scale, _FlowedMeshObject_limitChecker, _FlowedMeshObject_translationFlow, _FlowedMeshObject_polarRotationFlow, _FlowedMeshObject_scaleFlow, _FlowedMeshObject_performedTranslationBuilder, _FlowedMeshObject_performedPolarRotationBuilder, _FlowedMeshObject_performedScaleBuilder;
+var _FlowedMeshObject_instances, _FlowedMeshObject_name, _FlowedMeshObject_data, _FlowedMeshObject_position, _FlowedMeshObject_polarRotation, _FlowedMeshObject_scale, _FlowedMeshObject_limitChecker, _FlowedMeshObject_translationFlow, _FlowedMeshObject_polarRotationFlow, _FlowedMeshObject_scaleFlow, _FlowedMeshObject_performedTranslationBuilder, _FlowedMeshObject_performedPolarRotationBuilder, _FlowedMeshObject_performedScaleBuilder, _FlowedMeshObject_create1PixelTexture, _FlowedMeshObject_createTexture;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FlowedMeshObject = void 0;
 const number_trio_1 = require("../types/numbers/number-trio");
@@ -26,6 +26,7 @@ const mesh_object_signals_1 = require("./mesh-object-signals");
 const log_1 = require("../log/log");
 class FlowedMeshObject {
     constructor(name, data) {
+        _FlowedMeshObject_instances.add(this);
         _FlowedMeshObject_name.set(this, void 0);
         _FlowedMeshObject_data.set(this, void 0);
         _FlowedMeshObject_position.set(this, void 0);
@@ -62,15 +63,15 @@ class FlowedMeshObject {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         }
         let u_world = __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").u_world;
-        for (let { bufferInfo, material } of __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").parts) {
+        for (let part of __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").parts) {
             // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
-            WebGLUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+            WebGLUtils.setBuffersAndAttributes(gl, programInfo, part.bufferInfo);
             // calls gl.uniform
             WebGLUtils.setUniforms(programInfo, {
                 u_world,
-            }, material);
+            }, part.material);
             // calls gl.drawArrays or gl.drawElements
-            WebGLUtils.drawBufferInfo(gl, bufferInfo);
+            WebGLUtils.drawBufferInfo(gl, part.bufferInfo);
         }
         // for (let part of this.#data.parts) {
         //   // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
@@ -109,6 +110,9 @@ class FlowedMeshObject {
     glInit(gl) {
         __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").u_world = M4.identity();
         log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] initialized");
+        for (let part of __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").parts) {
+            part.bufferInfo = WebGLUtils.createBufferInfoFromArrays(gl, part.data);
+        }
     }
     setLimitsChecker(limitsChecker) {
         __classPrivateFieldSet(this, _FlowedMeshObject_limitChecker, limitsChecker, "f");
@@ -168,5 +172,33 @@ class FlowedMeshObject {
     }
 }
 exports.FlowedMeshObject = FlowedMeshObject;
-_FlowedMeshObject_name = new WeakMap(), _FlowedMeshObject_data = new WeakMap(), _FlowedMeshObject_position = new WeakMap(), _FlowedMeshObject_polarRotation = new WeakMap(), _FlowedMeshObject_scale = new WeakMap(), _FlowedMeshObject_limitChecker = new WeakMap(), _FlowedMeshObject_translationFlow = new WeakMap(), _FlowedMeshObject_polarRotationFlow = new WeakMap(), _FlowedMeshObject_scaleFlow = new WeakMap(), _FlowedMeshObject_performedTranslationBuilder = new WeakMap(), _FlowedMeshObject_performedPolarRotationBuilder = new WeakMap(), _FlowedMeshObject_performedScaleBuilder = new WeakMap();
+_FlowedMeshObject_name = new WeakMap(), _FlowedMeshObject_data = new WeakMap(), _FlowedMeshObject_position = new WeakMap(), _FlowedMeshObject_polarRotation = new WeakMap(), _FlowedMeshObject_scale = new WeakMap(), _FlowedMeshObject_limitChecker = new WeakMap(), _FlowedMeshObject_translationFlow = new WeakMap(), _FlowedMeshObject_polarRotationFlow = new WeakMap(), _FlowedMeshObject_scaleFlow = new WeakMap(), _FlowedMeshObject_performedTranslationBuilder = new WeakMap(), _FlowedMeshObject_performedPolarRotationBuilder = new WeakMap(), _FlowedMeshObject_performedScaleBuilder = new WeakMap(), _FlowedMeshObject_instances = new WeakSet(), _FlowedMeshObject_create1PixelTexture = function _FlowedMeshObject_create1PixelTexture(gl, pixel) {
+    let texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(pixel));
+    return texture;
+}, _FlowedMeshObject_createTexture = function _FlowedMeshObject_createTexture(gl, url) {
+    let texture = create1PixelTexture(gl, [128, 192, 255, 255]);
+    // Asynchronously load an image
+    let image = new Image();
+    image.src = url;
+    image.addEventListener('load', function () {
+        // Now that the image has loaded make copy it to the texture.
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        // Check if the image is a power of 2 in both dimensions.
+        if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+            // Yes, it's a power of 2. Generate mips.
+            gl.generateMipmap(gl.TEXTURE_2D);
+        }
+        else {
+            // No, it's not a power of 2. Turn of mips and set wrapping to clamp to edge
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        }
+    });
+    return texture;
+};
 //# sourceMappingURL=flowed-mesh-object.js.map

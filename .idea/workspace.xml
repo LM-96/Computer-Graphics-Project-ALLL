@@ -11,12 +11,17 @@
       <change beforePath="$PROJECT_DIR$/project/dist/lib/js/load_objx.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/load_objx.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-manager.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-manager.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-manager.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/lib/js/load_objx.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/load_objx.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/obj/flowed-mesh-object.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/flowed-mesh-object.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-drawer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-drawer.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-manager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-manager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,25 +52,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/luca/Github/Computer-Graphics-Project-ALLL/project/assets",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.new.ui",
-    "ts.external.directory.path": "/usr/local/lib/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/luca/Github/Computer-Graphics-Project-ALLL/project/assets&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/usr/local/lib/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/project/assets" />
@@ -176,7 +181,8 @@
       <workItem from="1674289727147" duration="11300000" />
       <workItem from="1674371678090" duration="240000" />
       <workItem from="1674371933978" duration="25890000" />
-      <workItem from="1674410261890" duration="24018000" />
+      <workItem from="1674410261890" duration="27126000" />
+      <workItem from="1674471652123" duration="3242000" />
     </task>
     <servers />
   </component>

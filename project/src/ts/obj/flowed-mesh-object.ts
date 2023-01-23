@@ -51,6 +51,38 @@ export class FlowedMeshObject implements MeshObject {
     this.#performedScaleBuilder.who = name
   }
 
+  #create1PixelTexture(gl: WebGLRenderingContext, pixel: Array<number>): WebGLTexture {
+    let texture: WebGLTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+        new Uint8Array(pixel));
+    return texture;
+  }
+
+  #createTexture(gl: WebGLRenderingContext, url: string): WebGLTexture {
+    let texture: WebGLTexture = create1PixelTexture(gl, [128, 192, 255, 255]);
+    // Asynchronously load an image
+    let image: HTMLImageElement = new Image();
+    image.src = url;
+    image.addEventListener('load', function() {
+      // Now that the image has loaded make copy it to the texture.
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+
+      // Check if the image is a power of 2 in both dimensions.
+      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+        // Yes, it's a power of 2. Generate mips.
+        gl.generateMipmap(gl.TEXTURE_2D);
+      } else {
+        // No, it's not a power of 2. Turn of mips and set wrapping to clamp to edge
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      }
+    });
+    return texture;
+  }
 
   draw(gl: WebGLRenderingContext, programInfo: object): void;
   draw(gl: WebGLRenderingContext, programInfo: object, clear: boolean): void;
@@ -63,15 +95,16 @@ export class FlowedMeshObject implements MeshObject {
     }
     let u_world = this.#data.u_world
 
-    for (let {bufferInfo, material} of this.#data.parts) {
+    for (let part of this.#data.parts) {
+
       // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
-      WebGLUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+      WebGLUtils.setBuffersAndAttributes(gl, programInfo, part.bufferInfo);
       // calls gl.uniform
       WebGLUtils.setUniforms(programInfo, {
         u_world,
-      }, material);
+      }, part.material);
       // calls gl.drawArrays or gl.drawElements
-      WebGLUtils.drawBufferInfo(gl, bufferInfo);
+      WebGLUtils.drawBufferInfo(gl, part.bufferInfo);
     }
 
     // for (let part of this.#data.parts) {
@@ -120,6 +153,10 @@ export class FlowedMeshObject implements MeshObject {
   glInit(gl: WebGLRenderingContext) {
     this.#data.u_world = M4.identity();
     Log.log("MeshObject[" + this.#name + "] initialized")
+
+    for(let part of this.#data.parts) {
+        part.bufferInfo = WebGLUtils.createBufferInfoFromArrays(gl, part.data);
+    }
   }
 
   setLimitsChecker(limitsChecker: LimitsChecker): void {

@@ -63,7 +63,8 @@ export class MeshObjectDrawer {
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
         gl.enable(gl.CULL_FACE)
         gl.enable(gl.DEPTH_TEST)
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT)
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, gl.canvas )
         this.updateProjectionMatrix()
         this.updateViewMatrix()
 

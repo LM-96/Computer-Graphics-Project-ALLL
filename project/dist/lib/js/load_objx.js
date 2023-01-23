@@ -169,7 +169,7 @@ function parseMapArgs(unparsedArgs) {
     return unparsedArgs;
 }
 function parseMTL(text) {
-    const materials = {};
+    let materials = {};
     let material;
     const keywords = {
         newmtl(parts, unparsedArgs) {
@@ -244,7 +244,7 @@ function createTexture(gl, url) {
 function getParentDir(path) {
     return path.substr(0, path.lastIndexOf('/') + 1);
 }
-function loadObjX(gl, path) {
+function loadObjX(path) {
     let baseHref = getParentDir(path);
     let objFile = loadFile(path);
     let objData = parseOBJ(objFile);
@@ -261,21 +261,20 @@ function loadObjX(gl, path) {
         shininess: 400,
         opacity: 1,
     };
-    const textures = {
-        defaultWhite: create1PixelTexture(gl, [255, 255, 255, 255]),
-    };
+    // const textures = {
+    //     defaultWhite: create1PixelTexture(gl, [255, 255, 255, 255]),
+    // };
     // load texture for materials
     for (const material of Object.values(materials)) {
         Object.entries(material)
             .filter(([key]) => key.endsWith('Map'))
             .forEach(([key, filename]) => {
-            let texture = textures[filename];
-            if (!texture) {
-                const textureHref = baseHref + filename;
-                texture = createTexture(gl, textureHref);
-                textures[filename] = texture;
-            }
-            material[key] = texture;
+            // let texture = textures[filename];
+            // // if (!texture) {
+            // //     //texture = createTexture(gl, textureHref);
+            // //     // textures[filename] = texture;
+            // // }
+            material[key] = { path: baseHref + filename };
         });
     }
     let parts = objData.geometries.map(({ material, data }) => {
@@ -301,10 +300,10 @@ function loadObjX(gl, path) {
             // there are no vertex colors so just use constant white
             data.color = { value: [1, 1, 1, 1] };
         }
-        const bufferInfo = webglUtils.createBufferInfoFromArrays(gl, data);
+        // const bufferInfo = webglUtils.createBufferInfoFromArrays(gl, data);
         return {
             material: Object.assign(Object.assign({}, defaultMaterial), materials[material]),
-            bufferInfo: bufferInfo,
+            data: data,
         };
     });
     return {
