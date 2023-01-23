@@ -1,6 +1,7 @@
 import {Signal, SignalName} from "./signal";
 import SignalFlows from "./flow";
 import {SubscriptionReceipt} from "./subscriptions";
+import {Log} from "../log/log";
 
 export type SignalHandler<S, D, R> = (signal: Signal<S, D, R>) => R
 
@@ -63,8 +64,9 @@ function getOrCreateSignalSubscriptionContinuation<D>(target: any,
  * @param {(receipt: SubscriptionReceipt<S, D, R>) => void} withReceipt the function that will be invoked
  * when the subscription is completed
  */
-export function onSignal<S, D, R>(signalName: string) {
+export function OnSignal<S, D, R>(signalName: string) {
     return function (target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<Function>) {
+        Log.log("onSignal | registering signal handler for signal " + signalName + " on method " + propertyKey)
         let options: SubscriptionOptions<S, D, R> = handler((signal: Signal<S, D, R>) => {
             return descriptor.value(signal)
         })

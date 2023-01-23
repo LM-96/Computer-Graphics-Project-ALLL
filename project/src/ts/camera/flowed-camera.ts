@@ -60,11 +60,11 @@ export default class FlowedCamera implements Camera {
         this.#performedTranslationBuilder.who = "camera"
     }
 
-    #lookAtObject(signal: Signal<MeshObject, PerformedTranslation, void>): void {
+    lookAtObject(signal: Signal<MeshObject, PerformedTranslation, void>): void {
         this.setTarget(signal.data.to)
     }
 
-    #followObject(signal: Signal<MeshObject, PerformedTranslation, void>): void {
+    followObject(signal: Signal<MeshObject, PerformedTranslation, void>): void {
         let translationVector: NumberTrio = signal.data.translationVector
         this.setPosition(
             this.#position.getX() + translationVector.getFirst(),
@@ -218,14 +218,24 @@ export default class FlowedCamera implements Camera {
     }
 
     startFollowingObject(obj: MeshObject): void {
+
+        if(this.#followObjectTranslation) {
+            this.stopFollowingObject()
+        }
+
         let oldObject = this.#targetObject
+        this.#targetObject = obj
         let oldFollowObjectTranslation = this.#followObjectTranslation
-        this.startLookingAtObject(obj)
+
+        if(!this.#lookingAtObject || (this.#lookingAtObject && this.#targetObject !== oldObject)) {
+            this.startLookingAtObject(obj)
+        }
+
         this.#followObjectTranslation = true
 
         this.#followObjectReceipt = MeshObjectSignals
             .getTranslationSubscriberOf(this.#targetObject)
-            .subscribe(handler(this.#followObject))
+            .subscribe(handler((signal) => {this.followObject(signal)}))
 
         this.#followedObjectFlow.fire(this, new PerformedObjectSet(oldObject, this.#targetObject))
         this.#followObjectTranslationFlow.fire(this,
@@ -233,6 +243,11 @@ export default class FlowedCamera implements Camera {
     }
 
     startLookingAtObject(obj: MeshObject): void {
+
+        if(this.#lookingAtObject) {
+            this.stopLookingAtObject()
+        }
+
         let oldObject = this.#targetObject
         let oldLookingAtObject = this.#lookingAtObject
         this.#targetObject = obj
@@ -240,7 +255,7 @@ export default class FlowedCamera implements Camera {
 
         this.#lookAtObjectReceipt = MeshObjectSignals
             .getTranslationSubscriberOf(this.#targetObject)
-            .subscribe(handler(this.#lookAtObject))
+            .subscribe(handler((signal) => {this.lookAtObject(signal)}))
 
         this.#lookedAtObjectFlow.fire(this, new PerformedObjectSet(oldObject, this.#targetObject))
         this.#lookingAtObjectFlow.fire(this, new PerformedObjectSet(oldLookingAtObject, this.#lookingAtObject))
@@ -264,7 +279,15 @@ export default class FlowedCamera implements Camera {
 
     stopLookingAtObject(): void {
         if(this.#lookingAtObject) {
-            this.stopFollowingObject()
+            if(this.#followObjectTranslation) {
+                this.stopFollowingObject()
+            }
+
+            MeshObjectSignals
+                .getTranslationSubscriberOf(this.#targetObject)
+                .unsubscribe(this.#lookAtObjectReceipt)
+            this.#lookAtObjectReceipt = null
+
             let oldLookingAtObject = this.#lookingAtObject
             this.#lookingAtObject = false
             this.#lookingAtObjectFlow.fire(this, new PerformedObjectSet(oldLookingAtObject, this.#lookingAtObject))

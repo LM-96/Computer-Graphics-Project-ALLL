@@ -1,5 +1,5 @@
 export interface MenuSettings {
-    Active_Menu: boolean
+    log: boolean
     target: number
     look_at: boolean
     follow: boolean

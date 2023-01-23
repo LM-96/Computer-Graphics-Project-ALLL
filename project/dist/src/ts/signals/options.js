@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.unsubscribeWhen = exports.subscribeWhen = exports.onSignal = exports.handlerFor = exports.handler = exports.SubscriptionOptions = void 0;
+exports.unsubscribeWhen = exports.subscribeWhen = exports.OnSignal = exports.handlerFor = exports.handler = exports.SubscriptionOptions = void 0;
 const flow_1 = require("./flow");
+const log_1 = require("../log/log");
 class SubscriptionOptions {
     constructor(signalName, handler) {
         this.signalName = undefined;
@@ -55,15 +56,16 @@ function getOrCreateSignalSubscriptionContinuation(target, propertyKey) {
  * @param {(receipt: SubscriptionReceipt<S, D, R>) => void} withReceipt the function that will be invoked
  * when the subscription is completed
  */
-function onSignal(signalName) {
+function OnSignal(signalName) {
     return function (target, propertyKey, descriptor) {
+        log_1.Log.log("onSignal | registering signal handler for signal " + signalName + " on method " + propertyKey);
         let options = handler((signal) => {
             return descriptor.value(signal);
         });
         flow_1.default.subscribeWhenRegistered(signalName, options);
     };
 }
-exports.onSignal = onSignal;
+exports.OnSignal = OnSignal;
 function subscribeWhen(otherSignal, signalData) {
     return function (target, propertyKey, descriptor) {
         let continuation = getOrCreateSignalSubscriptionContinuation(target, propertyKey);

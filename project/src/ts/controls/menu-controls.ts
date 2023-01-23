@@ -2,6 +2,14 @@ import {WebGLApplication} from "../webgl/webgl-application";
 import {MeshObject} from "../obj/mesh-object";
 import {AngleUnit, degree} from "../geometry/angle/angle";
 import {MenuSettings} from "./menu-settings";
+import {Signal} from "../signals/signal";
+import {Camera} from "../camera/camera";
+import PerformedTranslation from "../geometry/data/performed-translation";
+import {OnSignal} from "../signals/options";
+import CameraSignals from "../camera/camera-signals";
+import {Log} from "../log/log";
+import {PerformedObjectSet} from "../types/data/performed-object-set";
+import {Point3D} from "../geometry/point/point-3d";
 
 var ACTIVE_MENU_CONTROLS: MenuControls
 
@@ -18,7 +26,7 @@ export class MenuControls {
         this.loadedObjs = application.getMeshObjectManager().getAll().map((obj) => obj.getName())
 
         this.settings = {
-            Active_Menu: false,
+            log: true,
             target: undefined,
             look_at: false,
             follow: false,
@@ -63,8 +71,29 @@ export class MenuControls {
         this.settings.theta = this.activeObj.getPolarRotation().getSecond().getValueIn(AngleUnit.DEG)
         this.settings.hidden = this.activeObj.getHidden()
         if(updateUI) {
-            WebGlLessonUI.updateUI(this.widgets, this.settings)
+            this.updateUI()
         }
+    }
+
+    updateUI() {
+        WebGlLessonUI.updateUI(this.widgets, this.settings)
+    }
+
+    @OnSignal(CameraSignals.CAMERA_TRANSLATION_SIGNAL_STRING_NAME)
+    onCameraSetPositionEvent(signal: Signal<Camera, PerformedTranslation, void>) {
+        console.log('onCameraSetPositionEvent')
+        ACTIVE_MENU_CONTROLS.settings.cameraX = signal.data.to.getX()
+        ACTIVE_MENU_CONTROLS.settings.cameraY = signal.data.to.getY()
+        ACTIVE_MENU_CONTROLS.settings.cameraZ = signal.data.to.getZ()
+        ACTIVE_MENU_CONTROLS.updateUI()
+    }
+
+    @OnSignal(CameraSignals.CAMERA_TARGET_SIGNAL_STRING_NAME)
+    onCameraTargetChanged(signal: Signal<Camera, PerformedObjectSet<Point3D>, void>) {
+        ACTIVE_MENU_CONTROLS.settings.targetX = signal.data.newValue.getX()
+        ACTIVE_MENU_CONTROLS.settings.targetY = signal.data.newValue.getY()
+        ACTIVE_MENU_CONTROLS.settings.targetZ = signal.data.newValue.getZ()
+        ACTIVE_MENU_CONTROLS.updateUI()
     }
 
     onCameraChange() {
@@ -137,6 +166,11 @@ export class MenuControls {
                     .get(ACTIVE_MENU_CONTROLS.loadedObjs[settings.target])
             )
         } else {
+            if(settings.follow) {
+                settings.follow = false
+                ACTIVE_MENU_CONTROLS.updateUI()
+                ACTIVE_MENU_CONTROLS.onFollowObjectChange()
+            }
             ACTIVE_MENU_CONTROLS.application.getCamera().stopLookingAtObject()
         }
         ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
@@ -144,7 +178,14 @@ export class MenuControls {
 
     onFollowObjectChange() {
         let settings = ACTIVE_MENU_CONTROLS.settings
-        if(settings.look_at) {
+
+        if(settings.follow) {
+            if(!settings.look_at) {
+                settings.look_at = true
+                ACTIVE_MENU_CONTROLS.updateUI()
+                ACTIVE_MENU_CONTROLS.onLookAtObjectChange()
+            }
+
             ACTIVE_MENU_CONTROLS.application.getCamera().startFollowingObject(
                 ACTIVE_MENU_CONTROLS.application.getMeshObjectManager()
                     .get(ACTIVE_MENU_CONTROLS.loadedObjs[settings.target])
@@ -160,11 +201,19 @@ export class MenuControls {
         ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
     }
 
+    onLogChanged() {
+        if(ACTIVE_MENU_CONTROLS.settings.log) {
+            Log.enableLog()
+        } else {
+            Log.disableLog()
+        }
+    }
+
 
     setup() {
         ACTIVE_MENU_CONTROLS = this
         this.widgets = WebGlLessonUI.setupUI(document.querySelector('#ui'), this.settings, [
-            { type: 'checkbox', key: 'Active_Menu', },
+            { type: 'checkbox', key: 'log', change: this.onLogChanged},
             { type: 'option',   key: 'target',  options: this.loadedObjs, },
             { type: 'checkbox', key: 'look_at', change: this.onLookAtObjectChange, },
             { type: 'checkbox', key: 'follow', change: this.onFollowObjectChange, },

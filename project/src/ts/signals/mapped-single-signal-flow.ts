@@ -29,6 +29,7 @@ export class MappedSingleSignalFlow<S, D, R> implements SingleSignalFlow<S, D, R
             this.signalName.name + "#" + this.#id.toString(),
             this.signalName,
             SubscriptionStatus.ACCEPTED)
+        this.#id++
         let subscription: Subscription<S, D, R> = new Subscription(res, options)
         this.#subscriptions.set(res.subscriptionId, subscription)
         return res

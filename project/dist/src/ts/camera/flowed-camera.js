@@ -10,7 +10,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _FlowedCamera_instances, _FlowedCamera_position, _FlowedCamera_up, _FlowedCamera_target, _FlowedCamera_fov, _FlowedCamera_lookingAtObject, _FlowedCamera_followObjectTranslation, _FlowedCamera_targetObject, _FlowedCamera_lookingAtObjectReceipt, _FlowedCamera_positionFlow, _FlowedCamera_upFlow, _FlowedCamera_targetFlow, _FlowedCamera_fovFlow, _FlowedCamera_lookingAtObjectFlow, _FlowedCamera_followObjectTranslationFlow, _FlowedCamera_followedObjectFlow, _FlowedCamera_lookedAtObjectFlow, _FlowedCamera_performedTranslationBuilder, _FlowedCamera_lookAtObjectReceipt, _FlowedCamera_followObjectReceipt, _FlowedCamera_lookAtObject, _FlowedCamera_followObject;
+var _FlowedCamera_position, _FlowedCamera_up, _FlowedCamera_target, _FlowedCamera_fov, _FlowedCamera_lookingAtObject, _FlowedCamera_followObjectTranslation, _FlowedCamera_targetObject, _FlowedCamera_lookingAtObjectReceipt, _FlowedCamera_positionFlow, _FlowedCamera_upFlow, _FlowedCamera_targetFlow, _FlowedCamera_fovFlow, _FlowedCamera_lookingAtObjectFlow, _FlowedCamera_followObjectTranslationFlow, _FlowedCamera_followedObjectFlow, _FlowedCamera_lookedAtObjectFlow, _FlowedCamera_performedTranslationBuilder, _FlowedCamera_lookAtObjectReceipt, _FlowedCamera_followObjectReceipt;
 Object.defineProperty(exports, "__esModule", { value: true });
 const number_trio_1 = require("../types/numbers/number-trio");
 const angle_1 = require("../geometry/angle/angle");
@@ -24,7 +24,6 @@ const mesh_object_signals_1 = require("../obj/mesh-object-signals");
 const options_1 = require("../signals/options");
 class FlowedCamera {
     constructor() {
-        _FlowedCamera_instances.add(this);
         _FlowedCamera_position.set(this, void 0);
         _FlowedCamera_up.set(this, void 0);
         _FlowedCamera_target.set(this, void 0);
@@ -61,6 +60,13 @@ class FlowedCamera {
         __classPrivateFieldSet(this, _FlowedCamera_lookedAtObjectFlow, flow_1.default.newSingleFlow(camera_signals_1.default.CAMERA_LOOKED_AT_OBJECT_SIGNAL_STRING_NAME), "f");
         __classPrivateFieldSet(this, _FlowedCamera_performedTranslationBuilder, new performed_translation_1.PerformedTranslationBuilder(), "f");
         __classPrivateFieldGet(this, _FlowedCamera_performedTranslationBuilder, "f").who = "camera";
+    }
+    lookAtObject(signal) {
+        this.setTarget(signal.data.to);
+    }
+    followObject(signal) {
+        let translationVector = signal.data.translationVector;
+        this.setPosition(__classPrivateFieldGet(this, _FlowedCamera_position, "f").getX() + translationVector.getFirst(), __classPrivateFieldGet(this, _FlowedCamera_position, "f").getY() + translationVector.getSecond(), __classPrivateFieldGet(this, _FlowedCamera_position, "f").getZ() + translationVector.getThird());
     }
     calculateCameraMatrix() {
         return M4.lookAt(__classPrivateFieldGet(this, _FlowedCamera_position, "f").toArray(), __classPrivateFieldGet(this, _FlowedCamera_target, "f").toArray(), __classPrivateFieldGet(this, _FlowedCamera_up, "f").toArray());
@@ -168,24 +174,33 @@ class FlowedCamera {
         __classPrivateFieldGet(this, _FlowedCamera_upFlow, "f").fire(this, new performed_number_trio_change_1.PerformedNumberTrioChange(oldUp, __classPrivateFieldGet(this, _FlowedCamera_up, "f")));
     }
     startFollowingObject(obj) {
+        if (__classPrivateFieldGet(this, _FlowedCamera_followObjectTranslation, "f")) {
+            this.stopFollowingObject();
+        }
         let oldObject = __classPrivateFieldGet(this, _FlowedCamera_targetObject, "f");
+        __classPrivateFieldSet(this, _FlowedCamera_targetObject, obj, "f");
         let oldFollowObjectTranslation = __classPrivateFieldGet(this, _FlowedCamera_followObjectTranslation, "f");
-        this.startLookingAtObject(obj);
+        if (!__classPrivateFieldGet(this, _FlowedCamera_lookingAtObject, "f") || (__classPrivateFieldGet(this, _FlowedCamera_lookingAtObject, "f") && __classPrivateFieldGet(this, _FlowedCamera_targetObject, "f") !== oldObject)) {
+            this.startLookingAtObject(obj);
+        }
         __classPrivateFieldSet(this, _FlowedCamera_followObjectTranslation, true, "f");
         __classPrivateFieldSet(this, _FlowedCamera_followObjectReceipt, mesh_object_signals_1.MeshObjectSignals
             .getTranslationSubscriberOf(__classPrivateFieldGet(this, _FlowedCamera_targetObject, "f"))
-            .subscribe((0, options_1.handler)(__classPrivateFieldGet(this, _FlowedCamera_instances, "m", _FlowedCamera_followObject))), "f");
+            .subscribe((0, options_1.handler)((signal) => { this.followObject(signal); })), "f");
         __classPrivateFieldGet(this, _FlowedCamera_followedObjectFlow, "f").fire(this, new performed_object_set_1.PerformedObjectSet(oldObject, __classPrivateFieldGet(this, _FlowedCamera_targetObject, "f")));
         __classPrivateFieldGet(this, _FlowedCamera_followObjectTranslationFlow, "f").fire(this, new performed_object_set_1.PerformedObjectSet(oldFollowObjectTranslation, __classPrivateFieldGet(this, _FlowedCamera_followObjectTranslation, "f")));
     }
     startLookingAtObject(obj) {
+        if (__classPrivateFieldGet(this, _FlowedCamera_lookingAtObject, "f")) {
+            this.stopLookingAtObject();
+        }
         let oldObject = __classPrivateFieldGet(this, _FlowedCamera_targetObject, "f");
         let oldLookingAtObject = __classPrivateFieldGet(this, _FlowedCamera_lookingAtObject, "f");
         __classPrivateFieldSet(this, _FlowedCamera_targetObject, obj, "f");
         __classPrivateFieldSet(this, _FlowedCamera_lookingAtObject, true, "f");
         __classPrivateFieldSet(this, _FlowedCamera_lookAtObjectReceipt, mesh_object_signals_1.MeshObjectSignals
             .getTranslationSubscriberOf(__classPrivateFieldGet(this, _FlowedCamera_targetObject, "f"))
-            .subscribe((0, options_1.handler)(__classPrivateFieldGet(this, _FlowedCamera_instances, "m", _FlowedCamera_lookAtObject))), "f");
+            .subscribe((0, options_1.handler)((signal) => { this.lookAtObject(signal); })), "f");
         __classPrivateFieldGet(this, _FlowedCamera_lookedAtObjectFlow, "f").fire(this, new performed_object_set_1.PerformedObjectSet(oldObject, __classPrivateFieldGet(this, _FlowedCamera_targetObject, "f")));
         __classPrivateFieldGet(this, _FlowedCamera_lookingAtObjectFlow, "f").fire(this, new performed_object_set_1.PerformedObjectSet(oldLookingAtObject, __classPrivateFieldGet(this, _FlowedCamera_lookingAtObject, "f")));
     }
@@ -202,7 +217,13 @@ class FlowedCamera {
     }
     stopLookingAtObject() {
         if (__classPrivateFieldGet(this, _FlowedCamera_lookingAtObject, "f")) {
-            this.stopFollowingObject();
+            if (__classPrivateFieldGet(this, _FlowedCamera_followObjectTranslation, "f")) {
+                this.stopFollowingObject();
+            }
+            mesh_object_signals_1.MeshObjectSignals
+                .getTranslationSubscriberOf(__classPrivateFieldGet(this, _FlowedCamera_targetObject, "f"))
+                .unsubscribe(__classPrivateFieldGet(this, _FlowedCamera_lookAtObjectReceipt, "f"));
+            __classPrivateFieldSet(this, _FlowedCamera_lookAtObjectReceipt, null, "f");
             let oldLookingAtObject = __classPrivateFieldGet(this, _FlowedCamera_lookingAtObject, "f");
             __classPrivateFieldSet(this, _FlowedCamera_lookingAtObject, false, "f");
             __classPrivateFieldGet(this, _FlowedCamera_lookingAtObjectFlow, "f").fire(this, new performed_object_set_1.PerformedObjectSet(oldLookingAtObject, __classPrivateFieldGet(this, _FlowedCamera_lookingAtObject, "f")));
@@ -210,10 +231,5 @@ class FlowedCamera {
     }
 }
 exports.default = FlowedCamera;
-_FlowedCamera_position = new WeakMap(), _FlowedCamera_up = new WeakMap(), _FlowedCamera_target = new WeakMap(), _FlowedCamera_fov = new WeakMap(), _FlowedCamera_lookingAtObject = new WeakMap(), _FlowedCamera_followObjectTranslation = new WeakMap(), _FlowedCamera_targetObject = new WeakMap(), _FlowedCamera_lookingAtObjectReceipt = new WeakMap(), _FlowedCamera_positionFlow = new WeakMap(), _FlowedCamera_upFlow = new WeakMap(), _FlowedCamera_targetFlow = new WeakMap(), _FlowedCamera_fovFlow = new WeakMap(), _FlowedCamera_lookingAtObjectFlow = new WeakMap(), _FlowedCamera_followObjectTranslationFlow = new WeakMap(), _FlowedCamera_followedObjectFlow = new WeakMap(), _FlowedCamera_lookedAtObjectFlow = new WeakMap(), _FlowedCamera_performedTranslationBuilder = new WeakMap(), _FlowedCamera_lookAtObjectReceipt = new WeakMap(), _FlowedCamera_followObjectReceipt = new WeakMap(), _FlowedCamera_instances = new WeakSet(), _FlowedCamera_lookAtObject = function _FlowedCamera_lookAtObject(signal) {
-    this.setTarget(signal.data.to);
-}, _FlowedCamera_followObject = function _FlowedCamera_followObject(signal) {
-    let translationVector = signal.data.translationVector;
-    this.setPosition(__classPrivateFieldGet(this, _FlowedCamera_position, "f").getX() + translationVector.getFirst(), __classPrivateFieldGet(this, _FlowedCamera_position, "f").getY() + translationVector.getSecond(), __classPrivateFieldGet(this, _FlowedCamera_position, "f").getZ() + translationVector.getThird());
-};
+_FlowedCamera_position = new WeakMap(), _FlowedCamera_up = new WeakMap(), _FlowedCamera_target = new WeakMap(), _FlowedCamera_fov = new WeakMap(), _FlowedCamera_lookingAtObject = new WeakMap(), _FlowedCamera_followObjectTranslation = new WeakMap(), _FlowedCamera_targetObject = new WeakMap(), _FlowedCamera_lookingAtObjectReceipt = new WeakMap(), _FlowedCamera_positionFlow = new WeakMap(), _FlowedCamera_upFlow = new WeakMap(), _FlowedCamera_targetFlow = new WeakMap(), _FlowedCamera_fovFlow = new WeakMap(), _FlowedCamera_lookingAtObjectFlow = new WeakMap(), _FlowedCamera_followObjectTranslationFlow = new WeakMap(), _FlowedCamera_followedObjectFlow = new WeakMap(), _FlowedCamera_lookedAtObjectFlow = new WeakMap(), _FlowedCamera_performedTranslationBuilder = new WeakMap(), _FlowedCamera_lookAtObjectReceipt = new WeakMap(), _FlowedCamera_followObjectReceipt = new WeakMap();
 //# sourceMappingURL=flowed-camera.js.map

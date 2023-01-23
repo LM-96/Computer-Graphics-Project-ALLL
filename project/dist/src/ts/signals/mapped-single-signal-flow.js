@@ -4,6 +4,12 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
 var _MappedSingleSignalFlow_id, _MappedSingleSignalFlow_subscriptions;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MappedSingleSignalFlow = void 0;
@@ -21,7 +27,9 @@ class MappedSingleSignalFlow {
         this.signalName = signalName;
     }
     subscribe(options) {
+        var _a;
         let res = new subscriptions_1.SubscriptionReceipt(this.signalName.name + "#" + __classPrivateFieldGet(this, _MappedSingleSignalFlow_id, "f").toString(), this.signalName, subscriptions_1.SubscriptionStatus.ACCEPTED);
+        __classPrivateFieldSet(this, _MappedSingleSignalFlow_id, (_a = __classPrivateFieldGet(this, _MappedSingleSignalFlow_id, "f"), _a++, _a), "f");
         let subscription = new subscriptions_1.Subscription(res, options);
         __classPrivateFieldGet(this, _MappedSingleSignalFlow_subscriptions, "f").set(res.subscriptionId, subscription);
         return res;

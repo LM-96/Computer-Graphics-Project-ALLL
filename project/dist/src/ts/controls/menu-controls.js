@@ -1,14 +1,23 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuControls = void 0;
 const angle_1 = require("../geometry/angle/angle");
+const options_1 = require("../signals/options");
+const camera_signals_1 = require("../camera/camera-signals");
+const log_1 = require("../log/log");
 var ACTIVE_MENU_CONTROLS;
 class MenuControls {
     constructor(application) {
         this.application = application;
         this.loadedObjs = application.getMeshObjectManager().getAll().map((obj) => obj.getName());
         this.settings = {
-            Active_Menu: false,
+            log: true,
             target: undefined,
             look_at: false,
             follow: false,
@@ -51,8 +60,24 @@ class MenuControls {
         this.settings.theta = this.activeObj.getPolarRotation().getSecond().getValueIn(angle_1.AngleUnit.DEG);
         this.settings.hidden = this.activeObj.getHidden();
         if (updateUI) {
-            WebGlLessonUI.updateUI(this.widgets, this.settings);
+            this.updateUI();
         }
+    }
+    updateUI() {
+        WebGlLessonUI.updateUI(this.widgets, this.settings);
+    }
+    onCameraSetPositionEvent(signal) {
+        console.log('onCameraSetPositionEvent');
+        ACTIVE_MENU_CONTROLS.settings.cameraX = signal.data.to.getX();
+        ACTIVE_MENU_CONTROLS.settings.cameraY = signal.data.to.getY();
+        ACTIVE_MENU_CONTROLS.settings.cameraZ = signal.data.to.getZ();
+        ACTIVE_MENU_CONTROLS.updateUI();
+    }
+    onCameraTargetChanged(signal) {
+        ACTIVE_MENU_CONTROLS.settings.targetX = signal.data.newValue.getX();
+        ACTIVE_MENU_CONTROLS.settings.targetY = signal.data.newValue.getY();
+        ACTIVE_MENU_CONTROLS.settings.targetZ = signal.data.newValue.getZ();
+        ACTIVE_MENU_CONTROLS.updateUI();
     }
     onCameraChange() {
         let settings = ACTIVE_MENU_CONTROLS.settings;
@@ -105,13 +130,23 @@ class MenuControls {
                 .get(ACTIVE_MENU_CONTROLS.loadedObjs[settings.target]));
         }
         else {
+            if (settings.follow) {
+                settings.follow = false;
+                ACTIVE_MENU_CONTROLS.updateUI();
+                ACTIVE_MENU_CONTROLS.onFollowObjectChange();
+            }
             ACTIVE_MENU_CONTROLS.application.getCamera().stopLookingAtObject();
         }
         ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene();
     }
     onFollowObjectChange() {
         let settings = ACTIVE_MENU_CONTROLS.settings;
-        if (settings.look_at) {
+        if (settings.follow) {
+            if (!settings.look_at) {
+                settings.look_at = true;
+                ACTIVE_MENU_CONTROLS.updateUI();
+                ACTIVE_MENU_CONTROLS.onLookAtObjectChange();
+            }
             ACTIVE_MENU_CONTROLS.application.getCamera().startFollowingObject(ACTIVE_MENU_CONTROLS.application.getMeshObjectManager()
                 .get(ACTIVE_MENU_CONTROLS.loadedObjs[settings.target]));
         }
@@ -124,10 +159,18 @@ class MenuControls {
         ACTIVE_MENU_CONTROLS.activeObj.setHidden(ACTIVE_MENU_CONTROLS.settings.hidden);
         ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene();
     }
+    onLogChanged() {
+        if (ACTIVE_MENU_CONTROLS.settings.log) {
+            log_1.Log.enableLog();
+        }
+        else {
+            log_1.Log.disableLog();
+        }
+    }
     setup() {
         ACTIVE_MENU_CONTROLS = this;
         this.widgets = WebGlLessonUI.setupUI(document.querySelector('#ui'), this.settings, [
-            { type: 'checkbox', key: 'Active_Menu', },
+            { type: 'checkbox', key: 'log', change: this.onLogChanged },
             { type: 'option', key: 'target', options: this.loadedObjs, },
             { type: 'checkbox', key: 'look_at', change: this.onLookAtObjectChange, },
             { type: 'checkbox', key: 'follow', change: this.onFollowObjectChange, },
@@ -154,5 +197,11 @@ class MenuControls {
         ]);
     }
 }
+__decorate([
+    (0, options_1.OnSignal)(camera_signals_1.default.CAMERA_TRANSLATION_SIGNAL_STRING_NAME)
+], MenuControls.prototype, "onCameraSetPositionEvent", null);
+__decorate([
+    (0, options_1.OnSignal)(camera_signals_1.default.CAMERA_TARGET_SIGNAL_STRING_NAME)
+], MenuControls.prototype, "onCameraTargetChanged", null);
 exports.MenuControls = MenuControls;
 //# sourceMappingURL=menu-controls.js.map
