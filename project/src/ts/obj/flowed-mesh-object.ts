@@ -18,12 +18,11 @@ import {Log} from "../log/log";
 export class FlowedMeshObject implements MeshObject {
 
   readonly #name: string;
-  #data: MeshData;
+  #data: any;
   #position: Point3D;
   #polarRotation: Couple<Angle>
   #scale: NumberTrio
   #limitChecker: LimitsChecker
-  #bufferInfo: any = null
 
   readonly #translationFlow: SingleSignalFlow<MeshObject, PerformedTranslation, void>
   readonly #polarRotationFlow: SingleSignalFlow<MeshObject, PerformedPolarRotation, void>
@@ -32,7 +31,7 @@ export class FlowedMeshObject implements MeshObject {
   #performedPolarRotationBuilder: PerformedPolarRotationBuilder
   #performedScaleBuilder: PerformedScaleBuilder
 
-  constructor(name: string, data: MeshData) {
+  constructor(name: string, data: any) {
     this.#name = name;
     this.#data = data;
     this.#position = mutablePoint3D(0, 0, 0);
@@ -62,17 +61,16 @@ export class FlowedMeshObject implements MeshObject {
     if(clear) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
+    let u_world = this.#data.u_world
 
-    WebGLUtils.setBuffersAndAttributes(gl, programInfo, this.#bufferInfo);
-    Log.log("MeshObject[" + this.#name + "] buffers set: " + this.#bufferInfo)
-
-    WebGLUtils.setUniforms(programInfo, this.#data.uniforms);
-    Log.log("MeshObject[" + this.#name + "] uniforms set: " + this.#data.uniforms)
-
-    //gl.drawArrays(gl.TRIANGLES, 0, this.#bufferInfo.numElements);
-    WebGLUtils.drawBufferInfo(gl, this.#bufferInfo);
-    Log.log("MeshObject[" + this.#name + "] | drawArrays with " + this.#bufferInfo.numElements + " elements")
-
+    for (let part of this.#data.parts) {
+      // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+      WebGLUtils.setBuffersAndAttributes(gl, programInfo, part.bufferInfo);
+      // calls gl.uniform
+      WebGLUtils.setUniforms(programInfo, { u_world }, part.material);
+      // calls gl.drawArrays or gl.drawElements
+      WebGLUtils.drawBufferInfo(gl, part.bufferInfo);
+    }
     Log.log("MeshObject[" + this.#name + "] | drawn")
   }
 
@@ -109,11 +107,11 @@ export class FlowedMeshObject implements MeshObject {
   }
 
   glInit(gl: WebGLRenderingContext) {
-    this.#bufferInfo = WebGLUtils.createBufferInfoFromArrays(
-        gl,
-        this.#data.attributes
-    );
-    this.#data.uniforms.u_world = M4.identity();
+    for(let part of this.#data.parts) {
+      part.bufferInfo = WebGLUtils.createBufferInfoFromArrays(gl, part.data)
+    }
+
+    this.#data.u_world = M4.identity();
     Log.log("MeshObject[" + this.#name + "] initialized")
   }
 
@@ -182,7 +180,7 @@ export class FlowedMeshObject implements MeshObject {
     if(scale) {
         u_world = M4.scale(u_world, this.#scale.getFirst(), this.#scale.getSecond(), this.#scale.getThird())
     }
-    this.#data.uniforms.u_world = u_world
+    this.#data.u_world = u_world
     Log.log("MeshObject[" + this.#name + "] | u_world updated: " + u_world)
   }
 }

@@ -10,7 +10,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _FlowedMeshObject_name, _FlowedMeshObject_data, _FlowedMeshObject_position, _FlowedMeshObject_polarRotation, _FlowedMeshObject_scale, _FlowedMeshObject_limitChecker, _FlowedMeshObject_bufferInfo, _FlowedMeshObject_translationFlow, _FlowedMeshObject_polarRotationFlow, _FlowedMeshObject_scaleFlow, _FlowedMeshObject_performedTranslationBuilder, _FlowedMeshObject_performedPolarRotationBuilder, _FlowedMeshObject_performedScaleBuilder;
+var _FlowedMeshObject_name, _FlowedMeshObject_data, _FlowedMeshObject_position, _FlowedMeshObject_polarRotation, _FlowedMeshObject_scale, _FlowedMeshObject_limitChecker, _FlowedMeshObject_translationFlow, _FlowedMeshObject_polarRotationFlow, _FlowedMeshObject_scaleFlow, _FlowedMeshObject_performedTranslationBuilder, _FlowedMeshObject_performedPolarRotationBuilder, _FlowedMeshObject_performedScaleBuilder;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FlowedMeshObject = void 0;
 const number_trio_1 = require("../types/numbers/number-trio");
@@ -32,7 +32,6 @@ class FlowedMeshObject {
         _FlowedMeshObject_polarRotation.set(this, void 0);
         _FlowedMeshObject_scale.set(this, void 0);
         _FlowedMeshObject_limitChecker.set(this, void 0);
-        _FlowedMeshObject_bufferInfo.set(this, null);
         _FlowedMeshObject_translationFlow.set(this, void 0);
         _FlowedMeshObject_polarRotationFlow.set(this, void 0);
         _FlowedMeshObject_scaleFlow.set(this, void 0);
@@ -62,13 +61,15 @@ class FlowedMeshObject {
         if (clear) {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         }
-        WebGLUtils.setBuffersAndAttributes(gl, programInfo, __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f"));
-        log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] buffers set: " + __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f"));
-        WebGLUtils.setUniforms(programInfo, __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").uniforms);
-        log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] uniforms set: " + __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").uniforms);
-        //gl.drawArrays(gl.TRIANGLES, 0, this.#bufferInfo.numElements);
-        WebGLUtils.drawBufferInfo(gl, __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f"));
-        log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] | drawArrays with " + __classPrivateFieldGet(this, _FlowedMeshObject_bufferInfo, "f").numElements + " elements");
+        let u_world = __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").u_world;
+        for (let part of __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").parts) {
+            // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+            WebGLUtils.setBuffersAndAttributes(gl, programInfo, part.bufferInfo);
+            // calls gl.uniform
+            WebGLUtils.setUniforms(programInfo, { u_world }, part.material);
+            // calls gl.drawArrays or gl.drawElements
+            WebGLUtils.drawBufferInfo(gl, part.bufferInfo);
+        }
         log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] | drawn");
     }
     getCurrentScale() {
@@ -96,8 +97,10 @@ class FlowedMeshObject {
         return __classPrivateFieldGet(this, _FlowedMeshObject_translationFlow, "f");
     }
     glInit(gl) {
-        __classPrivateFieldSet(this, _FlowedMeshObject_bufferInfo, WebGLUtils.createBufferInfoFromArrays(gl, __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").attributes), "f");
-        __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").uniforms.u_world = M4.identity();
+        for (let part of __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").parts) {
+            part.bufferInfo = WebGLUtils.createBufferInfoFromArrays(gl, part.data);
+        }
+        __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").u_world = M4.identity();
         log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] initialized");
     }
     setLimitsChecker(limitsChecker) {
@@ -153,10 +156,10 @@ class FlowedMeshObject {
         if (scale) {
             u_world = M4.scale(u_world, __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").getFirst(), __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").getSecond(), __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").getThird());
         }
-        __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").uniforms.u_world = u_world;
+        __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").u_world = u_world;
         log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] | u_world updated: " + u_world);
     }
 }
 exports.FlowedMeshObject = FlowedMeshObject;
-_FlowedMeshObject_name = new WeakMap(), _FlowedMeshObject_data = new WeakMap(), _FlowedMeshObject_position = new WeakMap(), _FlowedMeshObject_polarRotation = new WeakMap(), _FlowedMeshObject_scale = new WeakMap(), _FlowedMeshObject_limitChecker = new WeakMap(), _FlowedMeshObject_bufferInfo = new WeakMap(), _FlowedMeshObject_translationFlow = new WeakMap(), _FlowedMeshObject_polarRotationFlow = new WeakMap(), _FlowedMeshObject_scaleFlow = new WeakMap(), _FlowedMeshObject_performedTranslationBuilder = new WeakMap(), _FlowedMeshObject_performedPolarRotationBuilder = new WeakMap(), _FlowedMeshObject_performedScaleBuilder = new WeakMap();
+_FlowedMeshObject_name = new WeakMap(), _FlowedMeshObject_data = new WeakMap(), _FlowedMeshObject_position = new WeakMap(), _FlowedMeshObject_polarRotation = new WeakMap(), _FlowedMeshObject_scale = new WeakMap(), _FlowedMeshObject_limitChecker = new WeakMap(), _FlowedMeshObject_translationFlow = new WeakMap(), _FlowedMeshObject_polarRotationFlow = new WeakMap(), _FlowedMeshObject_scaleFlow = new WeakMap(), _FlowedMeshObject_performedTranslationBuilder = new WeakMap(), _FlowedMeshObject_performedPolarRotationBuilder = new WeakMap(), _FlowedMeshObject_performedScaleBuilder = new WeakMap();
 //# sourceMappingURL=flowed-mesh-object.js.map

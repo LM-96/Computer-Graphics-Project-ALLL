@@ -14,25 +14,16 @@ Log.enableLog()
     ["vertex-shader", "fragment-shader"])
 class MyApp extends WebGLApplication {
 
-    @WebGLMesh("./assets/plane-2m.obj")
-    @ObjScale(L, L, 0)
-    private floor: MeshObject
+    // @WebGLMesh("./assets/AntoniosObj/world_tiger.obj")
+    // private world: MeshObject
 
-    @WebGLMesh("./assets/cubo_con_assi.obj")
-    @ObjPosition(0, 0, 0.25)
-    @ObjScale(0.25, 0.25, 0.25)
-    @ObjLimitsChecker(LimitsCheckers.linear(-L+0.25, L-0.25, -L+0.25, L-0.25, 3, 3))
-    private cube: MeshObject
+    @WebGLMesh("./assets/AntoniosObj/helmet.obj")
+    private helmet: MeshObject
 
     constructor() {
         super();
     }
 
-    @onSignal("mesh-objects.cube.translation")
-    handler(signal: Signal<MeshObject, PerformedTranslation, void>): void {
-        console.log("Handler called (obj: " + signal.source.getName() + ", translation: " +
-            signal.data.translationVector.toString() + ")")
-    }
     protected main(args: string[]): void {
         console.log("Hello world! [" + this.applicationName + "]")
         this.drawScene()

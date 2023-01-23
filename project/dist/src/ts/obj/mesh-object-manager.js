@@ -13,7 +13,6 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _MeshObjectManager_glEnvironment, _MeshObjectManager_objects, _MeshObjectManager_loadedObjectFlow;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MeshObjectManager = void 0;
-const load_mesh_wrapper_1 = require("./load-mesh-wrapper");
 const flowed_mesh_object_1 = require("./flowed-mesh-object");
 const flow_1 = require("../signals/flow");
 const mesh_object_signals_1 = require("./mesh-object-signals");
@@ -44,7 +43,7 @@ class MeshObjectManager {
      */
     loadObj(name, path) {
         log_1.Log.log("MeshObjectManager[" + this.applicationName + "] | loading object '" + name + "' from '" + path + "'");
-        let data = (0, load_mesh_wrapper_1.loadMesh)(__classPrivateFieldGet(this, _MeshObjectManager_glEnvironment, "f").getContext(), path);
+        let data = loadObjX(path);
         let res = new flowed_mesh_object_1.FlowedMeshObject(name, data);
         __classPrivateFieldGet(this, _MeshObjectManager_objects, "f").set(name, res);
         res.glInit(__classPrivateFieldGet(this, _MeshObjectManager_glEnvironment, "f").getContext());
