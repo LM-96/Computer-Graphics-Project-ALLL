@@ -53,6 +53,7 @@ body {
     /*border: 2px solid black;*/
     width: auto;
     overflow: scroll;
+    scroll-behavior: smooth;
 }
 
 #ui * {
@@ -61,7 +62,7 @@ body {
 
 #uiContainer {
     position: relative;
-    overflow: scroll;
+    /*overflow: scroll;*/
     top: 0 !important;
     right: 0 !important;
 }
