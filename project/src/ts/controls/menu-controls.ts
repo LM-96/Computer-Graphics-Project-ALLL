@@ -5,27 +5,35 @@ import {MenuSettings} from "./menu-settings";
 import {Signal} from "../signals/signal";
 import {Camera} from "../camera/camera";
 import PerformedTranslation from "../geometry/data/performed-translation";
-import {OnSignal} from "../signals/options";
 import CameraSignals from "../camera/camera-signals";
 import {Log} from "../log/log";
 import {PerformedObjectSet} from "../types/data/performed-object-set";
 import {Point3D} from "../geometry/point/point-3d";
+import {OnSignalMethod, SignalListener} from "../signals/signals-decorator";
+import {SingleSignalSubscriber, SubscriptionReceipt} from "../signals/subscriptions";
+import {handler} from "../signals/options";
+import PerformedScale from "../geometry/data/performed-scale";
+import {PerformedPolarRotation} from "../geometry/data/performed-polar-rotation";
+import {Pair, pairOf} from "../types/pair";
 
-var ACTIVE_MENU_CONTROLS: MenuControls
-
+@SignalListener
 export class MenuControls {
 
-    readonly application: WebGLApplication
-    activeObj: MeshObject
-    widgets: any
-    readonly loadedObjs: Array<string>
-    private readonly settings: MenuSettings
+    #application: WebGLApplication
+    #activeObj: MeshObject
+    #targetObj: MeshObject
+    #widgets: any
+    readonly #loadedObjs: Array<string>
+    readonly #settings: MenuSettings
+
+    #currentObjReceipt: Array<Pair<SingleSignalSubscriber<any, any, any>, SubscriptionReceipt<any, any, any>>>
 
     constructor(application: WebGLApplication) {
-        this.application = application
-        this.loadedObjs = application.getMeshObjectManager().getAll().map((obj) => obj.getName())
+        this.#application = application
+        this.#loadedObjs = application.getMeshObjectManager().getAll().map((obj) => obj.getName())
+        this.#currentObjReceipt = []
 
-        this.settings = {
+        this.#settings = {
             log: true,
             target: undefined,
             look_at: false,
@@ -49,194 +57,273 @@ export class MenuControls {
             targetZ: application.getCamera().getCurrentTarget().getZ(),
             fov: application.getCamera().getCurrentFov().getValueIn(AngleUnit.DEG),
             currentobj: undefined,
-            hidden: false
+            hidden: false,
+            draw: false,
         };
 
-        if(this.loadedObjs.length > 0) {
-            this.settings.currentobj = 0
-            this.settings.target = 0
-            this.updateObj(false)
+        if(this.#loadedObjs.length > 0) {
+            this.#settings.currentobj = 0
+            this.#settings.target = 0
+            this.#targetObj = this.#application.getMeshObjectManager().get(this.#loadedObjs[0])
+            this.updateActiveObj(false)
         }
     }
 
-    updateObj(updateUI: boolean = true) {
-        this.activeObj = this.application.getMeshObjectManager().get(this.loadedObjs[this.settings.currentobj])
-        this.settings.posX = this.activeObj.getPosition().getX()
-        this.settings.posY = this.activeObj.getPosition().getY()
-        this.settings.posZ = this.activeObj.getPosition().getZ()
-        this.settings.scaleX = this.activeObj.getCurrentScale().getFirst()
-        this.settings.scaleY = this.activeObj.getCurrentScale().getSecond()
-        this.settings.scaleZ = this.activeObj.getCurrentScale().getThird()
-        this.settings.phi = this.activeObj.getPolarRotation().getFirst().getValueIn(AngleUnit.DEG)
-        this.settings.theta = this.activeObj.getPolarRotation().getSecond().getValueIn(AngleUnit.DEG)
-        this.settings.hidden = this.activeObj.getHidden()
+    subscribeCurrentObjSignals() {
+        Log.log("Subscribing to signals of " + this.#activeObj.getName())
+        this.#currentObjReceipt.push(
+            pairOf(this.#activeObj.getTranslationSubscriber(),
+                this.#activeObj.getTranslationSubscriber().subscribe(
+                    handler<MeshObject, PerformedTranslation, void>(
+                        (signal: Signal<MeshObject, PerformedTranslation, void>) => {
+                            this.#settings.posX= signal.data.to.getX()
+                            this.#settings.posY = signal.data.to.getY()
+                            this.#settings.posZ = signal.data.to.getZ()
+                            this.updateUI()
+                        }))
+            )
+        )
+        this.#currentObjReceipt.push(
+            pairOf(this.#activeObj.getScaleSubscriber(),
+                this.#activeObj.getScaleSubscriber().subscribe(
+                    handler<MeshObject, PerformedScale, void>(
+                        (signal: Signal<MeshObject, PerformedScale, void>) => {
+                            this.#settings.scaleX = signal.data.to.getFirst()
+                            this.#settings.scaleY = signal.data.to.getSecond()
+                            this.#settings.scaleZ = signal.data.to.getThird()
+                            this.updateUI()
+                        }))
+            )
+        )
+        this.#currentObjReceipt.push(
+            pairOf(this.#activeObj.getPolarRotationSubscriber(),
+                this.#activeObj.getPolarRotationSubscriber().subscribe(
+                    handler<MeshObject, PerformedPolarRotation, void>(
+                        (signal: Signal<MeshObject, PerformedPolarRotation, void>) => {
+                            this.#settings.theta = signal.data.to.getFirst().getValueIn(AngleUnit.DEG)
+                            this.#settings.phi = signal.data.to.getSecond().getValueIn(AngleUnit.DEG)
+                            this.updateUI()
+                        }))
+            )
+        )
+        Log.log("Subscribed to signals of " + this.#activeObj.getName() +
+            ", total subscriptions: " + this.#currentObjReceipt.length)
+    }
+
+    unsubscribeCurrentObjSignals() {
+        Log.log("Unsubscribing from signals of " + this.#activeObj.getName())
+        this.#currentObjReceipt.forEach((pair) => {
+            pair.getFirst().unsubscribe(pair.getSecond())
+        })
+        Log.log("Unsubscribed from signals of " + this.#activeObj.getName() + " completed")
+        this.#currentObjReceipt = []
+    }
+
+    updateActiveObj(updateUI: boolean = true) {
+        let settings: MenuSettings = this.#settings
+
+        if(this.#activeObj != undefined) {
+            this.unsubscribeCurrentObjSignals()
+        }
+
+        this.#activeObj = this.#application.getMeshObjectManager().get(this.#loadedObjs[settings.currentobj])
+        settings.posX = this.#activeObj.getPosition().getX()
+        settings.posY = this.#activeObj.getPosition().getY()
+        settings.posZ = this.#activeObj.getPosition().getZ()
+        settings.scaleX = this.#activeObj.getCurrentScale().getFirst()
+        settings.scaleY = this.#activeObj.getCurrentScale().getSecond()
+        settings.scaleZ = this.#activeObj.getCurrentScale().getThird()
+        settings.phi = this.#activeObj.getPolarRotation().getFirst().getValueIn(AngleUnit.DEG)
+        settings.theta = this.#activeObj.getPolarRotation().getSecond().getValueIn(AngleUnit.DEG)
+        settings.hidden = this.#activeObj.getHidden()
+        this.subscribeCurrentObjSignals()
+
         if(updateUI) {
             this.updateUI()
         }
     }
 
     updateUI() {
-        WebGlLessonUI.updateUI(this.widgets, this.settings)
+        WebGlLessonUI.updateUI(this.#widgets, this.#settings)
     }
 
-    @OnSignal(CameraSignals.CAMERA_TRANSLATION_SIGNAL_STRING_NAME)
+    @OnSignalMethod(CameraSignals.CAMERA_TRANSLATION_SIGNAL_STRING_NAME)
     onCameraSetPositionEvent(signal: Signal<Camera, PerformedTranslation, void>) {
-        console.log('onCameraSetPositionEvent')
-        ACTIVE_MENU_CONTROLS.settings.cameraX = signal.data.to.getX()
-        ACTIVE_MENU_CONTROLS.settings.cameraY = signal.data.to.getY()
-        ACTIVE_MENU_CONTROLS.settings.cameraZ = signal.data.to.getZ()
-        ACTIVE_MENU_CONTROLS.updateUI()
+        let settings: MenuSettings = this.#settings
+        settings.cameraX = signal.data.to.getX()
+        settings.cameraY = signal.data.to.getY()
+        settings.cameraZ = signal.data.to.getZ()
+        this.updateUI()
     }
 
-    @OnSignal(CameraSignals.CAMERA_TARGET_SIGNAL_STRING_NAME)
+    @OnSignalMethod(CameraSignals.CAMERA_TARGET_SIGNAL_STRING_NAME)
     onCameraTargetChanged(signal: Signal<Camera, PerformedObjectSet<Point3D>, void>) {
-        ACTIVE_MENU_CONTROLS.settings.targetX = signal.data.newValue.getX()
-        ACTIVE_MENU_CONTROLS.settings.targetY = signal.data.newValue.getY()
-        ACTIVE_MENU_CONTROLS.settings.targetZ = signal.data.newValue.getZ()
-        ACTIVE_MENU_CONTROLS.updateUI()
+        let settings: MenuSettings = this.#settings
+        settings.targetX = signal.data.newValue.getX()
+        settings.targetY = signal.data.newValue.getY()
+        settings.targetZ = signal.data.newValue.getZ()
+        this.updateUI()
     }
 
     onCameraChange() {
-        let settings = ACTIVE_MENU_CONTROLS.settings
-        ACTIVE_MENU_CONTROLS.application.getCamera().setPosition(
+        let settings = this.#settings
+        this.#application.getCamera().setPosition(
             settings.cameraX, settings.cameraY, settings.cameraZ)
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().drawScene()
     }
 
     onObjectPositionChange() {
-        if(ACTIVE_MENU_CONTROLS.loadedObjs != undefined) {
-            let settings = ACTIVE_MENU_CONTROLS.settings
-            ACTIVE_MENU_CONTROLS.activeObj.setPosition(
+        if(this.#loadedObjs != undefined) {
+            let settings = this.#settings
+            this.#activeObj.setPosition(
                 settings.posX, settings.posY, settings.posZ)
-            ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
+            this.#application.getMeshObjectDrawer().drawScene()
         }
     }
 
     onTargetPositionChange() {
-        let settings = ACTIVE_MENU_CONTROLS.settings
-        ACTIVE_MENU_CONTROLS.application.getCamera().setTarget(
+        let settings = this.#settings
+        this.#application.getCamera().setTarget(
             settings.targetX, settings.targetY, settings.targetZ
         )
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().drawScene()
     }
 
     onFovChange() {
-        let settings = ACTIVE_MENU_CONTROLS.settings
-        ACTIVE_MENU_CONTROLS.application.getCamera().setFov(degree(settings.fov))
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
+        let settings = this.#settings
+        this.#application.getCamera().setFov(degree(settings.fov))
+        this.#application.getMeshObjectDrawer().drawScene()
     }
 
-    onCurrentObjChange() {
-        ACTIVE_MENU_CONTROLS.updateObj()
+    onActiveObjChange() {
+        this.updateActiveObj()
     }
 
     onObjectScaleChange() {
-        if (ACTIVE_MENU_CONTROLS.loadedObjs != undefined) {
-            let settings = ACTIVE_MENU_CONTROLS.settings
-            ACTIVE_MENU_CONTROLS.activeObj.setScale(
+        if (this.#loadedObjs != undefined) {
+            let settings = this.#settings
+            this.#activeObj.setScale(
                 settings.scaleX, settings.scaleY, settings.scaleZ
             )
-            ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
+            this.#application.getMeshObjectDrawer().drawScene()
         }
     }
 
     onObjectPolarRotationChange() {
-        if(ACTIVE_MENU_CONTROLS.loadedObjs != undefined) {
-            let settings = ACTIVE_MENU_CONTROLS.settings
-            ACTIVE_MENU_CONTROLS.activeObj.setPolarRotation(
+        if(this.#loadedObjs != undefined) {
+            let settings = this.#settings
+            this.#activeObj.setPolarRotation(
                 degree(settings.theta), degree(settings.phi)
             )
-            ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
+            this.#application.getMeshObjectDrawer().drawScene()
         }
     }
 
     onCameraUpChange() {
-        let settings = ACTIVE_MENU_CONTROLS.settings
-        ACTIVE_MENU_CONTROLS.application.getCamera().setUp(
+        let settings = this.#settings
+        this.#application.getCamera().setUp(
             settings.cameraUpX, settings.cameraUpY, settings.cameraUpZ
         )
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().drawScene()
     }
 
     onLookAtObjectChange() {
-        let settings = ACTIVE_MENU_CONTROLS.settings
+        let settings = this.#settings
         if(settings.look_at) {
-            ACTIVE_MENU_CONTROLS.application.getCamera().startLookingAtObject(
-                ACTIVE_MENU_CONTROLS.application.getMeshObjectManager()
-                    .get(ACTIVE_MENU_CONTROLS.loadedObjs[settings.target])
+            this.#application.getCamera().startLookingAtObject(
+                this.#application.getMeshObjectManager()
+                    .get(this.#loadedObjs[settings.target])
             )
         } else {
             if(settings.follow) {
                 settings.follow = false
-                ACTIVE_MENU_CONTROLS.updateUI()
-                ACTIVE_MENU_CONTROLS.onFollowObjectChange()
+                this.updateUI()
+                this.onFollowObjectChange()
             }
-            ACTIVE_MENU_CONTROLS.application.getCamera().stopLookingAtObject()
+            this.#application.getCamera().stopLookingAtObject()
         }
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().drawScene()
     }
 
     onFollowObjectChange() {
-        let settings = ACTIVE_MENU_CONTROLS.settings
+        let settings = this.#settings
 
         if(settings.follow) {
             if(!settings.look_at) {
                 settings.look_at = true
-                ACTIVE_MENU_CONTROLS.updateUI()
-                ACTIVE_MENU_CONTROLS.onLookAtObjectChange()
+                this.updateUI()
+                this.onLookAtObjectChange()
             }
 
-            ACTIVE_MENU_CONTROLS.application.getCamera().startFollowingObject(
-                ACTIVE_MENU_CONTROLS.application.getMeshObjectManager()
-                    .get(ACTIVE_MENU_CONTROLS.loadedObjs[settings.target])
+            this.#application.getCamera().startFollowingObject(
+                this.#application.getMeshObjectManager()
+                    .get(this.#loadedObjs[settings.target])
             )
         } else {
-            ACTIVE_MENU_CONTROLS.application.getCamera().stopFollowingObject()
+            this.#application.getCamera().stopFollowingObject()
         }
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().drawScene()
     }
 
     onHiddenObjChange() {
-        ACTIVE_MENU_CONTROLS.activeObj.setHidden(ACTIVE_MENU_CONTROLS.settings.hidden)
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
+        this.#activeObj.setHidden(this.#settings.hidden)
+        this.#application.getMeshObjectDrawer().drawScene()
     }
 
     onLogChanged() {
-        if(ACTIVE_MENU_CONTROLS.settings.log) {
+        if(this.#settings.log) {
             Log.enableLog()
         } else {
             Log.disableLog()
         }
     }
 
+    onTargetObjChange() {
+        if(this.#settings.look_at || this.#settings.follow) {
+            this.#settings.target = this.#loadedObjs.indexOf(this.#targetObj.getName())
+            this.updateUI()
+        } else {
+            this.#targetObj = this.#application.getMeshObjectManager()
+                .get(this.#loadedObjs[this.#settings.target])
+        }
+    }
+
+    onDrawPressed() {
+        if(this.#settings.draw) {
+            this.#settings.draw = false
+            this.#application.getMeshObjectDrawer().drawScene()
+            this.updateUI()
+        }
+    }
+
 
     setup() {
-        ACTIVE_MENU_CONTROLS = this
-        this.widgets = WebGlLessonUI.setupUI(document.querySelector('#ui'), this.settings, [
-            { type: 'checkbox', key: 'log', change: this.onLogChanged},
-            { type: 'option',   key: 'target',  options: this.loadedObjs, },
-            { type: 'checkbox', key: 'look_at', change: this.onLookAtObjectChange, },
-            { type: 'checkbox', key: 'follow', change: this.onFollowObjectChange, },
-            { type: 'slider',   key: 'cameraX',    change: this.onCameraChange, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'cameraY',    change: this.onCameraChange, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'cameraZ',    change: this.onCameraChange, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'cameraUpX',    change: this.onCameraUpChange, min: -1, max: 1, precision: 1, step: 1, },
-            { type: 'slider',   key: 'cameraUpY',    change: this.onCameraUpChange, min:   -1, max: 1, precision: 1, step: 1, },
-            { type: 'slider',   key: 'cameraUpZ',    change: this.onCameraUpChange, min:   -1, max: 1, precision: 1, step: 1, },
-            { type: 'slider',   key: 'fov', change: this.onFovChange, min:  0, max: 180,  },
-            { type: 'slider',   key: 'targetX',    change: this.onTargetPositionChange, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'targetY',    change: this.onTargetPositionChange, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'targetZ',    change: this.onTargetPositionChange, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'option',   key: 'currentobj', change: this.onCurrentObjChange, options: this.loadedObjs, },
-            { type: 'checkbox',   key: 'hidden', change: this.onHiddenObjChange, options: this.loadedObjs, },
-            { type: 'slider',   key: 'posX',       change: this.onObjectPositionChange, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'posY',       change: this.onObjectPositionChange, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'posZ',       change: this.onObjectPositionChange, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'scaleX',       change: this.onObjectScaleChange, min: 0, max: 10, precision: 1, step: 1, },
-            { type: 'slider',   key: 'scaleY',       change: this.onObjectScaleChange, min:   0, max: 10, precision: 1, step: 1, },
-            { type: 'slider',   key: 'scaleZ',       change: this.onObjectScaleChange, min:   0, max: 10, precision: 1, step: 1, },
-            { type: 'slider',   key: 'theta',       change: this.onObjectPolarRotationChange, min: 0, max: 360 },
-            { type: 'slider',   key: 'phi',       change: this.onObjectPolarRotationChange, min:   0, max: 360 },
+        this.#widgets = WebGlLessonUI.setupUI(document.querySelector('#ui'), this.#settings, [
+            { type: 'checkbox', key: 'log', change: () => { this.onLogChanged() }},
+            { type: 'option',   key: 'target',  change: () => { this.onTargetObjChange() }, options: this.#loadedObjs, },
+            { type: 'checkbox', key: 'look_at', change: () => { this.onLookAtObjectChange() }, },
+            { type: 'checkbox', key: 'follow', change: () => { this.onFollowObjectChange() }, },
+            { type: 'slider',   key: 'cameraX',    change: () => { this.onCameraChange() }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'cameraY',    change: () => { this.onCameraChange() }, min:   -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'cameraZ',    change: () => { this.onCameraChange() }, min:   -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'cameraUpX',    change: () => { this.onCameraUpChange() }, min: -1, max: 1, precision: 1, step: 1, },
+            { type: 'slider',   key: 'cameraUpY',    change: () => { this.onCameraUpChange() }, min:   -1, max: 1, precision: 1, step: 1, },
+            { type: 'slider',   key: 'cameraUpZ',    change: () => { this.onCameraUpChange() }, min:   -1, max: 1, precision: 1, step: 1, },
+            { type: 'slider',   key: 'fov', change: () => { this.onFovChange() }, min:  0, max: 180,  },
+            { type: 'slider',   key: 'targetX',    change: () => { this.onTargetPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'targetY',    change: () => { this.onTargetPositionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'targetZ',    change: () => { this.onTargetPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'option',   key: 'currentobj', change: () => { this.onActiveObjChange() }, options: this.#loadedObjs, },
+            { type: 'checkbox',   key: 'hidden', change: () => { this.onHiddenObjChange() }, options: this.#loadedObjs, },
+            { type: 'slider',   key: 'posX',       change: () => { this.onObjectPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'posY',       change: () => { this.onObjectPositionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'posZ',       change: () => { this.onObjectPositionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'scaleX',       change: () => { this.onObjectScaleChange() }, min: 0, max: 10, precision: 1, step: 1, },
+            { type: 'slider',   key: 'scaleY',       change: () => { this.onObjectScaleChange() }, min:   0, max: 10, precision: 1, step: 1, },
+            { type: 'slider',   key: 'scaleZ',       change: () => { this.onObjectScaleChange() }, min:   0, max: 10, precision: 1, step: 1, },
+            { type: 'slider',   key: 'theta',       change: () => { this.onObjectPolarRotationChange() }, min: 0, max: 360 },
+            { type: 'slider',   key: 'phi',       change: () => { this.onObjectPolarRotationChange() }, min:   0, max: 360 },
+            { type: 'checkbox', key: 'draw', change: () => { this.onDrawPressed() }},
 
         ]);
     }
