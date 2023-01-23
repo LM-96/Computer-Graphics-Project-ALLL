@@ -6,8 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/load_objx.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/load_objx.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/LuchettoObj/truck.obj" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/LuchettoObj/truck_final_1.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/LuchettoObj/truck_final.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/LuchettoObj/truck_final_1.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/LuchettoObj/truck_final.obj" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/LuchettoObj/truck_final.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/load_objx.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/load_objx.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/load_objx.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/load_objx.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,11 +180,6 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-    <option name="exactExcludedFiles">
-      <list>
-        <option value="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.d.ts" />
-      </list>
-    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

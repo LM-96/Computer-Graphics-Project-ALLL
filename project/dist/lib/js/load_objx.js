@@ -254,15 +254,18 @@ function loadObjX(gl, path) {
         mtlData += mtlFile + "\n";
     }
     let materials = parseMTL(mtlData);
+    const textures = {
+        defaultWhite: create1PixelTexture(gl, [255, 255, 255, 255]),
+    };
     const defaultMaterial = {
         diffuse: [1, 1, 1],
         ambient: [0, 0, 0],
         specular: [1, 1, 1],
         shininess: 400,
         opacity: 1,
-    };
-    const textures = {
-        defaultWhite: create1PixelTexture(gl, [255, 255, 255, 255]),
+        diffuseMap: textures.defaultWhite,
+        specularMap: textures.defaultWhite,
+        normalMap: textures.defaultWhite,
     };
     // load texture for materials
     for (const material of Object.values(materials)) {
@@ -289,7 +292,7 @@ function loadObjX(gl, path) {
         //
         // and because those names match the attributes in our vertex
         // shader we can pass it directly into `createBufferInfoFromArrays`
-        // from the article "less code more fun".
+        // from the article "less code more fun"    .
         if (data.color) {
             if (data.position.length === data.color.length) {
                 // it's 3. The our helper library assumes 4 so we need
@@ -306,6 +309,11 @@ function loadObjX(gl, path) {
             material: Object.assign(Object.assign({}, defaultMaterial), materials[material]),
             bufferInfo: bufferInfo,
         };
+    });
+    console.log({
+        objData: parseOBJ(objFile),
+        materials: parseMTL(mtlData),
+        parts: parts
     });
     return {
         objData: parseOBJ(objFile),

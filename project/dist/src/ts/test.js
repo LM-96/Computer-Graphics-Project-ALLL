@@ -20,10 +20,10 @@ let MyApp = class MyApp extends webgl_application_1.WebGLApplication {
     }
 };
 __decorate([
-    (0, webgl_application_1.WebGLMesh)("./assets/AntoniosObj/world_tiger.obj")
+    (0, webgl_application_1.WebGLMesh)("./assets/LuchettoObj/world_decimate.obj")
 ], MyApp.prototype, "world", void 0);
 __decorate([
-    (0, webgl_application_1.WebGLMesh)("./assets/AntoniosObj/helmet.obj")
+    (0, webgl_application_1.WebGLMesh)("./assets/AntoniosObj/truck_final_1.obj")
 ], MyApp.prototype, "helmet", void 0);
 MyApp = __decorate([
     (0, webgl_application_1.WebGL)("test-app", "my_Canvas", ["vertex-shader", "fragment-shader"])

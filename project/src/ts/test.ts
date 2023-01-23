@@ -14,10 +14,10 @@ Log.enableLog()
     ["vertex-shader", "fragment-shader"])
 class MyApp extends WebGLApplication {
 
-    @WebGLMesh("./assets/AntoniosObj/world_tiger.obj")
+    @WebGLMesh("./assets/LuchettoObj/world_decimate.obj")
     private world: MeshObject
 
-    @WebGLMesh("./assets/AntoniosObj/helmet.obj")
+    @WebGLMesh("./assets/LuchettoObj/truck_final.obj")
     private helmet: MeshObject
 
     constructor() {
