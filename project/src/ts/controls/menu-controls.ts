@@ -50,6 +50,7 @@ export class MenuControls {
             scaleX: 1,
             scaleY: 1,
             scaleZ: 1,
+            psi: 0,
             theta: 0,
             phi: 0,
             targetX: application.getCamera().getCurrentTarget().getX(),
@@ -102,8 +103,9 @@ export class MenuControls {
                 this.#activeObj.getPolarRotationSubscriber().subscribe(
                     handler<MeshObject, PerformedPolarRotation, void>(
                         (signal: Signal<MeshObject, PerformedPolarRotation, void>) => {
-                            this.#settings.theta = signal.data.to.getFirst().getValueIn(AngleUnit.DEG)
-                            this.#settings.phi = signal.data.to.getSecond().getValueIn(AngleUnit.DEG)
+                            this.#settings.phi = signal.data.to.getFirst().getValueIn(AngleUnit.DEG)
+                            this.#settings.theta = signal.data.to.getSecond().getValueIn(AngleUnit.DEG)
+                            this.#settings.phi = signal.data.to.getThird().getValueIn(AngleUnit.DEG)
                             this.updateUI()
                         }))
             )
@@ -215,7 +217,7 @@ export class MenuControls {
         if(this.#loadedObjs != undefined) {
             let settings = this.#settings
             this.#activeObj.setPolarRotation(
-                degree(settings.theta), degree(settings.phi)
+                degree(settings.psi), degree(settings.theta), degree(settings.phi)
             )
             this.#application.getMeshObjectDrawer().drawScene()
         }
@@ -334,6 +336,7 @@ export class MenuControls {
             { type: 'slider',   key: 'scaleX',       change: () => { this.onObjectScaleChange() }, min: 0, max: 10, precision: 1, step: 1, },
             { type: 'slider',   key: 'scaleY',       change: () => { this.onObjectScaleChange() }, min:   0, max: 10, precision: 1, step: 1, },
             { type: 'slider',   key: 'scaleZ',       change: () => { this.onObjectScaleChange() }, min:   0, max: 10, precision: 1, step: 1, },
+            { type: 'slider',   key: 'psi',       change: () => { this.onObjectPolarRotationChange() }, min:   0, max: 360 },
             { type: 'slider',   key: 'theta',       change: () => { this.onObjectPolarRotationChange() }, min: 0, max: 360 },
             { type: 'slider',   key: 'phi',       change: () => { this.onObjectPolarRotationChange() }, min:   0, max: 360 },
             { type: 'checkbox', key: 'draw', change: () => { this.onDrawPressed() }},

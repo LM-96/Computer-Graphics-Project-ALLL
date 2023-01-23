@@ -18,6 +18,7 @@ export interface MenuSettings {
     scaleX: number
     scaleY: number
     scaleZ: number
+    psi: number
     theta: number
     phi: number
     targetX: number

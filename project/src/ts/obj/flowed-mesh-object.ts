@@ -14,13 +14,14 @@ import {mutablePoint3D} from "../geometry/point/point-factory";
 import PerformedScale, {PerformedScaleBuilder} from "../geometry/data/performed-scale";
 import {MeshObjectSignals} from "./mesh-object-signals";
 import {Log} from "../log/log";
+import {Trio, trioOf} from "../types/triple";
 
 export class FlowedMeshObject implements MeshObject {
 
   readonly #name: string;
   #data: any;
   #position: Point3D;
-  #polarRotation: Couple<Angle>
+  #polarRotation: Trio<Angle>
   #scale: NumberTrio
   #limitChecker: LimitsChecker
 
@@ -37,7 +38,7 @@ export class FlowedMeshObject implements MeshObject {
     this.#name = name;
     this.#data = data;
     this.#position = mutablePoint3D(0, 0, 0);
-    this.#polarRotation = coupleOf(angle(0), angle(0));
+    this.#polarRotation = trioOf(angle(0), angle(0), angle(0));
     this.#scale = numberTrio(1, 1, 1);
     this.#limitChecker = LimitsCheckers.unlimited();
     this.#hidden = false
@@ -112,7 +113,7 @@ export class FlowedMeshObject implements MeshObject {
     return this.#name;
   }
 
-  getPolarRotation(): Couple<Angle> {
+  getPolarRotation(): Trio<Angle> {
     return this.#polarRotation.clone()
   }
 
@@ -141,11 +142,12 @@ export class FlowedMeshObject implements MeshObject {
     this.#limitChecker = limitsChecker
   }
 
-  setPolarRotation(theta: Angle, phi: Angle): void {
+  setPolarRotation(psi: Angle, theta: Angle, phi: Angle): void {
     this.#performedPolarRotationBuilder.clear()
     this.#performedPolarRotationBuilder.from = this.#polarRotation.clone()
-    this.#polarRotation.setFirst(theta)
-    this.#polarRotation.setSecond(phi)
+    this.#polarRotation.setFirst(psi)
+    this.#polarRotation.setSecond(theta)
+    this.#polarRotation.setThird(phi)
     this.#performedPolarRotationBuilder.to = this.#polarRotation.clone()
     this.#polarRotationFlow.fire(this, this.#performedPolarRotationBuilder.build())
 
@@ -198,6 +200,7 @@ export class FlowedMeshObject implements MeshObject {
     if(rotation) {
         u_world = M4.xRotate(u_world, this.#polarRotation.getFirst().getValueIn(AngleUnit.RAD))
         u_world = M4.yRotate(u_world, this.#polarRotation.getSecond().getValueIn(AngleUnit.RAD))
+        u_world = M4.zRotate(u_world, this.#polarRotation.getThird().getValueIn(AngleUnit.RAD))
     }
     if(scale) {
         u_world = M4.scale(u_world, this.#scale.getFirst(), this.#scale.getSecond(), this.#scale.getThird())

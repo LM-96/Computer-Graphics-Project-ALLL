@@ -54,6 +54,7 @@ let MenuControls = class MenuControls {
             scaleX: 1,
             scaleY: 1,
             scaleZ: 1,
+            psi: 0,
             theta: 0,
             phi: 0,
             targetX: application.getCamera().getCurrentTarget().getX(),
@@ -88,8 +89,9 @@ let MenuControls = class MenuControls {
             this.updateUI();
         }))));
         __classPrivateFieldGet(this, _MenuControls_currentObjReceipt, "f").push((0, pair_1.pairOf)(__classPrivateFieldGet(this, _MenuControls_activeObj, "f").getPolarRotationSubscriber(), __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getPolarRotationSubscriber().subscribe((0, options_1.handler)((signal) => {
-            __classPrivateFieldGet(this, _MenuControls_settings, "f").theta = signal.data.to.getFirst().getValueIn(angle_1.AngleUnit.DEG);
-            __classPrivateFieldGet(this, _MenuControls_settings, "f").phi = signal.data.to.getSecond().getValueIn(angle_1.AngleUnit.DEG);
+            __classPrivateFieldGet(this, _MenuControls_settings, "f").phi = signal.data.to.getFirst().getValueIn(angle_1.AngleUnit.DEG);
+            __classPrivateFieldGet(this, _MenuControls_settings, "f").theta = signal.data.to.getSecond().getValueIn(angle_1.AngleUnit.DEG);
+            __classPrivateFieldGet(this, _MenuControls_settings, "f").phi = signal.data.to.getThird().getValueIn(angle_1.AngleUnit.DEG);
             this.updateUI();
         }))));
         log_1.Log.log("Subscribed to signals of " + __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getName() +
@@ -175,7 +177,7 @@ let MenuControls = class MenuControls {
     onObjectPolarRotationChange() {
         if (__classPrivateFieldGet(this, _MenuControls_loadedObjs, "f") != undefined) {
             let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
-            __classPrivateFieldGet(this, _MenuControls_activeObj, "f").setPolarRotation((0, angle_1.degree)(settings.theta), (0, angle_1.degree)(settings.phi));
+            __classPrivateFieldGet(this, _MenuControls_activeObj, "f").setPolarRotation((0, angle_1.degree)(settings.psi), (0, angle_1.degree)(settings.theta), (0, angle_1.degree)(settings.phi));
             __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
         }
     }
@@ -279,6 +281,7 @@ let MenuControls = class MenuControls {
             { type: 'slider', key: 'scaleX', change: () => { this.onObjectScaleChange(); }, min: 0, max: 10, precision: 1, step: 1, },
             { type: 'slider', key: 'scaleY', change: () => { this.onObjectScaleChange(); }, min: 0, max: 10, precision: 1, step: 1, },
             { type: 'slider', key: 'scaleZ', change: () => { this.onObjectScaleChange(); }, min: 0, max: 10, precision: 1, step: 1, },
+            { type: 'slider', key: 'psi', change: () => { this.onObjectPolarRotationChange(); }, min: 0, max: 360 },
             { type: 'slider', key: 'theta', change: () => { this.onObjectPolarRotationChange(); }, min: 0, max: 360 },
             { type: 'slider', key: 'phi', change: () => { this.onObjectPolarRotationChange(); }, min: 0, max: 360 },
             { type: 'checkbox', key: 'draw', change: () => { this.onDrawPressed(); } },

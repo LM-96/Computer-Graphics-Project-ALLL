@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PerformedPolarRotationBuilder = exports.PerformedPolarRotation = void 0;
-const pair_1 = require("../../types/pair");
+const triple_1 = require("../../types/triple");
 class PerformedPolarRotation {
     constructor(who, from, to, delta = null) {
         this.who = who;
         this.from = from;
         this.to = to;
         if (delta == undefined) {
-            this.delta = (0, pair_1.coupleOf)(to.getFirst().clone().subtract(from.getFirst()), to.getSecond().clone().subtract(from.getSecond()));
+            this.delta = (0, triple_1.trioOf)(to.getFirst().clone().subtract(from.getFirst()), to.getSecond().clone().subtract(from.getSecond()), to.getThird().clone().subtract(from.getThird()));
         }
         else {
             this.delta = delta;

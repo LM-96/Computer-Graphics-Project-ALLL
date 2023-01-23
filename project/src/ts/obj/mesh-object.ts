@@ -9,6 +9,7 @@ import PerformedScale from "../geometry/data/performed-scale";
 import {Couple} from "../types/pair";
 import {Angle} from "../geometry/angle/angle";
 import {LimitsChecker} from "../geometry/limits/limits-checker";
+import {Trio} from "../types/triple";
 
 export interface MeshObject {
 
@@ -32,13 +33,13 @@ export interface MeshObject {
     getPosition(): Point3D
 
     /**
-     * Returns the current rotation of the object considering the polar angles (theta, phi).
+     * Returns the current rotation of the object considering the polar angles (psi, theta, phi).
      * The returned couple is a *clone* of the internal rotation, every change to the returned couple
      * will not affect the internal rotation
-     * @return {NumberCouple} the current rotation of the object considering the polar angles (theta, phi)
+     * @return {NumberCouple} the current rotation of the object considering the polar angles (psi, theta, phi)
      * as a couple of numbers
      */
-    getPolarRotation(): Couple<Angle>
+    getPolarRotation(): Trio<Angle>
 
     /**
      * Returns the current scale of the axis of the object.
@@ -109,7 +110,7 @@ export interface MeshObject {
      * @param {Angle} theta the new theta angle of the object
      * @param {Angle} phi the new phi angle of the object
      */
-    setPolarRotation(theta: Angle, phi: Angle): void;
+    setPolarRotation(psi: Angle, theta: Angle, phi: Angle): void;
 
     /**
      * Sets the scale of the object to the given scale

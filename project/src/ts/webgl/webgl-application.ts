@@ -17,6 +17,7 @@ import {Angle} from "../geometry/angle/angle";
 import {numberTrio, NumberTrio} from "../types/numbers/number-trio";
 import {LimitsChecker} from "../geometry/limits/limits-checker";
 import {CameraControls} from "../controls/camera-controls";
+import {Trio, trioOf} from "../types/triple";
 
 const ObjToLoad = Symbol("ObjToLoad")
 
@@ -50,6 +51,10 @@ export abstract class WebGLApplication {
 
         Log.log("WebGL application [" + applicationName + "] created")
 
+    }
+
+    getCanvas(): HTMLCanvasElement {
+        return this.environment.getCanvas()
     }
 
     /**
@@ -240,7 +245,8 @@ export function WebGL(applicationName: string, canvasHtmlElementName: string, we
                     obj.setPosition(continuation.position)
                 }
                 if(continuation.rotation != null) {
-                    obj.setPolarRotation(continuation.rotation.getFirst(), continuation.rotation.getSecond())
+                    obj.setPolarRotation(continuation.rotation.getFirst(),
+                        continuation.rotation.getSecond(), continuation.rotation.getThird())
                 }
                 if(continuation.scale != null) {
                     obj.setScale(continuation.scale)
@@ -270,7 +276,7 @@ class ObjInitializationContinuation {
     name: string|null = null
     path: string|null = null
     position: Point3D|null = null
-    rotation: Couple<Angle>|null = null
+    rotation: Trio<Angle>|null = null
     scale: NumberTrio|null = null
     limitsChecker: LimitsChecker|null = null
 }
@@ -297,7 +303,7 @@ function getOrCreateObjInitializationContinuation(target: any, propertyKey: stri
  */
 export function WebGLMesh(url: string, name: string|null = null,
                           position: Point3D|null = null,
-                          rotation: Couple<Angle>|null = null,
+                          rotation: Trio<Angle>|null = null,
                           scale: NumberTrio|null = null,
                           limitsChecker: LimitsChecker|null = null
                           ) {
@@ -332,14 +338,15 @@ export function ObjPosition(x: number, y: number, z: number) {
 
 /**
  * Sets the scale the mesh object will have when loaded
- * @param {number} theta the theta angle of the rotation
- * @param {number} phi the phi angle of the rotation
+ * @param {number} psi the psi angle of the rotation (around the `x` axis)
+ * @param {number} theta the theta angle of the rotation (around the `y` axis)
+ * @param {number} phi the phi angle of the rotation (around the `z` axis)
  * @constructor
  */
-export function ObjRotation(theta: Angle, phi: Angle) {
+export function ObjRotation(psi: Angle, theta: Angle, phi: Angle) {
     return function (target: any, propertyKey: string) {
         getOrCreateObjInitializationContinuation(target, propertyKey)
-            .rotation = coupleOf(theta, phi)
+            .rotation = trioOf(psi, theta, phi)
     }
 }
 

@@ -2,6 +2,7 @@ import {WebGL, WebGLApplication, WebGLMesh} from "./webgl/webgl-application";
 import {MeshObject} from "./obj/mesh-object";
 import {Log} from "./log/log";
 import {MenuControls} from "./controls/menu-controls";
+import {UserInputs} from "./controls/user-inputs";
 
 const L = 3
 Log.enableLog()
@@ -18,15 +19,23 @@ class MyApp extends WebGLApplication {
     private helmet: MeshObject
 
     private menu: MenuControls
+    private userInputs: UserInputs
 
     constructor() {
         super();
     }
 
-    protected main(args: string[]): void {
-        console.log("Hello world! [" + this.applicationName + "]")
+    protected beforeStart() {
         this.menu = new MenuControls(this)
         this.menu.setup()
+        this.userInputs = new UserInputs(this)
+        this.userInputs.setTarget(this.helmet)
+        this.userInputs.attachHandlers()
+    }
+
+    protected main(args: string[]): void {
+        console.log("Hello world! [" + this.applicationName + "]")
+
         this.drawScene()
     }
 }

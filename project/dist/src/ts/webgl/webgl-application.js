@@ -8,8 +8,8 @@ const flow_1 = require("../signals/flow");
 const illegal_signal_name_exception_1 = require("../signals/exceptions/illegal-signal-name-exception");
 const log_1 = require("../log/log");
 const point_factory_1 = require("../geometry/point/point-factory");
-const pair_1 = require("../types/pair");
 const number_trio_1 = require("../types/numbers/number-trio");
+const triple_1 = require("../types/triple");
 const ObjToLoad = Symbol("ObjToLoad");
 class WebGLApplication {
     constructor(applicationName = null, environment = null) {
@@ -26,6 +26,9 @@ class WebGLApplication {
             log_1.Log.log(applicationName + "| retrieved camera");
         }
         log_1.Log.log("WebGL application [" + applicationName + "] created");
+    }
+    getCanvas() {
+        return this.environment.getCanvas();
     }
     /**
      * Returns the mesh object manager
@@ -175,7 +178,7 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
                     obj.setPosition(continuation.position);
                 }
                 if (continuation.rotation != null) {
-                    obj.setPolarRotation(continuation.rotation.getFirst(), continuation.rotation.getSecond());
+                    obj.setPolarRotation(continuation.rotation.getFirst(), continuation.rotation.getSecond(), continuation.rotation.getThird());
                 }
                 if (continuation.scale != null) {
                     obj.setScale(continuation.scale);
@@ -264,14 +267,15 @@ function ObjPosition(x, y, z) {
 exports.ObjPosition = ObjPosition;
 /**
  * Sets the scale the mesh object will have when loaded
- * @param {number} theta the theta angle of the rotation
- * @param {number} phi the phi angle of the rotation
+ * @param {number} psi the psi angle of the rotation (around the `x` axis)
+ * @param {number} theta the theta angle of the rotation (around the `y` axis)
+ * @param {number} phi the phi angle of the rotation (around the `z` axis)
  * @constructor
  */
-function ObjRotation(theta, phi) {
+function ObjRotation(psi, theta, phi) {
     return function (target, propertyKey) {
         getOrCreateObjInitializationContinuation(target, propertyKey)
-            .rotation = (0, pair_1.coupleOf)(theta, phi);
+            .rotation = (0, triple_1.trioOf)(psi, theta, phi);
     };
 }
 exports.ObjRotation = ObjRotation;

@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FlowedMeshObject = void 0;
 const number_trio_1 = require("../types/numbers/number-trio");
 const limits_checkers_1 = require("../geometry/limits/limits-checkers");
-const pair_1 = require("../types/pair");
 const angle_1 = require("../geometry/angle/angle");
 const flow_1 = require("../signals/flow");
 const performed_translation_1 = require("../geometry/data/performed-translation");
@@ -24,6 +23,7 @@ const point_factory_1 = require("../geometry/point/point-factory");
 const performed_scale_1 = require("../geometry/data/performed-scale");
 const mesh_object_signals_1 = require("./mesh-object-signals");
 const log_1 = require("../log/log");
+const triple_1 = require("../types/triple");
 class FlowedMeshObject {
     constructor(name, data) {
         _FlowedMeshObject_name.set(this, void 0);
@@ -42,7 +42,7 @@ class FlowedMeshObject {
         __classPrivateFieldSet(this, _FlowedMeshObject_name, name, "f");
         __classPrivateFieldSet(this, _FlowedMeshObject_data, data, "f");
         __classPrivateFieldSet(this, _FlowedMeshObject_position, (0, point_factory_1.mutablePoint3D)(0, 0, 0), "f");
-        __classPrivateFieldSet(this, _FlowedMeshObject_polarRotation, (0, pair_1.coupleOf)((0, angle_1.angle)(0), (0, angle_1.angle)(0)), "f");
+        __classPrivateFieldSet(this, _FlowedMeshObject_polarRotation, (0, triple_1.trioOf)((0, angle_1.angle)(0), (0, angle_1.angle)(0), (0, angle_1.angle)(0)), "f");
         __classPrivateFieldSet(this, _FlowedMeshObject_scale, (0, number_trio_1.numberTrio)(1, 1, 1), "f");
         __classPrivateFieldSet(this, _FlowedMeshObject_limitChecker, limits_checkers_1.LimitsCheckers.unlimited(), "f");
         __classPrivateFieldSet(this, _FlowedMeshObject_hidden, false, "f");
@@ -126,11 +126,12 @@ class FlowedMeshObject {
     setLimitsChecker(limitsChecker) {
         __classPrivateFieldSet(this, _FlowedMeshObject_limitChecker, limitsChecker, "f");
     }
-    setPolarRotation(theta, phi) {
+    setPolarRotation(psi, theta, phi) {
         __classPrivateFieldGet(this, _FlowedMeshObject_performedPolarRotationBuilder, "f").clear();
         __classPrivateFieldGet(this, _FlowedMeshObject_performedPolarRotationBuilder, "f").from = __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").clone();
-        __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").setFirst(theta);
-        __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").setSecond(phi);
+        __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").setFirst(psi);
+        __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").setSecond(theta);
+        __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").setThird(phi);
         __classPrivateFieldGet(this, _FlowedMeshObject_performedPolarRotationBuilder, "f").to = __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").clone();
         __classPrivateFieldGet(this, _FlowedMeshObject_polarRotationFlow, "f").fire(this, __classPrivateFieldGet(this, _FlowedMeshObject_performedPolarRotationBuilder, "f").build());
         this.updateUMatrix();
@@ -172,6 +173,7 @@ class FlowedMeshObject {
         if (rotation) {
             u_world = M4.xRotate(u_world, __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").getFirst().getValueIn(angle_1.AngleUnit.RAD));
             u_world = M4.yRotate(u_world, __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").getSecond().getValueIn(angle_1.AngleUnit.RAD));
+            u_world = M4.zRotate(u_world, __classPrivateFieldGet(this, _FlowedMeshObject_polarRotation, "f").getThird().getValueIn(angle_1.AngleUnit.RAD));
         }
         if (scale) {
             u_world = M4.scale(u_world, __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").getFirst(), __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").getSecond(), __classPrivateFieldGet(this, _FlowedMeshObject_scale, "f").getThird());

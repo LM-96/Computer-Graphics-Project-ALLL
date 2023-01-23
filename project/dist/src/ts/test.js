@@ -9,16 +9,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const webgl_application_1 = require("./webgl/webgl-application");
 const log_1 = require("./log/log");
 const menu_controls_1 = require("./controls/menu-controls");
+const user_inputs_1 = require("./controls/user-inputs");
 const L = 3;
 log_1.Log.enableLog();
 let MyApp = class MyApp extends webgl_application_1.WebGLApplication {
     constructor() {
         super();
     }
-    main(args) {
-        console.log("Hello world! [" + this.applicationName + "]");
+    beforeStart() {
         this.menu = new menu_controls_1.MenuControls(this);
         this.menu.setup();
+        this.userInputs = new user_inputs_1.UserInputs(this);
+        this.userInputs.setTarget(this.helmet);
+        this.userInputs.attachHandlers();
+    }
+    main(args) {
+        console.log("Hello world! [" + this.applicationName + "]");
         this.drawScene();
     }
 };

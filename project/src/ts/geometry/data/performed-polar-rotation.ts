@@ -1,5 +1,5 @@
-import {Couple, coupleOf} from "../../types/pair";
 import {Angle} from "../angle/angle";
+import {Trio, trioOf} from "../../types/triple";
 
 export class PerformedPolarRotation {
 
@@ -11,25 +11,26 @@ export class PerformedPolarRotation {
     /**
      * The polar angles of the subject before the rotation
      */
-    readonly from: Couple<Angle>
+    readonly from: Trio<Angle>
 
     /**
      * The polar angles of the subject after the rotation
      */
-    readonly to: Couple<Angle>
+    readonly to: Trio<Angle>
 
     /**
      * The delta of the rotation that has been applied to the subject at the `from` rotation
      */
-    readonly delta: Couple<Angle>
+    readonly delta: Trio<Angle>
 
-    constructor(who: string, from: Couple<Angle>, to: Couple<Angle>, delta: Couple<Angle> = null) {
+    constructor(who: string, from: Trio<Angle>, to: Trio<Angle>, delta: Trio<Angle> = null) {
         this.who = who
         this.from = from
         this.to = to
         if(delta == undefined) {
-            this.delta = coupleOf<Angle>(to.getFirst().clone().subtract(from.getFirst()),
-                to.getSecond().clone().subtract(from.getSecond()))
+            this.delta = trioOf<Angle>(to.getFirst().clone().subtract(from.getFirst()),
+                to.getSecond().clone().subtract(from.getSecond()),
+                to.getThird().clone().subtract(from.getThird()))
         } else {
             this.delta = delta
         }
@@ -59,9 +60,9 @@ export class PerformedPolarRotation {
 export class PerformedPolarRotationBuilder {
 
     who: string = undefined
-    from: Couple<Angle> = undefined
-    to: Couple<Angle> = undefined
-    delta: Couple<Angle> = undefined
+    from: Trio<Angle> = undefined
+    to: Trio<Angle> = undefined
+    delta: Trio<Angle> = undefined
 
     /**
      * Builds a new `PerformedPolarRotation` object throwing an error if one of the required fields is missing
