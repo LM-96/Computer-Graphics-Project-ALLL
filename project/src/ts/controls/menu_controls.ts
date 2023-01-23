@@ -13,6 +13,8 @@ export class MenuControls {
 
     constructor(application: WebGLApplication) {
         this.application = application
+        this.#loadedObj = application.getMeshObjectManager().getAll().map((obj) => obj.getName())
+
         this.settings = {
             Active_Menu: false,
             cameraX: 2.75,
@@ -25,15 +27,20 @@ export class MenuControls {
             targetY: 0,
             targetZ: 0,
             fieldOfView: 60,
-            currentobj: 'option1',
+            currentobj: undefined
         };
 
-        this.#loadedObj = application.getMeshObjectManager().getAll().map((obj) => obj.getName())
-        this.activeObj = application.getMeshObjectManager().get(this.settings.currentobj)
+        if(this.#loadedObj.length > 0) {
+            this.activeObj = application.getMeshObjectManager().get(this.#loadedObj[0])
+            this.settings.currentobj = this.#loadedObj.indexOf(this.activeObj.getName())
+        } else {
+            this.#loadedObj = undefined
+            this.settings.currentobj = ''
+        }
     }
 
     updateObj() {
-        this.activeObj = this.application.getMeshObjectManager().get(this.settings.currentobj)
+        this.activeObj = this.application.getMeshObjectManager().get(this.#loadedObj[this.settings.currentobj])
         this.settings.posX = this.activeObj.getPosition().getX()
         this.settings.posY = this.activeObj.getPosition().getY()
         this.settings.posZ = this.activeObj.getPosition().getZ()
@@ -50,7 +57,7 @@ export class MenuControls {
     onObjectPositionChange() {
         let settings = ACTIVE_MENU_CONTROLS.settings
         ACTIVE_MENU_CONTROLS.activeObj.setPosition(
-            settings.posX, settings.posY, settings.posZ
+            settings.posX as number, settings.posY as number, settings.posZ as number
         )
         ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene()
     }
@@ -84,7 +91,7 @@ export class MenuControls {
             { type: 'slider',   key: 'targetX',    change: this.onTargetPositionChange, min: -10, max: 10, precision: 2, step: 0.001, },
             { type: 'slider',   key: 'targetY',    change: this.onTargetPositionChange, min:   0, max: 20, precision: 2, step: 0.001, },
             { type: 'slider',   key: 'targetZ',    change: this.onTargetPositionChange, min: -10, max: 20, precision: 2, step: 0.001, },
-            { type: 'option',  key: 'currentobj', change: this.onCurrentObjChange, options: this.#loadedObj, },
+            { type: 'option',   key: 'currentobj', change: this.onCurrentObjChange, options: this.#loadedObj, },
             { type: 'slider',   key: 'posX',       change: this.onObjectPositionChange, min: -10, max: 10, precision: 2, step: 0.001, },
             { type: 'slider',   key: 'posY',       change: this.onObjectPositionChange, min:   -10, max: 10, precision: 2, step: 0.001, },
             { type: 'slider',   key: 'posZ',       change: this.onObjectPositionChange, min:   0.25, max: 5, precision: 2, step: 0.001, },

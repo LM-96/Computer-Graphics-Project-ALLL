@@ -19,6 +19,7 @@ class MenuControls {
     constructor(application) {
         _MenuControls_loadedObj.set(this, void 0);
         this.application = application;
+        __classPrivateFieldSet(this, _MenuControls_loadedObj, application.getMeshObjectManager().getAll().map((obj) => obj.getName()), "f");
         this.settings = {
             Active_Menu: false,
             cameraX: 2.75,
@@ -31,13 +32,19 @@ class MenuControls {
             targetY: 0,
             targetZ: 0,
             fieldOfView: 60,
-            currentobj: 'option1',
+            currentobj: undefined
         };
-        __classPrivateFieldSet(this, _MenuControls_loadedObj, application.getMeshObjectManager().getAll().map((obj) => obj.getName()), "f");
-        this.activeObj = application.getMeshObjectManager().get(this.settings.currentobj);
+        if (__classPrivateFieldGet(this, _MenuControls_loadedObj, "f").length > 0) {
+            this.activeObj = application.getMeshObjectManager().get(__classPrivateFieldGet(this, _MenuControls_loadedObj, "f")[0]);
+            this.settings.currentobj = __classPrivateFieldGet(this, _MenuControls_loadedObj, "f").indexOf(this.activeObj.getName());
+        }
+        else {
+            __classPrivateFieldSet(this, _MenuControls_loadedObj, undefined, "f");
+            this.settings.currentobj = '';
+        }
     }
     updateObj() {
-        this.activeObj = this.application.getMeshObjectManager().get(this.settings.currentobj);
+        this.activeObj = this.application.getMeshObjectManager().get(__classPrivateFieldGet(this, _MenuControls_loadedObj, "f")[this.settings.currentobj]);
         this.settings.posX = this.activeObj.getPosition().getX();
         this.settings.posY = this.activeObj.getPosition().getY();
         this.settings.posZ = this.activeObj.getPosition().getZ();

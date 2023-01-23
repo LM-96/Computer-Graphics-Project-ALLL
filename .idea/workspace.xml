@@ -5,19 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Computer-Graphics-Project-ALLL.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Computer-Graphics-Project-ALLL.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/lib-master.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/lib-master.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/lib-master.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/lib-master.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/menu_interface.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/menu_interface.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/menu_interface.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/menu_interface.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/lib-master.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/lib-master.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/menu_interface.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/menu_interface.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu_controls.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu_controls.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu_controls.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu_controls.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu_controls.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu_controls.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
