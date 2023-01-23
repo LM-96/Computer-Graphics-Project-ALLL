@@ -20,6 +20,9 @@ let MyApp = class MyApp extends webgl_application_1.WebGLApplication {
     }
 };
 __decorate([
+    (0, webgl_application_1.WebGLMesh)("./assets/AntoniosObj/world_tiger.obj")
+], MyApp.prototype, "world", void 0);
+__decorate([
     (0, webgl_application_1.WebGLMesh)("./assets/AntoniosObj/helmet.obj")
 ], MyApp.prototype, "helmet", void 0);
 MyApp = __decorate([

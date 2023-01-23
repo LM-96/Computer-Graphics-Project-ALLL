@@ -63,14 +63,25 @@ export class FlowedMeshObject implements MeshObject {
     }
     let u_world = this.#data.u_world
 
-    for (let part of this.#data.parts) {
+    for (let {bufferInfo, material} of this.#data.parts) {
       // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
-      WebGLUtils.setBuffersAndAttributes(gl, programInfo, part.bufferInfo);
+      WebGLUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
       // calls gl.uniform
-      WebGLUtils.setUniforms(programInfo, { u_world }, part.material);
+      WebGLUtils.setUniforms(programInfo, {
+        u_world,
+      }, material);
       // calls gl.drawArrays or gl.drawElements
-      WebGLUtils.drawBufferInfo(gl, part.bufferInfo);
+      WebGLUtils.drawBufferInfo(gl, bufferInfo);
     }
+
+    // for (let part of this.#data.parts) {
+    //   // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+    //   WebGLUtils.setBuffersAndAttributes(gl, programInfo, part.bufferInfo);
+    //   // calls gl.uniform
+    //   WebGLUtils.setUniforms(programInfo, { u_world }, part.material);
+    //   // calls gl.drawArrays or gl.drawElements
+    //   WebGLUtils.drawBufferInfo(gl, part.bufferInfo);
+    // }
     Log.log("MeshObject[" + this.#name + "] | drawn")
   }
 
@@ -107,10 +118,6 @@ export class FlowedMeshObject implements MeshObject {
   }
 
   glInit(gl: WebGLRenderingContext) {
-    for(let part of this.#data.parts) {
-      part.bufferInfo = WebGLUtils.createBufferInfoFromArrays(gl, part.data)
-    }
-
     this.#data.u_world = M4.identity();
     Log.log("MeshObject[" + this.#name + "] initialized")
   }

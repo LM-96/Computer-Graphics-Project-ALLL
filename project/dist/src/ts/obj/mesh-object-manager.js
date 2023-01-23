@@ -43,7 +43,7 @@ class MeshObjectManager {
      */
     loadObj(name, path) {
         log_1.Log.log("MeshObjectManager[" + this.applicationName + "] | loading object '" + name + "' from '" + path + "'");
-        let data = loadObjX(path);
+        let data = loadObjX(__classPrivateFieldGet(this, _MeshObjectManager_glEnvironment, "f").getContext(), path);
         let res = new flowed_mesh_object_1.FlowedMeshObject(name, data);
         __classPrivateFieldGet(this, _MeshObjectManager_objects, "f").set(name, res);
         res.glInit(__classPrivateFieldGet(this, _MeshObjectManager_glEnvironment, "f").getContext());

@@ -14,8 +14,8 @@ Log.enableLog()
     ["vertex-shader", "fragment-shader"])
 class MyApp extends WebGLApplication {
 
-    // @WebGLMesh("./assets/AntoniosObj/world_tiger.obj")
-    // private world: MeshObject
+    @WebGLMesh("./assets/AntoniosObj/world_tiger.obj")
+    private world: MeshObject
 
     @WebGLMesh("./assets/AntoniosObj/helmet.obj")
     private helmet: MeshObject

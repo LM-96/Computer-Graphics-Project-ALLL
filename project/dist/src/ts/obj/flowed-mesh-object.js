@@ -62,14 +62,24 @@ class FlowedMeshObject {
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         }
         let u_world = __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").u_world;
-        for (let part of __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").parts) {
+        for (let { bufferInfo, material } of __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").parts) {
             // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
-            WebGLUtils.setBuffersAndAttributes(gl, programInfo, part.bufferInfo);
+            WebGLUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
             // calls gl.uniform
-            WebGLUtils.setUniforms(programInfo, { u_world }, part.material);
+            WebGLUtils.setUniforms(programInfo, {
+                u_world,
+            }, material);
             // calls gl.drawArrays or gl.drawElements
-            WebGLUtils.drawBufferInfo(gl, part.bufferInfo);
+            WebGLUtils.drawBufferInfo(gl, bufferInfo);
         }
+        // for (let part of this.#data.parts) {
+        //   // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+        //   WebGLUtils.setBuffersAndAttributes(gl, programInfo, part.bufferInfo);
+        //   // calls gl.uniform
+        //   WebGLUtils.setUniforms(programInfo, { u_world }, part.material);
+        //   // calls gl.drawArrays or gl.drawElements
+        //   WebGLUtils.drawBufferInfo(gl, part.bufferInfo);
+        // }
         log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] | drawn");
     }
     getCurrentScale() {
@@ -97,9 +107,6 @@ class FlowedMeshObject {
         return __classPrivateFieldGet(this, _FlowedMeshObject_translationFlow, "f");
     }
     glInit(gl) {
-        for (let part of __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").parts) {
-            part.bufferInfo = WebGLUtils.createBufferInfoFromArrays(gl, part.data);
-        }
         __classPrivateFieldGet(this, _FlowedMeshObject_data, "f").u_world = M4.identity();
         log_1.Log.log("MeshObject[" + __classPrivateFieldGet(this, _FlowedMeshObject_name, "f") + "] initialized");
     }
