@@ -60,6 +60,8 @@ let MenuControls = class MenuControls {
             targetY: application.getCamera().getCurrentTarget().getY(),
             targetZ: application.getCamera().getCurrentTarget().getZ(),
             fov: application.getCamera().getCurrentFov().getValueIn(angle_1.AngleUnit.DEG),
+            zNear: application.getMeshObjectDrawer().zNear,
+            zFar: application.getMeshObjectDrawer().zFar,
             currentobj: undefined,
             hidden: false,
             draw: false,
@@ -243,6 +245,14 @@ let MenuControls = class MenuControls {
             this.updateUI();
         }
     }
+    onZNearChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().zNear = __classPrivateFieldGet(this, _MenuControls_settings, "f").zNear;
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onZFarChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().zFar = __classPrivateFieldGet(this, _MenuControls_settings, "f").zFar;
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
     setup() {
         __classPrivateFieldSet(this, _MenuControls_widgets, WebGlLessonUI.setupUI(document.querySelector('#ui'), __classPrivateFieldGet(this, _MenuControls_settings, "f"), [
             { type: 'checkbox', key: 'log', change: () => { this.onLogChanged(); } },
@@ -255,6 +265,8 @@ let MenuControls = class MenuControls {
             { type: 'slider', key: 'cameraUpX', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 1, step: 1, },
             { type: 'slider', key: 'cameraUpY', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 1, step: 1, },
             { type: 'slider', key: 'cameraUpZ', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 1, step: 1, },
+            { type: 'slider', key: 'zNear', change: () => { this.onZNearChange(); }, min: -10, max: 10, precision: 2, step: 1, },
+            { type: 'slider', key: 'zFar', change: () => { this.onZFarChange(); }, min: -200, max: 200, precision: 1, step: 1, },
             { type: 'slider', key: 'fov', change: () => { this.onFovChange(); }, min: 0, max: 180, },
             { type: 'slider', key: 'targetX', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'slider', key: 'targetY', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },

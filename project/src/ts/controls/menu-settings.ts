@@ -10,6 +10,8 @@ export interface MenuSettings {
     cameraUpX: number
     cameraUpY: number
     cameraUpZ: number
+    zNear: number
+    zFar: number
     posX: number
     posY: number
     posZ: number

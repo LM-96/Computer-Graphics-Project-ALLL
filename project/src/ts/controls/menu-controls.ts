@@ -56,6 +56,8 @@ export class MenuControls {
             targetY: application.getCamera().getCurrentTarget().getY(),
             targetZ: application.getCamera().getCurrentTarget().getZ(),
             fov: application.getCamera().getCurrentFov().getValueIn(AngleUnit.DEG),
+            zNear: application.getMeshObjectDrawer().zNear,
+            zFar: application.getMeshObjectDrawer().zFar,
             currentobj: undefined,
             hidden: false,
             draw: false,
@@ -296,6 +298,15 @@ export class MenuControls {
         }
     }
 
+    onZNearChange() {
+        this.#application.getMeshObjectDrawer().zNear = this.#settings.zNear
+        this.#application.getMeshObjectDrawer().drawScene()
+    }
+
+    onZFarChange() {
+        this.#application.getMeshObjectDrawer().zFar = this.#settings.zFar
+        this.#application.getMeshObjectDrawer().drawScene()
+    }
 
     setup() {
         this.#widgets = WebGlLessonUI.setupUI(document.querySelector('#ui'), this.#settings, [
@@ -309,6 +320,8 @@ export class MenuControls {
             { type: 'slider',   key: 'cameraUpX',    change: () => { this.onCameraUpChange() }, min: -1, max: 1, precision: 1, step: 1, },
             { type: 'slider',   key: 'cameraUpY',    change: () => { this.onCameraUpChange() }, min:   -1, max: 1, precision: 1, step: 1, },
             { type: 'slider',   key: 'cameraUpZ',    change: () => { this.onCameraUpChange() }, min:   -1, max: 1, precision: 1, step: 1, },
+            { type: 'slider',   key: 'zNear',    change: () => { this.onZNearChange() }, min:   -10, max: 10, precision: 2, step: 1, },
+            { type: 'slider',   key: 'zFar',    change: () => { this.onZFarChange() }, min:   -200, max: 200, precision: 1, step: 1, },
             { type: 'slider',   key: 'fov', change: () => { this.onFovChange() }, min:  0, max: 180,  },
             { type: 'slider',   key: 'targetX',    change: () => { this.onTargetPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'slider',   key: 'targetY',    change: () => { this.onTargetPositionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
