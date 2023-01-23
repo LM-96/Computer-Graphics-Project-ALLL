@@ -12,19 +12,9 @@ const settings = {
     fieldOfView: 60
 };
 
-var widgets = null;
-function activateColor(active){
-    let uiContainer = document.getElementById("uiContainer");
-    if(active){
-        uiContainer.style.backgroundColor = "rgba(149,171,149,0.65)";
-    }else
-        uiContainer.style.backgroundColor = "rgba(162,117,117,0.3)";
-
-}
-
 //TODO. Input of menu do not update the slider
 function menu() {
-    widgets = webglLessonsUI.setupUI(document.querySelector('#ui'), settings, [
+    webglLessonsUI.setupUI(document.querySelector('#ui'), settings, [
         { type: 'checkbox', key: 'Active_Menu', },
         { type: 'slider',   key: 'cameraX',    min: -10, max: 10, precision: 2, step: 0.001, },
         { type: 'slider',   key: 'cameraY',    min:   -10, max: 10, precision: 2, step: 0.001, },
@@ -35,7 +25,7 @@ function menu() {
         { type: 'slider',   key: 'targetX',    min: -10, max: 10, precision: 2, step: 0.001, },
         { type: 'slider',   key: 'targetY',    min:   0, max: 20, precision: 2, step: 0.001, },
         { type: 'slider',   key: 'targetZ',    min: -10, max: 20, precision: 2, step: 0.001, },
-        { type: 'slider',   key: 'fieldOfView', min:  1, max: 179,  },
+        { type: 'slider',   key: 'fieldOfView', min:  0, max: 180,  },
     ]);
 
 
