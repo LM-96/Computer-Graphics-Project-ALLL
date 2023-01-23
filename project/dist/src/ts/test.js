@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const webgl_application_1 = require("./webgl/webgl-application");
 const log_1 = require("./log/log");
-const menu_controls_1 = require("./controls/menu_controls");
+const menu_controls_1 = require("./controls/menu-controls");
 const L = 3;
 log_1.Log.enableLog();
 let MyApp = class MyApp extends webgl_application_1.WebGLApplication {
@@ -23,8 +23,8 @@ let MyApp = class MyApp extends webgl_application_1.WebGLApplication {
     }
 };
 __decorate([
-    (0, webgl_application_1.WebGLMesh)("./assets/LuchettoObj/world_decimate.obj")
-], MyApp.prototype, "world", void 0);
+    (0, webgl_application_1.WebGLMesh)("./assets/assi.obj")
+], MyApp.prototype, "axis", void 0);
 __decorate([
     (0, webgl_application_1.WebGLMesh)("./assets/LuchettoObj/truck_final.obj")
 ], MyApp.prototype, "helmet", void 0);

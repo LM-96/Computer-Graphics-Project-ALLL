@@ -13,6 +13,11 @@ import {LimitsChecker} from "../geometry/limits/limits-checker";
 export interface MeshObject {
 
     /**
+     * Returns a `boolean` that indicates if the object is hidden or not
+     */
+    getHidden(): boolean
+
+    /**
      * Returns the name of the mesh object
      * @returns {string} the name of the mesh object
      */
@@ -70,6 +75,12 @@ export interface MeshObject {
      * @returns {SingleSignalSubscriber<PerformedScale, void>} the subscriber to the signals
      */
     getScaleSubscriber(): SingleSignalSubscriber<MeshObject, PerformedScale, void>
+
+    /**
+     * Sets the hidden state of the object
+     * @param {boolean} hidden the new hidden state of the object
+     */
+    setHidden(hidden: boolean): void
 
     /**
      * Sets the limits checker the object will use to constrain its movement

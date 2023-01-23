@@ -22,25 +22,25 @@ class MenuControls {
         __classPrivateFieldSet(this, _MenuControls_loadedObj, application.getMeshObjectManager().getAll().map((obj) => obj.getName()), "f");
         this.settings = {
             Active_Menu: false,
+            Look_at_object: false,
             cameraX: 2.75,
             cameraY: 5,
             cameraZ: 1,
             posX: 0,
             posY: 0,
             posZ: 0.25,
+            scaleX: 1,
+            scaleY: 1,
+            scaleZ: 1,
             targetX: 0,
             targetY: 0,
             targetZ: 0,
-            fieldOfView: 60,
+            fov: 60,
             currentobj: undefined
         };
         if (__classPrivateFieldGet(this, _MenuControls_loadedObj, "f").length > 0) {
             this.activeObj = application.getMeshObjectManager().get(__classPrivateFieldGet(this, _MenuControls_loadedObj, "f")[0]);
             this.settings.currentobj = __classPrivateFieldGet(this, _MenuControls_loadedObj, "f").indexOf(this.activeObj.getName());
-        }
-        else {
-            __classPrivateFieldSet(this, _MenuControls_loadedObj, undefined, "f");
-            this.settings.currentobj = '';
         }
     }
     updateObj() {
@@ -67,27 +67,42 @@ class MenuControls {
     }
     onFovChange() {
         let settings = ACTIVE_MENU_CONTROLS.settings;
-        ACTIVE_MENU_CONTROLS.application.getCamera().setFov((0, angle_1.degree)(settings.fieldOfView));
+        ACTIVE_MENU_CONTROLS.application.getCamera().setFov((0, angle_1.degree)(settings.fov));
         ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene();
     }
     onCurrentObjChange() {
         ACTIVE_MENU_CONTROLS.updateObj();
     }
+    onObjectScaleChange() {
+        let settings = ACTIVE_MENU_CONTROLS.settings;
+        ACTIVE_MENU_CONTROLS.activeObj.setScale(settings.scaleX, settings.scaleY, settings.scaleZ);
+        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene();
+    }
+    onObjectPolarRotationChange() {
+    }
+    onLookAtObjectChange() {
+    }
     setup() {
         ACTIVE_MENU_CONTROLS = this;
         this.widgets = WebGlLessonUI.setupUI(document.querySelector('#ui'), this.settings, [
             { type: 'checkbox', key: 'Active_Menu', },
-            { type: 'slider', key: 'cameraX', change: this.onCameraChange, min: -10, max: 10, precision: 2, step: 0.001, },
-            { type: 'slider', key: 'cameraY', change: this.onCameraChange, min: -10, max: 10, precision: 2, step: 0.001, },
-            { type: 'slider', key: 'cameraZ', change: this.onCameraChange, min: -10, max: 10, precision: 2, step: 0.001, },
-            { type: 'slider', key: 'fieldOfView', change: this.onFovChange, min: 0, max: 180, },
-            { type: 'slider', key: 'targetX', change: this.onTargetPositionChange, min: -10, max: 10, precision: 2, step: 0.001, },
-            { type: 'slider', key: 'targetY', change: this.onTargetPositionChange, min: 0, max: 20, precision: 2, step: 0.001, },
-            { type: 'slider', key: 'targetZ', change: this.onTargetPositionChange, min: -10, max: 20, precision: 2, step: 0.001, },
+            { type: 'checkbox', key: 'Look_at_Object', change: this.onLookAtObjectChange, },
+            { type: 'slider', key: 'cameraX', change: this.onCameraChange, min: -100, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'cameraY', change: this.onCameraChange, min: -100, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'cameraZ', change: this.onCameraChange, min: -100, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'fov', change: this.onFovChange, min: 0, max: 180, },
+            { type: 'slider', key: 'targetX', change: this.onTargetPositionChange, min: -100, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'targetY', change: this.onTargetPositionChange, min: -100, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'targetZ', change: this.onTargetPositionChange, min: -100, max: 100, precision: 2, step: 0.001, },
             { type: 'option', key: 'currentobj', change: this.onCurrentObjChange, options: __classPrivateFieldGet(this, _MenuControls_loadedObj, "f"), },
-            { type: 'slider', key: 'posX', change: this.onObjectPositionChange, min: -10, max: 10, precision: 2, step: 0.001, },
-            { type: 'slider', key: 'posY', change: this.onObjectPositionChange, min: -10, max: 10, precision: 2, step: 0.001, },
-            { type: 'slider', key: 'posZ', change: this.onObjectPositionChange, min: 0.25, max: 5, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'posX', change: this.onObjectPositionChange, min: -100, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'posY', change: this.onObjectPositionChange, min: -100, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'posZ', change: this.onObjectPositionChange, min: -100, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'scaleX', change: this.onObjectScaleChange, min: 0, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'scaleY', change: this.onObjectScaleChange, min: 0, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'scaleZ', change: this.onObjectScaleChange, min: 0, max: 100, precision: 2, step: 0.001, },
+            { type: 'slider', key: 'theta', change: this.onObjectPolarRotationChange, min: 0, max: 360 },
+            { type: 'slider', key: 'phi', change: this.onObjectPolarRotationChange, min: 0, max: 360 },
         ]);
     }
 }

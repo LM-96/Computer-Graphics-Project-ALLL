@@ -6,10 +6,30 @@
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Adding/webgl-lessons-ui-modified.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/webgl-lessons-ui-modified.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/alllUtils.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu_controls.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu_controls.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu_controls.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu_controls.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu_controls.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu_controls.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/angle/angle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/geometry/angle/angle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/geometry/angle/angle.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/geometry/angle/angle.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/eventHandlers.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/logutils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/objload.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/project.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/proveCubo.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/proveCubo.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu_controls.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/geometry/angle/angle.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/geometry/angle/angle.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/flowed-mesh-object.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/flowed-mesh-object.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-object.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/mesh-object.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/utils.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,11 +86,11 @@
       <recent name="$PROJECT_DIR$/project/src/ts/types/exceptions" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/project/lib/js" />
+      <recent name="$PROJECT_DIR$/project/lib" />
       <recent name="$PROJECT_DIR$/project/src/ts" />
       <recent name="$PROJECT_DIR$/project/src/ts/signals" />
       <recent name="$PROJECT_DIR$/project/src/ts/types/numbers" />
-      <recent name="$PROJECT_DIR$/project/src/ts/types/exceptions" />
-      <recent name="$PROJECT_DIR$/project/src/ts/geometry/rotation" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.test.js">

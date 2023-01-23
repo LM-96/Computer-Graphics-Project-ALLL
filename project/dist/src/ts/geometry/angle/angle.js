@@ -187,8 +187,7 @@ exports.angle = angle;
  * @return {number} the value of the angle in degree
  */
 function rad2Deg(angle) {
-    //return (180*angle)/Math.PI
-    return;
+    return (180 * angle) / Math.PI;
 }
 exports.rad2Deg = rad2Deg;
 /**

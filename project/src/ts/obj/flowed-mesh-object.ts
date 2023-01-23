@@ -24,6 +24,8 @@ export class FlowedMeshObject implements MeshObject {
   #scale: NumberTrio
   #limitChecker: LimitsChecker
 
+  #hidden: boolean
+
   readonly #translationFlow: SingleSignalFlow<MeshObject, PerformedTranslation, void>
   readonly #polarRotationFlow: SingleSignalFlow<MeshObject, PerformedPolarRotation, void>
   readonly #scaleFlow: SingleSignalFlow<MeshObject, PerformedScale, void>
@@ -38,6 +40,7 @@ export class FlowedMeshObject implements MeshObject {
     this.#polarRotation = coupleOf(angle(0), angle(0));
     this.#scale = numberTrio(1, 1, 1);
     this.#limitChecker = LimitsCheckers.unlimited();
+    this.#hidden = false
 
     this.#translationFlow = SignalFlows.newSingleFlow(MeshObjectSignals.translationSignalNameOf(name))
     this.#polarRotationFlow = SignalFlows.newSingleFlow(MeshObjectSignals.polarRotationSignalNameOf(name))
@@ -61,32 +64,40 @@ export class FlowedMeshObject implements MeshObject {
     if(clear) {
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
-    let u_world = this.#data.u_world
+    if(!this.#hidden) {
+      let u_world = this.#data.u_world
 
-    for (let {bufferInfo, material} of this.#data.parts) {
-      // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
-      WebGLUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
-      // calls gl.uniform
-      WebGLUtils.setUniforms(programInfo, {
-        u_world,
-      }, material);
-      // calls gl.drawArrays or gl.drawElements
-      WebGLUtils.drawBufferInfo(gl, bufferInfo);
+      for (let {bufferInfo, material} of this.#data.parts) {
+        // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+        WebGLUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+        // calls gl.uniform
+        WebGLUtils.setUniforms(programInfo, {
+          u_world,
+        }, material);
+        // calls gl.drawArrays or gl.drawElements
+        WebGLUtils.drawBufferInfo(gl, bufferInfo);
+      }
+
+      // for (let part of this.#data.parts) {
+      //   // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+      //   WebGLUtils.setBuffersAndAttributes(gl, programInfo, part.bufferInfo);
+      //   // calls gl.uniform
+      //   WebGLUtils.setUniforms(programInfo, { u_world }, part.material);
+      //   // calls gl.drawArrays or gl.drawElements
+      //   WebGLUtils.drawBufferInfo(gl, part.bufferInfo);
+      // }
+      Log.log("MeshObject[" + this.#name + "] | drawn")
+    } else {
+      Log.log("MeshObject[" + this.#name + "] | hidden, draw skipped")
     }
-
-    // for (let part of this.#data.parts) {
-    //   // calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
-    //   WebGLUtils.setBuffersAndAttributes(gl, programInfo, part.bufferInfo);
-    //   // calls gl.uniform
-    //   WebGLUtils.setUniforms(programInfo, { u_world }, part.material);
-    //   // calls gl.drawArrays or gl.drawElements
-    //   WebGLUtils.drawBufferInfo(gl, part.bufferInfo);
-    // }
-    Log.log("MeshObject[" + this.#name + "] | drawn")
   }
 
   getCurrentScale(): NumberTrio {
     return this.#scale.clone()
+  }
+
+  getHidden(): boolean {
+    return this.#hidden
   }
 
   getLimitsChecker(): LimitsChecker {
@@ -120,6 +131,10 @@ export class FlowedMeshObject implements MeshObject {
   glInit(gl: WebGLRenderingContext) {
     this.#data.u_world = M4.identity();
     Log.log("MeshObject[" + this.#name + "] initialized")
+  }
+
+  setHidden(hidden: boolean) {
+    this.#hidden = hidden
   }
 
   setLimitsChecker(limitsChecker: LimitsChecker): void {

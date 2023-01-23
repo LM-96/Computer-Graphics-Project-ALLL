@@ -5,7 +5,7 @@ import {Log} from "./log/log";
 import PerformedTranslation from "./geometry/data/performed-translation";
 import {Signal} from "./signals/signal";
 import {onSignal} from "./signals/options";
-import {MenuControls} from "./controls/menu_controls";
+import {MenuControls} from "./controls/menu-controls";
 
 const L = 3
 Log.enableLog()
@@ -15,8 +15,8 @@ Log.enableLog()
     ["vertex-shader", "fragment-shader"])
 class MyApp extends WebGLApplication {
 
-    @WebGLMesh("./assets/LuchettoObj/world_decimate.obj")
-    private world: MeshObject
+    @WebGLMesh("./assets/assi.obj")
+    private axis: MeshObject
 
     @WebGLMesh("./assets/LuchettoObj/truck_final.obj")
     private helmet: MeshObject

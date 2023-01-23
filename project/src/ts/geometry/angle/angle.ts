@@ -252,8 +252,7 @@ export function angle(value: number, unit: AngleUnit = AngleUnit.RAD): Angle {
  * @return {number} the value of the angle in degree
  */
 export function rad2Deg(angle: number): number {
-    //return (180*angle)/Math.PI
-    return
+    return (180*angle)/Math.PI
 }
 
 /**
