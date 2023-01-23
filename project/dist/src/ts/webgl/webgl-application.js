@@ -123,6 +123,12 @@ class WebGLApplication {
         log_1.Log.log(this.applicationName + " | signal [" + name + "] created!");
         return res;
     }
+    /**
+     * The method that is called before the application starts.
+     * At the points all the mesh objects are loaded and the scene is ready to be drawn
+     */
+    beforeStart() {
+    }
     start(args) {
         log_1.Log.log(this.applicationName + " | starting application...");
         this.main(args);
@@ -179,6 +185,8 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
                 }
                 instance[continuation.propertyKey] = obj;
             }
+            log_1.Log.log("initializing application " + applicationName + " ...");
+            instance.beforeStart();
             log_1.Log.log("starting application " + applicationName + " ...");
             //CameraControls.init(instance)
             appSignalFlow.fire(instance, "STARTED");

@@ -177,6 +177,14 @@ export abstract class WebGLApplication {
         return res
     }
 
+    /**
+     * The method that is called before the application starts.
+     * At the points all the mesh objects are loaded and the scene is ready to be drawn
+     */
+    protected beforeStart() {
+
+    }
+
     start(args: string[]) {
         Log.log(this.applicationName + " | starting application...")
         this.main(args)
@@ -242,6 +250,9 @@ export function WebGL(applicationName: string, canvasHtmlElementName: string, we
                 }
                 instance[continuation.propertyKey] = obj
             }
+
+            Log.log("initializing application " + applicationName + " ...")
+            instance.beforeStart()
 
             Log.log("starting application " + applicationName + " ...")
             //CameraControls.init(instance)

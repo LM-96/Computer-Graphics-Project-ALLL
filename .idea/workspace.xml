@@ -7,20 +7,12 @@
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/camera/flowed-camera.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/camera/flowed-camera.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/camera/flowed-camera.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/camera/flowed-camera.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/mapped-single-signal-flow.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/signals/mapped-single-signal-flow.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/mapped-single-signal-flow.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/signals/mapped-single-signal-flow.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/options.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/signals/options.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/signals/options.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/signals/options.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/camera/flowed-camera.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/camera/flowed-camera.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu-settings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-settings.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/signals/mapped-single-signal-flow.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/signals/mapped-single-signal-flow.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/signals/options.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/signals/options.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

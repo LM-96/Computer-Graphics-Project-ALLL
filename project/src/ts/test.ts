@@ -1,10 +1,6 @@
-import {WebGL, WebGLApplication, WebGLMesh, ObjPosition, ObjScale, ObjLimitsChecker} from "./webgl/webgl-application";
+import {WebGL, WebGLApplication, WebGLMesh} from "./webgl/webgl-application";
 import {MeshObject} from "./obj/mesh-object";
-import {LimitsCheckers} from "./geometry/limits/limits-checkers";
 import {Log} from "./log/log";
-import PerformedTranslation from "./geometry/data/performed-translation";
-import {Signal} from "./signals/signal";
-import {OnSignal} from "./signals/options";
 import {MenuControls} from "./controls/menu-controls";
 
 const L = 3
