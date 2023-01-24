@@ -10,13 +10,14 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _MeshObjectDrawer_glEnvironment, _MeshObjectDrawer_meshObjectManager, _MeshObjectDrawer_camera, _MeshObjectDrawer_sharedUniforms;
+var _MeshObjectDrawer_glEnvironment, _MeshObjectDrawer_meshObjectManager, _MeshObjectDrawer_camera, _MeshObjectDrawer_sharedUniforms, _MeshObjectDrawer_slManager;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MeshObjectDrawer = void 0;
 const flowed_camera_1 = require("../camera/flowed-camera");
 const webgl_wrappers_1 = require("../webgl/webgl-wrappers");
 const angle_1 = require("../geometry/angle/angle");
 const log_1 = require("../log/log");
+const sl_manager_1 = require("./sl-manager");
 class MeshObjectDrawer {
     constructor(applicationName, glEnvironment, meshObjectManager) {
         _MeshObjectDrawer_glEnvironment.set(this, void 0);
@@ -24,10 +25,13 @@ class MeshObjectDrawer {
         this.zNear = 0.1;
         this.zFar = 200;
         _MeshObjectDrawer_camera.set(this, new flowed_camera_1.default());
-        _MeshObjectDrawer_sharedUniforms.set(this, new webgl_wrappers_1.SharedUniforms());
+        _MeshObjectDrawer_sharedUniforms.set(this, void 0);
+        _MeshObjectDrawer_slManager.set(this, void 0);
         this.applicationName = applicationName;
         __classPrivateFieldSet(this, _MeshObjectDrawer_glEnvironment, glEnvironment, "f");
         __classPrivateFieldSet(this, _MeshObjectDrawer_meshObjectManager, meshObjectManager, "f");
+        __classPrivateFieldSet(this, _MeshObjectDrawer_sharedUniforms, new webgl_wrappers_1.SharedUniforms(), "f");
+        __classPrivateFieldSet(this, _MeshObjectDrawer_slManager, new sl_manager_1.SlManager(__classPrivateFieldGet(this, _MeshObjectDrawer_sharedUniforms, "f")), "f");
     }
     /**
      * Updates the internal *View Matrix* using the camera
@@ -94,6 +98,12 @@ class MeshObjectDrawer {
         return __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f");
     }
     /**
+     * Returns the manager for the shadows and the lights
+     */
+    getSlManager() {
+        return __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f");
+    }
+    /**
      * Returns the `MeshObjectManager` associated of this drawer
      */
     getMeshObjectManager() {
@@ -101,5 +111,5 @@ class MeshObjectDrawer {
     }
 }
 exports.MeshObjectDrawer = MeshObjectDrawer;
-_MeshObjectDrawer_glEnvironment = new WeakMap(), _MeshObjectDrawer_meshObjectManager = new WeakMap(), _MeshObjectDrawer_camera = new WeakMap(), _MeshObjectDrawer_sharedUniforms = new WeakMap();
+_MeshObjectDrawer_glEnvironment = new WeakMap(), _MeshObjectDrawer_meshObjectManager = new WeakMap(), _MeshObjectDrawer_camera = new WeakMap(), _MeshObjectDrawer_sharedUniforms = new WeakMap(), _MeshObjectDrawer_slManager = new WeakMap();
 //# sourceMappingURL=mesh-object-drawer.js.map

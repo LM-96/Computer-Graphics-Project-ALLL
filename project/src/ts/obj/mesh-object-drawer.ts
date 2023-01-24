@@ -5,6 +5,7 @@ import FlowedCamera from "../camera/flowed-camera";
 import {ProgramInfo, SharedUniforms} from "../webgl/webgl-wrappers";
 import {AngleUnit} from "../geometry/angle/angle";
 import {Log} from "../log/log";
+import {SlManager} from "./sl-manager";
 
 export class MeshObjectDrawer {
     readonly applicationName: string
@@ -13,12 +14,15 @@ export class MeshObjectDrawer {
     zNear: number = 0.1
     zFar: number = 200
     #camera: Camera = new FlowedCamera()
-    #sharedUniforms: SharedUniforms = new SharedUniforms()
+    #sharedUniforms: SharedUniforms
+    #slManager: SlManager
 
     constructor(applicationName: string, glEnvironment: WebGLEnvironment, meshObjectManager: MeshObjectManager) {
         this.applicationName = applicationName
         this.#glEnvironment = glEnvironment
         this.#meshObjectManager = meshObjectManager
+        this.#sharedUniforms = new SharedUniforms()
+        this.#slManager = new SlManager(this.#sharedUniforms)
     }
 
     /**
@@ -64,6 +68,7 @@ export class MeshObjectDrawer {
         gl.enable(gl.CULL_FACE)
         gl.enable(gl.DEPTH_TEST)
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
         this.updateProjectionMatrix()
         this.updateViewMatrix()
 
@@ -97,6 +102,13 @@ export class MeshObjectDrawer {
      */
     getCamera(): Camera {
         return this.#camera
+    }
+
+    /**
+     * Returns the manager for the shadows and the lights
+     */
+    getSlManager(): SlManager {
+        return this.#slManager
     }
 
     /**

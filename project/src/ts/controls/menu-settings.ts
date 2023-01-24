@@ -25,6 +25,9 @@ export interface MenuSettings {
     targetY: number
     targetZ: number
     fov: number
+    lightDirectionX: number
+    lightDirectionY: number
+    lightDirectionZ: number
     currentobj: number
     draw: boolean
 }

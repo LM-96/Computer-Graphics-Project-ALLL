@@ -60,6 +60,9 @@ let MenuControls = class MenuControls {
             targetX: application.getCamera().getCurrentTarget().getX(),
             targetY: application.getCamera().getCurrentTarget().getY(),
             targetZ: application.getCamera().getCurrentTarget().getZ(),
+            lightDirectionX: application.getMeshObjectDrawer().getSlManager().getLightDirection().getFirst(),
+            lightDirectionY: application.getMeshObjectDrawer().getSlManager().getLightDirection().getSecond(),
+            lightDirectionZ: application.getMeshObjectDrawer().getSlManager().getLightDirection().getThird(),
             fov: application.getCamera().getCurrentFov().getValueIn(angle_1.AngleUnit.DEG),
             zNear: application.getMeshObjectDrawer().zNear,
             zFar: application.getMeshObjectDrawer().zFar,
@@ -133,6 +136,13 @@ let MenuControls = class MenuControls {
         settings.cameraX = signal.data.to.getX();
         settings.cameraY = signal.data.to.getY();
         settings.cameraZ = signal.data.to.getZ();
+        this.updateUI();
+    }
+    onCameraSetUpEvent(signal) {
+        let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
+        settings.cameraUpX = signal.data.newValue.getFirst();
+        settings.cameraUpY = signal.data.newValue.getSecond();
+        settings.cameraUpZ = signal.data.newValue.getThird();
         this.updateUI();
     }
     onCameraTargetChanged(signal) {
@@ -255,6 +265,12 @@ let MenuControls = class MenuControls {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().zFar = __classPrivateFieldGet(this, _MenuControls_settings, "f").zFar;
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
     }
+    onLightDirectionChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer()
+            .getSlManager()
+            .setLightDirection(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightDirectionX, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightDirectionY, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightDirectionZ);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
     setup() {
         __classPrivateFieldSet(this, _MenuControls_widgets, WebGlLessonUI.setupUI(document.querySelector('#ui'), __classPrivateFieldGet(this, _MenuControls_settings, "f"), [
             { type: 'checkbox', key: 'log', change: () => { this.onLogChanged(); } },
@@ -264,15 +280,18 @@ let MenuControls = class MenuControls {
             { type: 'slider', key: 'cameraX', change: () => { this.onCameraChange(); }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'slider', key: 'cameraY', change: () => { this.onCameraChange(); }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'slider', key: 'cameraZ', change: () => { this.onCameraChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'cameraUpX', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 1, step: 1, },
-            { type: 'slider', key: 'cameraUpY', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 1, step: 1, },
-            { type: 'slider', key: 'cameraUpZ', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 1, step: 1, },
+            { type: 'slider', key: 'cameraUpX', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 3, step: 0.001, },
+            { type: 'slider', key: 'cameraUpY', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 3, step: 0.001, },
+            { type: 'slider', key: 'cameraUpZ', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 3, step: 0.001, },
             { type: 'slider', key: 'zNear', change: () => { this.onZNearChange(); }, min: -10, max: 10, precision: 2, step: 1, },
             { type: 'slider', key: 'zFar', change: () => { this.onZFarChange(); }, min: -200, max: 200, precision: 1, step: 1, },
             { type: 'slider', key: 'fov', change: () => { this.onFovChange(); }, min: 0, max: 180, },
             { type: 'slider', key: 'targetX', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'slider', key: 'targetY', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'slider', key: 'targetZ', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightDirectionX', change: () => { this.onLightDirectionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightDirectionY', change: () => { this.onLightDirectionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightDirectionZ', change: () => { this.onLightDirectionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'option', key: 'currentobj', change: () => { this.onActiveObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
             { type: 'checkbox', key: 'hidden', change: () => { this.onHiddenObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
             { type: 'slider', key: 'posX', change: () => { this.onObjectPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
@@ -292,6 +311,9 @@ _MenuControls_application = new WeakMap(), _MenuControls_activeObj = new WeakMap
 __decorate([
     (0, signals_decorator_1.OnSignalMethod)(camera_signals_1.default.CAMERA_TRANSLATION_SIGNAL_STRING_NAME)
 ], MenuControls.prototype, "onCameraSetPositionEvent", null);
+__decorate([
+    (0, signals_decorator_1.OnSignalMethod)(camera_signals_1.default.CAMERA_UP_SIGNAL_STRING_NAME)
+], MenuControls.prototype, "onCameraSetUpEvent", null);
 __decorate([
     (0, signals_decorator_1.OnSignalMethod)(camera_signals_1.default.CAMERA_TARGET_SIGNAL_STRING_NAME)
 ], MenuControls.prototype, "onCameraTargetChanged", null);

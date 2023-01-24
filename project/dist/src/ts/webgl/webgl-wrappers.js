@@ -7,6 +7,7 @@ class SharedUniforms {
         this.u_colorLight = [1.0, 1.0, 1.0];
         this.u_view = M4.identity();
         this.u_projection = M4.identity();
+        this.u_lightDirection = [2, 2, 2];
     }
 }
 exports.SharedUniforms = SharedUniforms;

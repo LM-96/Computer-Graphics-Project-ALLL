@@ -9,4 +9,5 @@ export class SharedUniforms {
     u_colorLight: Array<number> = [1.0, 1.0, 1.0]
     u_view: number[] = M4.identity()
     u_projection: number[] = M4.identity()
+    u_lightDirection: Array<number> = [2, 2, 2]
 }

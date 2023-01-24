@@ -19,7 +19,7 @@ Log.enableLog()
     ["vertex-shader", "fragment-shader"])
 class MyApp extends WebGLApplication {
 
-    @WebGLMesh("./assets/assi.obj")
+    @WebGLMesh("./assets/plane-2m.obj")
     private axis: MeshObject
 
     @WebGLMesh("./assets/LuchettoObj/truck_final.obj")

@@ -29,7 +29,7 @@ let MyApp = class MyApp extends webgl_application_1.WebGLApplication {
     }
 };
 __decorate([
-    (0, webgl_application_1.WebGLMesh)("./assets/assi.obj")
+    (0, webgl_application_1.WebGLMesh)("./assets/plane-2m.obj")
 ], MyApp.prototype, "axis", void 0);
 __decorate([
     (0, webgl_application_1.WebGLMesh)("./assets/LuchettoObj/truck_final.obj")

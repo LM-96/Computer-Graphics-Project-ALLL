@@ -15,6 +15,7 @@ import {handler} from "../signals/options";
 import PerformedScale from "../geometry/data/performed-scale";
 import {PerformedPolarRotation} from "../geometry/data/performed-polar-rotation";
 import {Pair, pairOf} from "../types/pair";
+import {PerformedNumberTrioChange} from "../types/data/performed-number-trio-change";
 
 @SignalListener
 export class MenuControls {
@@ -56,6 +57,9 @@ export class MenuControls {
             targetX: application.getCamera().getCurrentTarget().getX(),
             targetY: application.getCamera().getCurrentTarget().getY(),
             targetZ: application.getCamera().getCurrentTarget().getZ(),
+            lightDirectionX: application.getMeshObjectDrawer().getSlManager().getLightDirection().getFirst(),
+            lightDirectionY: application.getMeshObjectDrawer().getSlManager().getLightDirection().getSecond(),
+            lightDirectionZ: application.getMeshObjectDrawer().getSlManager().getLightDirection().getThird(),
             fov: application.getCamera().getCurrentFov().getValueIn(AngleUnit.DEG),
             zNear: application.getMeshObjectDrawer().zNear,
             zFar: application.getMeshObjectDrawer().zFar,
@@ -157,6 +161,15 @@ export class MenuControls {
         settings.cameraX = signal.data.to.getX()
         settings.cameraY = signal.data.to.getY()
         settings.cameraZ = signal.data.to.getZ()
+        this.updateUI()
+    }
+
+    @OnSignalMethod(CameraSignals.CAMERA_UP_SIGNAL_STRING_NAME)
+    onCameraSetUpEvent(signal: Signal<Camera, PerformedNumberTrioChange, void>) {
+        let settings: MenuSettings = this.#settings
+        settings.cameraUpX = signal.data.newValue.getFirst()
+        settings.cameraUpY = signal.data.newValue.getSecond()
+        settings.cameraUpZ = signal.data.newValue.getThird()
         this.updateUI()
     }
 
@@ -310,6 +323,15 @@ export class MenuControls {
         this.#application.getMeshObjectDrawer().drawScene()
     }
 
+    onLightDirectionChange() {
+        this.#application.getMeshObjectDrawer()
+            .getSlManager()
+            .setLightDirection(this.#settings.lightDirectionX,
+                this.#settings.lightDirectionY,
+                this.#settings.lightDirectionZ)
+        this.#application.getMeshObjectDrawer().drawScene()
+    }
+
     setup() {
         this.#widgets = WebGlLessonUI.setupUI(document.querySelector('#ui'), this.#settings, [
             { type: 'checkbox', key: 'log', change: () => { this.onLogChanged() }},
@@ -319,15 +341,18 @@ export class MenuControls {
             { type: 'slider',   key: 'cameraX',    change: () => { this.onCameraChange() }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'slider',   key: 'cameraY',    change: () => { this.onCameraChange() }, min:   -100, max: 100, precision: 1, step: 1, },
             { type: 'slider',   key: 'cameraZ',    change: () => { this.onCameraChange() }, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'cameraUpX',    change: () => { this.onCameraUpChange() }, min: -1, max: 1, precision: 1, step: 1, },
-            { type: 'slider',   key: 'cameraUpY',    change: () => { this.onCameraUpChange() }, min:   -1, max: 1, precision: 1, step: 1, },
-            { type: 'slider',   key: 'cameraUpZ',    change: () => { this.onCameraUpChange() }, min:   -1, max: 1, precision: 1, step: 1, },
+            { type: 'slider',   key: 'cameraUpX',    change: () => { this.onCameraUpChange() }, min: -1, max: 1, precision: 3, step: 0.001, },
+            { type: 'slider',   key: 'cameraUpY',    change: () => { this.onCameraUpChange() }, min:   -1, max: 1, precision: 3, step: 0.001, },
+            { type: 'slider',   key: 'cameraUpZ',    change: () => { this.onCameraUpChange() }, min:   -1, max: 1, precision: 3, step: 0.001, },
             { type: 'slider',   key: 'zNear',    change: () => { this.onZNearChange() }, min:   -10, max: 10, precision: 2, step: 1, },
             { type: 'slider',   key: 'zFar',    change: () => { this.onZFarChange() }, min:   -200, max: 200, precision: 1, step: 1, },
             { type: 'slider',   key: 'fov', change: () => { this.onFovChange() }, min:  0, max: 180,  },
             { type: 'slider',   key: 'targetX',    change: () => { this.onTargetPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'slider',   key: 'targetY',    change: () => { this.onTargetPositionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
             { type: 'slider',   key: 'targetZ',    change: () => { this.onTargetPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'lightDirectionX',    change: () => { this.onLightDirectionChange() }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'lightDirectionY',    change: () => { this.onLightDirectionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'lightDirectionZ',    change: () => { this.onLightDirectionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
             { type: 'option',   key: 'currentobj', change: () => { this.onActiveObjChange() }, options: this.#loadedObjs, },
             { type: 'checkbox',   key: 'hidden', change: () => { this.onHiddenObjChange() }, options: this.#loadedObjs, },
             { type: 'slider',   key: 'posX',       change: () => { this.onObjectPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
