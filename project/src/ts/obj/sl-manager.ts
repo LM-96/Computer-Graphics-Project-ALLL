@@ -3,8 +3,81 @@ import {SharedUniforms} from "../webgl/webgl-wrappers";
 import {Point3D} from "../geometry/point/point-3d";
 import {mutablePoint3D, point3D} from "../geometry/point/point-factory";
 import {Angle, AngleUnit, radians} from "../geometry/angle/angle";
+import {Pair, pairOf} from "../types/pair";
 
 export class SlManager {
+
+    static readonly depthTextureSize = 512
+    static #depthTB: Map<WebGLRenderingContext, Pair<WebGLTexture, WebGLFramebuffer>> =
+        new Map<WebGLRenderingContext, Pair<WebGLTexture, WebGLFramebuffer>>()
+    static getTextureForLights(gl: WebGLRenderingContext) : Pair<WebGLTexture, WebGLFramebuffer> {
+
+        let res: Pair<WebGLTexture, WebGLFramebuffer> = SlManager.#depthTB.get(gl)
+        if(res === undefined) {
+            let depthTexture = gl.createTexture();
+            let depthTextureSize = this.depthTextureSize;
+            gl.bindTexture(gl.TEXTURE_2D, depthTexture);
+            gl.texImage2D(
+                gl.TEXTURE_2D,      // target
+                0,                  // mip level
+                gl.DEPTH_COMPONENT, // internal format
+                depthTextureSize,   // width
+                depthTextureSize,   // height
+                0,                  // border
+                gl.DEPTH_COMPONENT, // format
+                gl.UNSIGNED_INT,    // type
+                null);              // data
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+            let depthFramebuffer = gl.createFramebuffer();
+            gl.bindFramebuffer(gl.FRAMEBUFFER, depthFramebuffer);
+            gl.framebufferTexture2D(
+                gl.FRAMEBUFFER,       // target
+                gl.DEPTH_ATTACHMENT,  // attachment point
+                gl.TEXTURE_2D,        // texture target
+                depthTexture,         // texture
+                0);                   // mip level
+
+            // --------------------------------------------------
+            // UNUSED TEXTURE
+
+            // create a color texture of the same size as the depth texture
+            // see article why this is needed_
+            let unusedTexture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, unusedTexture);
+            gl.texImage2D(
+                gl.TEXTURE_2D,
+                0,
+                gl.RGBA,
+                depthTextureSize,
+                depthTextureSize,
+                0,
+                gl.RGBA,
+                gl.UNSIGNED_BYTE,
+                null,
+            );
+
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+            // attach it to the framebuffer
+            gl.framebufferTexture2D(
+                gl.FRAMEBUFFER,        // target
+                gl.COLOR_ATTACHMENT0,  // attachment point
+                gl.TEXTURE_2D,         // texture target
+                unusedTexture,         // texture
+                0);
+            res = pairOf(depthTexture, depthFramebuffer)
+            this.#depthTB.set(gl, res)
+        }
+
+        return res
+    }
 
     #lightDirection: NumberTrio = numberTrio(0, 0, 0)
     #sharedUniforms: SharedUniforms
@@ -16,6 +89,9 @@ export class SlManager {
     #projWidth: number = 10
     #projHeight: number = 10
     #shadows: boolean = false
+
+    #near: number = 1
+    #far: number = 700
 
     constructor(sharedUniforms: SharedUniforms) {
         this.#sharedUniforms = sharedUniforms
@@ -36,10 +112,10 @@ export class SlManager {
     calculateLightProjectionMatrix(): number[] {
         if(this.#spotlight) {
             return M4.perspective(this.#lightFov.getValueIn(AngleUnit.RAD),
-                this.#projWidth / this.#projHeight, 1, 15)
+                this.#projWidth / this.#projHeight, this.#near, this.#far)
         } else {
             return M4.orthographic(-this.#projWidth / 2, this.#projWidth / 2,
-                -this.#projHeight / 2, this.#projHeight / 2, 1, 15)
+                -this.#projHeight / 2, this.#projHeight / 2, this.#near, this.#far)
         }
     }
 
@@ -61,6 +137,14 @@ export class SlManager {
 
     getFov(): Angle {
         return this.#lightFov.clone()
+    }
+
+    getNear(): number {
+        return this.#near
+    }
+
+    getFar(): number {
+        return this.#far
     }
 
     isSpotlight(): boolean {
@@ -138,6 +222,14 @@ export class SlManager {
 
     getShadows(): boolean {
         return this.#shadows
+    }
+
+    setNear(value: number): void {
+        this.#near = value
+    }
+
+    setFar(value: number): void {
+        this.#far = value
     }
 
 

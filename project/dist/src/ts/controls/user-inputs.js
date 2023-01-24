@@ -64,7 +64,7 @@ class UserInputs {
         __classPrivateFieldGet(this, _UserInputs_target, "f").setPolarRotation(currentAngles.getFirst(), currentAngles.getSecond(), currentAngles.getThird().add((0, angle_1.radians)(dX)));
         currentAngles = __classPrivateFieldGet(this, _UserInputs_target, "f").getPolarRotation();
         __classPrivateFieldGet(this, _UserInputs_controller, "f").navigate(dY, currentAngles.getThird());
-        e.preventDefault();
+        //e.preventDefault();
         __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().drawScene();
         log_1.Log.log("Angles || PSY:" + currentAngles.getFirst().toString() + ", THETA:" + currentAngles.getSecond().toString() +
             ", PHI:" + currentAngles.getThird().toString());

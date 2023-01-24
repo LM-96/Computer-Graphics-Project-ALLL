@@ -60,9 +60,24 @@ let MenuControls = class MenuControls {
             targetX: application.getCamera().getCurrentTarget().getX(),
             targetY: application.getCamera().getCurrentTarget().getY(),
             targetZ: application.getCamera().getCurrentTarget().getZ(),
-            lightDirectionX: application.getMeshObjectDrawer().getSlManager().getLightDirection().getFirst(),
-            lightDirectionY: application.getMeshObjectDrawer().getSlManager().getLightDirection().getSecond(),
-            lightDirectionZ: application.getMeshObjectDrawer().getSlManager().getLightDirection().getThird(),
+            frustum: application.getMeshObjectDrawer().getLightFrustum(),
+            shadows: application.getMeshObjectDrawer().getSlManager().getShadows(),
+            bias: application.getMeshObjectDrawer().getBias(),
+            lightPosX: application.getMeshObjectDrawer().getSlManager().getLightPosition().getX(),
+            lightPosY: application.getMeshObjectDrawer().getSlManager().getLightPosition().getY(),
+            lightPosZ: application.getMeshObjectDrawer().getSlManager().getLightPosition().getZ(),
+            lightTargX: application.getMeshObjectDrawer().getSlManager().getLightTarget().getX(),
+            lightTargY: application.getMeshObjectDrawer().getSlManager().getLightTarget().getY(),
+            lightTargZ: application.getMeshObjectDrawer().getSlManager().getLightTarget().getZ(),
+            lightFov: application.getMeshObjectDrawer().getSlManager().getFov().getValueIn(angle_1.AngleUnit.DEG),
+            lightNear: application.getMeshObjectDrawer().getSlManager().getNear(),
+            lightFar: application.getMeshObjectDrawer().getSlManager().getFar(),
+            spotlight: application.getMeshObjectDrawer().getSlManager().isSpotlight(),
+            lightWidth: application.getMeshObjectDrawer().getSlManager().getProjWidth(),
+            lightHeight: application.getMeshObjectDrawer().getSlManager().getProjHeight(),
+            lightUpX: application.getMeshObjectDrawer().getSlManager().getLightUp().getFirst(),
+            lightUpY: application.getMeshObjectDrawer().getSlManager().getLightUp().getSecond(),
+            lightUpZ: application.getMeshObjectDrawer().getSlManager().getLightUp().getThird(),
             fov: application.getCamera().getCurrentFov().getValueIn(angle_1.AngleUnit.DEG),
             zNear: application.getMeshObjectDrawer().zNear,
             zFar: application.getMeshObjectDrawer().zFar,
@@ -265,15 +280,58 @@ let MenuControls = class MenuControls {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().zFar = __classPrivateFieldGet(this, _MenuControls_settings, "f").zFar;
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
     }
-    onLightDirectionChange() {
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer()
-            .getSlManager()
-            .setLightDirection(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightDirectionX, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightDirectionY, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightDirectionZ);
+    onFrustumChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().setLightFrustum(__classPrivateFieldGet(this, _MenuControls_settings, "f").frustum);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onShadowsChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setShadows(__classPrivateFieldGet(this, _MenuControls_settings, "f").shadows);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onLightPositionChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setLightPosition(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightPosX, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightPosY, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightPosZ);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onLightTargetChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setLightTarget(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightTargX, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightTargY, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightTargZ);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onLightFovChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setFov((0, angle_1.degree)(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightFov));
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onSpotlightChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setSpotlight(__classPrivateFieldGet(this, _MenuControls_settings, "f").spotlight);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onLightWidthChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setProjWidth(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightWidth);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onLightHeightChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setProjHeight(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightHeight);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onLightUpChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setLightUp(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightUpX, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightUpY, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightUpZ);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onBiasChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().setBias(__classPrivateFieldGet(this, _MenuControls_settings, "f").bias);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onLightNearChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setNear(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightNear);
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    onLightFarChange() {
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setFar(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightFar);
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
     }
     setup() {
         __classPrivateFieldSet(this, _MenuControls_widgets, WebGlLessonUI.setupUI(document.querySelector('#ui'), __classPrivateFieldGet(this, _MenuControls_settings, "f"), [
             { type: 'checkbox', key: 'log', change: () => { this.onLogChanged(); } },
+            /* CAMERA ***************************************************************************** */
             { type: 'option', key: 'target', change: () => { this.onTargetObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
             { type: 'checkbox', key: 'look_at', change: () => { this.onLookAtObjectChange(); }, },
             { type: 'checkbox', key: 'follow', change: () => { this.onFollowObjectChange(); }, },
@@ -289,9 +347,26 @@ let MenuControls = class MenuControls {
             { type: 'slider', key: 'targetX', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'slider', key: 'targetY', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
             { type: 'slider', key: 'targetZ', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightDirectionX', change: () => { this.onLightDirectionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightDirectionY', change: () => { this.onLightDirectionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightDirectionZ', change: () => { this.onLightDirectionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            /* LIGHT ***************************************************************************** */
+            { type: 'checkbox', key: 'frustum', change: () => { this.onFrustumChange(); } },
+            { type: 'checkbox', key: 'shadows', change: () => { this.onShadowsChange(); } },
+            //{ type: 'slider',   key: 'bias',    change: () => { this.onBiasChange() }, min: 0, max: 10, precision: 3, step: 0.001, },
+            { type: 'slider', key: 'lightPosX', change: () => { this.onLightPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightPosY', change: () => { this.onLightPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightPosZ', change: () => { this.onLightPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightTargX', change: () => { this.onLightTargetChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightTargY', change: () => { this.onLightTargetChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightTargZ', change: () => { this.onLightTargetChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightFov', change: () => { this.onLightFovChange(); }, min: 0, max: 360, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightNear', change: () => { this.onLightNearChange(); }, min: 0, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightFar', change: () => { this.onLightFarChange(); }, min: 0, max: 1000, precision: 1, step: 1, },
+            { type: 'checkbox', key: 'spotlight', change: () => { this.onSpotlightChange(); } },
+            { type: 'slider', key: 'lightWidth', change: () => { this.onLightWidthChange(); }, min: 0, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightHeight', change: () => { this.onLightHeightChange(); }, min: 0, max: 100, precision: 1, step: 1, },
+            //{ type: 'slider',   key: 'lightUpX',    change: () => { this.onLightUpChange() }, min: -1, max: 1, precision: 3, step: 0.001, },
+            //{ type: 'slider',   key: 'lightUpY',    change: () => { this.onLightUpChange() }, min:   -1, max: 1, precision: 3, step: 0.001, },
+            //{ type: 'slider',   key: 'lightUpZ',    change: () => { this.onLightUpChange() }, min:   -1, max: 1, precision: 3, step: 0.001, },
+            /* OBJECT ***************************************************************************** */
             { type: 'option', key: 'currentobj', change: () => { this.onActiveObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
             { type: 'checkbox', key: 'hidden', change: () => { this.onHiddenObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
             { type: 'slider', key: 'posX', change: () => { this.onObjectPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },

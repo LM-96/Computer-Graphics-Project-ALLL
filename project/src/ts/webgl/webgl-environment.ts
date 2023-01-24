@@ -19,6 +19,11 @@ export class WebGLEnvironment {
             throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
         }
 
+        const ext = this.#gl.getExtension('WEBGL_depth_texture');
+        if (!ext) {
+            alert('WEBGL_depth_texture is required to work');
+        }
+
         this.#programInfo = new Map<string, ProgramInfo>()
         webGLShaders.forEach((value, key) => {
             this.#programInfo.set(key, WebGLUtils.createProgramInfo(this.#gl, value))

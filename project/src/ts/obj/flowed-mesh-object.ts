@@ -73,7 +73,9 @@ export class FlowedMeshObject implements MeshObject {
         WebGLUtils.setBuffersAndAttributes(gl, programInfo, bufferInfo);
         // calls gl.uniform
         WebGLUtils.setUniforms(programInfo, {
-          u_world,
+          u_colorMult: [1, 1, 1, 1],
+          u_color: [1, 1, 1, 1],
+          u_world: u_world,
         }, material);
         // calls gl.drawArrays or gl.drawElements
         WebGLUtils.drawBufferInfo(gl, bufferInfo);

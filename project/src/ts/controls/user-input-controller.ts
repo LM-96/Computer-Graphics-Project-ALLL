@@ -6,12 +6,13 @@ import {Trio} from "../types/triple";
 
 export class UserInputController {
     target: MeshObject
-    stepSize: number = 0.1
-    step: number = 0.1
+    stepSize: number = 2
+    step: number = 2
     controllerMode: number = 2
     cameraMode: number = 0
 
     constructor() {
+        this.controllerMode = 2
     }
 
 //this.controllerMode = 1; //0 visuale in terza persona, //1 visuale dall'alto, //2 visuale in prima persona
@@ -29,7 +30,7 @@ export class UserInputController {
     }
 
     move(move: string){
-        this.commandActuator(move, this.cameraMode);
+        this.commandActuator(move, this.controllerMode);
     }
 
     commandActuator(move: string, controllerMode: number){

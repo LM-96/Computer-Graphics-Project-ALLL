@@ -97,9 +97,9 @@ precision highp float;
     vec3 normal = normalize(v_normal);
 
     float light = dot(normal, u_lightDirection);
-    if (light<0.2){
+    /*if (light<0.2){
       light = 0.2;
-    }
+    }*/
 
     vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
     float currentDepth = projectedTexcoord.z + u_bias;
@@ -111,7 +111,7 @@ precision highp float;
         projectedTexcoord.y <= 1.0;
 
     float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
-    float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.0 : 1.0;
+    float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.5 : 1.5;
     vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
 
 

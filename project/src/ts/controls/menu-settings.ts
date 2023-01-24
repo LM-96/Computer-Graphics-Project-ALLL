@@ -25,9 +25,24 @@ export interface MenuSettings {
     targetY: number
     targetZ: number
     fov: number
-    lightDirectionX: number
-    lightDirectionY: number
-    lightDirectionZ: number
+    frustum: boolean
+    shadows: boolean
+    bias: number
+    lightPosX: number
+    lightPosY: number
+    lightPosZ: number
+    lightTargX: number
+    lightTargY: number
+    lightTargZ: number
+    lightFov: number
+    spotlight: boolean
+    lightWidth: number
+    lightHeight: number
+    lightNear: number
+    lightFar: number
+    lightUpX: number
+    lightUpY: number
+    lightUpZ: number
     currentobj: number
     draw: boolean
 }

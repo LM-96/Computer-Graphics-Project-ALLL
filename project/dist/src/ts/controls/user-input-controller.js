@@ -11,10 +11,11 @@ const angle_1 = require("../geometry/angle/angle");
 class UserInputController {
     constructor() {
         _UserInputController_instances.add(this);
-        this.stepSize = 0.1;
-        this.step = 0.1;
+        this.stepSize = 2;
+        this.step = 2;
         this.controllerMode = 2;
         this.cameraMode = 0;
+        this.controllerMode = 2;
     }
     //this.controllerMode = 1; //0 visuale in terza persona, //1 visuale dall'alto, //2 visuale in prima persona
     setTarget(target) {
@@ -27,7 +28,7 @@ class UserInputController {
         this.cameraMode = mode;
     }
     move(move) {
-        this.commandActuator(move, this.cameraMode);
+        this.commandActuator(move, this.controllerMode);
     }
     commandActuator(move, controllerMode) {
         switch (controllerMode) {

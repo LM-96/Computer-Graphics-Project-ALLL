@@ -60,7 +60,7 @@ export class UserInputs {
             currentAngles.getThird().add(radians(dX)))
         currentAngles = this.#target.getPolarRotation()
         this.#controller.navigate(dY, currentAngles.getThird())
-        e.preventDefault();
+        //e.preventDefault();
 
         this.#application.getMeshObjectDrawer().drawScene()
         Log.log("Angles || PSY:" + currentAngles.getFirst().toString() + ", THETA:" + currentAngles.getSecond().toString() +

@@ -28,6 +28,10 @@ class WebGLEnvironment {
             alert("Unable to initialize WebGL. Your browser or machine may not support it.");
             throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
         }
+        const ext = __classPrivateFieldGet(this, _WebGLEnvironment_gl, "f").getExtension('WEBGL_depth_texture');
+        if (!ext) {
+            alert('WEBGL_depth_texture is required to work');
+        }
         __classPrivateFieldSet(this, _WebGLEnvironment_programInfo, new Map(), "f");
         webGLShaders.forEach((value, key) => {
             __classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f").set(key, WebGLUtils.createProgramInfo(__classPrivateFieldGet(this, _WebGLEnvironment_gl, "f"), value));

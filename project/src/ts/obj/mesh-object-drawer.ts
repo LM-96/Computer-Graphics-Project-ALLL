@@ -6,8 +6,11 @@ import {ProgramInfo, SharedUniforms} from "../webgl/webgl-wrappers";
 import {AngleUnit} from "../geometry/angle/angle";
 import {Log} from "../log/log";
 import {SlManager} from "./sl-manager";
+import {Pair} from "../types/pair";
 
 export class MeshObjectDrawer {
+
+
 
     readonly applicationName: string
     #glEnvironment: WebGLEnvironment
@@ -18,10 +21,6 @@ export class MeshObjectDrawer {
     #sharedUniforms: SharedUniforms
     #slManager: SlManager
     #lightFrustum: boolean
-
-    readonly #depthTexture: WebGLTexture
-    readonly #depthTextureSize: number
-    readonly #depthFramebuffer: WebGLFramebuffer
     #bias: number
 
     readonly #cubeLinesBufferInfo: any
@@ -35,36 +34,8 @@ export class MeshObjectDrawer {
         this.#lightFrustum = false
         this.#bias = -0.006
 
-        let gl = this.#glEnvironment.getContext()
-        gl.enable(gl.DEPTH_TEST);
-        this.#depthTextureSize = 512
-        this.#depthTexture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, this.#depthTexture);
-        gl.texImage2D(
-            gl.TEXTURE_2D,
-            0,
-            gl.DEPTH_COMPONENT,
-            this.#depthTextureSize,
-            this.#depthTextureSize,
-            0,
-            gl.DEPTH_COMPONENT,
-            gl.UNSIGNED_INT,
-            null);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-        this.#depthFramebuffer = gl.createFramebuffer();
-        gl.bindFramebuffer(gl.FRAMEBUFFER, this.#depthFramebuffer);
-        gl.framebufferTexture2D(
-            gl.FRAMEBUFFER,
-            gl.DEPTH_ATTACHMENT,
-            gl.TEXTURE_2D,
-            this.#depthTexture,
-            0);
-
-        this.#cubeLinesBufferInfo = WebGLUtils.createBufferInfoFromArrays(gl, {
+        this.#cubeLinesBufferInfo = WebGLUtils.createBufferInfoFromArrays(
+            this.#glEnvironment.getContext(), {
             position: [
                 -1, -1, -1,
                 1, -1, -1,
@@ -127,7 +98,7 @@ export class MeshObjectDrawer {
             u_projection: projectionMatrix,
             u_bias: this.#bias,
             u_textureMatrix: textureMatrix,
-            u_projectedTexture: this.#depthTexture,
+            u_projectedTexture: SlManager.getTextureForLights(this.#glEnvironment.getContext()).getFirst(),
             u_lightDirection: this.#slManager.calculateLightWorldMatrix().slice(8, 11),
         });
         gl.uniform1f(gl.getUniformLocation(programInfo.program, "mesh"), 1.);
@@ -145,8 +116,8 @@ export class MeshObjectDrawer {
         let lightWorldMatrix = this.#slManager.calculateLightWorldMatrix()
         let lightProjectionMatrix = this.#slManager.calculateLightProjectionMatrix()
 
-        gl.bindFramebuffer(gl.FRAMEBUFFER, this.#depthFramebuffer);
-        gl.viewport(0, 0, this.#depthTextureSize, this.#depthTextureSize);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, SlManager.getTextureForLights(this.#glEnvironment.getContext()).getSecond());
+        gl.viewport(0, 0, SlManager.depthTextureSize, SlManager.depthTextureSize);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         /* TO ADJUST BASED ON WHICH PROGRAMS ARE PRESENT AND USED */
@@ -257,6 +228,10 @@ export class MeshObjectDrawer {
         this.render()
     }
 
+    setBias(bias: number) {
+        this.#bias = bias
+    }
+
     /**
      * Returns the `Camera` associated of this drawer
      */
@@ -284,5 +259,9 @@ export class MeshObjectDrawer {
 
     getLightFrustum(): boolean {
         return this.#lightFrustum
+    }
+
+    getBias(): number {
+        return this.#bias
     }
 }
