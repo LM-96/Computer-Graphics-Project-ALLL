@@ -12,10 +12,10 @@ Log.enableLog()
     ["vertex-shader", "fragment-shader"])
 class MyApp extends WebGLApplication {
 
-    @WebGLMesh("./assets/assi.obj")
+    @WebGLMesh("./assets/Consegna_fiori/furgone_fioreria.obj")
     private axis: MeshObject
 
-    @WebGLMesh("./assets/LuchettoObj/truck_final.obj")
+    @WebGLMesh("./assets/Consegna_fiori/mondo.obj")
     private helmet: MeshObject
 
     private menu: MenuControls
