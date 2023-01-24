@@ -15,52 +15,112 @@
 <body>
 
 <!-- SHADERS -------------------------------------->
+<!-- vertex shader -->
+<script  id="color-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 a_position;
+
+uniform mat4 u_projection;
+uniform mat4 u_view;
+uniform mat4 u_world;
+
+void main() {
+  gl_Position = u_projection * u_view * u_world * a_position;
+}
+</script>
+<!-- fragment shader -->
+<script  id="color-fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform vec4 u_color;
+void main() {
+  gl_FragColor = u_color;
+}
+</script>
+
+
 <script id="vertex-shader" type="x-shader/x-vertex">
 attribute vec4 a_position;
-  attribute vec3 a_normal;
   attribute vec2 a_texcoord;
+  attribute vec3 a_normal;
   attribute vec4 a_color;
 
+  uniform mat4 u_modelMatrix;//
   uniform mat4 u_projection;
   uniform mat4 u_view;
   uniform mat4 u_world;
+  uniform mat4 u_textureMatrix;
   uniform vec3 u_viewWorldPosition;
 
+  varying vec2 v_texcoord;
+  varying vec4 v_projectedTexcoord;
   varying vec3 v_normal;
   varying vec3 v_surfaceToView;
-  varying vec2 v_texcoord;
+  varying vec3 view;
   varying vec4 v_color;
 
+
   void main() {
-    vec4 worldPosition = u_world * a_position;
-    gl_Position = u_projection * u_view * worldPosition;
-    v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
-    v_normal = mat3(u_world) * a_normal;
+
+    vec4 worldPosition =  u_world * a_position ;
+
+    gl_Position = u_projection   * worldPosition ;
+
     v_texcoord = a_texcoord;
+    view = u_viewWorldPosition ;
+    v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
+    v_projectedTexcoord = u_textureMatrix * worldPosition ;
     v_color = a_color;
+
+    v_normal = mat3(u_world) * a_normal;
   }
 </script>
 
 <script id="fragment-shader" type="x-shader/x-fragment">
-precision highp float;
+  precision mediump float;
 
+  varying vec2 v_texcoord;
+  varying vec4 v_projectedTexcoord;
   varying vec3 v_normal;
   varying vec3 v_surfaceToView;
-  varying vec2 v_texcoord;
+  varying vec3 view;
   varying vec4 v_color;
 
+  uniform vec4 u_colorMult;
+  uniform sampler2D u_texture;
+  uniform sampler2D u_projectedTexture;
+  uniform float u_bias;
+  uniform vec3 u_lightDirection;
+  uniform float mesh;
   uniform vec3 diffuse;
-  uniform sampler2D diffuseMap;
   uniform vec3 ambient;
   uniform vec3 emissive;
   uniform vec3 specular;
   uniform float shininess;
   uniform float opacity;
-  uniform vec3 u_lightDirection;
   uniform vec3 u_ambientLight;
+  uniform vec3 u_colorLight;
+  uniform sampler2D diffuseMap;
 
   void main () {
     vec3 normal = normalize(v_normal);
+
+    float light = dot(normal, u_lightDirection);
+    if (light<0.2){
+      light = 0.2;
+    }
+
+    vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
+    float currentDepth = projectedTexcoord.z + u_bias;
+
+    bool inRange =
+        projectedTexcoord.x >= 0.0 &&
+        projectedTexcoord.x <= 1.0 &&
+        projectedTexcoord.y >= 0.0 &&
+        projectedTexcoord.y <= 1.0;
+
+    float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
+    float shadowLight = (inRange && projectedDepth <= currentDepth) ? 0.0 : 1.0;
+    vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
 
     vec3 surfaceToViewDirection = normalize(v_surfaceToView);
     vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
@@ -72,81 +132,13 @@ precision highp float;
     vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * v_color.rgb;
     float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;
 
-    gl_FragColor = vec4(
-        emissive +
-        ambient * u_ambientLight +
-        effectiveDiffuse * fakeLight +
-        specular * pow(specularLight, shininess),
-        effectiveOpacity);
+
+vec4 color = (mesh==1.0) ?
+      vec4((emissive + ambient * u_ambientLight + effectiveDiffuse * fakeLight + specular * pow(specularLight, shininess)) * shadowLight , effectiveOpacity)
+      : vec4( texColor.rgb * light * shadowLight, texColor.a);
+
   }
 </script>
-<!--
-<nav class="navbar navbar-dark bg-dark fixed-right">
-  <div class="container-fluid">
-    <span class="navbar-brand mb-0 h1">FlowedCamera Settings</span>
-
-      <div class="col-md-2">
-        <div class="btn-group" id="camXDiv" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-primary" id="btnCamXInc" onclick="decrementXCam()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-            <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-          </button>
-          <div class="input-group">
-            <div class="input-group-text">X</div>
-            <input type="text" disabled="true" id="camXValue" name="camXValue" class="form-control input-number" value="1" min="-100" max="100">
-          </div>
-          <button type="button" class="btn btn-primary" id="btnCamXDec" onclick="incrementXCam()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-            <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-          </svg></button>
-        </div>
-      </div>
-
-      <div class="col-md-2">
-        <div class="btn-group" id="camYDiv" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-primary" id="btnCamY" onclick="decrementYCam()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-            <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-          </button>
-          <div class="input-group">
-            <div class="input-group-text">Y</div>
-            <input type="text" disabled="true" id="camYValue" name="camYValue" class="form-control input-number" value="1" min="-100" max="100">
-          </div>
-          <button type="button" class="btn btn-primary" id="btnCamYDec" onclick="incrementYCam()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-            <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-          </svg></button>
-        </div>
-      </div>
-
-      <div class="col-md-2">
-        <div class="btn-group" id="camZDiv" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-primary" id="btnCamZ" onclick="decrementZCam()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-            <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-          </button>
-          <div class="input-group" >
-            <div class="input-group-text">Z</div>
-            <input type="text" disabled="true" id="camZValue" name="camZValue" class="form-control input-number" value="1" min="-100" max="100">
-          </div>
-          <button type="button" class="btn btn-primary" id="btnCamZDec" onclick="incrementZCam()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-            <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-          </svg></button>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="btn-group" id="camZDiv" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-primary" id="btnCamZ" onclick="decrementFov()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-            <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
-          </button>
-          <div class="input-group" >
-            <div class="input-group-text">FOV</div>
-            <input type="text" disabled="true" id="fovValue" name="fovValue" class="form-control input-number" value="60" min="-520" max="520">
-          </div>
-          <button type="button" class="btn btn-primary" id="btnCamZDec" onclick="incrementFov()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
-            <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
-          </svg></button>
-        </div>
-      </div>
-
-  </div>
-</nav> !-->
 
 <div id="parent_div">
 
