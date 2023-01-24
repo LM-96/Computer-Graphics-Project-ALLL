@@ -187,6 +187,8 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
                     obj.setLimitsChecker(continuation.limitsChecker);
                 }
                 instance[continuation.propertyKey] = obj;
+                log_1.Log.log("object [" + continuation.name + "] loaded for " + applicationName +
+                    " into property [" + continuation.propertyKey + "]!");
             }
             log_1.Log.log("initializing application " + applicationName + " ...");
             instance.beforeStart();
@@ -218,6 +220,7 @@ function getOrCreateObjInitializationContinuation(target, propertyKey) {
     let objInitializationContinuation = target[ObjToLoad].get(propertyKey);
     if (objInitializationContinuation == undefined) {
         objInitializationContinuation = new ObjInitializationContinuation();
+        objInitializationContinuation.propertyKey = propertyKey;
         target[ObjToLoad].set(propertyKey, objInitializationContinuation);
     }
     return objInitializationContinuation;

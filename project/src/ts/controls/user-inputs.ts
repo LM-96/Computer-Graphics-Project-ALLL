@@ -4,6 +4,7 @@ import {MeshObject} from "../obj/mesh-object";
 import {Couple} from "../types/pair";
 import {Angle, radians} from "../geometry/angle/angle";
 import {Trio} from "../types/triple";
+import {UserInputController} from "./user-input-controller";
 
 export class UserInputs {
 
@@ -13,9 +14,11 @@ export class UserInputs {
     #oldY: number = 0
 
     #target: MeshObject
+    #controller: UserInputController
 
     constructor(application: WebGLApplication) {
         this.#application = application
+        this.#controller = new UserInputController()
     }
 
     mouseDown(e: MouseEvent) {
@@ -37,23 +40,25 @@ export class UserInputs {
         let currentAngles: Trio<Angle> = this.#target.getPolarRotation()
         this.#target.setPolarRotation(
             currentAngles.getFirst(),
-            currentAngles.getSecond().add(radians(dY)),
-            currentAngles.getThird())
+            currentAngles.getSecond(),
+            currentAngles.getThird().add(radians(dY)))
         currentAngles = this.#target.getPolarRotation()
         this.#oldX=e.pageX;
         this.#oldY=e.pageY;
         e.preventDefault();
 
+        this.#application.getMeshObjectDrawer().drawScene()
         Log.log("Angles || PSY:" + currentAngles.getFirst().toString() + ", THETA:" + currentAngles.getSecond().toString() +
             ", PHI:" + currentAngles.getThird().toString());
     }
 
     keydownMap(e: KeyboardEvent) {
+        Log.log("Key pressed: " + e.code)
         switch(e.code) {
-            // case "ArrowDown" : canvas1.controller.move(KEYMOVE.downArrow); break;      	//Freccia Giù
-            // case "ArrowUp" : canvas1.controller.move(KEYMOVE.upArrow); break;       	//Freccia Su
-            // case "ArrowLeft" : canvas1.controller.move(KEYMOVE.leftArrow); break;       //Freccia Sx
-            // case "ArrowLeft" : canvas1.controller.move(KEYMOVE.rightArrow); break;       	//Ferccia Dx
+            case "ArrowDown" : this.#controller.move(e.code); break;      	//Freccia Giù
+            case "ArrowUp" : this.#controller.move(e.code); break;       	//Freccia Su
+            case "ArrowLeft" : this.#controller.move(e.code); break;       //Freccia Sx
+            case "ArrowRight" : this.#controller.move(e.code); break;       	//Ferccia Dx
             // case 104 : trans(0,0,0.1); break;		//NUmpad 8
             // case 189:  trans(0,0,-0.1); break;		//-
             // case 96 : 	CAMERA_MANAGER.changeCameraView(0); break;        //NUMpad 0
@@ -66,6 +71,7 @@ export class UserInputs {
             // case 188: 	CAMERA_MANAGER.incrementCameraFov(-1); break;		//,
             // case 190:	CAMERA_MANAGER.incrementCameraFov(1); break;		//.
         }
+        this.#application.getMeshObjectDrawer().drawScene()
     }
     //
     // const keydownMapLog = function(e) {
@@ -100,11 +106,13 @@ export class UserInputs {
         this.#application.getCanvas().onmouseout = (ev) => {this.mouseUp1(ev)};
         this.#application.getCanvas().onmousemove = (ev) => {this.mouseMove1(ev)};
 
-        //document.addEventListener('keydown', keydownMap);
+        document.addEventListener('keydown', (event) => {this.keydownMap(event)});
     }
 
     setTarget(target: MeshObject) {
+        console.log("user input set target")
         this.#target = target
+        this.#controller.setTarget(target)
     }
 
 }

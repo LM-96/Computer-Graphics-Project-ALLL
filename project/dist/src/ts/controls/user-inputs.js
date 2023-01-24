@@ -10,11 +10,12 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _UserInputs_application, _UserInputs_drag, _UserInputs_oldX, _UserInputs_oldY, _UserInputs_target;
+var _UserInputs_application, _UserInputs_drag, _UserInputs_oldX, _UserInputs_oldY, _UserInputs_target, _UserInputs_controller;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserInputs = void 0;
 const log_1 = require("../log/log");
 const angle_1 = require("../geometry/angle/angle");
+const user_input_controller_1 = require("./user-input-controller");
 class UserInputs {
     constructor(application) {
         _UserInputs_application.set(this, void 0);
@@ -22,7 +23,9 @@ class UserInputs {
         _UserInputs_oldX.set(this, 0);
         _UserInputs_oldY.set(this, 0);
         _UserInputs_target.set(this, void 0);
+        _UserInputs_controller.set(this, void 0);
         __classPrivateFieldSet(this, _UserInputs_application, application, "f");
+        __classPrivateFieldSet(this, _UserInputs_controller, new user_input_controller_1.UserInputController(), "f");
     }
     mouseDown(e) {
         __classPrivateFieldSet(this, _UserInputs_drag, true, "f");
@@ -40,20 +43,30 @@ class UserInputs {
         let dX = (e.pageX - __classPrivateFieldGet(this, _UserInputs_oldX, "f")) * 2 * Math.PI / __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().width;
         let dY = (e.pageY - __classPrivateFieldGet(this, _UserInputs_oldY, "f")) * 2 * Math.PI / __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().height;
         let currentAngles = __classPrivateFieldGet(this, _UserInputs_target, "f").getPolarRotation();
-        __classPrivateFieldGet(this, _UserInputs_target, "f").setPolarRotation(currentAngles.getFirst(), currentAngles.getSecond().add((0, angle_1.radians)(dY)), currentAngles.getThird());
+        __classPrivateFieldGet(this, _UserInputs_target, "f").setPolarRotation(currentAngles.getFirst(), currentAngles.getSecond(), currentAngles.getThird().add((0, angle_1.radians)(dY)));
         currentAngles = __classPrivateFieldGet(this, _UserInputs_target, "f").getPolarRotation();
         __classPrivateFieldSet(this, _UserInputs_oldX, e.pageX, "f");
         __classPrivateFieldSet(this, _UserInputs_oldY, e.pageY, "f");
         e.preventDefault();
+        __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().drawScene();
         log_1.Log.log("Angles || PSY:" + currentAngles.getFirst().toString() + ", THETA:" + currentAngles.getSecond().toString() +
             ", PHI:" + currentAngles.getThird().toString());
     }
     keydownMap(e) {
+        log_1.Log.log("Key pressed: " + e.code);
         switch (e.code) {
-            // case "ArrowDown" : canvas1.controller.move(KEYMOVE.downArrow); break;      	//Freccia Giù
-            // case "ArrowUp" : canvas1.controller.move(KEYMOVE.upArrow); break;       	//Freccia Su
-            // case "ArrowLeft" : canvas1.controller.move(KEYMOVE.leftArrow); break;       //Freccia Sx
-            // case "ArrowLeft" : canvas1.controller.move(KEYMOVE.rightArrow); break;       	//Ferccia Dx
+            case "ArrowDown":
+                __classPrivateFieldGet(this, _UserInputs_controller, "f").move(e.code);
+                break; //Freccia Giù
+            case "ArrowUp":
+                __classPrivateFieldGet(this, _UserInputs_controller, "f").move(e.code);
+                break; //Freccia Su
+            case "ArrowLeft":
+                __classPrivateFieldGet(this, _UserInputs_controller, "f").move(e.code);
+                break; //Freccia Sx
+            case "ArrowRight":
+                __classPrivateFieldGet(this, _UserInputs_controller, "f").move(e.code);
+                break; //Ferccia Dx
             // case 104 : trans(0,0,0.1); break;		//NUmpad 8
             // case 189:  trans(0,0,-0.1); break;		//-
             // case 96 : 	CAMERA_MANAGER.changeCameraView(0); break;        //NUMpad 0
@@ -66,6 +79,7 @@ class UserInputs {
             // case 188: 	CAMERA_MANAGER.incrementCameraFov(-1); break;		//,
             // case 190:	CAMERA_MANAGER.incrementCameraFov(1); break;		//.
         }
+        __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().drawScene();
     }
     //
     // const keydownMapLog = function(e) {
@@ -113,12 +127,14 @@ class UserInputs {
         __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().onmouseup = (ev) => { this.mouseUp1(ev); };
         __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().onmouseout = (ev) => { this.mouseUp1(ev); };
         __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().onmousemove = (ev) => { this.mouseMove1(ev); };
-        //document.addEventListener('keydown', keydownMap);
+        document.addEventListener('keydown', (event) => { this.keydownMap(event); });
     }
     setTarget(target) {
+        console.log("user input set target");
         __classPrivateFieldSet(this, _UserInputs_target, target, "f");
+        __classPrivateFieldGet(this, _UserInputs_controller, "f").setTarget(target);
     }
 }
 exports.UserInputs = UserInputs;
-_UserInputs_application = new WeakMap(), _UserInputs_drag = new WeakMap(), _UserInputs_oldX = new WeakMap(), _UserInputs_oldY = new WeakMap(), _UserInputs_target = new WeakMap();
+_UserInputs_application = new WeakMap(), _UserInputs_drag = new WeakMap(), _UserInputs_oldX = new WeakMap(), _UserInputs_oldY = new WeakMap(), _UserInputs_target = new WeakMap(), _UserInputs_controller = new WeakMap();
 //# sourceMappingURL=user-inputs.js.map

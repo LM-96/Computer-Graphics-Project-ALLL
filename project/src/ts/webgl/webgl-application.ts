@@ -255,6 +255,8 @@ export function WebGL(applicationName: string, canvasHtmlElementName: string, we
                     obj.setLimitsChecker(continuation.limitsChecker)
                 }
                 instance[continuation.propertyKey] = obj
+                Log.log("object [" + continuation.name + "] loaded for " + applicationName +
+                    " into property [" + continuation.propertyKey + "]!")
             }
 
             Log.log("initializing application " + applicationName + " ...")
@@ -286,6 +288,7 @@ function getOrCreateObjInitializationContinuation(target: any, propertyKey: stri
     let objInitializationContinuation: ObjInitializationContinuation = target[ObjToLoad].get(propertyKey)
     if(objInitializationContinuation == undefined) {
         objInitializationContinuation = new ObjInitializationContinuation()
+        objInitializationContinuation.propertyKey = propertyKey
         target[ObjToLoad].set(propertyKey, objInitializationContinuation)
     }
     return objInitializationContinuation
