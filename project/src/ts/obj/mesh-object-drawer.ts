@@ -13,12 +13,13 @@ export class MeshObjectDrawer {
     zNear: number = 0.1
     zFar: number = 200
     #camera: Camera = new FlowedCamera()
-    #sharedUniforms: SharedUniforms = new SharedUniforms()
+    #sharedUniforms: SharedUniforms
 
     constructor(applicationName: string, glEnvironment: WebGLEnvironment, meshObjectManager: MeshObjectManager) {
         this.applicationName = applicationName
         this.#glEnvironment = glEnvironment
         this.#meshObjectManager = meshObjectManager
+        this.#sharedUniforms = new SharedUniforms(this.#glEnvironment.getCanvas().getContext("webgl"), this.#camera.calculateCameraMatrix())
     }
 
     /**
@@ -84,6 +85,7 @@ export class MeshObjectDrawer {
         let gl: WebGLRenderingContext = this.#glEnvironment.getContext()
         let programInfo: ProgramInfo = this.#glEnvironment.getProgramInfo()
         this.startDrawing()
+
         for(let meshObject of this.#meshObjectManager.getAll()) {
             Log.log("MeshObjectDrawer[" + this.applicationName + "] | drawing mesh object [" + meshObject.getName() + "]")
             meshObject.draw(gl, programInfo, false)
