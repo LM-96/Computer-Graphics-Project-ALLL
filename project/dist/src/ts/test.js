@@ -35,6 +35,9 @@ __decorate([
     (0, webgl_application_1.WebGLMesh)("./assets/LuchettoObj/truck_final.obj")
 ], MyApp.prototype, "helmet", void 0);
 MyApp = __decorate([
-    (0, webgl_application_1.WebGL)("test-app", "my_Canvas", ["vertex-shader", "fragment-shader"])
+    (0, webgl_application_1.WebGL)("test-app", "my_Canvas", {
+        main: ["vertex-shader", "fragment-shader"],
+        color: ["color-vertex-shader", "color-fragment-shader"]
+    })
 ], MyApp);
 //# sourceMappingURL=test.js.map

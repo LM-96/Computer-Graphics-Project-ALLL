@@ -213,6 +213,14 @@ export abstract class WebGLApplication {
     }
 }
 
+function mapShaders(shaders: any): Map<string, string[]> {
+    let res = new Map<string, string[]>()
+    Object.entries(shaders).forEach(([key, value]) => {
+        res.set(key, value as string[])
+    })
+    return res
+}
+
 /**
  * Creates a new webgl application injecting all the required dependencies or the fields that are
  * necessary to create them
@@ -221,7 +229,9 @@ export abstract class WebGLApplication {
  * @param {string[]} webGLShaders the names of the webgl shaders
  * @constructor
  */
-export function WebGL(applicationName: string, canvasHtmlElementName: string, webGLShaders: string[]) {
+export function WebGL(applicationName: string,
+                      canvasHtmlElementName: string,
+                      webGLShaders: any) {
 
     // @ts-ignore
     window["APPLICATIONS"] = window["APPLICATIONS"] || new Map<string, WebGLApplication>()
@@ -237,7 +247,8 @@ export function WebGL(applicationName: string, canvasHtmlElementName: string, we
             window["APPLICATIONS"].set(applicationName, instance)
 
             Log.log("creating webgl environment for " + applicationName + " ...")
-            let webGLEnvironment: WebGLEnvironment = createWebglEnvironment(canvasHtmlElementName, webGLShaders)
+            let webGLEnvironment: WebGLEnvironment =
+                createWebglEnvironment(canvasHtmlElementName, mapShaders(webGLShaders))
 
             Log.log("creating mesh object manager for " + applicationName + " ...")
             let meshObjectManager: MeshObjectManager = new MeshObjectManager(applicationName, webGLEnvironment)

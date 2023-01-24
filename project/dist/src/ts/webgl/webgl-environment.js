@@ -28,8 +28,10 @@ class WebGLEnvironment {
             alert("Unable to initialize WebGL. Your browser or machine may not support it.");
             throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
         }
-        __classPrivateFieldSet(this, _WebGLEnvironment_programInfo, WebGLUtils.createProgramInfo(__classPrivateFieldGet(this, _WebGLEnvironment_gl, "f"), webGLShaders), "f");
-        __classPrivateFieldGet(this, _WebGLEnvironment_gl, "f").useProgram(__classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f").program);
+        __classPrivateFieldSet(this, _WebGLEnvironment_programInfo, new Map(), "f");
+        webGLShaders.forEach((value, key) => {
+            __classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f").set(key, WebGLUtils.createProgramInfo(__classPrivateFieldGet(this, _WebGLEnvironment_gl, "f"), value));
+        });
     }
     /**
      * Returns the `HtmlCanvasElement` associated to this environment
@@ -46,14 +48,31 @@ class WebGLEnvironment {
     /**
      * Returns the `WebGLProgram` associated to this environment
      */
-    getProgramInfo() {
+    getProgramInfo(programName = null) {
+        if (programName == null) {
+            return __classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f").values().next().value;
+        }
+        return __classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f").get(programName);
+    }
+    getProgramInfos() {
         return __classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f");
+    }
+    getPrograms() {
+        let programs = new Map();
+        __classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f").forEach((value, key) => {
+            programs.set(key, value.program);
+        });
+        return programs;
     }
     /**
      * Returns the `WebGLProgram` associated to this environment
      */
-    getProgram() {
-        return __classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f").program;
+    getProgram(programName = null) {
+        var _a;
+        if (programName == null) {
+            return __classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f").values().next().value.program;
+        }
+        return (_a = __classPrivateFieldGet(this, _WebGLEnvironment_programInfo, "f").get(programName)) === null || _a === void 0 ? void 0 : _a.program;
     }
     /**
      * Returns the aspect ratio of the canvas

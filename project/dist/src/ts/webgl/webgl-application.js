@@ -156,6 +156,13 @@ class WebGLApplication {
     }
 }
 exports.WebGLApplication = WebGLApplication;
+function mapShaders(shaders) {
+    let res = new Map();
+    Object.entries(shaders).forEach(([key, value]) => {
+        res.set(key, value);
+    });
+    return res;
+}
 /**
  * Creates a new webgl application injecting all the required dependencies or the fields that are
  * necessary to create them
@@ -176,7 +183,7 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
             // @ts-ignore
             window["APPLICATIONS"].set(applicationName, instance);
             log_1.Log.log("creating webgl environment for " + applicationName + " ...");
-            let webGLEnvironment = (0, webgl_environment_1.createWebglEnvironment)(canvasHtmlElementName, webGLShaders);
+            let webGLEnvironment = (0, webgl_environment_1.createWebglEnvironment)(canvasHtmlElementName, mapShaders(webGLShaders));
             log_1.Log.log("creating mesh object manager for " + applicationName + " ...");
             let meshObjectManager = new mesh_object_manager_1.MeshObjectManager(applicationName, webGLEnvironment);
             log_1.Log.log("creating mesh object drawer for " + applicationName + " ...");

@@ -16,7 +16,11 @@ Log.enableLog()
 
 @WebGL("test-app",
     "my_Canvas",
-    ["vertex-shader", "fragment-shader"])
+    {
+        main: ["vertex-shader", "fragment-shader"],
+        color:["color-vertex-shader", "color-fragment-shader"]
+    }
+)
 class MyApp extends WebGLApplication {
 
     @WebGLMesh("./assets/plane-2m.obj")

@@ -7,19 +7,24 @@
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-wrappers.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-wrappers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-wrappers.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-wrappers.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu-settings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-settings.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-drawer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-drawer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/sl-manager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/sl-manager.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/webgl/webgl-environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/webgl/webgl-environment.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/webgl/webgl-wrappers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/webgl/webgl-wrappers.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -182,7 +187,7 @@
       <workItem from="1674371933978" duration="25890000" />
       <workItem from="1674410261890" duration="24018000" />
       <workItem from="1674518920781" duration="71000" />
-      <workItem from="1674554701206" duration="10796000" />
+      <workItem from="1674554701206" duration="21477000" />
     </task>
     <servers />
   </component>

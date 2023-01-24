@@ -10,4 +10,8 @@ export class SharedUniforms {
     u_view: number[] = M4.identity()
     u_projection: number[] = M4.identity()
     u_lightDirection: Array<number> = [2, 2, 2]
+    u_bias: number = 0.001
+    texture_matrix: number[] = M4.identity()
+    u_projectedTexture: WebGLTexture | null = null
+    u_colorMult: number[] = [1, 1, 1, 1]
 }

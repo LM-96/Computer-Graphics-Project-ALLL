@@ -8,6 +8,7 @@ import {Log} from "../log/log";
 import {SlManager} from "./sl-manager";
 
 export class MeshObjectDrawer {
+
     readonly applicationName: string
     #glEnvironment: WebGLEnvironment
     #meshObjectManager: MeshObjectManager
@@ -16,6 +17,14 @@ export class MeshObjectDrawer {
     #camera: Camera = new FlowedCamera()
     #sharedUniforms: SharedUniforms
     #slManager: SlManager
+    #lightFrustum: boolean
+
+    readonly #depthTexture: WebGLTexture
+    readonly #depthTextureSize: number
+    readonly #depthFramebuffer: WebGLFramebuffer
+    #bias: number
+
+    readonly #cubeLinesBufferInfo: any
 
     constructor(applicationName: string, glEnvironment: WebGLEnvironment, meshObjectManager: MeshObjectManager) {
         this.applicationName = applicationName
@@ -23,6 +32,66 @@ export class MeshObjectDrawer {
         this.#meshObjectManager = meshObjectManager
         this.#sharedUniforms = new SharedUniforms()
         this.#slManager = new SlManager(this.#sharedUniforms)
+        this.#lightFrustum = false
+        this.#bias = -0.006
+
+        let gl = this.#glEnvironment.getContext()
+        gl.enable(gl.DEPTH_TEST);
+        this.#depthTextureSize = 512
+        this.#depthTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, this.#depthTexture);
+        gl.texImage2D(
+            gl.TEXTURE_2D,
+            0,
+            gl.DEPTH_COMPONENT,
+            this.#depthTextureSize,
+            this.#depthTextureSize,
+            0,
+            gl.DEPTH_COMPONENT,
+            gl.UNSIGNED_INT,
+            null);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        this.#depthFramebuffer = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this.#depthFramebuffer);
+        gl.framebufferTexture2D(
+            gl.FRAMEBUFFER,
+            gl.DEPTH_ATTACHMENT,
+            gl.TEXTURE_2D,
+            this.#depthTexture,
+            0);
+
+        this.#cubeLinesBufferInfo = WebGLUtils.createBufferInfoFromArrays(gl, {
+            position: [
+                -1, -1, -1,
+                1, -1, -1,
+                -1,  1, -1,
+                1,  1, -1,
+                -1, -1,  1,
+                1, -1,  1,
+                -1,  1,  1,
+                1,  1,  1,
+            ],
+            indices: [
+                0, 1,
+                1, 3,
+                3, 2,
+                2, 0,
+
+                4, 5,
+                5, 7,
+                7, 6,
+                6, 4,
+
+                0, 4,
+                1, 5,
+                3, 7,
+                2, 6,
+            ],
+        });
     }
 
     /**
@@ -43,6 +112,86 @@ export class MeshObjectDrawer {
             this.#camera.getCurrentFov().getValueIn(AngleUnit.RAD),
             this.#glEnvironment.calculateAspectRatio(), this.zNear, this.zFar)
         Log.log("MeshObjectDrawer[" + this.applicationName + "] | projection matrix updated")
+    }
+
+    drawSceneWith(projectionMatrix: number[], cameraMatrix: number[],
+                     textureMatrix: number[], lightWorldMatrix: number[],
+                     programInfo: ProgramInfo) {
+        Log.log("MeshObjectDrawer[" + this.applicationName +
+            "] | starting drawing with program info [" + programInfo + "]")
+        let gl: WebGLRenderingContext = this.#glEnvironment.getContext()
+        let viewMatrix = M4.inverse(cameraMatrix)
+        gl.useProgram(programInfo.program)
+        WebGLUtils.setUniforms(programInfo, {
+            u_view: viewMatrix,
+            u_projection: projectionMatrix,
+            u_bias: this.#bias,
+            u_textureMatrix: textureMatrix,
+            u_projectedTexture: this.#depthTexture,
+            u_lightDirection: this.#slManager.calculateLightWorldMatrix().slice(8, 11),
+        });
+        gl.uniform1f(gl.getUniformLocation(programInfo.program, "mesh"), 1.);
+        for(let meshObject of this.#meshObjectManager.getAll()) {
+            Log.log("MeshObjectDrawer[" + this.applicationName + "] | drawing mesh object [" + meshObject.getName() + "]")
+            meshObject.draw(gl, programInfo, false)
+        }
+    }
+
+    render() {
+        let gl: WebGLRenderingContext = this.#glEnvironment.getContext()
+        gl.enable(gl.CULL_FACE);
+        gl.enable(gl.DEPTH_TEST);
+
+        let lightWorldMatrix = this.#slManager.calculateLightWorldMatrix()
+        let lightProjectionMatrix = this.#slManager.calculateLightProjectionMatrix()
+
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this.#depthFramebuffer);
+        gl.viewport(0, 0, this.#depthTextureSize, this.#depthTextureSize);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        /* TO ADJUST BASED ON WHICH PROGRAMS ARE PRESENT AND USED */
+        if(this.#slManager.getShadows()) {
+            this.drawSceneWith(lightProjectionMatrix, lightWorldMatrix, M4.identity(), lightWorldMatrix,
+                this.#glEnvironment.getProgramInfo('color'))
+        }
+
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        gl.clearColor(0, 0, 0, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        let textureMatrix: number[] = M4.identity();
+        textureMatrix = M4.translate(textureMatrix, 0.5, 0.5, 0.5);
+        textureMatrix = M4.scale(textureMatrix, 0.5, 0.5, 0.5);
+        textureMatrix = M4.multiply(textureMatrix, lightProjectionMatrix);
+        textureMatrix = M4.multiply(
+            textureMatrix,
+            M4.inverse(lightWorldMatrix));
+
+        this.updateProjectionMatrix()
+        this.updateViewMatrix()
+        let viewProjectionMatrix = M4.multiply(this.#sharedUniforms.u_projection,
+            this.#sharedUniforms.u_view)
+
+        this.drawSceneWith(viewProjectionMatrix, this.#camera.calculateCameraMatrix(), textureMatrix,
+            lightWorldMatrix, this.#glEnvironment.getProgramInfo('main'))
+
+        if(this.#lightFrustum) {
+            let viewMatrix = M4.inverse(this.#camera.calculateCameraMatrix())
+            gl.useProgram(this.#glEnvironment.getProgramInfo('color').program)
+            WebGLUtils.setBuffersAndAttributes(gl,
+                this.#glEnvironment.getProgramInfo('color'),
+                this.#cubeLinesBufferInfo);
+
+            const mat = M4.multiply(lightWorldMatrix, M4.inverse(lightProjectionMatrix));
+            WebGLUtils.setUniforms(this.#glEnvironment.getProgramInfo('color'), {
+                u_color: [1, 1, 1, 1],
+                u_view: viewMatrix,
+                u_projection: this.#sharedUniforms.u_projection,
+                u_world: mat,
+            });
+            WebGLUtils.drawBufferInfo(gl, this.#cubeLinesBufferInfo, gl.LINES);
+        }
     }
 
     /**
@@ -84,17 +233,28 @@ export class MeshObjectDrawer {
      * Draw the scene using the object manager and the camera
      */
     drawScene() {
-        Log.log("MeshObjectDrawer[" + this.applicationName + "] | drawing scene")
-
-        let gl: WebGLRenderingContext = this.#glEnvironment.getContext()
-        let programInfo: ProgramInfo = this.#glEnvironment.getProgramInfo()
-        this.startDrawing()
-        for(let meshObject of this.#meshObjectManager.getAll()) {
-            Log.log("MeshObjectDrawer[" + this.applicationName + "] | drawing mesh object [" + meshObject.getName() + "]")
-            meshObject.draw(gl, programInfo, false)
-        }
-
-        Log.log("MeshObjectDrawer[" + this.applicationName + "] | scene drawn")
+        Log.log("MeshObjectDrawer[" + this.applicationName + "]\n" +
+            "\tcanvas size: " + this.#glEnvironment.getCanvas().width + "x" + this.#glEnvironment.getCanvas().height + "\n" +
+            "\tcanvas aspect ratio: " + this.#glEnvironment.calculateAspectRatio() + "\n" +
+            "\tcamera position: " + this.#camera.getCurrentPosition().toString() + "\n" +
+            "\tcamera up: " + this.#camera.getCurrentUp().toString() + "\n" +
+            "\tcamera target: " + this.#camera.getCurrentTarget().toString() + "\n" +
+            "\tfov: " + this.#camera.getCurrentFov().getValueIn(AngleUnit.DEG) + "°\n" +
+            "\tzNear: " + this.zNear + "\n" +
+            "\tzFar: " + this.zFar
+        )
+        // Log.log("MeshObjectDrawer[" + this.applicationName + "] | drawing scene")
+        //
+        // let gl: WebGLRenderingContext = this.#glEnvironment.getContext()
+        // let programInfo: ProgramInfo = this.#glEnvironment.getProgramInfo()
+        // this.startDrawing()
+        // for(let meshObject of this.#meshObjectManager.getAll()) {
+        //     Log.log("MeshObjectDrawer[" + this.applicationName + "] | drawing mesh object [" + meshObject.getName() + "]")
+        //     meshObject.draw(gl, programInfo, false)
+        // }
+        //
+        // Log.log("MeshObjectDrawer[" + this.applicationName + "] | scene drawn")
+        this.render()
     }
 
     /**
@@ -116,5 +276,13 @@ export class MeshObjectDrawer {
      */
     getMeshObjectManager(): MeshObjectManager {
         return this.#meshObjectManager
+    }
+
+    setLightFrustum(lightFrustum: boolean) {
+        this.#lightFrustum = lightFrustum
+    }
+
+    getLightFrustum(): boolean {
+        return this.#lightFrustum
     }
 }

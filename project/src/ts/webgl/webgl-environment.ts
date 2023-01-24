@@ -4,9 +4,9 @@ export class WebGLEnvironment {
 
     readonly #canvas : HTMLCanvasElement;
     readonly #gl: WebGLRenderingContext
-    readonly #programInfo: ProgramInfo
+    readonly #programInfo: Map<string, ProgramInfo>
 
-    constructor(canvas: HTMLElement, webGLShaders: WebGLShader[]) {
+    constructor(canvas: HTMLElement, webGLShaders: Map<string, WebGLShader[]>) {
         if(!('getContext' in canvas)) {
             alert("The given HTML element is not a canvas")
             throw new Error("The given HTML element is not a canvas")
@@ -18,8 +18,11 @@ export class WebGLEnvironment {
             alert("Unable to initialize WebGL. Your browser or machine may not support it.");
             throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
         }
-        this.#programInfo = WebGLUtils.createProgramInfo(this.#gl, webGLShaders);
-        this.#gl.useProgram(this.#programInfo.program)
+
+        this.#programInfo = new Map<string, ProgramInfo>()
+        webGLShaders.forEach((value, key) => {
+            this.#programInfo.set(key, WebGLUtils.createProgramInfo(this.#gl, value))
+        })
     }
 
     /**
@@ -39,16 +42,33 @@ export class WebGLEnvironment {
     /**
      * Returns the `WebGLProgram` associated to this environment
      */
-    getProgramInfo(): ProgramInfo {
+    getProgramInfo(programName: string|null = null): ProgramInfo {
+        if(programName == null) {
+            return this.#programInfo.values().next().value;
+        }
+        return this.#programInfo.get(programName);
+    }
+
+    getProgramInfos(): Map<string, ProgramInfo> {
         return this.#programInfo;
     }
 
+    getPrograms(): Map<string, WebGLProgram> {
+        let programs = new Map<string, WebGLProgram>()
+        this.#programInfo.forEach((value, key) => {
+            programs.set(key, value.program)
+        })
+        return programs
+    }
 
     /**
      * Returns the `WebGLProgram` associated to this environment
      */
-    getProgram(): WebGLProgram {
-        return this.#programInfo.program;
+    getProgram(programName: string|null = null): WebGLProgram {
+        if(programName == null) {
+            return this.#programInfo.values().next().value.program;
+        }
+        return this.#programInfo.get(programName)?.program;
     }
 
     /**
@@ -65,7 +85,7 @@ export class WebGLEnvironment {
  * @param {string} canvasHtmlName the name of the `HtmlElement` of the canvas
  * @param {string[]} webGLShaders the names of the shaders to create the `WebGLProgram`
  */
-export function createWebglEnvironment(canvasHtmlName: string, webGLShaders: string[]): WebGLEnvironment {
+export function createWebglEnvironment(canvasHtmlName: string, webGLShaders: Map<string, string[]>): WebGLEnvironment {
     let canvas: HTMLElement = document.getElementById(canvasHtmlName);
     if(canvas == null) {
         alert("Unable to find the canvas with id: " + canvas);
