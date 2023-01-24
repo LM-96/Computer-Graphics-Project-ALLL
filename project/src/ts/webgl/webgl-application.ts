@@ -16,10 +16,12 @@ import {Couple, coupleOf} from "../types/pair";
 import {Angle} from "../geometry/angle/angle";
 import {numberTrio, NumberTrio} from "../types/numbers/number-trio";
 import {LimitsChecker} from "../geometry/limits/limits-checker";
-import {CameraControls} from "../controls/camera-controls";
 import {Trio, trioOf} from "../types/triple";
 
 const ObjToLoad = Symbol("ObjToLoad")
+const OnCanvasEventSym = Symbol("OnCanvasEvent")
+const OnKeyboardEventSym = Symbol("OnKeyboardEvent")
+const OnCanvasTouchEventSym = Symbol("OnCanvasTouchEvent")
 
 export abstract class WebGLApplication {
     protected abstract main(args: string[]): void
@@ -182,6 +184,21 @@ export abstract class WebGLApplication {
         return res
     }
 
+    getPositionInCanvas(event: MouseEvent|TouchEvent): {x: number, y: number} {
+        let rect = this.getCanvas().getBoundingClientRect();
+        if(event instanceof TouchEvent) {
+            return {
+                x: event.touches[0].clientX - rect.left,
+                y: event.touches[0].clientY - rect.top
+            };
+        } else if(event instanceof MouseEvent) {
+            return {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            };
+        }
+    }
+
     /**
      * The method that is called before the application starts.
      * At the points all the mesh objects are loaded and the scene is ready to be drawn
@@ -235,6 +252,7 @@ export function WebGL(applicationName: string, canvasHtmlElementName: string, we
             instance["camera"] = meshObjectDrawer.getCamera()
             instance["applicationName"] = applicationName
 
+            // Loading mesh objects
             Log.log("loading objects for " + applicationName + " ...")
             for(let objToLoad of clazz.prototype[ObjToLoad]) {
                 let continuation: ObjInitializationContinuation = objToLoad[1]
@@ -257,6 +275,42 @@ export function WebGL(applicationName: string, canvasHtmlElementName: string, we
                 instance[continuation.propertyKey] = obj
                 Log.log("object [" + continuation.name + "] loaded for " + applicationName +
                     " into property [" + continuation.propertyKey + "]!")
+            }
+
+            // Attach canvas mouse events
+            const onCanvasMouseEventMethods = clazz.prototype[OnCanvasEventSym]
+            if(onCanvasMouseEventMethods != undefined) {
+                onCanvasMouseEventMethods.forEach((event: string, method: string) => {
+                    Log.log("subscribing to event [" + event + "] for " + applicationName +
+                        " with method [" + method + "] ...")
+                    webGLEnvironment.getCanvas().addEventListener(event, (e: MouseEvent) => {
+                        instance[method](e)
+                    })
+                })
+            }
+
+            // Attach keyboard events
+            const onKeyboardEventMethods = clazz.prototype[OnKeyboardEventSym]
+            if(onKeyboardEventMethods != undefined) {
+                onKeyboardEventMethods.forEach((event: string, method: string) => {
+                    Log.log("subscribing to event [" + event + "] for " + applicationName +
+                        " with method [" + method + "] ...")
+                    document.addEventListener(event, (e: KeyboardEvent) => {
+                        instance[method](e)
+                    })
+                })
+            }
+
+            // Attaching canvas touch events
+            const onCanvasTouchEventMethods = clazz.prototype[OnCanvasTouchEventSym]
+            if(onCanvasTouchEventMethods != undefined) {
+                onCanvasTouchEventMethods.forEach((event: string, method: string) => {
+                    Log.log("subscribing to event [" + event + "] for " + applicationName +
+                        " with method [" + method + "] ...")
+                    document.addEventListener(event, (e: TouchEvent) => {
+                        instance[method](e)
+                    }, false)
+                })
             }
 
             Log.log("initializing application " + applicationName + " ...")
@@ -324,6 +378,31 @@ export function WebGLMesh(url: string, name: string|null = null,
         if(limitsChecker != null) continuation.limitsChecker = limitsChecker
     }
 }
+
+export function OnCanvasMouseEvent<S, D, R>(eventName: string) {
+    return function (target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<Function>) {
+        Log.log("OnCanvasMouseEvent " + eventName + " on " + propertyKey)
+        target[OnCanvasEventSym] = target[OnCanvasEventSym] || new Map<string, string>()
+        target[OnCanvasEventSym].set(propertyKey, eventName)
+    }
+}
+
+export function OnKeyboardEvent<S, D, R>(eventName: string) {
+    return function (target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<Function>) {
+        Log.log("OnKeyboardEvent " + eventName + " on " + propertyKey)
+        target[OnKeyboardEventSym] = target[OnKeyboardEventSym] || new Map<string, string>()
+        target[OnKeyboardEventSym].set(propertyKey, eventName)
+    }
+}
+
+export function OnCanvasTouchEvent<S, D, R>(eventName: string) {
+    return function (target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<Function>) {
+        Log.log("OnKeyboardEvent " + eventName + " on " + propertyKey)
+        target[OnCanvasTouchEventSym] = target[OnCanvasTouchEventSym] || new Map<string, string>()
+        target[OnCanvasTouchEventSym].set(propertyKey, eventName)
+    }
+}
+
 
 /**
  * Sets the position the mesh object will have when loaded

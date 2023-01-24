@@ -29,8 +29,14 @@ class UserInputs {
     }
     mouseDown(e) {
         __classPrivateFieldSet(this, _UserInputs_drag, true, "f");
-        __classPrivateFieldSet(this, _UserInputs_oldX, e.pageX, "f");
-        __classPrivateFieldSet(this, _UserInputs_oldY, e.pageY, "f");
+        if (e instanceof MouseEvent) {
+            __classPrivateFieldSet(this, _UserInputs_oldX, e.pageX, "f");
+            __classPrivateFieldSet(this, _UserInputs_oldY, e.pageY, "f");
+        }
+        else {
+            __classPrivateFieldSet(this, _UserInputs_oldX, e.touches[0].clientX, "f");
+            __classPrivateFieldSet(this, _UserInputs_oldY, e.touches[0].clientY, "f");
+        }
         e.preventDefault();
         return false;
     }
@@ -40,13 +46,24 @@ class UserInputs {
     mouseMove1(e) {
         if (!__classPrivateFieldGet(this, _UserInputs_drag, "f"))
             return false;
-        let dX = (e.pageX - __classPrivateFieldGet(this, _UserInputs_oldX, "f")) * 2 * Math.PI / __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().width;
-        let dY = (e.pageY - __classPrivateFieldGet(this, _UserInputs_oldY, "f")) * 2 * Math.PI / __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().height;
+        let dX;
+        let dY;
+        if (e instanceof MouseEvent) {
+            dX = (e.pageX - __classPrivateFieldGet(this, _UserInputs_oldX, "f")) * 2 * Math.PI / __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().width;
+            dY = (e.pageY - __classPrivateFieldGet(this, _UserInputs_oldY, "f")) * 2 * Math.PI / __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().height;
+            __classPrivateFieldSet(this, _UserInputs_oldX, e.pageX, "f");
+            __classPrivateFieldSet(this, _UserInputs_oldY, e.pageY, "f");
+        }
+        else if (e instanceof TouchEvent) {
+            dX = (e.touches[0].clientX - __classPrivateFieldGet(this, _UserInputs_oldX, "f")) * 2 * Math.PI / __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().width;
+            dY = (e.touches[0].clientY - __classPrivateFieldGet(this, _UserInputs_oldY, "f")) * 2 * Math.PI / __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().height;
+            __classPrivateFieldSet(this, _UserInputs_oldX, e.touches[0].clientX, "f");
+            __classPrivateFieldSet(this, _UserInputs_oldY, e.touches[0].clientY, "f");
+        }
         let currentAngles = __classPrivateFieldGet(this, _UserInputs_target, "f").getPolarRotation();
-        __classPrivateFieldGet(this, _UserInputs_target, "f").setPolarRotation(currentAngles.getFirst(), currentAngles.getSecond(), currentAngles.getThird().add((0, angle_1.radians)(dY)));
+        __classPrivateFieldGet(this, _UserInputs_target, "f").setPolarRotation(currentAngles.getFirst(), currentAngles.getSecond(), currentAngles.getThird().add((0, angle_1.radians)(dX)));
         currentAngles = __classPrivateFieldGet(this, _UserInputs_target, "f").getPolarRotation();
-        __classPrivateFieldSet(this, _UserInputs_oldX, e.pageX, "f");
-        __classPrivateFieldSet(this, _UserInputs_oldY, e.pageY, "f");
+        __classPrivateFieldGet(this, _UserInputs_controller, "f").navigate(dY, currentAngles.getThird());
         e.preventDefault();
         __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().drawScene();
         log_1.Log.log("Angles || PSY:" + currentAngles.getFirst().toString() + ", THETA:" + currentAngles.getSecond().toString() +
@@ -127,6 +144,9 @@ class UserInputs {
         __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().onmouseup = (ev) => { this.mouseUp1(ev); };
         __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().onmouseout = (ev) => { this.mouseUp1(ev); };
         __classPrivateFieldGet(this, _UserInputs_application, "f").getCanvas().onmousemove = (ev) => { this.mouseMove1(ev); };
+        document.addEventListener("touchstart", (ev) => { this.mouseDown(ev); });
+        document.addEventListener("touchend", (ev) => { this.mouseUp1(ev); });
+        document.addEventListener("touchmove", (ev) => { this.mouseMove1(ev); });
         document.addEventListener('keydown', (event) => { this.keydownMap(event); });
     }
     setTarget(target) {

@@ -1,4 +1,11 @@
-import {WebGL, WebGLApplication, WebGLMesh} from "./webgl/webgl-application";
+import {
+    OnCanvasMouseEvent,
+    OnCanvasTouchEvent,
+    OnKeyboardEvent,
+    WebGL,
+    WebGLApplication,
+    WebGLMesh
+} from "./webgl/webgl-application";
 import {MeshObject} from "./obj/mesh-object";
 import {Log} from "./log/log";
 import {MenuControls} from "./controls/menu-controls";
@@ -35,7 +42,6 @@ class MyApp extends WebGLApplication {
 
     protected main(args: string[]): void {
         console.log("Hello world! [" + this.applicationName + "]")
-
         this.drawScene()
     }
 }

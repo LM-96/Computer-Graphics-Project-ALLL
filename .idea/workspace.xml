@@ -9,9 +9,11 @@
       <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/test.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/controls/user-inputs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/user-inputs.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/test.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -76,8 +78,8 @@
       <recent name="$PROJECT_DIR$/project/src/ts/types/numbers" />
     </key>
   </component>
-  <component name="RunManager" selected="Node.js.test.js">
-    <configuration name="test.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Computer-Graphics-Project-ALLL/project/src/ts/test.html" useBuiltInWebServerPort="true">
+  <component name="RunManager" selected="JavaScript Debug.index.html">
+    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Computer-Graphics-Project-ALLL/project/index.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
     <configuration name="WebGLMeshObject.ts" type="NodeJSConfigurationType" temporary="true" node-parameters="--require ts-node/register " path-to-js-file="$PROJECT_DIR$/project/src/ts/obj/WebGLMeshObject.ts" working-dir="$PROJECT_DIR$/project/src/ts/obj">
@@ -112,11 +114,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JavaScript Debug.index.html" />
         <item itemvalue="Node.js.test.js" />
         <item itemvalue="TypeScript.test.ts" />
         <item itemvalue="Node.js.WebGLMeshObject.ts" />
         <item itemvalue="TypeScript.main-test.ts" />
-        <item itemvalue="JavaScript Debug.test.html" />
       </list>
     </recent_temporary>
   </component>
@@ -173,6 +175,8 @@
       <workItem from="1674371678090" duration="240000" />
       <workItem from="1674371933978" duration="25890000" />
       <workItem from="1674410261890" duration="24018000" />
+      <workItem from="1674518920781" duration="71000" />
+      <workItem from="1674554701206" duration="5958000" />
     </task>
     <servers />
   </component>

@@ -21,30 +21,45 @@ export class UserInputs {
         this.#controller = new UserInputController()
     }
 
-    mouseDown(e: MouseEvent) {
+    mouseDown(e: MouseEvent|TouchEvent) {
         this.#drag = true;
-        this.#oldX = e.pageX;
-        this.#oldY = e.pageY;
+        if(e instanceof MouseEvent) {
+            this.#oldX = e.pageX;
+            this.#oldY = e.pageY;
+        } else {
+            this.#oldX = e.touches[0].clientX;
+            this.#oldY = e.touches[0].clientY;
+        }
         e.preventDefault();
         return false;
     }
 
-    mouseUp1(e: MouseEvent) {
+    mouseUp1(e: MouseEvent|TouchEvent) {
         this.#drag = false;
     }
 
-    mouseMove1(e: MouseEvent) {
+    mouseMove1(e: MouseEvent|TouchEvent) {
         if(!this.#drag) return false;
-        let dX=(e.pageX-this.#oldX)*2*Math.PI/this.#application.getCanvas().width;
-        let dY=(e.pageY-this.#oldY)*2*Math.PI/this.#application.getCanvas().height;
+        let dX: number
+        let dY: number
+        if(e instanceof MouseEvent) {
+            dX=(e.pageX-this.#oldX)*2*Math.PI/this.#application.getCanvas().width;
+            dY=(e.pageY-this.#oldY)*2*Math.PI/this.#application.getCanvas().height;
+            this.#oldX=e.pageX;
+            this.#oldY=e.pageY;
+        } else if(e instanceof TouchEvent) {
+            dX=(e.touches[0].clientX-this.#oldX)*2*Math.PI/this.#application.getCanvas().width;
+            dY=(e.touches[0].clientY-this.#oldY)*2*Math.PI/this.#application.getCanvas().height;
+            this.#oldX=e.touches[0].clientX;
+            this.#oldY=e.touches[0].clientY;
+        }
         let currentAngles: Trio<Angle> = this.#target.getPolarRotation()
         this.#target.setPolarRotation(
             currentAngles.getFirst(),
             currentAngles.getSecond(),
-            currentAngles.getThird().add(radians(dY)))
+            currentAngles.getThird().add(radians(dX)))
         currentAngles = this.#target.getPolarRotation()
-        this.#oldX=e.pageX;
-        this.#oldY=e.pageY;
+        this.#controller.navigate(dY, currentAngles.getThird())
         e.preventDefault();
 
         this.#application.getMeshObjectDrawer().drawScene()
@@ -105,6 +120,9 @@ export class UserInputs {
         this.#application.getCanvas().onmouseup= (ev) => {this.mouseUp1(ev)};
         this.#application.getCanvas().onmouseout = (ev) => {this.mouseUp1(ev)};
         this.#application.getCanvas().onmousemove = (ev) => {this.mouseMove1(ev)};
+        document.addEventListener("touchstart", (ev: TouchEvent) => {this.mouseDown(ev)});
+        document.addEventListener("touchend", (ev: TouchEvent) => {this.mouseUp1(ev)});
+        document.addEventListener("touchmove", (ev: TouchEvent) => {this.mouseMove1(ev)});
 
         document.addEventListener('keydown', (event) => {this.keydownMap(event)});
     }

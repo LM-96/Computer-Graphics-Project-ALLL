@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ObjLimitsChecker = exports.ObjScale = exports.ObjRotation = exports.ObjPosition = exports.WebGLMesh = exports.WebGL = exports.WebGLApplication = void 0;
+exports.ObjLimitsChecker = exports.ObjScale = exports.ObjRotation = exports.ObjPosition = exports.OnCanvasTouchEvent = exports.OnKeyboardEvent = exports.OnCanvasMouseEvent = exports.WebGLMesh = exports.WebGL = exports.WebGLApplication = void 0;
 const mesh_object_manager_1 = require("../obj/mesh-object-manager");
 const mesh_object_drawer_1 = require("../obj/mesh-object-drawer");
 const webgl_environment_1 = require("./webgl-environment");
@@ -11,6 +11,9 @@ const point_factory_1 = require("../geometry/point/point-factory");
 const number_trio_1 = require("../types/numbers/number-trio");
 const triple_1 = require("../types/triple");
 const ObjToLoad = Symbol("ObjToLoad");
+const OnCanvasEventSym = Symbol("OnCanvasEvent");
+const OnKeyboardEventSym = Symbol("OnKeyboardEvent");
+const OnCanvasTouchEventSym = Symbol("OnCanvasTouchEvent");
 class WebGLApplication {
     constructor(applicationName = null, environment = null) {
         log_1.Log.log("creating WebGL application [" + applicationName + "]...");
@@ -126,6 +129,21 @@ class WebGLApplication {
         log_1.Log.log(this.applicationName + " | signal [" + name + "] created!");
         return res;
     }
+    getPositionInCanvas(event) {
+        let rect = this.getCanvas().getBoundingClientRect();
+        if (event instanceof TouchEvent) {
+            return {
+                x: event.touches[0].clientX - rect.left,
+                y: event.touches[0].clientY - rect.top
+            };
+        }
+        else if (event instanceof MouseEvent) {
+            return {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            };
+        }
+    }
     /**
      * The method that is called before the application starts.
      * At the points all the mesh objects are loaded and the scene is ready to be drawn
@@ -169,6 +187,7 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
             instance["meshObjectDrawer"] = meshObjectDrawer;
             instance["camera"] = meshObjectDrawer.getCamera();
             instance["applicationName"] = applicationName;
+            // Loading mesh objects
             log_1.Log.log("loading objects for " + applicationName + " ...");
             for (let objToLoad of clazz.prototype[ObjToLoad]) {
                 let continuation = objToLoad[1];
@@ -189,6 +208,39 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
                 instance[continuation.propertyKey] = obj;
                 log_1.Log.log("object [" + continuation.name + "] loaded for " + applicationName +
                     " into property [" + continuation.propertyKey + "]!");
+            }
+            // Attach canvas mouse events
+            const onCanvasMouseEventMethods = clazz.prototype[OnCanvasEventSym];
+            if (onCanvasMouseEventMethods != undefined) {
+                onCanvasMouseEventMethods.forEach((event, method) => {
+                    log_1.Log.log("subscribing to event [" + event + "] for " + applicationName +
+                        " with method [" + method + "] ...");
+                    webGLEnvironment.getCanvas().addEventListener(event, (e) => {
+                        instance[method](e);
+                    });
+                });
+            }
+            // Attach keyboard events
+            const onKeyboardEventMethods = clazz.prototype[OnKeyboardEventSym];
+            if (onKeyboardEventMethods != undefined) {
+                onKeyboardEventMethods.forEach((event, method) => {
+                    log_1.Log.log("subscribing to event [" + event + "] for " + applicationName +
+                        " with method [" + method + "] ...");
+                    document.addEventListener(event, (e) => {
+                        instance[method](e);
+                    });
+                });
+            }
+            // Attaching canvas touch events
+            const onCanvasTouchEventMethods = clazz.prototype[OnCanvasTouchEventSym];
+            if (onCanvasTouchEventMethods != undefined) {
+                onCanvasTouchEventMethods.forEach((event, method) => {
+                    log_1.Log.log("subscribing to event [" + event + "] for " + applicationName +
+                        " with method [" + method + "] ...");
+                    document.addEventListener(event, (e) => {
+                        instance[method](e);
+                    }, false);
+                });
             }
             log_1.Log.log("initializing application " + applicationName + " ...");
             instance.beforeStart();
@@ -254,6 +306,30 @@ function WebGLMesh(url, name = null, position = null, rotation = null, scale = n
     };
 }
 exports.WebGLMesh = WebGLMesh;
+function OnCanvasMouseEvent(eventName) {
+    return function (target, propertyKey, descriptor) {
+        log_1.Log.log("OnCanvasMouseEvent " + eventName + " on " + propertyKey);
+        target[OnCanvasEventSym] = target[OnCanvasEventSym] || new Map();
+        target[OnCanvasEventSym].set(propertyKey, eventName);
+    };
+}
+exports.OnCanvasMouseEvent = OnCanvasMouseEvent;
+function OnKeyboardEvent(eventName) {
+    return function (target, propertyKey, descriptor) {
+        log_1.Log.log("OnKeyboardEvent " + eventName + " on " + propertyKey);
+        target[OnKeyboardEventSym] = target[OnKeyboardEventSym] || new Map();
+        target[OnKeyboardEventSym].set(propertyKey, eventName);
+    };
+}
+exports.OnKeyboardEvent = OnKeyboardEvent;
+function OnCanvasTouchEvent(eventName) {
+    return function (target, propertyKey, descriptor) {
+        log_1.Log.log("OnKeyboardEvent " + eventName + " on " + propertyKey);
+        target[OnCanvasTouchEventSym] = target[OnCanvasTouchEventSym] || new Map();
+        target[OnCanvasTouchEventSym].set(propertyKey, eventName);
+    };
+}
+exports.OnCanvasTouchEvent = OnCanvasTouchEvent;
 /**
  * Sets the position the mesh object will have when loaded
  * @param {number} x the x coordinate of the position
