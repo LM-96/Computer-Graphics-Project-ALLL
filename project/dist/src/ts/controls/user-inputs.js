@@ -188,10 +188,16 @@ class UserInputs {
             case "Comma":
                 __classPrivateFieldGet(this, _UserInputs_application, "f").getCamera().setFov(cam.getCurrentFov().add(-5, angle_1.AngleUnit.DEG));
                 break;
-            case "KeyZ": this.placeObj("z");
-            case "KeyX": this.placeObj("x");
-            case "KeyC": this.placeObj("c");
-            case "KeyV": this.placeObj("v");
+            case "KeyZ":
+                this.placeObj("z");
+                break;
+            case "KeyX":
+                this.placeObj("x");
+                break;
+            case "KeyC":
+                this.placeObj("c");
+                break;
+            //case "KeyV": this.placeObj("v")
         }
         __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().drawScene();
     }
@@ -225,19 +231,35 @@ class UserInputs {
                 objPah = "./assets/LucaLanAssets/helmet.obj";
                 break;
             case "x":
-                objPah = "";
+                objPah = "./assets/building.obj";
                 break;
             case "c":
-                objPah = "";
+                objPah = "./assets/bed.obj";
                 break;
             case "v":
                 objPah = "";
                 break;
         }
-        let newCreatedObj = __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectManager().loadObj("helmet" + incrementalNum, objPah);
+        let newCreatedObj = __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectManager().loadObj("obj" + incrementalNum, objPah);
         newCreatedObj.setPosition(myObj.getPosition().translate(-d * Math.sin(myObj.getPolarRotation().getThird().getValueIn(angle_1.AngleUnit.RAD)), d * Math.cos(myObj.getPolarRotation().getThird().getValueIn(angle_1.AngleUnit.RAD)), 0));
         newCreatedObj.setPosition(newCreatedObj.getPosition().getX(), newCreatedObj.getPosition().getY(), 1);
         newCreatedObj.setPolarRotation(myObj.getPolarRotation().getFirst(), myObj.getPolarRotation().getSecond(), myObj.getPolarRotation().getThird());
+        switch (objNum) {
+            //TODO. Add objs path
+            case "z":
+                ;
+                break;
+            case "x":
+                newCreatedObj.setScale(0.7, 0.7, 0.4);
+                break;
+            case "c":
+                newCreatedObj.setPolarRotation(new angle_1.Angle(90, angle_1.AngleUnit.DEG), new angle_1.Angle(0, angle_1.AngleUnit.DEG), new angle_1.Angle(0, angle_1.AngleUnit.DEG));
+                newCreatedObj.setScale(2, 2, 2);
+                break;
+            case "v":
+                objPah = "";
+                break;
+        }
     }
 }
 exports.UserInputs = UserInputs;

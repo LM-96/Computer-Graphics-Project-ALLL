@@ -147,10 +147,10 @@ export class UserInputs {
             case "Space": this.setCameraView(0); break;
             case "Period": this.#application.getCamera().setFov(cam.getCurrentFov().add(5, AngleUnit.DEG)); break;
             case "Comma": this.#application.getCamera().setFov(cam.getCurrentFov().add(-5, AngleUnit.DEG)); break;
-            case "KeyZ": this.placeObj("z")
-            case "KeyX": this.placeObj("x")
-            case "KeyC": this.placeObj("c")
-            case "KeyV": this.placeObj("v")
+            case "KeyZ": this.placeObj("z"); break;
+            case "KeyX": this.placeObj("x"); break;
+            case "KeyC": this.placeObj("c"); break;
+            //case "KeyV": this.placeObj("v")
         }
         this.#application.getMeshObjectDrawer().drawScene()
     }
@@ -177,14 +177,23 @@ export class UserInputs {
         switch (objNum) {
             //TODO. Add objs path
             case "z": objPah = "./assets/LucaLanAssets/helmet.obj"; break;
-            case "x": objPah = ""; break;
-            case "c": objPah = ""; break;
+            case "x": objPah = "./assets/building.obj"; break;
+            case "c": objPah = "./assets/bed.obj"; break;
             case "v": objPah = ""; break;
         }
-        let newCreatedObj = this.#application.getMeshObjectManager().loadObj("helmet"+incrementalNum, objPah)
+        let newCreatedObj = this.#application.getMeshObjectManager().loadObj("obj"+incrementalNum, objPah)
         newCreatedObj.setPosition(myObj.getPosition().translate(-d*Math.sin(myObj.getPolarRotation().getThird().getValueIn(AngleUnit.RAD)), d*Math.cos(myObj.getPolarRotation().getThird().getValueIn(AngleUnit.RAD)),0))
         newCreatedObj.setPosition(newCreatedObj.getPosition().getX(), newCreatedObj.getPosition().getY(), 1);
         newCreatedObj.setPolarRotation(myObj.getPolarRotation().getFirst(), myObj.getPolarRotation().getSecond(), myObj.getPolarRotation().getThird())
 
+
+        switch (objNum) {
+            //TODO. Add objs path
+            case "z": ; break;
+            case "x": newCreatedObj.setScale(0.7, 0.7, 0.4); break;
+            case "c": newCreatedObj.setPolarRotation(new Angle(90, AngleUnit.DEG), new Angle(0, AngleUnit.DEG), new Angle(0, AngleUnit.DEG));
+            newCreatedObj.setScale(2,2,2); break;
+            case "v": objPah = ""; break;
+        }
     }
 }
