@@ -312,9 +312,10 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders, logEnabled 
                 onCanvasMouseEventMethods.forEach((event, method) => {
                     log_1.Log.log("WebGLApplicationBuilder | subscribing to event [" + event + "] for " + applicationName +
                         " with method [" + method + "] ...");
-                    webGLEnvironment.getCanvas().addEventListener(event, (e) => {
-                        instance[method](e);
-                    });
+                    // webGLEnvironment.getCanvas().addEventListener(event, (e: MouseEvent) => {
+                    //     instance[method](e)
+                    // }, false)
+                    attachMouseEventListenerOnCanvas(webGLEnvironment.getCanvas(), event, (e) => { instance[method](e); });
                 });
             }
             // Attach keyboard events
@@ -356,6 +357,38 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders, logEnabled 
     };
 }
 exports.WebGL = WebGL;
+function attachMouseEventListenerOnCanvas(canvas, eventName, listener) {
+    switch (eventName) {
+        case "mousedown":
+            canvas.onmousedown = listener;
+            break;
+        case "mouseup":
+            canvas.onmouseup = listener;
+            break;
+        case "mousemove":
+            canvas.onmousemove = listener;
+            break;
+        case "mouseover":
+            canvas.onmouseover = listener;
+            break;
+        case "mouseout":
+            canvas.onmouseout = listener;
+            break;
+        case "mouseenter":
+            canvas.onmouseenter = listener;
+            break;
+        case "mouseleave":
+            canvas.onmouseleave = listener;
+            break;
+        case "wheel":
+            canvas.onwheel = listener;
+            break;
+        case "contextmenu":
+            canvas.oncontextmenu = listener;
+            break;
+        default: log_1.Log.logError("WebGLApplicationBuilder | unknown event [" + eventName + "]!");
+    }
+}
 class ObjInitializationContinuation {
     constructor() {
         this.propertyKey = null;

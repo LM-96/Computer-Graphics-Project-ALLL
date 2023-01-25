@@ -406,9 +406,12 @@ export function WebGL(applicationName: string,
                 onCanvasMouseEventMethods.forEach((event: string, method: string) => {
                     Log.log("WebGLApplicationBuilder | subscribing to event [" + event + "] for " + applicationName +
                         " with method [" + method + "] ...")
-                    webGLEnvironment.getCanvas().addEventListener(event, (e: MouseEvent) => {
-                        instance[method](e)
-                    })
+                    // webGLEnvironment.getCanvas().addEventListener(event, (e: MouseEvent) => {
+                    //     instance[method](e)
+                    // }, false)
+                    attachMouseEventListenerOnCanvas(webGLEnvironment.getCanvas(),
+                        event,
+                        (e: MouseEvent) => { instance[method](e) })
                 })
             }
 
@@ -450,6 +453,23 @@ export function WebGL(applicationName: string,
             alert(e)
             throw e
         }
+    }
+}
+
+function attachMouseEventListenerOnCanvas(canvas: HTMLCanvasElement,
+                                          eventName: string,
+                                          listener:(e: MouseEvent) => void,) {
+    switch (eventName) {
+        case "mousedown": canvas.onmousedown = listener; break;
+        case "mouseup": canvas.onmouseup = listener; break;
+        case "mousemove": canvas.onmousemove = listener; break;
+        case "mouseover": canvas.onmouseover = listener; break;
+        case "mouseout": canvas.onmouseout = listener; break;
+        case "mouseenter": canvas.onmouseenter = listener; break;
+        case "mouseleave": canvas.onmouseleave = listener; break;
+        case "wheel": canvas.onwheel = listener; break;
+        case "contextmenu": canvas.oncontextmenu = listener; break;
+        default: Log.logError("WebGLApplicationBuilder | unknown event [" + eventName + "]!")
     }
 }
 

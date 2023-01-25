@@ -19,18 +19,26 @@ let GothamApp = class GothamApp extends webgl_application_1.WebGLApplication {
         super();
         this.userInputs = new user_inputs_1.UserInputs(this);
     }
+    //@OnCanvasTouchEvent("mousedown")
+    //@OnCanvasTouchEvent("touchstart")
     onMouseDown(e) {
         log_1.Log.log("WebGLApplication | capturing mouse down [event type: " + e.type + "]");
         this.userInputs.mouseDown(e);
     }
+    // @OnCanvasMouseEvent("mouseup")
+    // @OnCanvasTouchEvent("touchend")
+    // @OnCanvasMouseEvent("mouseout")
     onMouseUp(e) {
         log_1.Log.log("WebGLApplication | capturing mouse up [event type: " + e.type + "]");
         this.userInputs.mouseUp1(e);
     }
+    // @OnCanvasMouseEvent("mousemove")
+    // @OnCanvasTouchEvent("touchmove")
     onMouseMove(e) {
         log_1.Log.log("WebGLApplication | capturing mouse move [event type: " + e.type + "]");
         this.userInputs.mouseMove1(e);
     }
+    // @OnKeyboardEvent("keydown")
     onKeyDown(e) {
         log_1.Log.log("WebGLApplication | capturing key down [event type: " + e.type +
             ", key: " + e.key + "]");
@@ -61,7 +69,7 @@ let GothamApp = class GothamApp extends webgl_application_1.WebGLApplication {
     }
 };
 __decorate([
-    (0, webgl_application_1.WebGLMesh)("./assets/objs/city_marchegiani.obj"),
+    (0, webgl_application_1.WebGLMesh)("./assets/objs/city.obj"),
     (0, webgl_application_1.ObjScale)(0.7, 0.7, 0.7)
 ], GothamApp.prototype, "world", void 0);
 __decorate([
@@ -69,22 +77,6 @@ __decorate([
     (0, webgl_application_1.ObjPosition)(0, 0, 1),
     (0, webgl_application_1.ObjScale)(0.3, 0.3, 0.3)
 ], GothamApp.prototype, "batMoto", void 0);
-__decorate([
-    (0, webgl_application_1.OnCanvasTouchEvent)("mousedown"),
-    (0, webgl_application_1.OnCanvasTouchEvent)("touchstart")
-], GothamApp.prototype, "onMouseDown", null);
-__decorate([
-    (0, webgl_application_1.OnCanvasMouseEvent)("mouseup"),
-    (0, webgl_application_1.OnCanvasTouchEvent)("touchend"),
-    (0, webgl_application_1.OnCanvasMouseEvent)("mouseout")
-], GothamApp.prototype, "onMouseUp", null);
-__decorate([
-    (0, webgl_application_1.OnCanvasMouseEvent)("mousemove"),
-    (0, webgl_application_1.OnCanvasTouchEvent)("touchmove")
-], GothamApp.prototype, "onMouseMove", null);
-__decorate([
-    (0, webgl_application_1.OnKeyboardEvent)("keydown")
-], GothamApp.prototype, "onKeyDown", null);
 GothamApp = __decorate([
     (0, webgl_application_1.WebGL)("gotham-app", "my_Canvas", SHADERS)
 ], GothamApp);

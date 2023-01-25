@@ -20,7 +20,7 @@ const SHADERS: WebGLShaderReference = {
 @WebGL("gotham-app", "my_Canvas", SHADERS)
 class GothamApp extends WebGLApplication {
 
-    @WebGLMesh("./assets/objs/city_marchegiani.obj")
+    @WebGLMesh("./assets/objs/city.obj")
     @ObjScale(0.7,0.7,0.7)
     private world: MeshObject
 
@@ -36,29 +36,29 @@ class GothamApp extends WebGLApplication {
         this.userInputs = new UserInputs(this)
     }
 
-    @OnCanvasTouchEvent("mousedown")
-    @OnCanvasTouchEvent("touchstart")
+    //@OnCanvasTouchEvent("mousedown")
+    //@OnCanvasTouchEvent("touchstart")
     protected onMouseDown(e: MouseEvent|TouchEvent) {
         Log.log("WebGLApplication | capturing mouse down [event type: " + e.type + "]")
         this.userInputs.mouseDown(e)
     }
 
-    @OnCanvasMouseEvent("mouseup")
-    @OnCanvasTouchEvent("touchend")
-    @OnCanvasMouseEvent("mouseout")
+    // @OnCanvasMouseEvent("mouseup")
+    // @OnCanvasTouchEvent("touchend")
+    // @OnCanvasMouseEvent("mouseout")
     protected onMouseUp(e: MouseEvent|TouchEvent) {
         Log.log("WebGLApplication | capturing mouse up [event type: " + e.type + "]")
         this.userInputs.mouseUp1(e)
     }
 
-    @OnCanvasMouseEvent("mousemove")
-    @OnCanvasTouchEvent("touchmove")
+    // @OnCanvasMouseEvent("mousemove")
+    // @OnCanvasTouchEvent("touchmove")
     protected onMouseMove(e: MouseEvent|TouchEvent) {
         Log.log("WebGLApplication | capturing mouse move [event type: " + e.type + "]")
         this.userInputs.mouseMove1(e)
     }
 
-    @OnKeyboardEvent("keydown")
+    // @OnKeyboardEvent("keydown")
     onKeyDown(e: KeyboardEvent) {
         Log.log("WebGLApplication | capturing key down [event type: " + e.type +
             ", key: " + e.key + "]")

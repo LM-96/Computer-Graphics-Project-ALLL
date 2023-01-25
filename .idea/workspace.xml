@@ -6,14 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/objs/batmoto.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/objs/batmoto.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/objs/city_marchegiani.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/objs/city.mtl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/objs/city_marchegiani.obj" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/objs/city.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/lib-master.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/lib-master.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/lib-master.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/lib-master.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/LucaMarchegianiApp.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/LucaMarchegianiApp.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" afterDir="false" />
     </list>
@@ -52,7 +52,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/luca/Github/Computer-Graphics-Project-ALLL/project/assets",
+    "last_opened_file_path": "/home/luca/Github/Computer-Graphics-Project-ALLL/project/assets/objs",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
@@ -69,6 +69,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/project/assets/objs" />
       <recent name="$PROJECT_DIR$/project/assets" />
       <recent name="$PROJECT_DIR$/project/src/ts/types/numbers" />
       <recent name="$PROJECT_DIR$/project/src/ts/types/exceptions" />
@@ -181,7 +182,7 @@
       <workItem from="1674518920781" duration="71000" />
       <workItem from="1674554701206" duration="31417000" />
       <workItem from="1674615811256" duration="1500000" />
-      <workItem from="1674644530984" duration="14688000" />
+      <workItem from="1674644530984" duration="17321000" />
     </task>
     <servers />
   </component>
