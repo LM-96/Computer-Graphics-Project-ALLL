@@ -1,3 +1,5 @@
+var ON_TEXTURE_READY = (objName, imageUrl) => {}
+
 function isPowerOf2(value) {
     return (value & (value - 1)) === 0;
 }
@@ -239,7 +241,7 @@ function create1PixelTexture(gl, pixel) {
     return texture;
 }
 
-function createTexture(gl, url) {
+function createTexture(gl, objName, url) {
     const texture = create1PixelTexture(gl, [128, 192, 255, 255]);
     // Asynchronously load an image
     const image = new Image();
@@ -260,6 +262,7 @@ function createTexture(gl, url) {
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         }
+        ON_TEXTURE_READY(objName, url)
     });
     return texture;
 }
@@ -268,7 +271,7 @@ function getParentDir(path) {
     return path.substr(0, path.lastIndexOf('/') + 1);
 }
 
-function loadObjX(gl, path) {
+function loadObjX(gl, name, path) {
     let baseHref = getParentDir(path)
     let objFile = loadFile(path)
     let objData = parseOBJ(objFile)
@@ -303,7 +306,7 @@ function loadObjX(gl, path) {
                 let texture = textures[filename];
                 if (!texture) {
                     const textureHref = baseHref + filename
-                    texture = createTexture(gl, textureHref);
+                    texture = createTexture(gl, name, textureHref);
                     textures[filename] = texture;
                 }
                 material[key] = texture;
@@ -344,13 +347,8 @@ function loadObjX(gl, path) {
         }
     });
 
-    console.log({
-        objData: parseOBJ(objFile),
-        materials: parseMTL(mtlData),
-        parts: parts
-    })
-
     return {
+        name: name,
         objData: parseOBJ(objFile),
         materials: parseMTL(mtlData),
         parts: parts

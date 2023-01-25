@@ -35,7 +35,7 @@ export class MeshObjectManager {
      */
     loadObj(name: string, path: string): MeshObject {
         Log.log("MeshObjectManager[" + this.applicationName + "] | loading object '" + name + "' from '" + path + "'")
-        let data: any = loadObjX(this.#glEnvironment.getContext(), path)
+        let data: any = loadObjX(this.#glEnvironment.getContext(), name, path)
         let res: MeshObject = new FlowedMeshObject(name, data)
         this.#objects.set(name, res)
         res.glInit(this.#glEnvironment.getContext())

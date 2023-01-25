@@ -1,7 +1,6 @@
 import {WebGLApplication} from "../webgl/webgl-application";
 import {Log} from "../log/log";
 import {MeshObject} from "../obj/mesh-object";
-import {Couple} from "../types/pair";
 import {Angle, radians} from "../geometry/angle/angle";
 import {Trio} from "../types/triple";
 import {UserInputController} from "./user-input-controller";
@@ -62,7 +61,7 @@ export class UserInputs {
         this.#controller.navigate(dY, currentAngles.getThird())
         //e.preventDefault();
 
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
         Log.log("Angles || PSY:" + currentAngles.getFirst().toString() + ", THETA:" + currentAngles.getSecond().toString() +
             ", PHI:" + currentAngles.getThird().toString());
     }
@@ -86,7 +85,7 @@ export class UserInputs {
             // case 188: 	CAMERA_MANAGER.incrementCameraFov(-1); break;		//,
             // case 190:	CAMERA_MANAGER.incrementCameraFov(1); break;		//.
         }
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
     //
     // const keydownMapLog = function(e) {
@@ -128,7 +127,6 @@ export class UserInputs {
     }
 
     setTarget(target: MeshObject) {
-        console.log("user input set target")
         this.#target = target
         this.#controller.setTarget(target)
     }

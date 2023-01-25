@@ -10,7 +10,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _MeshObjectDrawer_glEnvironment, _MeshObjectDrawer_meshObjectManager, _MeshObjectDrawer_camera, _MeshObjectDrawer_sharedUniforms, _MeshObjectDrawer_slManager, _MeshObjectDrawer_lightFrustum, _MeshObjectDrawer_bias, _MeshObjectDrawer_cubeLinesBufferInfo;
+var _MeshObjectDrawer_instances, _MeshObjectDrawer_glEnvironment, _MeshObjectDrawer_meshObjectManager, _MeshObjectDrawer_camera, _MeshObjectDrawer_sharedUniforms, _MeshObjectDrawer_slManager, _MeshObjectDrawer_lightFrustum, _MeshObjectDrawer_bias, _MeshObjectDrawer_cubeLinesBufferInfo, _MeshObjectDrawer_logDrawInformation;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MeshObjectDrawer = void 0;
 const flowed_camera_1 = require("../camera/flowed-camera");
@@ -20,6 +20,7 @@ const log_1 = require("../log/log");
 const sl_manager_1 = require("./sl-manager");
 class MeshObjectDrawer {
     constructor(applicationName, glEnvironment, meshObjectManager) {
+        _MeshObjectDrawer_instances.add(this);
         _MeshObjectDrawer_glEnvironment.set(this, void 0);
         _MeshObjectDrawer_meshObjectManager.set(this, void 0);
         this.zNear = 0.1;
@@ -101,31 +102,48 @@ class MeshObjectDrawer {
         }
     }
     render() {
+    }
+    /**
+     * Draw the scene using the object manager and the camera
+     */
+    renderScene() {
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | rendering scene");
+        __classPrivateFieldGet(this, _MeshObjectDrawer_instances, "m", _MeshObjectDrawer_logDrawInformation).call(this);
         let gl = __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getContext();
         gl.enable(gl.CULL_FACE);
         gl.enable(gl.DEPTH_TEST);
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | CULL_FACE and DEPTH_TEST enabled");
         let lightWorldMatrix = __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").calculateLightWorldMatrix();
         let lightProjectionMatrix = __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").calculateLightProjectionMatrix();
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName +
+            "] | light world matrix and light projection matrix calculated");
         gl.bindFramebuffer(gl.FRAMEBUFFER, sl_manager_1.SlManager.getTextureForLights(__classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getContext()).getSecond());
         gl.viewport(0, 0, sl_manager_1.SlManager.depthTextureSize, sl_manager_1.SlManager.depthTextureSize);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | framebuffer for depth texture bound");
         /* TO ADJUST BASED ON WHICH PROGRAMS ARE PRESENT AND USED */
         if (__classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").getShadows()) {
             this.drawSceneWith(lightProjectionMatrix, lightWorldMatrix, M4.identity(), lightWorldMatrix, __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getProgramInfo('color'));
+            log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | shadows drawn");
         }
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
         gl.clearColor(0, 0, 0, 1);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName +
+            "] | framebuffer, color buffer and depth buffer cleared");
         let textureMatrix = M4.identity();
         textureMatrix = M4.translate(textureMatrix, 0.5, 0.5, 0.5);
         textureMatrix = M4.scale(textureMatrix, 0.5, 0.5, 0.5);
         textureMatrix = M4.multiply(textureMatrix, lightProjectionMatrix);
         textureMatrix = M4.multiply(textureMatrix, M4.inverse(lightWorldMatrix));
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | texture matrix calculated");
         this.updateProjectionMatrix();
         this.updateViewMatrix();
         let viewProjectionMatrix = M4.multiply(__classPrivateFieldGet(this, _MeshObjectDrawer_sharedUniforms, "f").u_projection, __classPrivateFieldGet(this, _MeshObjectDrawer_sharedUniforms, "f").u_view);
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | view projection matrix calculated");
         this.drawSceneWith(viewProjectionMatrix, __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").calculateCameraMatrix(), textureMatrix, lightWorldMatrix, __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getProgramInfo('main'));
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | scene drawn with main program");
         if (__classPrivateFieldGet(this, _MeshObjectDrawer_lightFrustum, "f")) {
             let viewMatrix = M4.inverse(__classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").calculateCameraMatrix());
             gl.useProgram(__classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getProgramInfo('color').program);
@@ -138,61 +156,9 @@ class MeshObjectDrawer {
                 u_world: mat,
             });
             WebGLUtils.drawBufferInfo(gl, __classPrivateFieldGet(this, _MeshObjectDrawer_cubeLinesBufferInfo, "f"), gl.LINES);
+            log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | light frustum drawn");
         }
-    }
-    /**
-     * Begin the drawing process
-     */
-    startDrawing() {
-        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | starting drawing...");
-        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "]\n" +
-            "\tcanvas size: " + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getCanvas().width + "x" + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getCanvas().height + "\n" +
-            "\tcanvas aspect ratio: " + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").calculateAspectRatio() + "\n" +
-            "\tcamera position: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentPosition().toString() + "\n" +
-            "\tcamera up: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentUp().toString() + "\n" +
-            "\tcamera target: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentTarget().toString() + "\n" +
-            "\tfov: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentFov().getValueIn(angle_1.AngleUnit.DEG) + "°\n" +
-            "\tzNear: " + this.zNear + "\n" +
-            "\tzFar: " + this.zFar);
-        let gl = __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getContext();
-        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | context obtained [" + gl + "]");
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-        gl.enable(gl.CULL_FACE);
-        gl.enable(gl.DEPTH_TEST);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this.updateProjectionMatrix();
-        this.updateViewMatrix();
-        gl.useProgram(__classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getProgram());
-        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | program used [" + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getProgram() + "]");
-        WebGLUtils.setUniforms(__classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getProgramInfo(), __classPrivateFieldGet(this, _MeshObjectDrawer_sharedUniforms, "f"));
-        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | uniforms set [" + __classPrivateFieldGet(this, _MeshObjectDrawer_sharedUniforms, "f") + "]");
-        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | start drawing done!");
-    }
-    /**
-     * Draw the scene using the object manager and the camera
-     */
-    drawScene() {
-        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "]\n" +
-            "\tcanvas size: " + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getCanvas().width + "x" + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getCanvas().height + "\n" +
-            "\tcanvas aspect ratio: " + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").calculateAspectRatio() + "\n" +
-            "\tcamera position: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentPosition().toString() + "\n" +
-            "\tcamera up: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentUp().toString() + "\n" +
-            "\tcamera target: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentTarget().toString() + "\n" +
-            "\tfov: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentFov().getValueIn(angle_1.AngleUnit.DEG) + "°\n" +
-            "\tzNear: " + this.zNear + "\n" +
-            "\tzFar: " + this.zFar);
-        // Log.log("MeshObjectDrawer[" + this.applicationName + "] | drawing scene")
-        //
-        // let gl: WebGLRenderingContext = this.#glEnvironment.getContext()
-        // let programInfo: ProgramInfo = this.#glEnvironment.getProgramInfo()
-        // this.startDrawing()
-        // for(let meshObject of this.#meshObjectManager.getAll()) {
-        //     Log.log("MeshObjectDrawer[" + this.applicationName + "] | drawing mesh object [" + meshObject.getName() + "]")
-        //     meshObject.draw(gl, programInfo, false)
-        // }
-        //
-        // Log.log("MeshObjectDrawer[" + this.applicationName + "] | scene drawn")
-        this.render();
+        log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "] | render complete");
     }
     setBias(bias) {
         __classPrivateFieldSet(this, _MeshObjectDrawer_bias, bias, "f");
@@ -226,5 +192,27 @@ class MeshObjectDrawer {
     }
 }
 exports.MeshObjectDrawer = MeshObjectDrawer;
-_MeshObjectDrawer_glEnvironment = new WeakMap(), _MeshObjectDrawer_meshObjectManager = new WeakMap(), _MeshObjectDrawer_camera = new WeakMap(), _MeshObjectDrawer_sharedUniforms = new WeakMap(), _MeshObjectDrawer_slManager = new WeakMap(), _MeshObjectDrawer_lightFrustum = new WeakMap(), _MeshObjectDrawer_bias = new WeakMap(), _MeshObjectDrawer_cubeLinesBufferInfo = new WeakMap();
+_MeshObjectDrawer_glEnvironment = new WeakMap(), _MeshObjectDrawer_meshObjectManager = new WeakMap(), _MeshObjectDrawer_camera = new WeakMap(), _MeshObjectDrawer_sharedUniforms = new WeakMap(), _MeshObjectDrawer_slManager = new WeakMap(), _MeshObjectDrawer_lightFrustum = new WeakMap(), _MeshObjectDrawer_bias = new WeakMap(), _MeshObjectDrawer_cubeLinesBufferInfo = new WeakMap(), _MeshObjectDrawer_instances = new WeakSet(), _MeshObjectDrawer_logDrawInformation = function _MeshObjectDrawer_logDrawInformation() {
+    log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "]\n" +
+        "\tcanvas size: " + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getCanvas().width + "x" + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getCanvas().height + "\n" +
+        "\tcanvas aspect ratio: " + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").calculateAspectRatio() + "\n" +
+        "\tcamera position: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentPosition().toString() + "\n" +
+        "\tcamera up: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentUp().toString() + "\n" +
+        "\tcamera target: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentTarget().toString() + "\n" +
+        "\tfov: " + __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f").getCurrentFov().getValueIn(angle_1.AngleUnit.DEG) + "°\n" +
+        "\tzNear: " + this.zNear + "\n" +
+        "\tzFar: " + this.zFar + "\n" +
+        "\tlightPosition: " + __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").getLightPosition().toString() + "\n" +
+        "\tlightTarget: " + __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").getLightTarget().toString() + "\n" +
+        "\tlightUp: " + __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").getLightUp().toString() + "\n" +
+        "\tlightWidth: " + __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").getProjWidth() + "\n" +
+        "\tlightHeight: " + __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").getProjHeight() + "\n" +
+        "\tlightFov: " + __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").getFov().getValueIn(angle_1.AngleUnit.DEG) + "°\n" +
+        "\tlightZNear: " + __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").getNear() + "\n" +
+        "\tlightZFar: " + __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").getFar() + "\n" +
+        "\tlightFrustum: " + __classPrivateFieldGet(this, _MeshObjectDrawer_lightFrustum, "f") + "\n" +
+        "\tbias: " + __classPrivateFieldGet(this, _MeshObjectDrawer_bias, "f") + "\n" +
+        "\tshadows: " + __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").getShadows() + "\n" +
+        "\tspotlight: " + __classPrivateFieldGet(this, _MeshObjectDrawer_slManager, "f").isSpotlight() + "\n");
+};
 //# sourceMappingURL=mesh-object-drawer.js.map

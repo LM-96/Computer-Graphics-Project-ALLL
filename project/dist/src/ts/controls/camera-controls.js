@@ -82,7 +82,7 @@ _a = CameraControls, _CameraControls_initPositionControls = function _CameraCont
     updateCameraViewers(camera.getCurrentPosition().getX(), camera.getCurrentPosition().getY(), camera.getCurrentPosition().getZ());
     camera.getCameraPositionSubscriber().subscribe((0, options_1.handler)((signal) => {
         updateCameraViewers(signal.data.to.getX(), signal.data.to.getY(), signal.data.to.getZ());
-        application.getMeshObjectDrawer().drawScene();
+        application.getMeshObjectDrawer().renderScene();
     }));
 }, _CameraControls_initUpControls = function _CameraControls_initUpControls(application) {
     var _b, _c, _d, _e, _f, _g;
@@ -119,7 +119,7 @@ _a = CameraControls, _CameraControls_initPositionControls = function _CameraCont
     updateUpViewers(camera.getCurrentUp().getFirst(), camera.getCurrentUp().getSecond(), camera.getCurrentUp().getThird());
     camera.getUpSubscriber().subscribe((0, options_1.handler)((signal) => {
         updateUpViewers(signal.data.newValue.getFirst(), signal.data.newValue.getSecond(), signal.data.newValue.getThird());
-        application.getMeshObjectDrawer().drawScene();
+        application.getMeshObjectDrawer().renderScene();
     }));
 }, _CameraControls_initFovControls = function _CameraControls_initFovControls(application) {
     var _b, _c;
@@ -138,7 +138,7 @@ _a = CameraControls, _CameraControls_initPositionControls = function _CameraCont
     updateFovViewers(camera.getCurrentFov());
     camera.getFovSubscriber().subscribe((0, options_1.handler)((signal) => {
         updateFovViewers(signal.data.newValue);
-        application.getMeshObjectDrawer().drawScene();
+        application.getMeshObjectDrawer().renderScene();
     }));
 }, _CameraControls_initTargetControls = function _CameraControls_initTargetControls(application) {
     var _b, _c, _d;
@@ -163,7 +163,7 @@ _a = CameraControls, _CameraControls_initPositionControls = function _CameraCont
     updateTargetViewers(camera.getCurrentTarget().getX(), camera.getCurrentTarget().getY(), camera.getCurrentTarget().getZ());
     camera.getTargetSubscriber().subscribe((0, options_1.handler)((signal) => {
         updateTargetViewers(signal.data.newValue.getX(), signal.data.newValue.getY(), signal.data.newValue.getZ());
-        application.getMeshObjectDrawer().drawScene();
+        application.getMeshObjectDrawer().renderScene();
     }));
 };
 //# sourceMappingURL=camera-controls.js.map

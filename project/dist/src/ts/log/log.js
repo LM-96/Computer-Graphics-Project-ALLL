@@ -20,6 +20,15 @@ class Log {
     static disableLog() {
         __classPrivateFieldSet(Log, _a, false, "f", _Log_logEnabled);
     }
+    static isLogEnabled() {
+        return __classPrivateFieldGet(Log, _a, "f", _Log_logEnabled);
+    }
+    static isLogDisabled() {
+        return !__classPrivateFieldGet(Log, _a, "f", _Log_logEnabled);
+    }
+    static setLog(enabled) {
+        __classPrivateFieldSet(Log, _a, enabled, "f", _Log_logEnabled);
+    }
     static log(message, ...optionalParams) {
         if (__classPrivateFieldGet(Log, _a, "f", _Log_logEnabled)) {
             console.log(message, ...optionalParams);

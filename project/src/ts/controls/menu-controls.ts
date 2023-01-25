@@ -201,7 +201,7 @@ export class MenuControls {
         let settings = this.#settings
         this.#application.getCamera().setPosition(
             settings.cameraX, settings.cameraY, settings.cameraZ)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onObjectPositionChange() {
@@ -209,7 +209,7 @@ export class MenuControls {
             let settings = this.#settings
             this.#activeObj.setPosition(
                 settings.posX, settings.posY, settings.posZ)
-            this.#application.getMeshObjectDrawer().drawScene()
+            this.#application.getMeshObjectDrawer().renderScene()
         }
     }
 
@@ -218,13 +218,13 @@ export class MenuControls {
         this.#application.getCamera().setTarget(
             settings.targetX, settings.targetY, settings.targetZ
         )
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onFovChange() {
         let settings = this.#settings
         this.#application.getCamera().setFov(degree(settings.fov))
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onActiveObjChange() {
@@ -237,7 +237,7 @@ export class MenuControls {
             this.#activeObj.setScale(
                 settings.scaleX, settings.scaleY, settings.scaleZ
             )
-            this.#application.getMeshObjectDrawer().drawScene()
+            this.#application.getMeshObjectDrawer().renderScene()
         }
     }
 
@@ -247,7 +247,7 @@ export class MenuControls {
             this.#activeObj.setPolarRotation(
                 degree(settings.psi), degree(settings.theta), degree(settings.phi)
             )
-            this.#application.getMeshObjectDrawer().drawScene()
+            this.#application.getMeshObjectDrawer().renderScene()
         }
     }
 
@@ -256,7 +256,7 @@ export class MenuControls {
         this.#application.getCamera().setUp(
             settings.cameraUpX, settings.cameraUpY, settings.cameraUpZ
         )
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onLookAtObjectChange() {
@@ -274,7 +274,7 @@ export class MenuControls {
             }
             this.#application.getCamera().stopLookingAtObject()
         }
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onFollowObjectChange() {
@@ -294,12 +294,12 @@ export class MenuControls {
         } else {
             this.#application.getCamera().stopFollowingObject()
         }
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onHiddenObjChange() {
         this.#activeObj.setHidden(this.#settings.hidden)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onLogChanged() {
@@ -323,83 +323,83 @@ export class MenuControls {
     onDrawPressed() {
         if(this.#settings.draw) {
             this.#settings.draw = false
-            this.#application.getMeshObjectDrawer().drawScene()
+            this.#application.getMeshObjectDrawer().renderScene()
             this.updateUI()
         }
     }
 
     onZNearChange() {
         this.#application.getMeshObjectDrawer().zNear = this.#settings.zNear
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onZFarChange() {
         this.#application.getMeshObjectDrawer().zFar = this.#settings.zFar
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onFrustumChange() {
         this.#application.getMeshObjectDrawer().setLightFrustum(this.#settings.frustum)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onShadowsChange() {
         this.#application.getMeshObjectDrawer().getSlManager().setShadows(this.#settings.shadows)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onLightPositionChange() {
         this.#application.getMeshObjectDrawer().getSlManager().setLightPosition(
             this.#settings.lightPosX, this.#settings.lightPosY, this.#settings.lightPosZ)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onLightTargetChange() {
         this.#application.getMeshObjectDrawer().getSlManager().setLightTarget(
             this.#settings.lightTargX, this.#settings.lightTargY, this.#settings.lightTargZ)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onLightFovChange() {
         this.#application.getMeshObjectDrawer().getSlManager().setFov(
             degree(this.#settings.lightFov))
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onSpotlightChange() {
         this.#application.getMeshObjectDrawer().getSlManager().setSpotlight(this.#settings.spotlight)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onLightWidthChange() {
         this.#application.getMeshObjectDrawer().getSlManager().setProjWidth(this.#settings.lightWidth)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onLightHeightChange() {
         this.#application.getMeshObjectDrawer().getSlManager().setProjHeight(this.#settings.lightHeight)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onLightUpChange() {
         this.#application.getMeshObjectDrawer().getSlManager().setLightUp(
             this.#settings.lightUpX, this.#settings.lightUpY, this.#settings.lightUpZ)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onBiasChange() {
         this.#application.getMeshObjectDrawer().setBias(this.#settings.bias)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onLightNearChange() {
         this.#application.getMeshObjectDrawer().getSlManager().setNear(this.#settings.lightNear)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     onLightFarChange() {
         this.#application.getMeshObjectDrawer().getSlManager().setFar(this.#settings.lightFar)
-        this.#application.getMeshObjectDrawer().drawScene()
+        this.#application.getMeshObjectDrawer().renderScene()
     }
 
     setup() {

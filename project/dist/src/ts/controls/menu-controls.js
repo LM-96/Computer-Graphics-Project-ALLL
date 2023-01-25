@@ -170,24 +170,24 @@ let MenuControls = class MenuControls {
     onCameraChange() {
         let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
         __classPrivateFieldGet(this, _MenuControls_application, "f").getCamera().setPosition(settings.cameraX, settings.cameraY, settings.cameraZ);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onObjectPositionChange() {
         if (__classPrivateFieldGet(this, _MenuControls_loadedObjs, "f") != undefined) {
             let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
             __classPrivateFieldGet(this, _MenuControls_activeObj, "f").setPosition(settings.posX, settings.posY, settings.posZ);
-            __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+            __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
         }
     }
     onTargetPositionChange() {
         let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
         __classPrivateFieldGet(this, _MenuControls_application, "f").getCamera().setTarget(settings.targetX, settings.targetY, settings.targetZ);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onFovChange() {
         let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
         __classPrivateFieldGet(this, _MenuControls_application, "f").getCamera().setFov((0, angle_1.degree)(settings.fov));
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onActiveObjChange() {
         this.updateActiveObj();
@@ -196,20 +196,20 @@ let MenuControls = class MenuControls {
         if (__classPrivateFieldGet(this, _MenuControls_loadedObjs, "f") != undefined) {
             let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
             __classPrivateFieldGet(this, _MenuControls_activeObj, "f").setScale(settings.scaleX, settings.scaleY, settings.scaleZ);
-            __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+            __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
         }
     }
     onObjectPolarRotationChange() {
         if (__classPrivateFieldGet(this, _MenuControls_loadedObjs, "f") != undefined) {
             let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
             __classPrivateFieldGet(this, _MenuControls_activeObj, "f").setPolarRotation((0, angle_1.degree)(settings.psi), (0, angle_1.degree)(settings.theta), (0, angle_1.degree)(settings.phi));
-            __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+            __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
         }
     }
     onCameraUpChange() {
         let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
         __classPrivateFieldGet(this, _MenuControls_application, "f").getCamera().setUp(settings.cameraUpX, settings.cameraUpY, settings.cameraUpZ);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onLookAtObjectChange() {
         let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
@@ -225,7 +225,7 @@ let MenuControls = class MenuControls {
             }
             __classPrivateFieldGet(this, _MenuControls_application, "f").getCamera().stopLookingAtObject();
         }
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onFollowObjectChange() {
         let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
@@ -241,11 +241,11 @@ let MenuControls = class MenuControls {
         else {
             __classPrivateFieldGet(this, _MenuControls_application, "f").getCamera().stopFollowingObject();
         }
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onHiddenObjChange() {
         __classPrivateFieldGet(this, _MenuControls_activeObj, "f").setHidden(__classPrivateFieldGet(this, _MenuControls_settings, "f").hidden);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onLogChanged() {
         if (__classPrivateFieldGet(this, _MenuControls_settings, "f").log) {
@@ -268,65 +268,65 @@ let MenuControls = class MenuControls {
     onDrawPressed() {
         if (__classPrivateFieldGet(this, _MenuControls_settings, "f").draw) {
             __classPrivateFieldGet(this, _MenuControls_settings, "f").draw = false;
-            __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+            __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
             this.updateUI();
         }
     }
     onZNearChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().zNear = __classPrivateFieldGet(this, _MenuControls_settings, "f").zNear;
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onZFarChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().zFar = __classPrivateFieldGet(this, _MenuControls_settings, "f").zFar;
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onFrustumChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().setLightFrustum(__classPrivateFieldGet(this, _MenuControls_settings, "f").frustum);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onShadowsChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setShadows(__classPrivateFieldGet(this, _MenuControls_settings, "f").shadows);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onLightPositionChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setLightPosition(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightPosX, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightPosY, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightPosZ);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onLightTargetChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setLightTarget(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightTargX, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightTargY, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightTargZ);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onLightFovChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setFov((0, angle_1.degree)(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightFov));
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onSpotlightChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setSpotlight(__classPrivateFieldGet(this, _MenuControls_settings, "f").spotlight);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onLightWidthChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setProjWidth(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightWidth);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onLightHeightChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setProjHeight(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightHeight);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onLightUpChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setLightUp(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightUpX, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightUpY, __classPrivateFieldGet(this, _MenuControls_settings, "f").lightUpZ);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onBiasChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().setBias(__classPrivateFieldGet(this, _MenuControls_settings, "f").bias);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onLightNearChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setNear(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightNear);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     onLightFarChange() {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().getSlManager().setFar(__classPrivateFieldGet(this, _MenuControls_settings, "f").lightFar);
-        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     setup() {
         __classPrivateFieldSet(this, _MenuControls_widgets, WebGlLessonUI.setupUI(document.querySelector('#ui'), __classPrivateFieldGet(this, _MenuControls_settings, "f"), [

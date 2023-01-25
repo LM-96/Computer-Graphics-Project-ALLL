@@ -9,6 +9,17 @@ export class Log {
         Log.#logEnabled = false
     }
 
+    static isLogEnabled(): boolean {
+        return Log.#logEnabled
+    }
+
+    static isLogDisabled(): boolean {
+        return !Log.#logEnabled
+    }
+    static setLog(enabled: boolean): void {
+        Log.#logEnabled = enabled
+    }
+
     static log(message: string, ...optionalParams: any[]): void {
         if(Log.#logEnabled) {
             console.log(message, ...optionalParams)

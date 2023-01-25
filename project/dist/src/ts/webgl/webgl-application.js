@@ -10,6 +10,7 @@ const log_1 = require("../log/log");
 const point_factory_1 = require("../geometry/point/point-factory");
 const number_trio_1 = require("../types/numbers/number-trio");
 const triple_1 = require("../types/triple");
+const obj_texture_signal_flow_1 = require("../obj/obj-texture-signal-flow");
 const ObjToLoad = Symbol("ObjToLoad");
 const OnCanvasEventSym = Symbol("OnCanvasEvent");
 const OnKeyboardEventSym = Symbol("OnKeyboardEvent");
@@ -78,12 +79,12 @@ class WebGLApplication {
         return this.meshObjectManager.get(name);
     }
     /**
-     * Draws the scene
+     * Draws and renders the scene into the canvas of the application
      * @protected
      */
-    drawScene() {
+    renderScene() {
         log_1.Log.log(this.applicationName + " | drawing scene...");
-        this.meshObjectDrawer.drawScene();
+        this.meshObjectDrawer.renderScene();
         log_1.Log.log(this.applicationName + " | scene drawn!");
     }
     subscribeTo(signalName, options) {
@@ -129,6 +130,10 @@ class WebGLApplication {
         log_1.Log.log(this.applicationName + " | signal [" + name + "] created!");
         return res;
     }
+    /**
+     * Converts the global position of the mouse into the position relative to the canvas
+     * @param {MouseEvent|TouchEvent} event the mouse or touch event
+     */
     getPositionInCanvas(event) {
         let rect = this.getCanvas().getBoundingClientRect();
         if (event instanceof TouchEvent) {
@@ -145,17 +150,32 @@ class WebGLApplication {
         }
     }
     /**
-     * The method that is called before the application starts.
-     * At the points all the mesh objects are loaded and the scene is ready to be drawn
+     * The `init` method that is called immediately after the instantiation of the object.
+     * At this point, the object of this `WebGLApplication` is created, so it is possible
+     * to use the `this` keyboard without problems, but nothing else is created (so the *objs*
+     * are not loaded and the events are not registered).
+     * This method can be overridden to perform some initialization before the application is initialized
+     * @protected
      */
-    beforeStart() {
-    }
+    init() { }
+    /**
+     * The method that is called before the application starts.
+     * At this point, all the mesh objects are loaded, and the scene is ready to be drawn.
+     * This method can be overridden to perform some initialization before the application starts
+     */
+    beforeStart() { }
     start(args) {
         log_1.Log.log(this.applicationName + " | starting application...");
         this.main(args);
     }
 }
 exports.WebGLApplication = WebGLApplication;
+/**
+ * Transforms an object which contains each set of shaders associated to a key (their name) into
+ * the map used by the `WebGLEnvironment` class.
+ * This object is the one that is needed to use the `WebGL` decorator.
+ * @param {any} shaders the object containing the pointers to the shaders
+ */
 function mapShaders(shaders) {
     let res = new Map();
     Object.entries(shaders).forEach(([key, value]) => {
@@ -165,13 +185,52 @@ function mapShaders(shaders) {
 }
 /**
  * Creates a new webgl application injecting all the required dependencies or the fields that are
- * necessary to create them
+ * necessary to create them.<br>
+ * **The class annotated with this decorator MUST ALSO EXTEND `WebGLApplication`**.
+ * Thanks to this decorator, the following fields are injected:
+ * <ul>
+ *     <li>the `applicationName` field</li>
+ *     <li>the `WebGLEnvironment` object</li>
+ *     <li>the `MeshObjectManager` object</li>
+ *     <li>the `MeshObjectDrawer` object</li>
+ * </ul>
+ * In addition, this decorator allows to use this other decorators:
+ * <ul>
+ *     <li>`WebGLMesh` to specify a `MeshObject` variable in which will be loaded and injected
+ *     the specified mesh object</li>
+ *     <li>`OnCanvasMouseEvent`, `OnCanvasTouchEvent` and `KeyboardsEvent` to specify the methods
+ *     that will be called when the specified event occurs</li>
+ * </ul>
+ *
+ * Notice that this decorator let the system load the referred application; the step for the
+ * creation are:
+ * <ol>
+ *     <li>the `WebGL` decorator is called</li>
+ *     <li>the `WebGLApplication` object is instantiated</li>
+ *     <li>the `WebGLApplication` object is added to the `window["APPLICATIONS"]` map</li>
+ *     <li>the `init()` method of the instantiated object is called</li>
+ *     <li>the annotated mesh objects are loaded</li>
+ *     <li>the annotated methods are registered as event listeners</li>
+ *     <li>the `beforeStart()` method of the instantiated object is called</li>
+ *     <li>the `start()` method of the instantiated object is called</li>
+ * </ol>
+ * The main logic of the application should be placed in the **`main()`** method that will be
+ * used from the `start()` method
+ *
  * @param {string} applicationName the name of the application
  * @param {string} canvasHtmlElementName the name of the canvas html element
  * @param {string[]} webGLShaders the names of the webgl shaders
+ * @param {boolean} logEnabled to enable or disable the logging (`true` by default)
  * @constructor
  */
-function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
+function WebGL(applicationName, canvasHtmlElementName, webGLShaders, logEnabled = true) {
+    log_1.Log.setLog(logEnabled);
+    log_1.Log.log("WebGLApplicationBuilder [" + applicationName + "]\n" +
+        "\tapplicationName: " + applicationName + "\n" +
+        "\tcanvasHtmlElementName: " + canvasHtmlElementName + "\n" +
+        "\tmain shader: [" + webGLShaders.main + "]\n" +
+        "\tcolor shader: [" + webGLShaders.color + "]\n" +
+        "\tlogEnabled: " + logEnabled);
     // @ts-ignore
     window["APPLICATIONS"] = window["APPLICATIONS"] || new Map();
     // @ts-ignore
@@ -182,23 +241,26 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
             let instance = new clazz();
             // @ts-ignore
             window["APPLICATIONS"].set(applicationName, instance);
-            log_1.Log.log("creating webgl environment for " + applicationName + " ...");
+            log_1.Log.log("WebGLApplicationBuilder | created instance for " + applicationName +
+                " calling init() ...");
+            instance.init();
+            log_1.Log.log("WebGLApplicationBuilder | creating webgl environment for " + applicationName + " ...");
             let webGLEnvironment = (0, webgl_environment_1.createWebglEnvironment)(canvasHtmlElementName, mapShaders(webGLShaders));
-            log_1.Log.log("creating mesh object manager for " + applicationName + " ...");
+            log_1.Log.log("WebGLApplicationBuilder | creating mesh object manager for " + applicationName + " ...");
             let meshObjectManager = new mesh_object_manager_1.MeshObjectManager(applicationName, webGLEnvironment);
-            log_1.Log.log("creating mesh object drawer for " + applicationName + " ...");
+            log_1.Log.log("WebGLApplicationBuilder | creating mesh object drawer for " + applicationName + " ...");
             let meshObjectDrawer = new mesh_object_drawer_1.MeshObjectDrawer(applicationName, webGLEnvironment, meshObjectManager);
-            log_1.Log.log("injecting application variables for " + applicationName + " ...");
+            log_1.Log.log("WebGLApplicationBuilder | injecting application variables for " + applicationName + " ...");
             instance["environment"] = webGLEnvironment;
             instance["meshObjectManager"] = meshObjectManager;
             instance["meshObjectDrawer"] = meshObjectDrawer;
             instance["camera"] = meshObjectDrawer.getCamera();
             instance["applicationName"] = applicationName;
-            // Loading mesh objects
-            log_1.Log.log("loading objects for " + applicationName + " ...");
+            obj_texture_signal_flow_1.ObjTextureSignalFlow.ensureDrawWithTextureLoaded(applicationName);
+            log_1.Log.log("WebGLApplicationBuilder | loading objects for " + applicationName + " ...");
             for (let objToLoad of clazz.prototype[ObjToLoad]) {
                 let continuation = objToLoad[1];
-                log_1.Log.log("loading object [" + continuation.name + "] for " + applicationName + " ...");
+                log_1.Log.log("WebGLApplicationBuilder | loading object [" + continuation.name + "] for " + applicationName + " ...");
                 let obj = meshObjectManager.loadObj(continuation.name, continuation.path);
                 if (continuation.position != null) {
                     obj.setPosition(continuation.position);
@@ -213,14 +275,14 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
                     obj.setLimitsChecker(continuation.limitsChecker);
                 }
                 instance[continuation.propertyKey] = obj;
-                log_1.Log.log("object [" + continuation.name + "] loaded for " + applicationName +
+                log_1.Log.log("WebGLApplicationBuilder | object [" + continuation.name + "] loaded for " + applicationName +
                     " into property [" + continuation.propertyKey + "]!");
             }
             // Attach canvas mouse events
             const onCanvasMouseEventMethods = clazz.prototype[OnCanvasEventSym];
             if (onCanvasMouseEventMethods != undefined) {
                 onCanvasMouseEventMethods.forEach((event, method) => {
-                    log_1.Log.log("subscribing to event [" + event + "] for " + applicationName +
+                    log_1.Log.log("WebGLApplicationBuilder | subscribing to event [" + event + "] for " + applicationName +
                         " with method [" + method + "] ...");
                     webGLEnvironment.getCanvas().addEventListener(event, (e) => {
                         instance[method](e);
@@ -231,7 +293,7 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
             const onKeyboardEventMethods = clazz.prototype[OnKeyboardEventSym];
             if (onKeyboardEventMethods != undefined) {
                 onKeyboardEventMethods.forEach((event, method) => {
-                    log_1.Log.log("subscribing to event [" + event + "] for " + applicationName +
+                    log_1.Log.log("WebGLApplicationBuilder | subscribing to event [" + event + "] for " + applicationName +
                         " with method [" + method + "] ...");
                     document.addEventListener(event, (e) => {
                         instance[method](e);
@@ -242,16 +304,16 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders) {
             const onCanvasTouchEventMethods = clazz.prototype[OnCanvasTouchEventSym];
             if (onCanvasTouchEventMethods != undefined) {
                 onCanvasTouchEventMethods.forEach((event, method) => {
-                    log_1.Log.log("subscribing to event [" + event + "] for " + applicationName +
+                    log_1.Log.log("WebGLApplicationBuilder | subscribing to event [" + event + "] for " + applicationName +
                         " with method [" + method + "] ...");
                     document.addEventListener(event, (e) => {
                         instance[method](e);
                     }, false);
                 });
             }
-            log_1.Log.log("initializing application " + applicationName + " ...");
+            log_1.Log.log("WebGLApplicationBuilder | initializing application " + applicationName + " ...");
             instance.beforeStart();
-            log_1.Log.log("starting application " + applicationName + " ...");
+            log_1.Log.log("WebGLApplicationBuilder | starting application " + applicationName + " ...");
             //CameraControls.init(instance)
             appSignalFlow.fire(instance, "STARTED");
             instance.start();
@@ -313,6 +375,15 @@ function WebGLMesh(url, name = null, position = null, rotation = null, scale = n
     };
 }
 exports.WebGLMesh = WebGLMesh;
+/**
+ * A decorator to attach a **mouse** event on a canvas to a method.
+ * This decorator **works only if the class is annotated with @WebGLApplication** and will be associated
+ * with the canvas of the application. So, when the event is fired, the method annotated with this decorator
+ * will be called.<br>
+ * **The method must have a single parameter of type `MouseEvent`**
+ * @param {string} eventName the name of the mouse event
+ * @constructor
+ */
 function OnCanvasMouseEvent(eventName) {
     return function (target, propertyKey, descriptor) {
         log_1.Log.log("OnCanvasMouseEvent " + eventName + " on " + propertyKey);
@@ -321,6 +392,14 @@ function OnCanvasMouseEvent(eventName) {
     };
 }
 exports.OnCanvasMouseEvent = OnCanvasMouseEvent;
+/**
+ * A decorator to attach a **keyboard** event o to a method.
+ * This decorator **works only if the class is annotated with @WebGLApplication**.
+ * So, when the event is fired, the method annotated with this decorator will be called.<br>
+ * **The method must have a single parameter of type `KeyboardEvent`**
+ * @param {string} eventName the name of the keyboard event
+ * @constructor
+ */
 function OnKeyboardEvent(eventName) {
     return function (target, propertyKey, descriptor) {
         log_1.Log.log("OnKeyboardEvent " + eventName + " on " + propertyKey);
@@ -329,6 +408,15 @@ function OnKeyboardEvent(eventName) {
     };
 }
 exports.OnKeyboardEvent = OnKeyboardEvent;
+/**
+ * A decorator to attach a **touch** event on a canvas to a method.
+ * This decorator **works only if the class is annotated with @WebGLApplication** and will be associated
+ * with the canvas of the application. So, when the event is fired, the method annotated with this decorator
+ * will be called.<br>
+ * **The method must have a single parameter of type `TouchEvent`**
+ * @param {string} eventName the name of the touch event
+ * @constructor
+ */
 function OnCanvasTouchEvent(eventName) {
     return function (target, propertyKey, descriptor) {
         log_1.Log.log("OnKeyboardEvent " + eventName + " on " + propertyKey);
@@ -338,7 +426,8 @@ function OnCanvasTouchEvent(eventName) {
 }
 exports.OnCanvasTouchEvent = OnCanvasTouchEvent;
 /**
- * Sets the position the mesh object will have when loaded
+ * Sets the position the mesh object will have when loaded.
+ * This decorator
  * @param {number} x the x coordinate of the position
  * @param {number} y the y coordinate of the position
  * @param {number} z the z coordinate of the position

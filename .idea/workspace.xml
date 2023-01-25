@@ -6,40 +6,71 @@
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/batmoto.obj" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/obj_marchegiani/batmoto.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/city_marchegiani.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/obj_marchegiani/city_marchegiani.mtl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/city_marchegiani.obj" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/obj_marchegiani/city_marchegiani.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/textures/1960391-ciottoli-street-texture-gratuito-foto.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj/city1.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj/city1.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj/erba1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj/moto1.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj/moto1.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/batmoto.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/batmoto.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/city_marchegiani.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/city_marchegiani.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/textures/bark_brown_01_diff_1k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/textures/bark_brown_01_spec_1k.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/textures/batman_logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/textures/cityscapecitybuilding.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/textures/erba1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/assets/obj_marchegiani/textures/marche_foto.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/m4.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/m4.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/m4.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/m4.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/math.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/math.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/math.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/math.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/webgl-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/webgl-utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/webgl-utils.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/webgl-utils.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/load_objx.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/load_objx.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/load_objx.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/load_objx.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/camera-controls.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/camera-controls.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/camera-controls.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/camera-controls.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/load-mesh-wrapper.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/load-mesh-wrapper.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/load-mesh-wrapper.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/load-mesh-wrapper.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/result.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/result.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/result.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/result.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu_controls.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu_controls.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/log/log.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/log/log.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/log/log.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/log/log.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-manager.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-manager.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/dat.gui.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/hello.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/jquery-3.6.0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/jquery-3.6.1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/load_mesh.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/m4.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/m4.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/math.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/math.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/menu_interface.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/ui_components.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/lib/js/webgl-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/webgl-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/lib/js/load_objx.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/load_objx.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/lib/js/math.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/bundle.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/css/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/css/ui_style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/public/css/ui_style2.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/dom_utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/arrow-down-square-fill.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/arrow-up-square-fill.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/computer-history-museum/neg-x.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/computer-history-museum/neg-y.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/computer-history-museum/neg-z.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/computer-history-museum/pos-x.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/computer-history-museum/pos-y.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/computer-history-museum/pos-z.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/dash-circle.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/noodles.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/plus-circle.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/sky-box.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/resources/images/webgl-marble.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/LucaMarchegianiApp.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/LucaMarchegianiApp.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/camera-controls.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/camera-controls.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/load-mesh-wrapper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/load-mesh-wrapper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/user-inputs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/user-inputs.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/log/log.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/log/log.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-drawer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-drawer.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-manager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-manager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,25 +101,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/luca/Github/Computer-Graphics-Project-ALLL/project/assets&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/usr/local/lib/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/home/luca/Github/Computer-Graphics-Project-ALLL/project/assets",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/usr/local/lib/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/project/assets" />
@@ -202,7 +233,8 @@
       <workItem from="1674410261890" duration="24018000" />
       <workItem from="1674518920781" duration="71000" />
       <workItem from="1674554701206" duration="31417000" />
-      <workItem from="1674615811256" duration="1309000" />
+      <workItem from="1674615811256" duration="1500000" />
+      <workItem from="1674644530984" duration="11793000" />
     </task>
     <servers />
   </component>

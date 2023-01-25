@@ -5,30 +5,26 @@ import {
     OnKeyboardEvent,
     WebGL,
     WebGLApplication,
-    WebGLMesh
+    WebGLMesh, WebGLShaderReference
 } from "./webgl/webgl-application";
 import {MeshObject} from "./obj/mesh-object";
 import {Log} from "./log/log";
 import {MenuControls} from "./controls/menu-controls";
 import {UserInputs} from "./controls/user-inputs";
 
-const L = 3
-Log.enableLog()
+const SHADERS: WebGLShaderReference = {
+    main: ["vertex-shader", "fragment-shader"],
+    color:["color-vertex-shader", "color-fragment-shader"]
+}
 
-@WebGL("test-app",
-    "my_Canvas",
-    {
-        main: ["vertex-shader", "fragment-shader"],
-        color:["color-vertex-shader", "color-fragment-shader"]
-    }
-)
-class MyApp extends WebGLApplication {
+@WebGL("gotham-app", "my_Canvas", SHADERS)
+class GothamApp extends WebGLApplication {
 
-    @WebGLMesh("./assets/obj_marchegiani/city_marchegiani.obj")
+    @WebGLMesh("./assets/objs/city_marchegiani.obj")
     @ObjScale(0.7,0.7,0.7)
-    private World: MeshObject
+    private world: MeshObject
 
-    @WebGLMesh("./assets/obj_marchegiani/batmoto.obj")
+    @WebGLMesh("./assets/objs/batmoto.obj")
     @ObjPosition(0,0,1)
     @ObjScale(0.3,0.3,0.3)
     private batMoto: MeshObject
@@ -38,6 +34,36 @@ class MyApp extends WebGLApplication {
 
     constructor() {
         super();
+        this.userInputs = new UserInputs(this)
+    }
+
+    @OnCanvasTouchEvent("mousedown")
+    @OnCanvasTouchEvent("touchstart")
+    protected onMouseDown(e: MouseEvent|TouchEvent) {
+        Log.log("WebGLApplication | capturing mouse down [event type: " + e.type + "]")
+        this.userInputs.mouseDown(e)
+    }
+
+    @OnCanvasMouseEvent("mouseup")
+    @OnCanvasTouchEvent("touchend")
+    @OnCanvasMouseEvent("mouseout")
+    protected onMouseUp(e: MouseEvent|TouchEvent) {
+        Log.log("WebGLApplication | capturing mouse up [event type: " + e.type + "]")
+        this.userInputs.mouseUp1(e)
+    }
+
+    @OnCanvasMouseEvent("mousemove")
+    @OnCanvasTouchEvent("touchmove")
+    protected onMouseMove(e: MouseEvent|TouchEvent) {
+        Log.log("WebGLApplication | capturing mouse move [event type: " + e.type + "]")
+        this.userInputs.mouseMove1(e)
+    }
+
+    @OnKeyboardEvent("keydown")
+    onKeyDown(e: KeyboardEvent) {
+        Log.log("WebGLApplication | capturing key down [event type: " + e.type +
+            ", key: " + e.key + "]")
+        this.userInputs.keydownMap(e)
     }
 
     protected beforeStart() {
@@ -60,13 +86,13 @@ class MyApp extends WebGLApplication {
 
         this.menu = new MenuControls(this)
         this.menu.setup()
-        this.userInputs = new UserInputs(this)
         this.userInputs.setTarget(this.batMoto)
         this.userInputs.attachHandlers()
     }
 
     protected main(args: string[]): void {
         console.log("Hello world! [" + this.applicationName + "]")
-        this.drawScene()
+        this.renderScene()
+        this.renderScene()
     }
 }

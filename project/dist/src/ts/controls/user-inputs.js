@@ -65,7 +65,7 @@ class UserInputs {
         currentAngles = __classPrivateFieldGet(this, _UserInputs_target, "f").getPolarRotation();
         __classPrivateFieldGet(this, _UserInputs_controller, "f").navigate(dY, currentAngles.getThird());
         //e.preventDefault();
-        __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().renderScene();
         log_1.Log.log("Angles || PSY:" + currentAngles.getFirst().toString() + ", THETA:" + currentAngles.getSecond().toString() +
             ", PHI:" + currentAngles.getThird().toString());
     }
@@ -96,7 +96,7 @@ class UserInputs {
             // case 188: 	CAMERA_MANAGER.incrementCameraFov(-1); break;		//,
             // case 190:	CAMERA_MANAGER.incrementCameraFov(1); break;		//.
         }
-        __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().drawScene();
+        __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().renderScene();
     }
     //
     // const keydownMapLog = function(e) {
@@ -150,7 +150,6 @@ class UserInputs {
         document.addEventListener('keydown', (event) => { this.keydownMap(event); });
     }
     setTarget(target) {
-        console.log("user input set target");
         __classPrivateFieldSet(this, _UserInputs_target, target, "f");
         __classPrivateFieldGet(this, _UserInputs_controller, "f").setTarget(target);
     }

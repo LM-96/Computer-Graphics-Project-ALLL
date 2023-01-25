@@ -95,7 +95,7 @@ export class CameraControls {
 
         camera.getCameraPositionSubscriber().subscribe(handler((signal: Signal<Camera, PerformedTranslation, void>) => {
             updateCameraViewers(signal.data.to.getX(), signal.data.to.getY(), signal.data.to.getZ())
-            application.getMeshObjectDrawer().drawScene()
+            application.getMeshObjectDrawer().renderScene()
         }))
     }
 
@@ -157,7 +157,7 @@ export class CameraControls {
             updateUpViewers(signal.data.newValue.getFirst(),
                 signal.data.newValue.getSecond(),
                 signal.data.newValue.getThird())
-            application.getMeshObjectDrawer().drawScene()
+            application.getMeshObjectDrawer().renderScene()
         }))
     }
 
@@ -180,7 +180,7 @@ export class CameraControls {
         updateFovViewers(camera.getCurrentFov())
         camera.getFovSubscriber().subscribe(handler((signal: Signal<Camera, PerformedObjectSet<Angle>, void>) => {
             updateFovViewers(signal.data.newValue)
-            application.getMeshObjectDrawer().drawScene()
+            application.getMeshObjectDrawer().renderScene()
         }))
     }
 
@@ -221,7 +221,7 @@ export class CameraControls {
             updateTargetViewers(signal.data.newValue.getX(),
                 signal.data.newValue.getY(),
                 signal.data.newValue.getZ())
-            application.getMeshObjectDrawer().drawScene()
+            application.getMeshObjectDrawer().renderScene()
         }))
     }
 

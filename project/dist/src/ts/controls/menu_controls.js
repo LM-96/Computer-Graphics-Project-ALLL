@@ -53,22 +53,22 @@ class MenuControls {
     onCameraChange() {
         let settings = ACTIVE_MENU_CONTROLS.settings;
         ACTIVE_MENU_CONTROLS.application.getCamera().setPosition(settings.cameraX, settings.cameraY, settings.cameraZ);
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene();
+        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().renderScene();
     }
     onObjectPositionChange() {
         let settings = ACTIVE_MENU_CONTROLS.settings;
         ACTIVE_MENU_CONTROLS.activeObj.setPosition(settings.posX, settings.posY, settings.posZ);
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene();
+        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().renderScene();
     }
     onTargetPositionChange() {
         let settings = ACTIVE_MENU_CONTROLS.settings;
         ACTIVE_MENU_CONTROLS.application.getCamera().setTarget(settings.targetX, settings.targetY, settings.targetZ);
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene();
+        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().renderScene();
     }
     onFovChange() {
         let settings = ACTIVE_MENU_CONTROLS.settings;
         ACTIVE_MENU_CONTROLS.application.getCamera().setFov((0, angle_1.degree)(settings.fov));
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene();
+        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().renderScene();
     }
     onCurrentObjChange() {
         ACTIVE_MENU_CONTROLS.updateObj();
@@ -76,7 +76,7 @@ class MenuControls {
     onObjectScaleChange() {
         let settings = ACTIVE_MENU_CONTROLS.settings;
         ACTIVE_MENU_CONTROLS.activeObj.setScale(settings.scaleX, settings.scaleY, settings.scaleZ);
-        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().drawScene();
+        ACTIVE_MENU_CONTROLS.application.getMeshObjectDrawer().renderScene();
     }
     onObjectPolarRotationChange() {
     }
