@@ -74,8 +74,8 @@ export class UserInputController {
 
     moveFirstPerson(keyMove: string){
         switch(keyMove){
-            case "ArrowUp" : this.navigate(-4, this.target.getPolarRotation().getThird()); break;
-            case "ArrowDown" : this.navigate(4, this.target.getPolarRotation().getThird()); break;
+            case "ArrowUp" : this.navigate(4, this.target.getPolarRotation().getThird()); break;
+            case "ArrowDown" : this.navigate(-4, this.target.getPolarRotation().getThird()); break;
             case "ArrowLeft" : this.#rotateTarget(degree(0), degree(0), degree(5)); break;
             case "ArrowRight" : this.#rotateTarget(degree(0), degree(0), degree(-5)); break;
         }

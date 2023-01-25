@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./src/ts/AntonioFranzeseApp.ts",
+    entry: "./src/ts/LucaDeRisiApp.ts",
     module: {
         rules: [
             {
