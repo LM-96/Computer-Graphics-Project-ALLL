@@ -54,6 +54,7 @@ class MyApp extends WebGLApplication {
         let camera = this.getCamera()
 
         camera.setPosition(25,0,20);
+        this.getMeshObjectDrawer().zFar = 700
         camera.startFollowingObject(this.batMoto)
 
 

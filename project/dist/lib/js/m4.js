@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Gregg Tavares.
+ * Copyright 2021 GFXFundamentals.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -12,7 +12,7 @@
  * copyright notice, this list of conditions and the following disclaimer
  * in the documentation and/or other materials provided with the
  * distribution.
- *     * Neither the name of Gregg Tavares. nor the names of his
+ *     * Neither the name of GFXFundamentals. nor the names of his
  * contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission.
  *
@@ -164,6 +164,21 @@
         return dst;
     }
     /**
+     * scale vectors3
+     * @param {Vector3} v vector
+     * @param {Number} s scale
+     * @param {Vector3} dst optional vector3 to store result
+     * @return {Vector3} dst or new Vector3 if not provided
+     * @memberOf module:webgl-3d-math
+     */
+    function scaleVector(v, s, dst) {
+        dst = dst || new MatType(3);
+        dst[0] = v[0] * s;
+        dst[1] = v[1] * s;
+        dst[2] = v[2] * s;
+        return dst;
+    }
+    /**
      * normalizes a vector.
      * @param {Vector3} v vector to normalize
      * @param {Vector3} dst optional vector3 to store result
@@ -190,6 +205,14 @@
         return Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
     }
     /**
+     * Computes the length squared of a vector
+     * @param {Vector3} v vector to take length of
+     * @return {number} length sqaured of vector
+     */
+    function lengthSq(v) {
+        return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
+    }
+    /**
      * Computes the cross product of 2 vectors3s
      * @param {Vector3} a a
      * @param {Vector3} b b
@@ -214,14 +237,6 @@
      */
     function dot(a, b) {
         return (a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]);
-    }
-    function mvec4(u, v, dst) {
-        dst = dst || new MatType(4);
-        dst[0] = u[0] * v[0];
-        dst[1] = u[1] * v[1];
-        dst[2] = u[2] * v[2];
-        dst[3] = u[3] * v[3];
-        return dst;
     }
     /**
      * Computes the distance squared between 2 points
@@ -330,7 +345,6 @@
         dst[13] = cameraPosition[1];
         dst[14] = cameraPosition[2];
         dst[15] = 1;
-        //    var dst = m4.inverse(dst);
         return dst;
     }
     /**
@@ -534,7 +548,7 @@
         return dst;
     }
     /**
-     * Makes an x angle matrix
+     * Makes an x rotation matrix
      * @param {number} angleInRadians amount to rotate
      * @param {Matrix4} [dst] optional matrix to store result
      * @return {Matrix4} dst or a new matrix if none provided
@@ -563,7 +577,7 @@
         return dst;
     }
     /**
-     * Multiply by an x angle matrix
+     * Multiply by an x rotation matrix
      * @param {Matrix4} m matrix to multiply
      * @param {number} angleInRadians amount to rotate
      * @param {Matrix4} [dst] optional matrix to store result
@@ -605,7 +619,7 @@
         return dst;
     }
     /**
-     * Makes an y angle matrix
+     * Makes an y rotation matrix
      * @param {number} angleInRadians amount to rotate
      * @param {Matrix4} [dst] optional matrix to store result
      * @return {Matrix4} dst or a new matrix if none provided
@@ -634,7 +648,7 @@
         return dst;
     }
     /**
-     * Multiply by an y angle matrix
+     * Multiply by an y rotation matrix
      * @param {Matrix4} m matrix to multiply
      * @param {number} angleInRadians amount to rotate
      * @param {Matrix4} [dst] optional matrix to store result
@@ -676,7 +690,7 @@
         return dst;
     }
     /**
-     * Makes an z angle matrix
+     * Makes an z rotation matrix
      * @param {number} angleInRadians amount to rotate
      * @param {Matrix4} [dst] optional matrix to store result
      * @return {Matrix4} dst or a new matrix if none provided
@@ -705,7 +719,7 @@
         return dst;
     }
     /**
-     * Multiply by an z angle matrix
+     * Multiply by an z rotation matrix
      * @param {Matrix4} m matrix to multiply
      * @param {number} angleInRadians amount to rotate
      * @param {Matrix4} [dst] optional matrix to store result
@@ -747,7 +761,7 @@
         return dst;
     }
     /**
-     * Makes an angle matrix around an arbitrary axis
+     * Makes an rotation matrix around an arbitrary axis
      * @param {Vector3} axis axis to rotate around
      * @param {number} angleInRadians amount to rotate
      * @param {Matrix4} [dst] optional matrix to store result
@@ -788,7 +802,7 @@
         return dst;
     }
     /**
-     * Multiply by an axis angle matrix
+     * Multiply by an axis rotation matrix
      * @param {Matrix4} m matrix to multiply
      * @param {Vector3} axis axis to rotate around
      * @param {number} angleInRadians amount to rotate
@@ -917,33 +931,10 @@
         }
         return dst;
     }
-    function flatten(v, dst) {
-        var n = v.length;
-        var elemsAreArrays = false;
-        if (Array.isArray(v[0])) {
-            elemsAreArrays = true;
-            n *= v[0].length;
-        }
-        var dst = dst || new MatType(n);
-        if (elemsAreArrays) {
-            var idx = 0;
-            for (var i = 0; i < v.length; ++i) {
-                for (var j = 0; j < v[i].length; ++j) {
-                    dst[idx++] = v[i][j];
-                }
-            }
-        }
-        else {
-            for (var i = 0; i < v.length; ++i) {
-                dst[i] = v[i];
-            }
-        }
-        return dst;
-    }
     /**
      * creates a matrix from translation, quaternion, scale
      * @param {Number[]} translation [x, y, z] translation
-     * @param {Number[]} quaternion [x, y, z, z] quaternion angle
+     * @param {Number[]} quaternion [x, y, z, z] quaternion rotation
      * @param {Number[]} scale [x, y, z] scale
      * @param {Matrix4} [dst] optional matrix to store result
      * @return {Matrix4} dst or a new matrix if none provided
@@ -989,7 +980,7 @@
     }
     function quatFromRotationMatrix(m, dst) {
         // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
-        // assumes the upper 3x3 of m is a pure angle matrix (i.e, unscaled)
+        // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
         const m11 = m[0];
         const m12 = m[4];
         const m13 = m[8];
@@ -1041,7 +1032,7 @@
         translation[0] = mat[12];
         translation[1] = mat[13];
         translation[2] = mat[14];
-        // scale the angle part
+        // scale the rotation part
         const matrix = m4.copy(mat);
         const invSX = 1 / sx;
         const invSY = 1 / sy;
@@ -1231,7 +1222,7 @@
      * Takes a 4-by-4 matrix and a vector with 3 entries, interprets the vector as a
      * direction, transforms that direction by the matrix, and returns the result;
      * assumes the transformation of 3-dimensional space represented by the matrix
-     * is parallel-preserving, i.e. any combination of angle, scaling and
+     * is parallel-preserving, i.e. any combination of rotation, scaling and
      * translation, but not a perspective distortion. Returns a vector with 3
      * entries.
      * @param {Matrix4} m The matrix.
@@ -1256,7 +1247,7 @@
      * transforming that surface by the matrix. The effect of this function is the
      * same as transforming v (as a direction) by the inverse-transpose of m.  This
      * function assumes the transformation of 3-dimensional space represented by the
-     * matrix is parallel-preserving, i.e. any combination of angle, scaling and
+     * matrix is parallel-preserving, i.e. any combination of rotation, scaling and
      * translation, but not a perspective distortion.  Returns a vector with 3
      * entries.
      * @param {Matrix4} m The matrix.
@@ -1301,17 +1292,18 @@
         lookAt: lookAt,
         addVectors: addVectors,
         subtractVectors: subtractVectors,
+        scaleVector: scaleVector,
         distance: distance,
         distanceSq: distanceSq,
         normalize: normalize,
         compose: compose,
         cross: cross,
         decompose: decompose,
-        mvec4: mvec4,
         dot: dot,
         identity: identity,
         transpose: transpose,
         length: length,
+        lengthSq: lengthSq,
         orthographic: orthographic,
         frustum: frustum,
         perspective: perspective,
@@ -1327,7 +1319,6 @@
         axisRotate: axisRotate,
         scaling: scaling,
         scale: scale,
-        flatten: flatten,
         multiply: multiply,
         inverse: inverse,
         transformVector: transformVector,

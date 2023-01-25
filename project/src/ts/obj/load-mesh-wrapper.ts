@@ -26,6 +26,6 @@ export interface MeshData {
     uniforms: Uniforms
 }
 
-export function loadMesh(gl: WebGLRenderingContext, path: string): MeshData {
-    return LoadMesh(gl, path)
-}
+// export function loadMesh(gl: WebGLRenderingContext, path: string): MeshData {
+//     return LoadMesh(gl, path)
+// }

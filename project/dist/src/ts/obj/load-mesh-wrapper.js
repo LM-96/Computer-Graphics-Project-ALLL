@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadMesh = void 0;
-function loadMesh(gl, path) {
-    return LoadMesh(gl, path);
-}
-exports.loadMesh = loadMesh;
+// export function loadMesh(gl: WebGLRenderingContext, path: string): MeshData {
+//     return LoadMesh(gl, path)
+// }
 //# sourceMappingURL=load-mesh-wrapper.js.map

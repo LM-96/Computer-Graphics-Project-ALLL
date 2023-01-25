@@ -1,5 +1,5 @@
 import {MeshObject} from "./mesh-object";
-import {Attributes, loadMesh, MeshData} from "./load-mesh-wrapper";
+import {Attributes, MeshData} from "./load-mesh-wrapper";
 import {FlowedMeshObject} from "./flowed-mesh-object";
 import SignalFlows, {SingleSignalFlow} from "../signals/flow";
 import {MeshObjectSignals} from "./mesh-object-signals";
