@@ -25,12 +25,12 @@ Log.enableLog()
 class MyApp extends WebGLApplication {
 
     @WebGLMesh("./assets/Consegna_fiori/Saviano.obj")
-    private World: MeshObject
+    private Saviano: MeshObject
 
     @WebGLMesh("./assets/Consegna_fiori/furgoncino.obj")
     @ObjScale(0.7, 0.7, 0.7)
     @ObjPosition(0,0,1)
-    private helmet: MeshObject
+    private Furgoncino: MeshObject
 
     private menu: MenuControls
     private userInputs: UserInputs
@@ -53,13 +53,13 @@ class MyApp extends WebGLApplication {
         let camera = this.getCamera()
 
         camera.setPosition(15,0,5);
-        camera.startFollowingObject(this.helmet)
+        camera.startFollowingObject(this.Furgoncino)
 
 
         this.menu = new MenuControls(this)
         this.menu.setup()
         this.userInputs = new UserInputs(this)
-        this.userInputs.setTarget(this.helmet)
+        this.userInputs.setTarget(this.Furgoncino)
         this.userInputs.attachHandlers()
     }
 
