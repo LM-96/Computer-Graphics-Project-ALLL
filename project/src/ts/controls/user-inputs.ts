@@ -2,7 +2,7 @@ import {WebGLApplication} from "../webgl/webgl-application";
 import {Log} from "../log/log";
 import {MeshObject} from "../obj/mesh-object";
 import {Couple} from "../types/pair";
-import {Angle, radians} from "../geometry/angle/angle";
+import {Angle, AngleUnit, radians} from "../geometry/angle/angle";
 import {Trio} from "../types/triple";
 import {UserInputController} from "./user-input-controller";
 
@@ -125,6 +125,7 @@ export class UserInputs {
         document.addEventListener("touchmove", (ev: TouchEvent) => {this.mouseMove1(ev)});
 
         document.addEventListener('keydown', (event) => {this.keydownMap(event)});
+        document.addEventListener("keydown", (event) => {this.keydownMapExtend(event)})
     }
 
     setTarget(target: MeshObject) {
@@ -133,4 +134,33 @@ export class UserInputs {
         this.#controller.setTarget(target)
     }
 
+
+    keydownMapExtend(e : KeyboardEvent){
+        let cam = this.#application.getCamera()
+        switch (e.code) {
+            case "KeyI": this.setCameraView(1); break;
+            case "KeyO": this.setCameraView(2); break;
+            case "KeyP": this.setCameraView(3); break;
+            case "Space": this.setCameraView(0); break;
+            case "Period": this.#application.getCamera().setFov(cam.getCurrentFov().add(5, AngleUnit.DEG)); break;
+            case "Comma": this.#application.getCamera().setFov(cam.getCurrentFov().add(-5, AngleUnit.DEG)); break;
+            default: console.log(e.code)
+        }
+        this.#application.getMeshObjectDrawer().drawScene()
+
+    }
+
+    setCameraView(view: number){
+        let cam = this.#application.getCamera()
+        let helmet = this.#application.getMeshObjectManager().get("helmet")
+        cam.startFollowingObject(helmet)
+        cam.setFov(new Angle(60, AngleUnit.DEG))
+        switch (view){
+            case 1: cam.setPosition(70, 70, 80); break;
+            case 2: cam.setPosition(0,0,90)
+                cam.setFov(new Angle(80, AngleUnit.DEG)); break;
+            case 3: cam.setPosition(80, 0, 30); break;
+            case 0: cam.setPosition(helmet.getPosition().translate(15, 0, 10))
+        }
+    }
 }

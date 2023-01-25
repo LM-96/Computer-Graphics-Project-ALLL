@@ -1,19 +1,13 @@
-import {
-    ObjPosition,
-    OnCanvasMouseEvent,
-    OnCanvasTouchEvent,
-    OnKeyboardEvent,
-    WebGL,
-    WebGLApplication,
-    WebGLMesh
-} from "./webgl/webgl-application";
+import {ObjPosition, WebGL, WebGLApplication, WebGLMesh} from "./webgl/webgl-application";
 import {MeshObject} from "./obj/mesh-object";
 import {Log} from "./log/log";
 import {MenuControls} from "./controls/menu-controls";
 import {UserInputs} from "./controls/user-inputs";
+import {Angle, AngleUnit} from "./geometry/angle/angle";
 
 const L = 3
 Log.enableLog()
+Log.disableLog()
 
 @WebGL("test-app",
     "my_Canvas",
@@ -44,8 +38,8 @@ class MyApp extends WebGLApplication {
         light.setFar(200)
         light.setProjHeight(200)
         light.setProjWidth(200)
-        light.setLightPosition(20,20,100)
-        light.setLightTarget(20, 20, 0)
+        light.setLightPosition(20,50,50)
+        light.setLightTarget(-10, -10, 0)
         light.setShadows(true)
 
         //Camera Set up
@@ -53,6 +47,8 @@ class MyApp extends WebGLApplication {
 
         camera.setPosition(15,0,15);
         camera.startFollowingObject(this.helmet)
+        camera.setFov(new Angle(60, AngleUnit.DEG))
+        this.getMeshObjectDrawer().zFar = 700
 
 
         this.menu = new MenuControls(this)
@@ -60,6 +56,9 @@ class MyApp extends WebGLApplication {
         this.userInputs = new UserInputs(this)
         this.userInputs.setTarget(this.helmet)
         this.userInputs.attachHandlers()
+
+        //Attacching handler for camera views
+        //this.userInputs.attachHandler("onkeydown", this.keydownMapExtend)
     }
 
     protected main(args: string[]): void {

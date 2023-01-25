@@ -148,11 +148,56 @@ class UserInputs {
         document.addEventListener("touchend", (ev) => { this.mouseUp1(ev); });
         document.addEventListener("touchmove", (ev) => { this.mouseMove1(ev); });
         document.addEventListener('keydown', (event) => { this.keydownMap(event); });
+        document.addEventListener("keydown", (event) => { this.keydownMapExtend(event); });
     }
     setTarget(target) {
         console.log("user input set target");
         __classPrivateFieldSet(this, _UserInputs_target, target, "f");
         __classPrivateFieldGet(this, _UserInputs_controller, "f").setTarget(target);
+    }
+    keydownMapExtend(e) {
+        let cam = __classPrivateFieldGet(this, _UserInputs_application, "f").getCamera();
+        switch (e.code) {
+            case "KeyI":
+                this.setCameraView(1);
+                break;
+            case "KeyO":
+                this.setCameraView(2);
+                break;
+            case "KeyP":
+                this.setCameraView(3);
+                break;
+            case "Space":
+                this.setCameraView(0);
+                break;
+            case "Period":
+                __classPrivateFieldGet(this, _UserInputs_application, "f").getCamera().setFov(cam.getCurrentFov().add(5, angle_1.AngleUnit.DEG));
+                break;
+            case "Comma":
+                __classPrivateFieldGet(this, _UserInputs_application, "f").getCamera().setFov(cam.getCurrentFov().add(-5, angle_1.AngleUnit.DEG));
+                break;
+            default: console.log(e.code);
+        }
+        __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().drawScene();
+    }
+    setCameraView(view) {
+        let cam = __classPrivateFieldGet(this, _UserInputs_application, "f").getCamera();
+        let helmet = __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectManager().get("helmet");
+        cam.startFollowingObject(helmet);
+        cam.setFov(new angle_1.Angle(60, angle_1.AngleUnit.DEG));
+        switch (view) {
+            case 1:
+                cam.setPosition(70, 70, 80);
+                break;
+            case 2:
+                cam.setPosition(0, 0, 90);
+                cam.setFov(new angle_1.Angle(80, angle_1.AngleUnit.DEG));
+                break;
+            case 3:
+                cam.setPosition(80, 0, 30);
+                break;
+            case 0: cam.setPosition(helmet.getPosition().translate(15, 0, 10));
+        }
     }
 }
 exports.UserInputs = UserInputs;

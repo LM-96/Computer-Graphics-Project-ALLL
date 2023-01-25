@@ -23,7 +23,7 @@ class MeshObjectDrawer {
         _MeshObjectDrawer_glEnvironment.set(this, void 0);
         _MeshObjectDrawer_meshObjectManager.set(this, void 0);
         this.zNear = 0.1;
-        this.zFar = 400;
+        this.zFar = 200;
         _MeshObjectDrawer_camera.set(this, new flowed_camera_1.default());
         _MeshObjectDrawer_sharedUniforms.set(this, void 0);
         _MeshObjectDrawer_slManager.set(this, void 0);
