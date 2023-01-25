@@ -1,4 +1,5 @@
 import {
+    ObjPosition,
     OnCanvasMouseEvent,
     OnCanvasTouchEvent,
     OnKeyboardEvent,
@@ -23,10 +24,11 @@ Log.enableLog()
 )
 class MyApp extends WebGLApplication {
 
-    @WebGLMesh("./assets/plane-2m.obj")
-    private axis: MeshObject
+    @WebGLMesh("./assets/LucaLanAssets/luca-lan-world.obj")
+    private World: MeshObject
 
-    @WebGLMesh("./assets/LuchettoObj/truck_final.obj")
+    @WebGLMesh("./assets/LucaLanAssets/helmet.obj")
+    @ObjPosition(0,0,10)
     private helmet: MeshObject
 
     private menu: MenuControls
@@ -37,6 +39,21 @@ class MyApp extends WebGLApplication {
     }
 
     protected beforeStart() {
+        // Light Set up
+        let light = this.getMeshObjectDrawer().getSlManager()
+        light.setFar(200)
+        light.setProjHeight(200)
+        light.setProjWidth(200)
+        light.setLightPosition(20,20,100)
+        light.setLightTarget(20, 20, 0)
+
+        //Camera Set up
+        let camera = this.getCamera()
+
+        camera.setPosition(15,0,15);
+        camera.startFollowingObject(this.helmet)
+
+
         this.menu = new MenuControls(this)
         this.menu.setup()
         this.userInputs = new UserInputs(this)
