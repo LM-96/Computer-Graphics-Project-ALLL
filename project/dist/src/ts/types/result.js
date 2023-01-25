@@ -16,6 +16,15 @@ exports.resultOf = exports.Result = void 0;
 const illegal_argument_exception_1 = require("./exceptions/illegal-argument-exception");
 const illegal_state_exception_1 = require("./exceptions/illegal-state-exception");
 class Result {
+    constructor(value, error) {
+        _Result_value.set(this, void 0);
+        _Result_error.set(this, void 0);
+        if (__classPrivateFieldGet(this, _Result_value, "f") != null && __classPrivateFieldGet(this, _Result_error, "f") != null) {
+            throw new illegal_argument_exception_1.IllegalArgumentException("value and error can NOT be non-null at the same time");
+        }
+        __classPrivateFieldSet(this, _Result_value, value, "f");
+        __classPrivateFieldSet(this, _Result_error, error, "f");
+    }
     /**
      * Creates and returns a new **successful** result which contains
      * a value
@@ -32,15 +41,6 @@ class Result {
      */
     static ofFailure(error) {
         return new Result(null, error);
-    }
-    constructor(value, error) {
-        _Result_value.set(this, void 0);
-        _Result_error.set(this, void 0);
-        if (__classPrivateFieldGet(this, _Result_value, "f") != null && __classPrivateFieldGet(this, _Result_error, "f") != null) {
-            throw new illegal_argument_exception_1.IllegalArgumentException("value and error can NOT be non-null at the same time");
-        }
-        __classPrivateFieldSet(this, _Result_value, value, "f");
-        __classPrivateFieldSet(this, _Result_error, error, "f");
     }
     /**
      * Returns the value of this result or `null` if it's a failure (so no result is owned)

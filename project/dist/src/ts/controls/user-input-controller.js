@@ -11,8 +11,8 @@ const angle_1 = require("../geometry/angle/angle");
 class UserInputController {
     constructor() {
         _UserInputController_instances.add(this);
-        this.stepSize = 2;
-        this.step = 2;
+        this.stepSize = 5;
+        this.step = 5;
         this.controllerMode = 2;
         this.cameraMode = 0;
         this.controllerMode = 2;
@@ -68,10 +68,10 @@ class UserInputController {
     moveFirstPerson(keyMove) {
         switch (keyMove) {
             case "ArrowUp":
-                this.navigate(-0.1, this.target.getPolarRotation().getThird());
+                this.navigate(-this.stepSize, this.target.getPolarRotation().getThird());
                 break;
             case "ArrowDown":
-                this.navigate(0.1, this.target.getPolarRotation().getThird());
+                this.navigate(+this.stepSize, this.target.getPolarRotation().getThird());
                 break;
             case "ArrowLeft":
                 __classPrivateFieldGet(this, _UserInputController_instances, "m", _UserInputController_rotateTarget).call(this, (0, angle_1.degree)(0), (0, angle_1.degree)(0), (0, angle_1.degree)(5));
