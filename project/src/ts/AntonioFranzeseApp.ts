@@ -52,7 +52,7 @@ class MyApp extends WebGLApplication {
         //Camera Set up
         let camera = this.getCamera()
 
-        camera.setPosition(7,0,7);
+        camera.setPosition(15,0,5);
         camera.startFollowingObject(this.helmet)
 
 

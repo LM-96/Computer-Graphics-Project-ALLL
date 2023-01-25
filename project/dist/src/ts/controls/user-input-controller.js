@@ -68,10 +68,10 @@ class UserInputController {
     moveFirstPerson(keyMove) {
         switch (keyMove) {
             case "ArrowUp":
-                this.navigate(-0.1, this.target.getPolarRotation().getThird());
+                this.navigate(-4, this.target.getPolarRotation().getThird());
                 break;
             case "ArrowDown":
-                this.navigate(0.1, this.target.getPolarRotation().getThird());
+                this.navigate(4, this.target.getPolarRotation().getThird());
                 break;
             case "ArrowLeft":
                 __classPrivateFieldGet(this, _UserInputController_instances, "m", _UserInputController_rotateTarget).call(this, (0, angle_1.degree)(0), (0, angle_1.degree)(0), (0, angle_1.degree)(5));
