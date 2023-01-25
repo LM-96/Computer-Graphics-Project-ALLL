@@ -147,7 +147,7 @@ class UserInputs {
         document.addEventListener("touchstart", (ev) => { this.mouseDown(ev); });
         document.addEventListener("touchend", (ev) => { this.mouseUp1(ev); });
         document.addEventListener("touchmove", (ev) => { this.mouseMove1(ev); });
-        document.addEventListener('keydown', (event) => { this.keydownMap(event); });
+        // document.addEventListener('keydown', (event) => {this.keydownMap(event)});
         document.addEventListener("keydown", (event) => { this.keydownMapExtend(event); });
     }
     setTarget(target) {
@@ -158,6 +158,18 @@ class UserInputs {
     keydownMapExtend(e) {
         let cam = __classPrivateFieldGet(this, _UserInputs_application, "f").getCamera();
         switch (e.code) {
+            case "ArrowDown":
+                __classPrivateFieldGet(this, _UserInputs_controller, "f").move(e.code);
+                break; //Freccia Giù
+            case "ArrowUp":
+                __classPrivateFieldGet(this, _UserInputs_controller, "f").move(e.code);
+                break; //Freccia Su
+            case "ArrowLeft":
+                __classPrivateFieldGet(this, _UserInputs_controller, "f").move(e.code);
+                break; //Freccia Sx
+            case "ArrowRight":
+                __classPrivateFieldGet(this, _UserInputs_controller, "f").move(e.code);
+                break; //Ferccia Dx
             case "KeyI":
                 this.setCameraView(1);
                 break;
@@ -176,7 +188,10 @@ class UserInputs {
             case "Comma":
                 __classPrivateFieldGet(this, _UserInputs_application, "f").getCamera().setFov(cam.getCurrentFov().add(-5, angle_1.AngleUnit.DEG));
                 break;
-            default: console.log(e.code);
+            case "KeyZ": this.placeObj("z");
+            case "KeyX": this.placeObj("x");
+            case "KeyC": this.placeObj("c");
+            case "KeyV": this.placeObj("v");
         }
         __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectDrawer().drawScene();
     }
@@ -190,14 +205,39 @@ class UserInputs {
                 cam.setPosition(70, 70, 80);
                 break;
             case 2:
-                cam.setPosition(0, 0, 90);
-                cam.setFov(new angle_1.Angle(80, angle_1.AngleUnit.DEG));
+                cam.setPosition(1, 1, 85);
+                cam.setFov(new angle_1.Angle(95, angle_1.AngleUnit.DEG));
                 break;
             case 3:
                 cam.setPosition(80, 0, 30);
                 break;
             case 0: cam.setPosition(helmet.getPosition().translate(15, 0, 10));
         }
+    }
+    placeObj(objNum) {
+        let incrementalNum = __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectManager().getAll().length;
+        let myObj = __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectManager().get("helmet");
+        let d = -1;
+        let objPah;
+        switch (objNum) {
+            //TODO. Add objs path
+            case "z":
+                objPah = "./assets/LucaLanAssets/helmet.obj";
+                break;
+            case "x":
+                objPah = "";
+                break;
+            case "c":
+                objPah = "";
+                break;
+            case "v":
+                objPah = "";
+                break;
+        }
+        let newCreatedObj = __classPrivateFieldGet(this, _UserInputs_application, "f").getMeshObjectManager().loadObj("helmet" + incrementalNum, objPah);
+        newCreatedObj.setPosition(myObj.getPosition().translate(-d * Math.sin(myObj.getPolarRotation().getThird().getValueIn(angle_1.AngleUnit.RAD)), d * Math.cos(myObj.getPolarRotation().getThird().getValueIn(angle_1.AngleUnit.RAD)), 0));
+        newCreatedObj.setPosition(newCreatedObj.getPosition().getX(), newCreatedObj.getPosition().getY(), 1);
+        newCreatedObj.setPolarRotation(myObj.getPolarRotation().getFirst(), myObj.getPolarRotation().getSecond(), myObj.getPolarRotation().getThird());
     }
 }
 exports.UserInputs = UserInputs;

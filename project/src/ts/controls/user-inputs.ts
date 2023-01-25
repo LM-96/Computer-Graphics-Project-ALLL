@@ -1,7 +1,6 @@
 import {WebGLApplication} from "../webgl/webgl-application";
 import {Log} from "../log/log";
 import {MeshObject} from "../obj/mesh-object";
-import {Couple} from "../types/pair";
 import {Angle, AngleUnit, radians} from "../geometry/angle/angle";
 import {Trio} from "../types/triple";
 import {UserInputController} from "./user-input-controller";
@@ -124,7 +123,7 @@ export class UserInputs {
         document.addEventListener("touchend", (ev: TouchEvent) => {this.mouseUp1(ev)});
         document.addEventListener("touchmove", (ev: TouchEvent) => {this.mouseMove1(ev)});
 
-        document.addEventListener('keydown', (event) => {this.keydownMap(event)});
+        // document.addEventListener('keydown', (event) => {this.keydownMap(event)});
         document.addEventListener("keydown", (event) => {this.keydownMapExtend(event)})
     }
 
@@ -138,16 +137,22 @@ export class UserInputs {
     keydownMapExtend(e : KeyboardEvent){
         let cam = this.#application.getCamera()
         switch (e.code) {
+            case "ArrowDown" : this.#controller.move(e.code); break;      	//Freccia Giù
+            case "ArrowUp" : this.#controller.move(e.code); break;       	//Freccia Su
+            case "ArrowLeft" : this.#controller.move(e.code); break;       //Freccia Sx
+            case "ArrowRight" : this.#controller.move(e.code); break;       	//Ferccia Dx
             case "KeyI": this.setCameraView(1); break;
             case "KeyO": this.setCameraView(2); break;
             case "KeyP": this.setCameraView(3); break;
             case "Space": this.setCameraView(0); break;
             case "Period": this.#application.getCamera().setFov(cam.getCurrentFov().add(5, AngleUnit.DEG)); break;
             case "Comma": this.#application.getCamera().setFov(cam.getCurrentFov().add(-5, AngleUnit.DEG)); break;
-            default: console.log(e.code)
+            case "KeyZ": this.placeObj("z")
+            case "KeyX": this.placeObj("x")
+            case "KeyC": this.placeObj("c")
+            case "KeyV": this.placeObj("v")
         }
         this.#application.getMeshObjectDrawer().drawScene()
-
     }
 
     setCameraView(view: number){
@@ -157,10 +162,29 @@ export class UserInputs {
         cam.setFov(new Angle(60, AngleUnit.DEG))
         switch (view){
             case 1: cam.setPosition(70, 70, 80); break;
-            case 2: cam.setPosition(0,0,90)
-                cam.setFov(new Angle(80, AngleUnit.DEG)); break;
+            case 2: cam.setPosition(1,1,85)
+                cam.setFov(new Angle(95, AngleUnit.DEG)); break;
             case 3: cam.setPosition(80, 0, 30); break;
             case 0: cam.setPosition(helmet.getPosition().translate(15, 0, 10))
         }
+    }
+
+    placeObj(objNum : string){
+        let incrementalNum = this.#application.getMeshObjectManager().getAll().length
+        let myObj = this.#application.getMeshObjectManager().get("helmet")
+        let d = -1;
+        let objPah : string;
+        switch (objNum) {
+            //TODO. Add objs path
+            case "z": objPah = "./assets/LucaLanAssets/helmet.obj"; break;
+            case "x": objPah = ""; break;
+            case "c": objPah = ""; break;
+            case "v": objPah = ""; break;
+        }
+        let newCreatedObj = this.#application.getMeshObjectManager().loadObj("helmet"+incrementalNum, objPah)
+        newCreatedObj.setPosition(myObj.getPosition().translate(-d*Math.sin(myObj.getPolarRotation().getThird().getValueIn(AngleUnit.RAD)), d*Math.cos(myObj.getPolarRotation().getThird().getValueIn(AngleUnit.RAD)),0))
+        newCreatedObj.setPosition(newCreatedObj.getPosition().getX(), newCreatedObj.getPosition().getY(), 1);
+        newCreatedObj.setPolarRotation(myObj.getPolarRotation().getFirst(), myObj.getPolarRotation().getSecond(), myObj.getPolarRotation().getThird())
+
     }
 }
