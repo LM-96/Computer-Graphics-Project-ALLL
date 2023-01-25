@@ -10,6 +10,16 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/ts/AntonioFranzeseApp.ts":
+/*!**************************************!*\
+  !*** ./src/ts/AntonioFranzeseApp.ts ***!
+  \**************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+eval("\nvar __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {\n    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") r = Reflect.decorate(decorators, target, key, desc);\n    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;\n    return c > 3 && r && Object.defineProperty(target, key, r), r;\n};\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nconst webgl_application_1 = __webpack_require__(/*! ./webgl/webgl-application */ \"./src/ts/webgl/webgl-application.ts\");\nconst log_1 = __webpack_require__(/*! ./log/log */ \"./src/ts/log/log.ts\");\nconst menu_controls_1 = __webpack_require__(/*! ./controls/menu-controls */ \"./src/ts/controls/menu-controls.ts\");\nconst user_inputs_1 = __webpack_require__(/*! ./controls/user-inputs */ \"./src/ts/controls/user-inputs.ts\");\nconst L = 3;\nlog_1.Log.enableLog();\nlet MyApp = class MyApp extends webgl_application_1.WebGLApplication {\n    constructor() {\n        super();\n    }\n    beforeStart() {\n        // Light Set up\n        let light = this.getMeshObjectDrawer().getSlManager();\n        light.setFar(200);\n        light.setProjHeight(200);\n        light.setProjWidth(200);\n        light.setLightPosition(20, 20, 100);\n        light.setLightTarget(20, 20, 0);\n        light.setShadows(true);\n        //Camera Set up\n        let camera = this.getCamera();\n        camera.setPosition(7, 0, 7);\n        camera.startFollowingObject(this.helmet);\n        this.menu = new menu_controls_1.MenuControls(this);\n        this.menu.setup();\n        this.userInputs = new user_inputs_1.UserInputs(this);\n        this.userInputs.setTarget(this.helmet);\n        this.userInputs.attachHandlers();\n    }\n    main(args) {\n        console.log(\"Hello world! [\" + this.applicationName + \"]\");\n        this.drawScene();\n    }\n};\n__decorate([\n    (0, webgl_application_1.WebGLMesh)(\"./assets/Consegna_fiori/Saviano.obj\")\n], MyApp.prototype, \"World\", void 0);\n__decorate([\n    (0, webgl_application_1.WebGLMesh)(\"./assets/Consegna_fiori/furgoncino.obj\"),\n    (0, webgl_application_1.ObjScale)(0.7, 0.7, 0.7),\n    (0, webgl_application_1.ObjPosition)(0, 0, 1)\n], MyApp.prototype, \"helmet\", void 0);\nMyApp = __decorate([\n    (0, webgl_application_1.WebGL)(\"test-app\", \"my_Canvas\", {\n        main: [\"vertex-shader\", \"fragment-shader\"],\n        color: [\"color-vertex-shader\", \"color-fragment-shader\"]\n    })\n], MyApp);\n\n\n//# sourceURL=webpack:///./src/ts/AntonioFranzeseApp.ts?");
+
+/***/ }),
+
 /***/ "./src/ts/camera/camera-signals.ts":
 /*!*****************************************!*\
   !*** ./src/ts/camera/camera-signals.ts ***!
@@ -450,16 +460,6 @@ eval("\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nexpo
 
 /***/ }),
 
-/***/ "./src/ts/test.ts":
-/*!************************!*\
-  !*** ./src/ts/test.ts ***!
-  \************************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-eval("\nvar __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {\n    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;\n    if (typeof Reflect === \"object\" && typeof Reflect.decorate === \"function\") r = Reflect.decorate(decorators, target, key, desc);\n    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;\n    return c > 3 && r && Object.defineProperty(target, key, r), r;\n};\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nconst webgl_application_1 = __webpack_require__(/*! ./webgl/webgl-application */ \"./src/ts/webgl/webgl-application.ts\");\nconst log_1 = __webpack_require__(/*! ./log/log */ \"./src/ts/log/log.ts\");\nconst menu_controls_1 = __webpack_require__(/*! ./controls/menu-controls */ \"./src/ts/controls/menu-controls.ts\");\nconst user_inputs_1 = __webpack_require__(/*! ./controls/user-inputs */ \"./src/ts/controls/user-inputs.ts\");\nconst L = 3;\nlog_1.Log.enableLog();\nlet MyApp = class MyApp extends webgl_application_1.WebGLApplication {\n    constructor() {\n        super();\n    }\n    beforeStart() {\n        this.menu = new menu_controls_1.MenuControls(this);\n        this.menu.setup();\n        this.userInputs = new user_inputs_1.UserInputs(this);\n        this.userInputs.setTarget(this.helmet);\n        this.userInputs.attachHandlers();\n    }\n    main(args) {\n        console.log(\"Hello world! [\" + this.applicationName + \"]\");\n        this.drawScene();\n    }\n};\n__decorate([\n    (0, webgl_application_1.WebGLMesh)(\"./assets/plane-2m.obj\")\n], MyApp.prototype, \"axis\", void 0);\n__decorate([\n    (0, webgl_application_1.WebGLMesh)(\"./assets/LuchettoObj/truck_final.obj\")\n], MyApp.prototype, \"helmet\", void 0);\nMyApp = __decorate([\n    (0, webgl_application_1.WebGL)(\"test-app\", \"my_Canvas\", {\n        main: [\"vertex-shader\", \"fragment-shader\"],\n        color: [\"color-vertex-shader\", \"color-fragment-shader\"]\n    })\n], MyApp);\n\n\n//# sourceURL=webpack:///./src/ts/test.ts?");
-
-/***/ }),
-
 /***/ "./src/ts/types/arrays.ts":
 /*!********************************!*\
   !*** ./src/ts/types/arrays.ts ***!
@@ -671,7 +671,7 @@ eval("\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nexpo
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/ts/test.ts");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/ts/AntonioFranzeseApp.ts");
 /******/ 	
 /******/ })()
 ;
