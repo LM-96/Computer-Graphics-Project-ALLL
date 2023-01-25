@@ -58,7 +58,6 @@ let GothamApp = class GothamApp extends webgl_application_1.WebGLApplication {
     main(args) {
         console.log("Hello world! [" + this.applicationName + "]");
         this.renderScene();
-        this.renderScene();
     }
 };
 __decorate([

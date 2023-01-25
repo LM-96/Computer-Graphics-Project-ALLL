@@ -215,6 +215,28 @@ export abstract class WebGLApplication {
     protected init() {}
 
     /**
+     * The method that is called after the creation of the WebGL context.
+     * At this point, the `WebGLEnvironment`, the `MeshObjectDrawer` and the `MeshObjectLoader` are created,
+     * but the objects are not loaded yet and the events are not registered
+     * @protected
+     */
+    protected afterContextCreation() {}
+
+    /**
+     * The method that is called after the loading of the objects.
+     * At this point, the objects are loaded, but the events are not registered
+     * @protected
+     */
+    protected afterObjectsLoaded() {}
+
+    /**
+     * The method that is called after the registration of the events.
+     * At this point, the events are registered, but the application is not started yet
+     * @protected
+     */
+    protected afterEventsRegistered() {}
+
+    /**
      * The method that is called before the application starts.
      * At this point, all the mesh objects are loaded, and the scene is ready to be drawn.
      * This method can be overridden to perform some initialization before the application starts
@@ -279,8 +301,12 @@ function mapShaders(shaders: any): Map<string, string[]> {
  *     <li>the `WebGLApplication` object is instantiated</li>
  *     <li>the `WebGLApplication` object is added to the `window["APPLICATIONS"]` map</li>
  *     <li>the `init()` method of the instantiated object is called</li>
+ *     <li>the `WebGLEnvironment`, "MeshObjectManager" and "MeshObjectDrawer" objects are created</li>
+ *     <li>the `afterContextCreation()` method of the instantiated object is called</li>
  *     <li>the annotated mesh objects are loaded</li>
+ *     <li>the `afterObjectsLoaded()` method of the instantiated object is called</li>
  *     <li>the annotated methods are registered as event listeners</li>
+ *     <li>the `afterEventsRegistered()` method of the instantiated object is called</li>
  *     <li>the `beforeStart()` method of the instantiated object is called</li>
  *     <li>the `start()` method of the instantiated object is called</li>
  * </ol>
@@ -342,6 +368,9 @@ export function WebGL(applicationName: string,
             instance["camera"] = meshObjectDrawer.getCamera()
             instance["applicationName"] = applicationName
 
+            Log.log("WebGLApplicationBuilder | calling beforeContextCreation() for " + applicationName + " ...")
+            instance["afterContextCreation"]()
+
             ObjTextureSignalFlow.ensureDrawWithTextureLoaded(applicationName)
 
             Log.log("WebGLApplicationBuilder | loading objects for " + applicationName + " ...")
@@ -367,6 +396,9 @@ export function WebGL(applicationName: string,
                 Log.log("WebGLApplicationBuilder | object [" + continuation.name + "] loaded for " + applicationName +
                     " into property [" + continuation.propertyKey + "]!")
             }
+            Log.log("WebGLApplicationBuilder | objects loaded for " + applicationName +
+                ", calling afterObjectsLoaded() ...")
+            instance["afterObjectsLoaded"]()
 
             // Attach canvas mouse events
             const onCanvasMouseEventMethods = clazz.prototype[OnCanvasEventSym]
@@ -403,6 +435,9 @@ export function WebGL(applicationName: string,
                     }, false)
                 })
             }
+            Log.log("WebGLApplicationBuilder | events attached for " + applicationName +
+                ", calling afterEventsAttached() ...")
+            instance["afterEventsRegistered"]()
 
             Log.log("WebGLApplicationBuilder | initializing application " + applicationName + " ...")
             instance.beforeStart()

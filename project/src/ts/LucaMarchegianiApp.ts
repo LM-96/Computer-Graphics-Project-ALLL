@@ -31,7 +31,6 @@ class GothamApp extends WebGLApplication {
 
     private menu: MenuControls
     private userInputs: UserInputs
-
     constructor() {
         super();
         this.userInputs = new UserInputs(this)
@@ -92,7 +91,6 @@ class GothamApp extends WebGLApplication {
 
     protected main(args: string[]): void {
         console.log("Hello world! [" + this.applicationName + "]")
-        this.renderScene()
         this.renderScene()
     }
 }
