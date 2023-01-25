@@ -8,7 +8,7 @@
   <h1 style="color:black">Progetto cantiere</h1>
   <h2><center>Progetto per il corso di Computer Graphics</center></h2>
   <h3><center>Realizzato da Luca Landolfi Studente di Ingegneria Informatica Magistrale</center></h3>
-  <p>Il progetto "Cantiere" vuole rappresentare una citt&agrave; ancora in fase di costruzione dove vi sono tre zone ben distinte che riproducono i lavori in corso. L'idea &egrave; nata del tutto a caso dopo aver visto un documentario
+  <p>Il progetto "Cantiere" vuole rappresentare una citt&agrave; ancora in fase di costruzione dove vi sono tre zone ben distinte che riproducono i lavori in corso. L'idea &egrave; nata casualmente dopo aver visto un documentario
   riguardante la costruzione della citt&agrave; di Dubai.</br></br>
     All'interno del progetto vi &egrave; la presenza di vari elementi:</p>
     <ul>
@@ -20,12 +20,13 @@
     </ul>
   <img src="./images/sc-1.png" alt="front" class="center" style="width:800px;height:500px">
   </br>
+  <h3>Interazione Utente</h3>
   <p>E' possibile interagire con la scena in vari modi:</p>
   <ul>
-    <li><p>Con l'utilizzo di mouse: muovendo il mouse orizzontalmente si pu&ograve; ruotare l'elmetto, mentre in verticale &egrave; possibile farlo spostare in avanti e in dietro. Dando un effetto movimento molto fluido</p></li></br>
+    <li><p>Con l'utilizzo di mouse: muovendo il mouse orizzontalmente si pu&ograve; ruotare l'elmetto, mentre in verticale &egrave; possibile farlo spostare in avanti e in dietro. Dando un effetto di movimento molto fluido</p></li></br>
     <li><p>Con la tastiera, con la quale si possono effettuare molteplici azioni:</p>
           <ul>
-            <li><p>La prima, pi&ugrave; semplice, &egrave; di muovere l'elmetto. Con "freccia s&ugrave;" e "freccia gi&ugrave;" si muover&agrave; in avanti e in dietro e con le frecce laterali effettuer&agrave; una rotazione. Così da poter esplorare tutta la mappa</p></li>
+            <li><p>La prima, pi&ugrave; semplice, &egrave; di muovere l'elmetto. Con "freccia s&ugrave;" e "freccia gi&ugrave;" si muover&agrave; in avanti e in dietro e con le frecce laterali effettuer&agrave; una rotazione. Cos&igrave; da poter esplorare tutta la mappa</p></li>
             <li><p>La seconda riguarda il setting di varie visuali della camera. Abbiamo 3 visuali accessibili dai tasti <b>"I"</b>, <b>"O"</b> e <b>"P"</b> (Di seguito alcuni screen delle visuali). Con il tasto <b>"spazio"</b> &egrave; inoltre possibile tornare alla visualizzaizone ravvicinata dell'elemetto.
               Inoltre con i tasti <b>"."</b> e <b>","</b> &egrave; possibile modificare il <i>"Fov"</i> (Field Of View). Aumentandolo e diminuendolo.</p></li>
             <img src="./images/sc-view1.png" alt="front" style="width:600px;height:400px">
@@ -53,7 +54,7 @@
   </ul>
   <p>Il progetto prevede quindi un esplorazione della mappa che rappresenta un cantiere in costruzione e il avanzamento, con l'inserimento di palazzi, oggetti e nuovi elementi all'interno della scena.
   Sar&agrave; quindi possibile muovere l'elmetto da cantiere in modo da poter andare
-    in giro per i cantieri potendo così supervisionare i lavori, e aggiungere elementi alla scena</p></br>
+    in giro per i cantieri potendo cos&igrave; supervisionare i lavori, e aggiungere elementi alla scena</p></br>
   <p>La scena necessita di circa un secondo per essere renderizzata la prima volta, in quanto vengono utilizzate svariate texture di dimensioni nell'ordine dei 100KB.</p></br> </br>
   <img src="images/mondo_tiger.png" alt="front" style="width:800px;height:400px;" class="center">
   <img src="images/mondo_tiger2.png" alt="front" class="center" style="width:800px;height:400px">
@@ -62,9 +63,9 @@
   <p>Gli oggetti della scena sono stati realizzati utillizzando Blender e sono stati importati all'interno del codice tramite i file .obj e.mtl:</p></br>
   <ul>
 	<li><p>Il cubo &egrave; stato texturizzato con 2 texture differenti, la prima &egrave; stata applicata alle facce laterali e a quella superiore in modo che potessero rappresentare la silhouette di una citt&agrave;, la seconda invece &egrave; stata applicata alla faccia
-      inferiore per poter così ricreare l'urbanistica della citt&agrave;.</p></li></br>
-    <li><p>Gli edifici in fase di costruzione a cui &egrave; stata applicata una semplice colorozaione del materiale.</p></li></br>
-	<li><p>I palazzi a cui &egrave; stata applicata una colorazione pi&ugrave; l'aggiunta di una texture raffiguaranti delle finestre. In particolare su uno dei tre palazzi &egrave; presente l'insegna della ditta di muratura addobbata con 3 texture
+      inferiore per poter cos&igrave; ricreare l'urbanistica della citt&agrave;.</p></li></br>
+    <li><p>Gli edifici in fase di costruzione a cui &egrave; stata applicata una semplice colorzaione del materiale.</p></li></br>
+	<li><p>I palazzi a cui &egrave; stata applicata una colorazione pi&ugrave; l'aggiunta di una texture raffiguarnti delle finestre. In particolare su uno dei tre palazzi &egrave; presente l'insegna della ditta di muratura addobbata con 3 texture
       tra cui una mia foto.</p></li></br>
     <li><p>L'elmetto da cantiere al quale &egrave; stata applicata una texture col nome della ditta pi&ugrave; il segnale di pericolo.</p></li>
   </ul>
@@ -92,7 +93,7 @@
   <p>E' possibile attivare l'ombreggiatura, generata grazie al calcolo della profondit&agrave; dei pixel rispetto alla sorgente luminosa e al resto della scena. Con l'ausilio di due "Sahder Program" in cominazione.</br>
   E' stata dunque anche inserita la possibilit&agrave; di disabilitare/abilitare le ombre dal pannello di controllo (dal menu).<br>
   Grazie alle ombre la resa della nostra citt&agrave; in costruzione &egrave; decisamente pi&ugrave; bella e pi&ugrave; realistica. Inoltre,
-    grazie ai controlli del menu &egrave; possibile modificare la posizione delle luce per ottenere vari effetti realistici di illuminazione.<br></p>
+    grazie ai controlli del menu &egrave; possibile modificare la posizione della luce per ottenere vari effetti realistici di illuminazione.<br></p>
   <img src="images/screen-shadow.png" alt="control panel" style="width:800px;height:400px;">
   <img src="images/sc-shadowno2.png" alt="control panel" style="width:800px;height:400px;">
 
@@ -132,6 +133,7 @@
   <p>Essendo questa un'applicazione web, l'utilizzo su un disposito mobile risulta essere semplificato. L'interazione avviene tramite i tocchi sullo schermo invece che tramite il mouse/tastiera, i quali vengono catturati e gestiti adeguatamente dall'applicazione.
   Lo spostamento del nostro oggetto principale (l'elmetto) avviene in modo molto fluido e intuitivo tramite gli eventi touch.
     Permettendo all'utente di poter tranquillamente continuare a esplorare la scena divertendosi!</p>
+  <img src="./images/sc-mobile2.png" alt="front" style="width:200px;height:400px">
 
 <h3>Extra</h3>
   <p>L'inserimento di oggetti all'interno della scena era stata pensata con l'aggiunta anche di un secondo canvas nella pagina, pi&ugrave; piccolo,
@@ -142,9 +144,10 @@ Per ragioni di tempistiche la funzionalit&agrave; non &egrave; stata integrata m
 
 <h4>Note</h4>
 <p>Il progetto nasce grazie alla collaborazione di 4 colleghi, con la realizzazione di una solida base di codice comune
-permettendo poi ad ognuno di noi di sviluppare il progetto personale con maggiore precisione. Il codice organizzato e strutturato in Typescript,
+permettendo poi a ognuno di noi di sviluppare il progetto personale con maggiore precisione. Il codice organizzato e strutturato in Typescript,
 permette l'utilizzo di WebGl e degli script JavaScritp con una maggiore tipizzazione. Il modello di programmazione &egrave; stato riscritto sulla programazione ad aventi,
 dove ogni azione effetuata scatena un evento che &egrave; possibile catturare per aggiornare la scena. Ci&ograve; permette una maggiore efficienza a livello di utilizzo di risorse e di efficienza del codice.
   Si ringrazia dunque <i>Luca De Risi</i>, <i>Luca Marchegiani</i> ed <i>Antonio Franzese</i> per la collaborazione.</p>
+<h5>Grazie per l'attenzione - <i>Luca Landolfi</i></h5>
 </body>
 </html>
