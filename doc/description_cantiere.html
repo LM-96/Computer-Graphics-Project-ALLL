@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Project Description</title>
+  <link rel="stylesheet" href="desc_style.css">
+</head>
+<body bgcolor= "white">
+  <h1 style="color:black">Progetto cantiere</h1>
+  <h2><center>Progetto per il corso di Computer Graphics</center></h2>
+  <h3><center>Realizzato da Luca Landolfi di Ingegneria Informatica</center></h3>
+  <p>Il progetto "Cantiere" vuole rappresentare una città ancora in fase di costruzione dove vi sono tre zone ben distinte che riproducono i lavori in corso. L'idea è nata del tutto a caso dopo aver visto un documentario
+  riguardante la costruzione della città di Dubai.</br></br>
+    All'interno del progetto vi è la presenza di vari elementi:
+    <ul>
+        <li>Un cubo rappresentante la città (visibile dall'interno)</li></br>
+        <li>Alcuni edifici in fase di costruzione</li></br>
+        <li>Alcuni palazzi</li></br>
+		<li>Il palazzo della ditta di costruzioni</li></br>
+        <li>Un elmetto da cantiere (oggetto animato)</li>
+    </ul>
+  <img src="./images/sc-1.png" alt="front" class="center" style="width:800px;height:500px">
+  </br>
+  E' possibile interagire con la scena in vari modi:
+  <ul>
+      <li>Con l'utilizzo di mouse: muovendo il mouse orizzontalmente si può ruotare l'elmetto, mentre in verticale è possibile farlo spostare in avanti e in dietro. Dando un effetto movimento molto fluido</li></br>
+      <li>Con la tastiera, con la quale si possono effettuare molteplici azioni:
+          <ul>
+              <li>La prima, piu' semplice, è di muovere l'elmetto. Con "freccia su'" e "freccia gi'" si muovera' in avanti e in dietro e con le frecce laterali effettuera' una rotazione. Così da poter esplorare tutta la mappa</li>
+            <li>La seconda riguarda il setting di varie visuali della camera. Abbiamo 3 visuali accessibili dai tasti <b>"I"</b>, <b>"O"</b> e <b>"P"</b> (Di seguito alcuni screen delle visuali). Con il tasto <b>"spazio"</b> è inoltre possibile tornare alla visualizzaizone ravvicinata dell'elemetto.
+            Inoltre con i tasti <b>"."</b> e <b>","</b> è possibile modificare il <i>"Fov"</i> (Field Of View). Aumentandolo e diminuendolo.</li>
+            <img src="./images/sc-view1.png" alt="front" style="width:600px;height:400px">
+            <img src="./images/sc-view2.png" alt="front" style="width:600px;height:400px">
+            <img src="./images/sc-view3.png" alt="front" class="center" style="width:600px;height:400px">
+            <img src="./images/sc-view4.png" alt="front" class="center" style="width:600px;height:400px">
+              <li>Ultima possibile interazione è quella di poter inserire nella scena ulteriori oggetti3D utilizzando i tasti <b>"Z"</b>, <b>"X"</b>, <b>"C"</b> e <b>"V"</b>.
+              Alla pressione di uno di questi tasti verrà caricato un Obj (diverso per ogni tasto) all'interno della mappa dove si trova il nostro elmetto</li>
+            <img src="./images/sc-obj1.png" alt="front" style="width:600px;height:400px">
+            <img src="./images/sc-obj2.png" alt="front" style="width:600px;height:400px">
+          </ul>
+      </li>
+    <li>L'utente puo' poi interagire con tutti glie ementi delle ascena tramite un pannello di controllo inserito. Il pannello si apre cliccando sulla barra "menu" situata a destra del canvas.
+    Cliccandovi si aprira' un menu' a tendina dalla quale sarà poi possibile modificare e selzionare tutte le opzioni</li>
+    <img src="./images/sc-menu1.png" alt="front" style="width:600px;height:400px">
+    <img src="./images/sc-menu.png" alt="front" style="width:200px;height:400px">
+
+      <li>Inoltre è stata gestita anche l'interazione "touch" dell'utente in caso di dispositivi mobili. Le gesture inserite sono semplificate, infatti sarà solamente possibile muoversi nella mappa e utitlizzare il menu.
+      Per muoversi nella mappa le gesture "touch" seguiranno gli comportamenti descritti prima con il mouse</li>
+
+    <img src="./images/sc-mobile1.png" alt="front" style="width:350px;height:400px">
+    <img src="./images/sc-mobile2.png" alt="front" style="width:200px;height:400px">
+    <img src="./images/sc-mobile4.png" alt="front" style="width:200px;height:400px">
+    </br>
+  </ul>
+  Il progetto prevede quindi un esplorazione della mappa che rappresenta un cantiere in costruzione e il avanzamento, con l'inserimento di palazzi, oggetti e nuovi elementi all'interno della scena.
+  Sarà quindi possibile muovere l'elmetto da cantiere in modo da poter andare
+  in giro per i cantieri potendo così supervisionare i lavori, e aggiungere elementi alla scena</br>
+  La scena necessita di circa un secondo per essere renderizzata la prima volta, in quanto vengono utilizzate svariate texture di dimensioni nell'ordine dei 100KB.</br> </br>
+  <img src="images/mondo_tiger.png" alt="front" style="width:800px;height:400px;" class="center">
+  <img src="images/mondo_tiger2.png" alt="front" class="center" style="width:800px;height:400px">
+  <h2><center>Caratteristiche dell'applicazione</center></h2>
+  <h3>Dettagli degli elementi</h3>
+  Gli oggetti della scena sono stati realizzati utillizzando Blender e sono stati importati all'interno del codice tramite i file .obj e.mtl:</br>
+  <ul>
+	<li>Il cubo è stato texturizzato con 2 texture differenti, la prima è stata applicata alle facce laterali e a quella superiore in modo che potessero rappresentare la silhouette di una città, la seconda invece è stata applicata alla faccia 
+  inferiore per poter così ricreare l'urbanistica della città.</li></br>
+	<li>Gli edifici in fase di costruzione a cui è stata applicata una semplice colorozaione del materiale.</li></br>
+	<li>I palazzi a cui è stata applicata una colorazione più l'aggiunta di una texture raffiguaranti delle finestre. In particolare su uno dei tre palazzi è presente l'insegna della ditta di muratura addobbata con 3 texture
+  tra cui una mia foto.</li></br>
+	<li>L'elmetto da cantiere al quale è stata applicata una texture col nome della ditta più il segnale di pericolo.</li>
+  </ul>
+  <div>
+			<img src="images\tiger.jpeg" height="200" >
+			<img src="images\muratore.jpg" height="200" >
+			<img src="images\building.jpg" height="200" >
+			<img src="images\casco2-01.jpg" height="200" >
+			<img src="images\l41480-road-21297.jpg" height="200" >
+			<img src="images\2058984-silhouette-di-grattacielo-edifici-citta-skyline-illustrazione-vettoriale.jpg" height="200" >
+			<img src="images\texture-glazed-modern-windows-grey-1013369.jpg" height="200" >
+		</div>
+  
+  <h3>Illuminazione</h3>
+  <p>L'intera scena è illuminata da una luce ambientale che rende visibili tutti gli elementi, anche quelli che non sarebbero visibili perchè esclusi dall'illuminazione della sorgente luminosa.</br>
+  L'illuminazione principale pero' e' rappresentata dalla luce direzionale inserita, che può essere modificata dal menu tramite le varie opzioni (posizione, orientamento, etc.) e può essere trasformata in una <i>Spotlight</i> tramite l'opzione nel menu.<br>
+    Si notano gli effetti di luce generati modificando la posizione della stessa.</p>
+  <img src="./images/screen-light1.png" alt="front" style="width:800px;height:400px">
+  <p>Dal pannello di controllo e' inoltre possibile visualizzare il "frustum" della luce, per poterne controllare la posizione e l'orientamento.</p>
+  <img src="./images/screen-light2.png" alt="front" style="width:800px;height:400px">
+  <p>Cliccando inoltre sull'opzione "Spotlight" si può trasformare l'illuminazione. (Si noti il "frustum")</p>
+  <img src="./images/screen-light3.png" alt="front" style="width:800px;height:400px">
+
+  <h3>Ombreggiatura</h3>
+  E' possibile attivare l'ombreggiatura, generata grazie al calcolo della profondità dei pixel rispetto alla sorgente luminosa e al resto della scena. </br>
+  E' stata dunque anche inserita la possibilità di disabilitare/abilitare le ombre dal pannello di controllo (dal menu).<br>
+  Grazie alle ombre la resa della nostra città in costruzione è decisamente più bella e più realistica. Inoltre,
+  grazie ai controlli del menu è possibile modificare la posizione delle luce per ottenere vari effetti realistici di illuminazione.
+<img src="images/control_panel.png" alt="control panel" style="float:right;width:200px;height:400px;">
+  <h3>Interazione utente</h3>
+
+  <h3>Pannello di Controllo</h3>
+  <p>Il pannello di controllo, realizzato con sfondo semi-trasparente per poter continuare a vedere la scena mentre
+    si modificano i valori, presenta diversi parametri modificabili:</p>
+  <ul>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li>"spotLight" permette di definire il tipo di illuminazione, direzionale o spot</li>
+    <li>"lightFrustum" permette di visualizzare il frustum della sorgente luminosa</li>
+    <li>"shadows" permette di abilitare/disabilitare le ombre</li>
+  </ul>
+  <img src="images/sc-menu.png" alt="control panel" style="float:right;width:300px;height:600px;">
+   
+<h3>Utilizzo su dispositivi mobile</h3>
+  <p>Essendo questa un'applicazione web, l'utilizzo su un disposito mobile risulta essere semplificato. L'interazione avviene tramite i tocchi sullo schermo invece che tramite il mouse/tastiera, i quali vengono catturati e gestiti adeguatamente dall'applicazione.
+  Lo spostamento del nostro oggetto principale (l'elmetto) avviene in modo molto fluido e intuitivo tramite gli eventi touch.
+    Permettendo all'utente di poter tranquillamente continuare a esplorare la scena divertendosi!</p>
+
+<h3>Extra</h3>
+  <p>L'inserimento di oggetti all'interno della scena era stata pensata con l'aggiunta anche di un secondo canvas nella pagina, più piccolo,
+che permettesse all'utente di visionare e interagire in modo semplice con gli oggetti in maniera 3D, prima di posizionarli nella scena.
+Per ragioni di tempistiche la funzionalità non è stata integrata ma si riporta qui uno screen del prototipo di esempio con la presenza di due canvas.
+  </p>
+  <-- Inserire immagine del prototipo -->
+
+<h4>Note</h4>
+<p>Il progetto nasce grazie alla collaborazione di 4 colleghi, con la realizzazione di una solida base di codice comune
+permettendo poi ad ognuno di noi di sviluppare il progetto personale con maggiore precisione. Il codice organizzato e strutturato in Typescript,
+permette l'utilizzo di WebGl e degli script JavaScritp con una maggiore tipizzazione. Il modello di programmazione è stato riscritto sulla programazione ad aventi,
+dove ogni azione effetuata scatena un evento che è possibile catturare per aggiornare la scena. Ciò permette una maggiore efficienza a livello di utilizzo di risorse e di efficienza del codice.
+  Si ringrazia dunque <i>Luca De Risi</i>, <i>Luca Marchegiani</i> ed <i>Antonio Franzese</i> per la collaborazione.</p>
+</body>
+</html>
