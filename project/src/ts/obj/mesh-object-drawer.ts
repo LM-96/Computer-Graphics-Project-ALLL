@@ -7,6 +7,7 @@ import {AngleUnit} from "../geometry/angle/angle";
 import {Log} from "../log/log";
 import {SlManager} from "./sl-manager";
 import {Pair} from "../types/pair";
+import {CameraMan} from "../camera/camera-man";
 
 export class MeshObjectDrawer {
 
@@ -16,8 +17,9 @@ export class MeshObjectDrawer {
     #glEnvironment: WebGLEnvironment
     #meshObjectManager: MeshObjectManager
     zNear: number = 0.1
-    zFar: number = 200
+    zFar: number = 700
     #camera: Camera = new FlowedCamera()
+    #cameraMan: CameraMan
     #sharedUniforms: SharedUniforms
     #slManager: SlManager
     #lightFrustum: boolean
@@ -33,6 +35,7 @@ export class MeshObjectDrawer {
         this.#slManager = new SlManager(this.#sharedUniforms)
         this.#lightFrustum = false
         this.#bias = -0.006
+        this.#cameraMan = new CameraMan(this)
 
         this.#cubeLinesBufferInfo = WebGLUtils.createBufferInfoFromArrays(
             this.#glEnvironment.getContext(), {
@@ -217,6 +220,13 @@ export class MeshObjectDrawer {
      */
     getCamera(): Camera {
         return this.#camera
+    }
+
+    /**
+     * Returns the `CameraMan` associated of this drawer
+     */
+    getCameraMan(): CameraMan {
+        return this.#cameraMan
     }
 
     /**

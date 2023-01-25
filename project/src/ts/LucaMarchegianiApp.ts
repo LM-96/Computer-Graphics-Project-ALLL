@@ -1,12 +1,15 @@
 import {
     ObjLimitsChecker,
-    ObjPosition, ObjRotation, ObjScale,
+    ObjPosition,
+    ObjRotation,
+    ObjScale,
     OnCanvasMouseEvent,
     OnCanvasTouchEvent,
     OnKeyboardEvent,
     WebGL,
     WebGLApplication,
-    WebGLMesh, WebGLShaderReference
+    WebGLMesh,
+    WebGLShaderReference
 } from "./webgl/webgl-application";
 import {MeshObject} from "./obj/mesh-object";
 import {Log} from "./log/log";
@@ -15,6 +18,7 @@ import {UserInputs} from "./controls/user-inputs";
 import {LimitsCheckers} from "./geometry/limits/limits-checkers";
 import {degree} from "./geometry/angle/angle";
 import {Point3D} from "./geometry/point/point-3d";
+import {CameraManWorkMode} from "./camera/camera-man";
 
 const SHADERS: WebGLShaderReference = {
     main: ["vertex-shader", "fragment-shader"],
@@ -29,10 +33,6 @@ const TOLERANCE: number = 3
 @WebGL("gotham-app", "my_Canvas", SHADERS)
 class GothamApp extends WebGLApplication {
 
-    @WebGLMesh("./assets/objs/city.obj")
-    @ObjScale(0.7,0.7,0.7)
-    private world: MeshObject
-
     @WebGLMesh("./assets/objs/batmoto.obj")
     @ObjPosition(170,-131,1)
     @ObjRotation(degree(0),degree(0),degree(90))
@@ -40,6 +40,10 @@ class GothamApp extends WebGLApplication {
     @ObjLimitsChecker(LimitsCheckers.linear(TOLERANCE, HIGH - TOLERANCE,
         -BASE + TOLERANCE, 0 - TOLERANCE, 1, 1))
     private batMoto: MeshObject
+
+    @WebGLMesh("./assets/objs/city.obj")
+    @ObjScale(0.7,0.7,0.7)
+    private world: MeshObject
 
     private menu: MenuControls
     private userInputs: UserInputs
@@ -84,7 +88,10 @@ class GothamApp extends WebGLApplication {
     protected afterObjectsLoaded() {
         // It's now possible to setup the menu
         Log.log("WebGLApplication | after objects loaded")
-        this.menu.setup()
+        let cameraMan = this.getMeshObjectDrawer().getCameraMan()
+        cameraMan.setTarget(this.batMoto)
+        cameraMan.setPhase(this.batMoto.getPolarRotation().getThird().multiply(-1))
+        cameraMan.hire(CameraManWorkMode.THIRD_PERSON)
     }
 
     protected afterEventsRegistered() {
@@ -104,14 +111,8 @@ class GothamApp extends WebGLApplication {
         light.setLightTarget(20, 20, 0)
         light.setShadows(true)
 
-        //Camera Set up
-        let camera = this.getCamera()
-
-        let motoPos: Point3D = this.batMoto.getPosition()
-        camera.setPosition(motoPos.getX() - 30, motoPos.getY(),5);
-        camera.setTarget(motoPos.getX(), motoPos.getY(), motoPos.getZ())
         this.getMeshObjectDrawer().zFar = 700
-        camera.startFollowingObject(this.batMoto)
+        this.menu.setup()
     }
 
     protected main(args: string[]): void {

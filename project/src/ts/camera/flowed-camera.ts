@@ -13,6 +13,7 @@ import CameraSignals from "./camera-signals";
 import {Signal} from "../signals/signal";
 import {MeshObjectSignals} from "../obj/mesh-object-signals";
 import {handler} from "../signals/options";
+import {CameraMan} from "./camera-man";
 
 export default class FlowedCamera implements Camera {
     #position: Point3D;
@@ -34,6 +35,8 @@ export default class FlowedCamera implements Camera {
     readonly #followedObjectFlow: SingleSignalFlow<Camera, PerformedObjectSet<MeshObject|null>, void>
     readonly #lookedAtObjectFlow: SingleSignalFlow<Camera, PerformedObjectSet<MeshObject|null>, void>
     readonly #performedTranslationBuilder: PerformedTranslationBuilder
+
+    readonly cameraMan: CameraMan
 
     #lookAtObjectReceipt: SubscriptionReceipt<MeshObject, PerformedTranslation, void>|null = null
     #followObjectReceipt: SubscriptionReceipt<MeshObject, PerformedTranslation, void> = null

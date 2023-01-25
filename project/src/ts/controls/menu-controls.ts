@@ -17,6 +17,7 @@ import {PerformedPolarRotation} from "../geometry/data/performed-polar-rotation"
 import {Pair, pairOf} from "../types/pair";
 import {PerformedNumberTrioChange} from "../types/data/performed-number-trio-change";
 import {PositionOutOfLimitException} from "../geometry/limits/exceptions/position-out-of-limit-exception";
+import {CameraMan, CAMERAMAN_WORK_MODES, CameraManWorkMode} from "../camera/camera-man";
 
 @SignalListener
 export class MenuControls {
@@ -90,7 +91,55 @@ export class MenuControls {
         this.#currentObjReceipt = []
     }
 
-    updateActiveObj(updateUI: boolean = true) {
+    allineateSettings(): void {
+        let application = this.#application
+        this.#settings.look_at = application.getCamera().isLookingAtObject()
+        this.#settings.follow = application.getCamera().isFollowingObjectTranslation()
+        this.#settings.cameraman = CAMERAMAN_WORK_MODES.indexOf(application.getMeshObjectDrawer().getCameraMan().getCurrentWorkMode()),
+        this.#settings.cman_high = application.getMeshObjectDrawer().getCameraMan().getHigh(),
+        this.#settings.cman_distance = application.getMeshObjectDrawer().getCameraMan().getDistance(),
+        this.#settings.cameraX = application.getCamera().getCurrentPosition().getX(),
+        this.#settings.cameraY = application.getCamera().getCurrentPosition().getY(),
+        this.#settings.cameraZ = application.getCamera().getCurrentPosition().getY(),
+        this.#settings.cameraUpX = application.getCamera().getCurrentUp().getFirst(),
+        this.#settings.cameraUpY = application.getCamera().getCurrentUp().getSecond(),
+        this.#settings.cameraUpZ = application.getCamera().getCurrentUp().getThird(),
+        this.#settings.posX = this.#targetObj == undefined ? this.#settings.posX : this.#targetObj.getPosition().getX(),
+        this.#settings.posY = this.#targetObj == undefined ? this.#settings.posY : this.#targetObj.getPosition().getY(),
+        this.#settings.posZ = this.#targetObj == undefined ? this.#settings.posZ : this.#targetObj.getPosition().getZ(),
+        this.#settings.scaleX = this.#targetObj == undefined ? this.#settings.scaleX : this.#targetObj.getCurrentScale().getFirst(),
+        this.#settings.scaleY = this.#targetObj == undefined ? this.#settings.scaleY : this.#targetObj.getCurrentScale().getSecond(),
+        this.#settings.scaleZ = this.#targetObj == undefined ? this.#settings.scaleZ : this.#targetObj.getCurrentScale().getThird(),
+        this.#settings.psi = this.#targetObj == undefined ? this.#settings.psi : this.#targetObj.getPolarRotation().getFirst().getValueIn(AngleUnit.DEG),
+        this.#settings.theta = this.#targetObj == undefined ? this.#settings.theta : this.#targetObj.getPolarRotation().getSecond().getValueIn(AngleUnit.DEG),
+        this.#settings.phi = this.#targetObj == undefined ? this.#settings.phi : this.#targetObj.getPolarRotation().getThird().getValueIn(AngleUnit.DEG),
+        this.#settings.targetX = application.getCamera().getCurrentTarget().getX(),
+        this.#settings.targetY = application.getCamera().getCurrentTarget().getY(),
+        this.#settings.targetZ = application.getCamera().getCurrentTarget().getZ(),
+        this.#settings.frustum = application.getMeshObjectDrawer().getLightFrustum(),
+        this.#settings.shadows = application.getMeshObjectDrawer().getSlManager().getShadows(),
+        this.#settings.bias = application.getMeshObjectDrawer().getBias(),
+        this.#settings.lightPosX = application.getMeshObjectDrawer().getSlManager().getLightPosition().getX(),
+        this.#settings.lightPosY = application.getMeshObjectDrawer().getSlManager().getLightPosition().getY(),
+        this.#settings.lightPosZ = application.getMeshObjectDrawer().getSlManager().getLightPosition().getZ(),
+        this.#settings.lightTargX = application.getMeshObjectDrawer().getSlManager().getLightTarget().getX(),
+        this.#settings.lightTargY =  application.getMeshObjectDrawer().getSlManager().getLightTarget().getY(),
+        this.#settings.lightTargZ = application.getMeshObjectDrawer().getSlManager().getLightTarget().getZ(),
+        this.#settings.lightFov = application.getMeshObjectDrawer().getSlManager().getFov().getValueIn(AngleUnit.DEG),
+        this.#settings.lightNear = application.getMeshObjectDrawer().getSlManager().getNear(),
+        this.#settings.lightFar = application.getMeshObjectDrawer().getSlManager().getFar(),
+        this.#settings.spotlight = application.getMeshObjectDrawer().getSlManager().isSpotlight(),
+        this.#settings.lightWidth = application.getMeshObjectDrawer().getSlManager().getProjWidth(),
+        this.#settings.lightHeight = application.getMeshObjectDrawer().getSlManager().getProjHeight(),
+        this.#settings.lightUpX = application.getMeshObjectDrawer().getSlManager().getLightUp().getFirst(),
+        this.#settings.lightUpY = application.getMeshObjectDrawer().getSlManager().getLightUp().getSecond(),
+        this.#settings.lightUpZ = application.getMeshObjectDrawer().getSlManager().getLightUp().getThird(),
+        this.#settings.fov = application.getCamera().getCurrentFov().getValueIn(AngleUnit.DEG),
+        this.#settings.zNear = application.getMeshObjectDrawer().zNear,
+        this.#settings. zFar = application.getMeshObjectDrawer().zFar
+    }
+
+    updateActiveObj() {
         let settings: MenuSettings = this.#settings
 
         if(this.#activeObj != undefined) {
@@ -104,14 +153,11 @@ export class MenuControls {
         settings.scaleX = this.#activeObj.getCurrentScale().getFirst()
         settings.scaleY = this.#activeObj.getCurrentScale().getSecond()
         settings.scaleZ = this.#activeObj.getCurrentScale().getThird()
-        settings.phi = this.#activeObj.getPolarRotation().getFirst().getValueIn(AngleUnit.DEG)
-        settings.theta = this.#activeObj.getPolarRotation().getSecond().getValueIn(AngleUnit.DEG)
+        settings.psi = this.#activeObj.getPolarRotation().getFirst().getValueIn(AngleUnit.DEG)
+        settings.phi = this.#activeObj.getPolarRotation().getSecond().getValueIn(AngleUnit.DEG)
+        settings.theta = this.#activeObj.getPolarRotation().getThird().getValueIn(AngleUnit.DEG)
         settings.hidden = this.#activeObj.getHidden()
         this.subscribeCurrentObjSignals()
-
-        if(updateUI) {
-            this.updateUI()
-        }
     }
 
     updateUI() {
@@ -217,13 +263,23 @@ export class MenuControls {
 
     onLookAtObjectChange() {
         let settings = this.#settings
-        if(settings.look_at) {
-            this.#application.getCamera().startLookingAtObject(
-                this.#application.getMeshObjectManager()
-                    .get(this.#loadedObjs[settings.target])
-            )
+        if(settings.look_at) { //Look at objet is changed to true
+            if(CAMERAMAN_WORK_MODES[settings.cameraman] != CameraManWorkMode.DISMISSED) {
+                Log.log("MenuControls [ " + this.#application.applicationName +
+                    " ] | unable to look at object while cameraman is working")
+                settings.look_at = false
+                this.updateUI()
+            }
+            else {
+                this.#application.getCamera().startLookingAtObject(
+                    this.#application.getMeshObjectManager()
+                        .get(this.#loadedObjs[settings.target])
+                )
+            }
         } else {
             if(settings.follow) {
+                Log.log("MenuControls [ " + this.#application.applicationName +
+                    " ] | follow object is automatically deactivated")
                 settings.follow = false
                 this.updateUI()
                 this.onFollowObjectChange()
@@ -237,16 +293,25 @@ export class MenuControls {
         let settings = this.#settings
 
         if(settings.follow) {
-            if(!settings.look_at) {
-                settings.look_at = true
+            if (CAMERAMAN_WORK_MODES[settings.cameraman] != CameraManWorkMode.DISMISSED) {
+                Log.log("MenuControls [ " + this.#application.applicationName +
+                    " ] | unable to follow object while cameraman is working")
+                settings.follow = false
                 this.updateUI()
-                this.onLookAtObjectChange()
+            } else {
+                if (!settings.look_at) {
+                    Log.log("MenuControls [ " + this.#application.applicationName +
+                        "] | look at object is automatically activated")
+                    settings.look_at = true
+                    this.updateUI()
+                    this.onLookAtObjectChange()
+                }
+                this.#application.getCamera().startFollowingObject(
+                    this.#application.getMeshObjectManager()
+                        .get(this.#loadedObjs[settings.target])
+                )
             }
 
-            this.#application.getCamera().startFollowingObject(
-                this.#application.getMeshObjectManager()
-                    .get(this.#loadedObjs[settings.target])
-            )
         } else {
             this.#application.getCamera().stopFollowingObject()
         }
@@ -358,6 +423,34 @@ export class MenuControls {
         this.#application.getMeshObjectDrawer().renderScene()
     }
 
+    onCameramanChange() {
+        if(this.#application.getCamera().isFollowingObjectTranslation() ||
+            this.#application.getCamera().isLookingAtObject()) {
+            Log.log("MenuControls [" + this.#application.applicationName +
+                "] | cameraman can't be hired while following or looking at object")
+            this.#settings.cameraman = CAMERAMAN_WORK_MODES
+                .indexOf(this.#application.getMeshObjectDrawer().getCameraMan().getCurrentWorkMode())
+            this.updateUI()
+        } else {
+            let cameraman: CameraMan = this.#application.getMeshObjectDrawer().getCameraMan()
+            cameraman.setTarget(this.#targetObj)
+            cameraman.hire(CAMERAMAN_WORK_MODES[this.#settings.cameraman])
+        }
+    }
+
+    onCameramanDistanceChange() {
+        this.#application.getMeshObjectDrawer()
+            .getCameraMan()
+            .setDistance(this.#settings.cman_distance, true)
+    }
+
+    onCameramanHighChange() {
+        this.#application
+            .getMeshObjectDrawer()
+            .getCameraMan()
+            .setHigh(this.#settings.cman_high, true)
+    }
+
     setup() {
         let application = this.#application;
         Log.log("MenuControls [" + application.applicationName + "] | setting up UI controls...")
@@ -368,6 +461,9 @@ export class MenuControls {
             target: undefined,
             look_at: false,
             follow: false,
+            cameraman: CAMERAMAN_WORK_MODES.indexOf(application.getMeshObjectDrawer().getCameraMan().getCurrentWorkMode()),
+            cman_high: application.getMeshObjectDrawer().getCameraMan().getHigh(),
+            cman_distance: application.getMeshObjectDrawer().getCameraMan().getDistance(),
             cameraX: application.getCamera().getCurrentPosition().getX(),
             cameraY: application.getCamera().getCurrentPosition().getY(),
             cameraZ: application.getCamera().getCurrentPosition().getY(),
@@ -416,7 +512,7 @@ export class MenuControls {
             this.#settings.currentobj = 0
             this.#settings.target = 0
             this.#targetObj = this.#application.getMeshObjectManager().get(this.#loadedObjs[0])
-            this.updateActiveObj(false)
+            this.updateActiveObj()
         }
 
         this.#widgets = WebGlLessonUI.setupUI(document.querySelector('#ui'), this.#settings, [
@@ -425,29 +521,32 @@ export class MenuControls {
             { type: 'option',   key: 'target',  change: () => { this.onTargetObjChange() }, options: this.#loadedObjs, },
             { type: 'checkbox', key: 'look_at', change: () => { this.onLookAtObjectChange() }, },
             { type: 'checkbox', key: 'follow', change: () => { this.onFollowObjectChange() }, },
-            { type: 'slider',   key: 'cameraX',    change: () => { this.onCameraChange() }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'cameraY',    change: () => { this.onCameraChange() }, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'cameraZ',    change: () => { this.onCameraChange() }, min:   -100, max: 100, precision: 1, step: 1, },
+            { type: 'option',   key: 'cameraman', change: () => { this.onCameramanChange() }, options: CAMERAMAN_WORK_MODES, },
+            { type: 'slider',   key: 'cman_high', change: () => { this.onCameramanHighChange() },  min: 0, max: 100, precision: 2, step: 1, },
+            { type: 'slider',   key: 'cman_distance', change: () => { this.onCameramanDistanceChange() }, min: 0, max: 100, precision: 2, step: 1, },
+            { type: 'slider',   key: 'cameraX',    change: () => { this.onCameraChange() }, min: -500, max: 500, precision: 2, step: 1, },
+            { type: 'slider',   key: 'cameraY',    change: () => { this.onCameraChange() }, min:   -500, max: 500, precision: 2, step: 1, },
+            { type: 'slider',   key: 'cameraZ',    change: () => { this.onCameraChange() }, min:   -500, max: 500, precision: 2, step: 1, },
             { type: 'slider',   key: 'cameraUpX',    change: () => { this.onCameraUpChange() }, min: -1, max: 1, precision: 3, step: 0.001, },
             { type: 'slider',   key: 'cameraUpY',    change: () => { this.onCameraUpChange() }, min:   -1, max: 1, precision: 3, step: 0.001, },
             { type: 'slider',   key: 'cameraUpZ',    change: () => { this.onCameraUpChange() }, min:   -1, max: 1, precision: 3, step: 0.001, },
             { type: 'slider',   key: 'zNear',    change: () => { this.onZNearChange() }, min:   -10, max: 10, precision: 2, step: 1, },
             { type: 'slider',   key: 'zFar',    change: () => { this.onZFarChange() }, min:   0, max: 1000, precision: 1, step: 1, },
             { type: 'slider',   key: 'fov', change: () => { this.onFovChange() }, min:  0, max: 180,  },
-            { type: 'slider',   key: 'targetX',    change: () => { this.onTargetPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'targetY',    change: () => { this.onTargetPositionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'targetZ',    change: () => { this.onTargetPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'targetX',    change: () => { this.onTargetPositionChange() }, min: -500, max: 500, precision: 2, step: 1, },
+            { type: 'slider',   key: 'targetY',    change: () => { this.onTargetPositionChange() }, min:   -500, max: 500, precision: 2, step: 1, },
+            { type: 'slider',   key: 'targetZ',    change: () => { this.onTargetPositionChange() }, min: -500, max: 500, precision: 2, step: 1, },
 
             /* LIGHT ***************************************************************************** */
             { type: 'checkbox', key: 'frustum', change: () => { this.onFrustumChange() }},
             { type: 'checkbox', key: 'shadows', change: () => { this.onShadowsChange() }},
             //{ type: 'slider',   key: 'bias',    change: () => { this.onBiasChange() }, min: 0, max: 10, precision: 3, step: 0.001, },
-            { type: 'slider',   key: 'lightPosX',    change: () => { this.onLightPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'lightPosY',    change: () => { this.onLightPositionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'lightPosZ',    change: () => { this.onLightPositionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'lightTargX',    change: () => { this.onLightTargetChange() }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'lightTargY',    change: () => { this.onLightTargetChange() }, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'lightTargZ',    change: () => { this.onLightTargetChange() }, min:   -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider',   key: 'lightPosX',    change: () => { this.onLightPositionChange() }, min: -500, max: 500, precision: 2, step: 1, },
+            { type: 'slider',   key: 'lightPosY',    change: () => { this.onLightPositionChange() }, min:   -500, max: 500, precision: 2, step: 1, },
+            { type: 'slider',   key: 'lightPosZ',    change: () => { this.onLightPositionChange() }, min:   -500, max: 500, precision: 2, step: 1, },
+            { type: 'slider',   key: 'lightTargX',    change: () => { this.onLightTargetChange() }, min: -500, max: 500, precision: 2, step: 1, },
+            { type: 'slider',   key: 'lightTargY',    change: () => { this.onLightTargetChange() }, min:   -500, max: 500, precision: 2, step: 1, },
+            { type: 'slider',   key: 'lightTargZ',    change: () => { this.onLightTargetChange() }, min:   -500, max: 500, precision: 2, step: 1, },
             { type: 'slider',   key: 'lightFov',    change: () => { this.onLightFovChange() }, min:   0, max: 360, precision: 1, step: 1, },
             { type: 'slider',   key: 'lightNear',    change: () => { this.onLightNearChange() }, min:   0, max: 100, precision: 1, step: 1, },
             { type: 'slider',   key: 'lightFar',    change: () => { this.onLightFarChange() }, min:   0, max: 1000, precision: 1, step: 1, },
@@ -462,10 +561,10 @@ export class MenuControls {
             /* OBJECT ***************************************************************************** */
             { type: 'option',   key: 'currentobj', change: () => { this.onActiveObjChange() }, options: this.#loadedObjs, },
             { type: 'checkbox',   key: 'hidden', change: () => { this.onHiddenObjChange() }, options: this.#loadedObjs, },
-            { type: 'slider',   key: 'posX',       change: () => { this.onObjectPositionChange() }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'posY',       change: () => { this.onObjectPositionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'posZ',       change: () => { this.onObjectPositionChange() }, min:   -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider',   key: 'scaleX',       change: () => { this.onObjectScaleChange() }, min: 0, max: 10, precision: 1, step: 1, },
+            { type: 'slider',   key: 'posX',       change: () => { this.onObjectPositionChange() }, min: -200, max: 200, precision: 2, step: 1, },
+            { type: 'slider',   key: 'posY',       change: () => { this.onObjectPositionChange() }, min:   -200, max: 200, precision: 2, step: 1, },
+            { type: 'slider',   key: 'posZ',       change: () => { this.onObjectPositionChange() }, min:   -200, max: 200, precision: 2, step: 1, },
+            { type: 'slider',   key: 'scaleX',       change: () => { this.onObjectScaleChange() }, min: 0, max: 10, precision: 2, step: 0.01, },
             { type: 'slider',   key: 'scaleY',       change: () => { this.onObjectScaleChange() }, min:   0, max: 10, precision: 2, step: 0.01, },
             { type: 'slider',   key: 'scaleZ',       change: () => { this.onObjectScaleChange() }, min:   0, max: 10, precision: 2, step: 0.01, },
             { type: 'slider',   key: 'psi',       change: () => { this.onObjectPolarRotationChange() }, min:   -180, max: 180 },

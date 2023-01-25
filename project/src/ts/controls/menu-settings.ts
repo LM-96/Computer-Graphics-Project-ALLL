@@ -45,4 +45,7 @@ export interface MenuSettings {
     lightUpZ: number
     currentobj: number
     draw: boolean
+    cameraman: number
+    cman_high: number
+    cman_distance: number
 }

@@ -12,6 +12,7 @@ const menu_controls_1 = require("./controls/menu-controls");
 const user_inputs_1 = require("./controls/user-inputs");
 const limits_checkers_1 = require("./geometry/limits/limits-checkers");
 const angle_1 = require("./geometry/angle/angle");
+const camera_man_1 = require("./camera/camera-man");
 const SHADERS = {
     main: ["vertex-shader", "fragment-shader"],
     color: ["color-vertex-shader", "color-fragment-shader"]
@@ -48,7 +49,10 @@ let GothamApp = class GothamApp extends webgl_application_1.WebGLApplication {
     afterObjectsLoaded() {
         // It's now possible to setup the menu
         log_1.Log.log("WebGLApplication | after objects loaded");
-        this.menu.setup();
+        let cameraMan = this.getMeshObjectDrawer().getCameraMan();
+        cameraMan.setTarget(this.batMoto);
+        cameraMan.setPhase(this.batMoto.getPolarRotation().getThird().multiply(-1));
+        cameraMan.hire(camera_man_1.CameraManWorkMode.THIRD_PERSON);
     }
     afterEventsRegistered() {
         // Set the target object of the user inputs used by the event listeners
@@ -65,13 +69,8 @@ let GothamApp = class GothamApp extends webgl_application_1.WebGLApplication {
         light.setLightPosition(20, 20, 100);
         light.setLightTarget(20, 20, 0);
         light.setShadows(true);
-        //Camera Set up
-        let camera = this.getCamera();
-        let motoPos = this.batMoto.getPosition();
-        camera.setPosition(motoPos.getX() - 30, motoPos.getY(), 5);
-        camera.setTarget(motoPos.getX(), motoPos.getY(), motoPos.getZ());
         this.getMeshObjectDrawer().zFar = 700;
-        camera.startFollowingObject(this.batMoto);
+        this.menu.setup();
     }
     main(args) {
         console.log("Hello world! [" + this.applicationName + "]");
@@ -79,16 +78,16 @@ let GothamApp = class GothamApp extends webgl_application_1.WebGLApplication {
     }
 };
 __decorate([
-    (0, webgl_application_1.WebGLMesh)("./assets/objs/city.obj"),
-    (0, webgl_application_1.ObjScale)(0.7, 0.7, 0.7)
-], GothamApp.prototype, "world", void 0);
-__decorate([
     (0, webgl_application_1.WebGLMesh)("./assets/objs/batmoto.obj"),
     (0, webgl_application_1.ObjPosition)(170, -131, 1),
     (0, webgl_application_1.ObjRotation)((0, angle_1.degree)(0), (0, angle_1.degree)(0), (0, angle_1.degree)(90)),
     (0, webgl_application_1.ObjScale)(0.3, 0.3, 0.3),
     (0, webgl_application_1.ObjLimitsChecker)(limits_checkers_1.LimitsCheckers.linear(TOLERANCE, HIGH - TOLERANCE, -BASE + TOLERANCE, 0 - TOLERANCE, 1, 1))
 ], GothamApp.prototype, "batMoto", void 0);
+__decorate([
+    (0, webgl_application_1.WebGLMesh)("./assets/objs/city.obj"),
+    (0, webgl_application_1.ObjScale)(0.7, 0.7, 0.7)
+], GothamApp.prototype, "world", void 0);
 __decorate([
     (0, webgl_application_1.OnCanvasMouseEvent)("mousedown"),
     (0, webgl_application_1.OnCanvasTouchEvent)("touchstart")

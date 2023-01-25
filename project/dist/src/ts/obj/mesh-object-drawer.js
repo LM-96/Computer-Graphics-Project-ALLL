@@ -10,7 +10,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _MeshObjectDrawer_instances, _MeshObjectDrawer_glEnvironment, _MeshObjectDrawer_meshObjectManager, _MeshObjectDrawer_camera, _MeshObjectDrawer_sharedUniforms, _MeshObjectDrawer_slManager, _MeshObjectDrawer_lightFrustum, _MeshObjectDrawer_bias, _MeshObjectDrawer_cubeLinesBufferInfo, _MeshObjectDrawer_logDrawInformation;
+var _MeshObjectDrawer_instances, _MeshObjectDrawer_glEnvironment, _MeshObjectDrawer_meshObjectManager, _MeshObjectDrawer_camera, _MeshObjectDrawer_cameraMan, _MeshObjectDrawer_sharedUniforms, _MeshObjectDrawer_slManager, _MeshObjectDrawer_lightFrustum, _MeshObjectDrawer_bias, _MeshObjectDrawer_cubeLinesBufferInfo, _MeshObjectDrawer_logDrawInformation;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MeshObjectDrawer = void 0;
 const flowed_camera_1 = require("../camera/flowed-camera");
@@ -18,14 +18,16 @@ const webgl_wrappers_1 = require("../webgl/webgl-wrappers");
 const angle_1 = require("../geometry/angle/angle");
 const log_1 = require("../log/log");
 const sl_manager_1 = require("./sl-manager");
+const camera_man_1 = require("../camera/camera-man");
 class MeshObjectDrawer {
     constructor(applicationName, glEnvironment, meshObjectManager) {
         _MeshObjectDrawer_instances.add(this);
         _MeshObjectDrawer_glEnvironment.set(this, void 0);
         _MeshObjectDrawer_meshObjectManager.set(this, void 0);
         this.zNear = 0.1;
-        this.zFar = 200;
+        this.zFar = 700;
         _MeshObjectDrawer_camera.set(this, new flowed_camera_1.default());
+        _MeshObjectDrawer_cameraMan.set(this, void 0);
         _MeshObjectDrawer_sharedUniforms.set(this, void 0);
         _MeshObjectDrawer_slManager.set(this, void 0);
         _MeshObjectDrawer_lightFrustum.set(this, void 0);
@@ -38,6 +40,7 @@ class MeshObjectDrawer {
         __classPrivateFieldSet(this, _MeshObjectDrawer_slManager, new sl_manager_1.SlManager(__classPrivateFieldGet(this, _MeshObjectDrawer_sharedUniforms, "f")), "f");
         __classPrivateFieldSet(this, _MeshObjectDrawer_lightFrustum, false, "f");
         __classPrivateFieldSet(this, _MeshObjectDrawer_bias, -0.006, "f");
+        __classPrivateFieldSet(this, _MeshObjectDrawer_cameraMan, new camera_man_1.CameraMan(this), "f");
         __classPrivateFieldSet(this, _MeshObjectDrawer_cubeLinesBufferInfo, WebGLUtils.createBufferInfoFromArrays(__classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getContext(), {
             position: [
                 -1, -1, -1,
@@ -168,6 +171,12 @@ class MeshObjectDrawer {
         return __classPrivateFieldGet(this, _MeshObjectDrawer_camera, "f");
     }
     /**
+     * Returns the `CameraMan` associated of this drawer
+     */
+    getCameraMan() {
+        return __classPrivateFieldGet(this, _MeshObjectDrawer_cameraMan, "f");
+    }
+    /**
      * Returns the manager for the shadows and the lights
      */
     getSlManager() {
@@ -190,7 +199,7 @@ class MeshObjectDrawer {
     }
 }
 exports.MeshObjectDrawer = MeshObjectDrawer;
-_MeshObjectDrawer_glEnvironment = new WeakMap(), _MeshObjectDrawer_meshObjectManager = new WeakMap(), _MeshObjectDrawer_camera = new WeakMap(), _MeshObjectDrawer_sharedUniforms = new WeakMap(), _MeshObjectDrawer_slManager = new WeakMap(), _MeshObjectDrawer_lightFrustum = new WeakMap(), _MeshObjectDrawer_bias = new WeakMap(), _MeshObjectDrawer_cubeLinesBufferInfo = new WeakMap(), _MeshObjectDrawer_instances = new WeakSet(), _MeshObjectDrawer_logDrawInformation = function _MeshObjectDrawer_logDrawInformation() {
+_MeshObjectDrawer_glEnvironment = new WeakMap(), _MeshObjectDrawer_meshObjectManager = new WeakMap(), _MeshObjectDrawer_camera = new WeakMap(), _MeshObjectDrawer_cameraMan = new WeakMap(), _MeshObjectDrawer_sharedUniforms = new WeakMap(), _MeshObjectDrawer_slManager = new WeakMap(), _MeshObjectDrawer_lightFrustum = new WeakMap(), _MeshObjectDrawer_bias = new WeakMap(), _MeshObjectDrawer_cubeLinesBufferInfo = new WeakMap(), _MeshObjectDrawer_instances = new WeakSet(), _MeshObjectDrawer_logDrawInformation = function _MeshObjectDrawer_logDrawInformation() {
     log_1.Log.log("MeshObjectDrawer[" + this.applicationName + "]\n" +
         "\tcanvas size: " + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getCanvas().width + "x" + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").getCanvas().height + "\n" +
         "\tcanvas aspect ratio: " + __classPrivateFieldGet(this, _MeshObjectDrawer_glEnvironment, "f").calculateAspectRatio() + "\n" +

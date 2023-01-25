@@ -6,6 +6,7 @@ import {SingleSignalSubscriber} from "../signals/subscriptions";
 import PerformedTranslation from "../geometry/data/performed-translation";
 import {PerformedObjectSet} from "../types/data/performed-object-set";
 import {PerformedNumberTrioChange} from "../types/data/performed-number-trio-change";
+import {CameraMan} from "./camera-man";
 
 export interface Camera {
 
