@@ -6,8 +6,8 @@ import {Trio} from "../types/triple";
 
 export class UserInputController {
     target: MeshObject
-    stepSize: number = 2
-    step: number = 2
+    stepSize: number = 5
+    step: number = 5
     controllerMode: number = 2
     cameraMode: number = 0
 
@@ -74,8 +74,8 @@ export class UserInputController {
 
     moveFirstPerson(keyMove: string){
         switch(keyMove){
-            case "ArrowUp" : this.navigate(-0.1, this.target.getPolarRotation().getThird()); break;
-            case "ArrowDown" : this.navigate(0.1, this.target.getPolarRotation().getThird()); break;
+            case "ArrowUp" : this.navigate(-this.stepSize, this.target.getPolarRotation().getThird()); break;
+            case "ArrowDown" : this.navigate(+this.stepSize, this.target.getPolarRotation().getThird()); break;
             case "ArrowLeft" : this.#rotateTarget(degree(0), degree(0), degree(5)); break;
             case "ArrowRight" : this.#rotateTarget(degree(0), degree(0), degree(-5)); break;
         }
