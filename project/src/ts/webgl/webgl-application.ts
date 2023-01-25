@@ -406,12 +406,12 @@ export function WebGL(applicationName: string,
                 onCanvasMouseEventMethods.forEach((event: string, method: string) => {
                     Log.log("WebGLApplicationBuilder | subscribing to event [" + event + "] for " + applicationName +
                         " with method [" + method + "] ...")
-                    // webGLEnvironment.getCanvas().addEventListener(event, (e: MouseEvent) => {
-                    //     instance[method](e)
-                    // }, false)
-                    attachMouseEventListenerOnCanvas(webGLEnvironment.getCanvas(),
-                        event,
-                        (e: MouseEvent) => { instance[method](e) })
+                    webGLEnvironment.getCanvas().addEventListener(event, (e: MouseEvent) => {
+                        instance[method](e)
+                    }, false)
+                //     attachMouseEventListenerOnCanvas(webGLEnvironment.getCanvas(),
+                //         event,
+                //         (e: MouseEvent) => { instance[method](e) })
                 })
             }
 

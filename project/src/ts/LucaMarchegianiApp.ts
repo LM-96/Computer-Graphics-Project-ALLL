@@ -1,5 +1,6 @@
 import {
-    ObjPosition, ObjScale,
+    ObjLimitsChecker,
+    ObjPosition, ObjRotation, ObjScale,
     OnCanvasMouseEvent,
     OnCanvasTouchEvent,
     OnKeyboardEvent,
@@ -11,11 +12,19 @@ import {MeshObject} from "./obj/mesh-object";
 import {Log} from "./log/log";
 import {MenuControls} from "./controls/menu-controls";
 import {UserInputs} from "./controls/user-inputs";
+import {LimitsCheckers} from "./geometry/limits/limits-checkers";
+import {degree} from "./geometry/angle/angle";
+import {Point3D} from "./geometry/point/point-3d";
 
 const SHADERS: WebGLShaderReference = {
     main: ["vertex-shader", "fragment-shader"],
     color:["color-vertex-shader", "color-fragment-shader"]
 }
+
+// VERTICES OF THE WORLD (0, 0), (B, 0), (B, -H), (0, -H)
+const BASE: number = 200
+const HIGH: number = 365
+const TOLERANCE: number = 3
 
 @WebGL("gotham-app", "my_Canvas", SHADERS)
 class GothamApp extends WebGLApplication {
@@ -25,44 +34,64 @@ class GothamApp extends WebGLApplication {
     private world: MeshObject
 
     @WebGLMesh("./assets/objs/batmoto.obj")
-    @ObjPosition(0,0,1)
+    @ObjPosition(170,-131,1)
+    @ObjRotation(degree(0),degree(0),degree(90))
     @ObjScale(0.3,0.3,0.3)
+    @ObjLimitsChecker(LimitsCheckers.linear(TOLERANCE, HIGH - TOLERANCE,
+        -BASE + TOLERANCE, 0 - TOLERANCE, 1, 1))
     private batMoto: MeshObject
 
     private menu: MenuControls
     private userInputs: UserInputs
     constructor() {
         super();
-        this.userInputs = new UserInputs(this)
     }
 
-    //@OnCanvasTouchEvent("mousedown")
-    //@OnCanvasTouchEvent("touchstart")
+    @OnCanvasMouseEvent("mousedown")
+    @OnCanvasTouchEvent("touchstart")
     protected onMouseDown(e: MouseEvent|TouchEvent) {
         Log.log("WebGLApplication | capturing mouse down [event type: " + e.type + "]")
         this.userInputs.mouseDown(e)
     }
 
-    // @OnCanvasMouseEvent("mouseup")
-    // @OnCanvasTouchEvent("touchend")
-    // @OnCanvasMouseEvent("mouseout")
+    @OnCanvasMouseEvent("mouseup")
+    @OnCanvasTouchEvent("touchend")
+    @OnCanvasMouseEvent("mouseout")
     protected onMouseUp(e: MouseEvent|TouchEvent) {
         Log.log("WebGLApplication | capturing mouse up [event type: " + e.type + "]")
         this.userInputs.mouseUp1(e)
     }
 
-    // @OnCanvasMouseEvent("mousemove")
-    // @OnCanvasTouchEvent("touchmove")
+    @OnCanvasMouseEvent("mousemove")
+    @OnCanvasTouchEvent("touchmove")
     protected onMouseMove(e: MouseEvent|TouchEvent) {
         Log.log("WebGLApplication | capturing mouse move [event type: " + e.type + "]")
         this.userInputs.mouseMove1(e)
     }
 
-    // @OnKeyboardEvent("keydown")
+    @OnKeyboardEvent("keydown")
     onKeyDown(e: KeyboardEvent) {
         Log.log("WebGLApplication | capturing key down [event type: " + e.type +
             ", key: " + e.key + "]")
         this.userInputs.keydownMap(e)
+    }
+
+    protected init() {
+        this.menu = new MenuControls(this)
+        this.userInputs = new UserInputs(this)
+    }
+
+    protected afterObjectsLoaded() {
+        // It's now possible to setup the menu
+        Log.log("WebGLApplication | after objects loaded")
+        this.menu.setup()
+    }
+
+    protected afterEventsRegistered() {
+        // Set the target object of the user inputs used by the event listeners
+        // immediately after they
+        Log.log("WebGLApplication | after events registered")
+        this.userInputs.setTarget(this.batMoto)
     }
 
     protected beforeStart() {
@@ -78,15 +107,11 @@ class GothamApp extends WebGLApplication {
         //Camera Set up
         let camera = this.getCamera()
 
-        camera.setPosition(25,0,20);
+        let motoPos: Point3D = this.batMoto.getPosition()
+        camera.setPosition(motoPos.getX() - 30, motoPos.getY(),5);
+        camera.setTarget(motoPos.getX(), motoPos.getY(), motoPos.getZ())
         this.getMeshObjectDrawer().zFar = 700
         camera.startFollowingObject(this.batMoto)
-
-
-        this.menu = new MenuControls(this)
-        this.menu.setup()
-        this.userInputs.setTarget(this.batMoto)
-        this.userInputs.attachHandlers()
     }
 
     protected main(args: string[]): void {

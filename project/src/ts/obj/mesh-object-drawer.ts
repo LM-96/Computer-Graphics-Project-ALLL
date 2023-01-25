@@ -108,10 +108,6 @@ export class MeshObjectDrawer {
         }
     }
 
-    render() {
-
-    }
-
 
     #logDrawInformation() {
         Log.log("MeshObjectDrawer[" + this.applicationName + "]\n" +

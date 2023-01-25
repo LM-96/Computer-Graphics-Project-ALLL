@@ -8,6 +8,8 @@ var _UserInputController_instances, _UserInputController_translateTarget, _UserI
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserInputController = void 0;
 const angle_1 = require("../geometry/angle/angle");
+const position_out_of_limit_exception_1 = require("../geometry/limits/exceptions/position-out-of-limit-exception");
+const log_1 = require("../log/log");
 class UserInputController {
     constructor() {
         _UserInputController_instances.add(this);
@@ -102,7 +104,16 @@ class UserInputController {
 exports.UserInputController = UserInputController;
 _UserInputController_instances = new WeakSet(), _UserInputController_translateTarget = function _UserInputController_translateTarget(dx, dy, dz) {
     let currentPos = this.target.getPosition();
-    this.target.setPosition(currentPos.getX() + dx, currentPos.getY() + dy, currentPos.getZ() + dz);
+    try {
+        this.target.setPosition(currentPos.getX() + dx, currentPos.getY() + dy, currentPos.getZ() + dz);
+    }
+    catch (e) {
+        if (e instanceof position_out_of_limit_exception_1.PositionOutOfLimitException) {
+            log_1.Log.log("UserInputController | Error moving target: " + e.message);
+        }
+        else
+            throw e;
+    }
 }, _UserInputController_rotateTarget = function _UserInputController_rotateTarget(deltaPsi, deltaTheta, deltaPhi) {
     let currentRotation = this.target.getPolarRotation();
     this.target.setPolarRotation(currentRotation.getFirst().add(deltaPsi), currentRotation.getSecond().add(deltaTheta), currentRotation.getThird().add(deltaPhi));

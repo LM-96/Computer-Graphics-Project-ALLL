@@ -10,7 +10,7 @@ import {LimitsChecker} from "../geometry/limits/limits-checker";
 import SignalFlows, {SingleSignalFlow} from "../signals/flow";
 import PerformedTranslation, {PerformedTranslationBuilder} from "../geometry/data/performed-translation";
 import {PerformedPolarRotation, PerformedPolarRotationBuilder} from "../geometry/data/performed-polar-rotation";
-import {mutablePoint3D} from "../geometry/point/point-factory";
+import {mutablePoint3D, point3D} from "../geometry/point/point-factory";
 import PerformedScale, {PerformedScaleBuilder} from "../geometry/data/performed-scale";
 import {MeshObjectSignals} from "./mesh-object-signals";
 import {Log} from "../log/log";
@@ -159,11 +159,14 @@ export class FlowedMeshObject implements MeshObject {
   setPosition(position: Point3D): void;
   setPosition(x: number, y: number, z: number): void;
   setPosition(position: Point3D | number, y?: number, z?: number): void {
+
     this.#performedTranslationBuilder.clear()
     this.#performedTranslationBuilder.from = this.#position.clone()
     if (typeof position === "number") {
+      this.#limitChecker.checkOrThrow(point3D(position, y, z), true)
       this.#position.set(position, y, z)
     } else {
+      this.#limitChecker.checkOrThrow(position, true)
       this.#position.set(position.getX(), position.getY(), position.getZ())
     }
     this.#performedTranslationBuilder.to = this.#position.clone()

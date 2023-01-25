@@ -142,9 +142,11 @@ class FlowedMeshObject {
         __classPrivateFieldGet(this, _FlowedMeshObject_performedTranslationBuilder, "f").clear();
         __classPrivateFieldGet(this, _FlowedMeshObject_performedTranslationBuilder, "f").from = __classPrivateFieldGet(this, _FlowedMeshObject_position, "f").clone();
         if (typeof position === "number") {
+            __classPrivateFieldGet(this, _FlowedMeshObject_limitChecker, "f").checkOrThrow((0, point_factory_1.point3D)(position, y, z), true);
             __classPrivateFieldGet(this, _FlowedMeshObject_position, "f").set(position, y, z);
         }
         else {
+            __classPrivateFieldGet(this, _FlowedMeshObject_limitChecker, "f").checkOrThrow(position, true);
             __classPrivateFieldGet(this, _FlowedMeshObject_position, "f").set(position.getX(), position.getY(), position.getZ());
         }
         __classPrivateFieldGet(this, _FlowedMeshObject_performedTranslationBuilder, "f").to = __classPrivateFieldGet(this, _FlowedMeshObject_position, "f").clone();

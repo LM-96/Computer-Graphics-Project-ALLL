@@ -2,6 +2,8 @@ import {MeshObject} from "../obj/mesh-object";
 import {Point3D} from "../geometry/point/point-3d";
 import {angle, Angle, AngleUnit, degree} from "../geometry/angle/angle";
 import {Trio} from "../types/triple";
+import {PositionOutOfLimitException} from "../geometry/limits/exceptions/position-out-of-limit-exception";
+import {Log} from "../log/log";
 
 
 export class UserInputController {
@@ -43,7 +45,14 @@ export class UserInputController {
 
     #translateTarget(dx: number, dy: number, dz: number){
         let currentPos: Point3D = this.target.getPosition()
-        this.target.setPosition(currentPos.getX() + dx, currentPos.getY() + dy, currentPos.getZ() + dz)
+        try {
+            this.target.setPosition(currentPos.getX() + dx, currentPos.getY() + dy, currentPos.getZ() + dz)
+        } catch (e) {
+            if(e instanceof PositionOutOfLimitException) {
+                Log.log("UserInputController | Error moving target: " + e.message)
+            }
+            else throw e
+        }
     }
 
     #rotateTarget(deltaPsi: Angle, deltaTheta: Angle, deltaPhi: Angle){

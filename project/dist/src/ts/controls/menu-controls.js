@@ -25,6 +25,7 @@ const log_1 = require("../log/log");
 const signals_decorator_1 = require("../signals/signals-decorator");
 const options_1 = require("../signals/options");
 const pair_1 = require("../types/pair");
+const position_out_of_limit_exception_1 = require("../geometry/limits/exceptions/position-out-of-limit-exception");
 let MenuControls = class MenuControls {
     constructor(application) {
         _MenuControls_application.set(this, void 0);
@@ -35,11 +36,11 @@ let MenuControls = class MenuControls {
         _MenuControls_settings.set(this, void 0);
         _MenuControls_currentObjReceipt.set(this, void 0);
         __classPrivateFieldSet(this, _MenuControls_application, application, "f");
-        __classPrivateFieldSet(this, _MenuControls_loadedObjs, application.getMeshObjectManager().getAll().map((obj) => obj.getName()), "f");
         __classPrivateFieldSet(this, _MenuControls_currentObjReceipt, [], "f");
     }
     subscribeCurrentObjSignals() {
-        log_1.Log.log("Subscribing to signals of " + __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getName());
+        log_1.Log.log("MenuControls [ " + __classPrivateFieldGet(this, _MenuControls_application, "f").applicationName +
+            " ] | subscribing to signals of " + __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getName());
         __classPrivateFieldGet(this, _MenuControls_currentObjReceipt, "f").push((0, pair_1.pairOf)(__classPrivateFieldGet(this, _MenuControls_activeObj, "f").getTranslationSubscriber(), __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getTranslationSubscriber().subscribe((0, options_1.handler)((signal) => {
             __classPrivateFieldGet(this, _MenuControls_settings, "f").posX = signal.data.to.getX();
             __classPrivateFieldGet(this, _MenuControls_settings, "f").posY = signal.data.to.getY();
@@ -58,15 +59,18 @@ let MenuControls = class MenuControls {
             __classPrivateFieldGet(this, _MenuControls_settings, "f").phi = signal.data.to.getThird().getValueIn(angle_1.AngleUnit.DEG);
             this.updateUI();
         }))));
-        log_1.Log.log("Subscribed to signals of " + __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getName() +
+        log_1.Log.log("MenuControls [ " + __classPrivateFieldGet(this, _MenuControls_application, "f").applicationName +
+            " ] | subscribed to signals of " + __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getName() +
             ", total subscriptions: " + __classPrivateFieldGet(this, _MenuControls_currentObjReceipt, "f").length);
     }
     unsubscribeCurrentObjSignals() {
-        log_1.Log.log("Unsubscribing from signals of " + __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getName());
+        log_1.Log.log("MenuControls [ " + __classPrivateFieldGet(this, _MenuControls_application, "f").applicationName +
+            " ] | unsubscribing from signals of " + __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getName());
         __classPrivateFieldGet(this, _MenuControls_currentObjReceipt, "f").forEach((pair) => {
             pair.getFirst().unsubscribe(pair.getSecond());
         });
-        log_1.Log.log("Unsubscribed from signals of " + __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getName() + " completed");
+        log_1.Log.log("MenuControls [ " + __classPrivateFieldGet(this, _MenuControls_application, "f").applicationName +
+            " ] | unsubscribed from signals of " + __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getName() + " completed");
         __classPrivateFieldSet(this, _MenuControls_currentObjReceipt, [], "f");
     }
     updateActiveObj(updateUI = true) {
@@ -121,8 +125,18 @@ let MenuControls = class MenuControls {
     onObjectPositionChange() {
         if (__classPrivateFieldGet(this, _MenuControls_loadedObjs, "f") != undefined) {
             let settings = __classPrivateFieldGet(this, _MenuControls_settings, "f");
-            __classPrivateFieldGet(this, _MenuControls_activeObj, "f").setPosition(settings.posX, settings.posY, settings.posZ);
-            __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
+            try {
+                __classPrivateFieldGet(this, _MenuControls_activeObj, "f").setPosition(settings.posX, settings.posY, settings.posZ);
+                __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
+            }
+            catch (e) {
+                if (e instanceof position_out_of_limit_exception_1.PositionOutOfLimitException) {
+                    log_1.Log.logError("MenuControls [ " + __classPrivateFieldGet(this, _MenuControls_application, "f").applicationName + " ] | " + e);
+                }
+                else {
+                    throw e;
+                }
+            }
         }
     }
     onTargetPositionChange() {
@@ -275,58 +289,9 @@ let MenuControls = class MenuControls {
         __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectDrawer().renderScene();
     }
     setup() {
-        __classPrivateFieldSet(this, _MenuControls_widgets, WebGlLessonUI.setupUI(document.querySelector('#ui'), __classPrivateFieldGet(this, _MenuControls_settings, "f"), [
-            { type: 'checkbox', key: 'log', change: () => { this.onLogChanged(); } },
-            /* CAMERA ***************************************************************************** */
-            { type: 'option', key: 'target', change: () => { this.onTargetObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
-            { type: 'checkbox', key: 'look_at', change: () => { this.onLookAtObjectChange(); }, },
-            { type: 'checkbox', key: 'follow', change: () => { this.onFollowObjectChange(); }, },
-            { type: 'slider', key: 'cameraX', change: () => { this.onCameraChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'cameraY', change: () => { this.onCameraChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'cameraZ', change: () => { this.onCameraChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'cameraUpX', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 3, step: 0.001, },
-            { type: 'slider', key: 'cameraUpY', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 3, step: 0.001, },
-            { type: 'slider', key: 'cameraUpZ', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 3, step: 0.001, },
-            { type: 'slider', key: 'zNear', change: () => { this.onZNearChange(); }, min: -10, max: 10, precision: 2, step: 1, },
-            { type: 'slider', key: 'zFar', change: () => { this.onZFarChange(); }, min: 0, max: 1000, precision: 1, step: 1, },
-            { type: 'slider', key: 'fov', change: () => { this.onFovChange(); }, min: 0, max: 180, },
-            { type: 'slider', key: 'targetX', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'targetY', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'targetZ', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            /* LIGHT ***************************************************************************** */
-            { type: 'checkbox', key: 'frustum', change: () => { this.onFrustumChange(); } },
-            { type: 'checkbox', key: 'shadows', change: () => { this.onShadowsChange(); } },
-            //{ type: 'slider',   key: 'bias',    change: () => { this.onBiasChange() }, min: 0, max: 10, precision: 3, step: 0.001, },
-            { type: 'slider', key: 'lightPosX', change: () => { this.onLightPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightPosY', change: () => { this.onLightPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightPosZ', change: () => { this.onLightPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightTargX', change: () => { this.onLightTargetChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightTargY', change: () => { this.onLightTargetChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightTargZ', change: () => { this.onLightTargetChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightFov', change: () => { this.onLightFovChange(); }, min: 0, max: 360, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightNear', change: () => { this.onLightNearChange(); }, min: 0, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightFar', change: () => { this.onLightFarChange(); }, min: 0, max: 1000, precision: 1, step: 1, },
-            { type: 'checkbox', key: 'spotlight', change: () => { this.onSpotlightChange(); } },
-            { type: 'slider', key: 'lightWidth', change: () => { this.onLightWidthChange(); }, min: 0, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'lightHeight', change: () => { this.onLightHeightChange(); }, min: 0, max: 100, precision: 1, step: 1, },
-            //{ type: 'slider',   key: 'lightUpX',    change: () => { this.onLightUpChange() }, min: -1, max: 1, precision: 3, step: 0.001, },
-            //{ type: 'slider',   key: 'lightUpY',    change: () => { this.onLightUpChange() }, min:   -1, max: 1, precision: 3, step: 0.001, },
-            //{ type: 'slider',   key: 'lightUpZ',    change: () => { this.onLightUpChange() }, min:   -1, max: 1, precision: 3, step: 0.001, },
-            /* OBJECT ***************************************************************************** */
-            { type: 'option', key: 'currentobj', change: () => { this.onActiveObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
-            { type: 'checkbox', key: 'hidden', change: () => { this.onHiddenObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
-            { type: 'slider', key: 'posX', change: () => { this.onObjectPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'posY', change: () => { this.onObjectPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'posZ', change: () => { this.onObjectPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
-            { type: 'slider', key: 'scaleX', change: () => { this.onObjectScaleChange(); }, min: 0, max: 10, precision: 1, step: 1, },
-            { type: 'slider', key: 'scaleY', change: () => { this.onObjectScaleChange(); }, min: 0, max: 10, precision: 2, step: 0.01, },
-            { type: 'slider', key: 'scaleZ', change: () => { this.onObjectScaleChange(); }, min: 0, max: 10, precision: 2, step: 0.01, },
-            { type: 'slider', key: 'psi', change: () => { this.onObjectPolarRotationChange(); }, min: -180, max: 180 },
-            { type: 'slider', key: 'theta', change: () => { this.onObjectPolarRotationChange(); }, min: -180, max: 180 },
-            { type: 'slider', key: 'phi', change: () => { this.onObjectPolarRotationChange(); }, min: -180, max: 180 },
-            { type: 'checkbox', key: 'draw', change: () => { this.onDrawPressed(); } },
-        ]), "f");
         let application = __classPrivateFieldGet(this, _MenuControls_application, "f");
+        log_1.Log.log("MenuControls [" + application.applicationName + "] | setting up UI controls...");
+        __classPrivateFieldSet(this, _MenuControls_loadedObjs, application.getMeshObjectManager().getAll().map((obj) => obj.getName()), "f");
         __classPrivateFieldSet(this, _MenuControls_settings, {
             log: true,
             target: undefined,
@@ -381,6 +346,58 @@ let MenuControls = class MenuControls {
             __classPrivateFieldSet(this, _MenuControls_targetObj, __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectManager().get(__classPrivateFieldGet(this, _MenuControls_loadedObjs, "f")[0]), "f");
             this.updateActiveObj(false);
         }
+        __classPrivateFieldSet(this, _MenuControls_widgets, WebGlLessonUI.setupUI(document.querySelector('#ui'), __classPrivateFieldGet(this, _MenuControls_settings, "f"), [
+            { type: 'checkbox', key: 'log', change: () => { this.onLogChanged(); } },
+            /* CAMERA ***************************************************************************** */
+            { type: 'option', key: 'target', change: () => { this.onTargetObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
+            { type: 'checkbox', key: 'look_at', change: () => { this.onLookAtObjectChange(); }, },
+            { type: 'checkbox', key: 'follow', change: () => { this.onFollowObjectChange(); }, },
+            { type: 'slider', key: 'cameraX', change: () => { this.onCameraChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'cameraY', change: () => { this.onCameraChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'cameraZ', change: () => { this.onCameraChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'cameraUpX', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 3, step: 0.001, },
+            { type: 'slider', key: 'cameraUpY', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 3, step: 0.001, },
+            { type: 'slider', key: 'cameraUpZ', change: () => { this.onCameraUpChange(); }, min: -1, max: 1, precision: 3, step: 0.001, },
+            { type: 'slider', key: 'zNear', change: () => { this.onZNearChange(); }, min: -10, max: 10, precision: 2, step: 1, },
+            { type: 'slider', key: 'zFar', change: () => { this.onZFarChange(); }, min: 0, max: 1000, precision: 1, step: 1, },
+            { type: 'slider', key: 'fov', change: () => { this.onFovChange(); }, min: 0, max: 180, },
+            { type: 'slider', key: 'targetX', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'targetY', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'targetZ', change: () => { this.onTargetPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            /* LIGHT ***************************************************************************** */
+            { type: 'checkbox', key: 'frustum', change: () => { this.onFrustumChange(); } },
+            { type: 'checkbox', key: 'shadows', change: () => { this.onShadowsChange(); } },
+            //{ type: 'slider',   key: 'bias',    change: () => { this.onBiasChange() }, min: 0, max: 10, precision: 3, step: 0.001, },
+            { type: 'slider', key: 'lightPosX', change: () => { this.onLightPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightPosY', change: () => { this.onLightPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightPosZ', change: () => { this.onLightPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightTargX', change: () => { this.onLightTargetChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightTargY', change: () => { this.onLightTargetChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightTargZ', change: () => { this.onLightTargetChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightFov', change: () => { this.onLightFovChange(); }, min: 0, max: 360, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightNear', change: () => { this.onLightNearChange(); }, min: 0, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightFar', change: () => { this.onLightFarChange(); }, min: 0, max: 1000, precision: 1, step: 1, },
+            { type: 'checkbox', key: 'spotlight', change: () => { this.onSpotlightChange(); } },
+            { type: 'slider', key: 'lightWidth', change: () => { this.onLightWidthChange(); }, min: 0, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'lightHeight', change: () => { this.onLightHeightChange(); }, min: 0, max: 100, precision: 1, step: 1, },
+            //{ type: 'slider',   key: 'lightUpX',    change: () => { this.onLightUpChange() }, min: -1, max: 1, precision: 3, step: 0.001, },
+            //{ type: 'slider',   key: 'lightUpY',    change: () => { this.onLightUpChange() }, min:   -1, max: 1, precision: 3, step: 0.001, },
+            //{ type: 'slider',   key: 'lightUpZ',    change: () => { this.onLightUpChange() }, min:   -1, max: 1, precision: 3, step: 0.001, },
+            /* OBJECT ***************************************************************************** */
+            { type: 'option', key: 'currentobj', change: () => { this.onActiveObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
+            { type: 'checkbox', key: 'hidden', change: () => { this.onHiddenObjChange(); }, options: __classPrivateFieldGet(this, _MenuControls_loadedObjs, "f"), },
+            { type: 'slider', key: 'posX', change: () => { this.onObjectPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'posY', change: () => { this.onObjectPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'posZ', change: () => { this.onObjectPositionChange(); }, min: -100, max: 100, precision: 1, step: 1, },
+            { type: 'slider', key: 'scaleX', change: () => { this.onObjectScaleChange(); }, min: 0, max: 10, precision: 1, step: 1, },
+            { type: 'slider', key: 'scaleY', change: () => { this.onObjectScaleChange(); }, min: 0, max: 10, precision: 2, step: 0.01, },
+            { type: 'slider', key: 'scaleZ', change: () => { this.onObjectScaleChange(); }, min: 0, max: 10, precision: 2, step: 0.01, },
+            { type: 'slider', key: 'psi', change: () => { this.onObjectPolarRotationChange(); }, min: -180, max: 180 },
+            { type: 'slider', key: 'theta', change: () => { this.onObjectPolarRotationChange(); }, min: -180, max: 180 },
+            { type: 'slider', key: 'phi', change: () => { this.onObjectPolarRotationChange(); }, min: -180, max: 180 },
+            { type: 'checkbox', key: 'draw', change: () => { this.onDrawPressed(); } },
+        ]), "f");
+        log_1.Log.log("MenuControls [" + application.applicationName + "] | UI controls ready");
     }
 };
 _MenuControls_application = new WeakMap(), _MenuControls_activeObj = new WeakMap(), _MenuControls_targetObj = new WeakMap(), _MenuControls_widgets = new WeakMap(), _MenuControls_loadedObjs = new WeakMap(), _MenuControls_settings = new WeakMap(), _MenuControls_currentObjReceipt = new WeakMap();

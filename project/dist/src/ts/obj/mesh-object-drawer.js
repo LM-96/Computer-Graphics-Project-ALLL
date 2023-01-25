@@ -101,8 +101,6 @@ class MeshObjectDrawer {
             meshObject.draw(gl, programInfo, false);
         }
     }
-    render() {
-    }
     /**
      * Draw the scene using the object manager and the camera
      */

@@ -8,8 +8,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd textures/bark_brown_01_diff_1k.png
-map_Ks textures/bark_brown_01_spec_1k.png
+map_Kd ../img/bark_brown_01_diff_1k.png
+map_Ks ../img/bark_brown_01_spec_1k.png
 
 newmtl Building
 Ns 50.625011
@@ -29,7 +29,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd textures/marche_foto.jpg
+map_Kd ../img/marche_foto.jpg
 
 newmtl Material.002
 Ns 250.000000
@@ -89,7 +89,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd textures/marche_foto.jpg
+map_Kd ../img/marche_foto.jpg
 
 newmtl Material.009
 Ns 250.000000
@@ -109,7 +109,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd textures/batman_logo.png
+map_Kd ../img/batman_logo.png
 
 newmtl Material.012
 Ns 250.000000
@@ -119,7 +119,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd textures/erba1.png
+map_Kd ../img/erba1.png
 
 newmtl Material.013
 Ns 250.000000
@@ -219,4 +219,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd textures/cityscapecitybuilding.jpg
+map_Kd ../img/cityscapecitybuilding.jpg

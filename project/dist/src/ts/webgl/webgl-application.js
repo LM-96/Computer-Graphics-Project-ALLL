@@ -312,10 +312,12 @@ function WebGL(applicationName, canvasHtmlElementName, webGLShaders, logEnabled 
                 onCanvasMouseEventMethods.forEach((event, method) => {
                     log_1.Log.log("WebGLApplicationBuilder | subscribing to event [" + event + "] for " + applicationName +
                         " with method [" + method + "] ...");
-                    // webGLEnvironment.getCanvas().addEventListener(event, (e: MouseEvent) => {
-                    //     instance[method](e)
-                    // }, false)
-                    attachMouseEventListenerOnCanvas(webGLEnvironment.getCanvas(), event, (e) => { instance[method](e); });
+                    webGLEnvironment.getCanvas().addEventListener(event, (e) => {
+                        instance[method](e);
+                    }, false);
+                    //     attachMouseEventListenerOnCanvas(webGLEnvironment.getCanvas(),
+                    //         event,
+                    //         (e: MouseEvent) => { instance[method](e) })
                 });
             }
             // Attach keyboard events
