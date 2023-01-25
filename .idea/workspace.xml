@@ -6,16 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/assets/objs/batmoto.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/objs/batmoto.mtl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/assets/objs/city_marchegiani.mtl" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/objs/city.mtl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/assets/objs/city_marchegiani.obj" beforeDir="false" afterPath="$PROJECT_DIR$/project/assets/objs/city.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-application.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/LucaMarchegianiApp.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/LucaMarchegianiApp.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/webgl/webgl-application.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,26 +40,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/luca/Github/Computer-Graphics-Project-ALLL/project/assets/objs",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "/usr/local/lib/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/luca/Github/Computer-Graphics-Project-ALLL/project/assets/objs&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/usr/local/lib/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/project/assets/objs" />

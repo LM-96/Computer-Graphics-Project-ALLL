@@ -25,7 +25,7 @@ export class MenuControls {
     #targetObj: MeshObject
     #widgets: any
     readonly #loadedObjs: Array<string>
-    readonly #settings: MenuSettings
+    #settings: MenuSettings
 
     #currentObjReceipt: Array<Pair<SingleSignalSubscriber<any, any, any>, SubscriptionReceipt<any, any, any>>>
 
@@ -33,62 +33,6 @@ export class MenuControls {
         this.#application = application
         this.#loadedObjs = application.getMeshObjectManager().getAll().map((obj) => obj.getName())
         this.#currentObjReceipt = []
-
-        this.#settings = {
-            log: true,
-            target: undefined,
-            look_at: false,
-            follow: false,
-            cameraX: application.getCamera().getCurrentPosition().getX(),
-            cameraY: application.getCamera().getCurrentPosition().getY(),
-            cameraZ: application.getCamera().getCurrentPosition().getY(),
-            cameraUpX: application.getCamera().getCurrentUp().getFirst(),
-            cameraUpY: application.getCamera().getCurrentUp().getSecond(),
-            cameraUpZ: application.getCamera().getCurrentUp().getThird(),
-            posX: 0,
-            posY: 0,
-            posZ: 0.25,
-            scaleX: 1,
-            scaleY: 1,
-            scaleZ: 1,
-            psi: 0,
-            theta: 0,
-            phi: 0,
-            targetX: application.getCamera().getCurrentTarget().getX(),
-            targetY: application.getCamera().getCurrentTarget().getY(),
-            targetZ: application.getCamera().getCurrentTarget().getZ(),
-            frustum: application.getMeshObjectDrawer().getLightFrustum(),
-            shadows: application.getMeshObjectDrawer().getSlManager().getShadows(),
-            bias: application.getMeshObjectDrawer().getBias(),
-            lightPosX: application.getMeshObjectDrawer().getSlManager().getLightPosition().getX(),
-            lightPosY: application.getMeshObjectDrawer().getSlManager().getLightPosition().getY(),
-            lightPosZ: application.getMeshObjectDrawer().getSlManager().getLightPosition().getZ(),
-            lightTargX: application.getMeshObjectDrawer().getSlManager().getLightTarget().getX(),
-            lightTargY: application.getMeshObjectDrawer().getSlManager().getLightTarget().getY(),
-            lightTargZ: application.getMeshObjectDrawer().getSlManager().getLightTarget().getZ(),
-            lightFov: application.getMeshObjectDrawer().getSlManager().getFov().getValueIn(AngleUnit.DEG),
-            lightNear: application.getMeshObjectDrawer().getSlManager().getNear(),
-            lightFar: application.getMeshObjectDrawer().getSlManager().getFar(),
-            spotlight: application.getMeshObjectDrawer().getSlManager().isSpotlight(),
-            lightWidth: application.getMeshObjectDrawer().getSlManager().getProjWidth(),
-            lightHeight: application.getMeshObjectDrawer().getSlManager().getProjHeight(),
-            lightUpX: application.getMeshObjectDrawer().getSlManager().getLightUp().getFirst(),
-            lightUpY: application.getMeshObjectDrawer().getSlManager().getLightUp().getSecond(),
-            lightUpZ: application.getMeshObjectDrawer().getSlManager().getLightUp().getThird(),
-            fov: application.getCamera().getCurrentFov().getValueIn(AngleUnit.DEG),
-            zNear: application.getMeshObjectDrawer().zNear,
-            zFar: application.getMeshObjectDrawer().zFar,
-            currentobj: undefined,
-            hidden: false,
-            draw: false,
-        };
-
-        if(this.#loadedObjs.length > 0) {
-            this.#settings.currentobj = 0
-            this.#settings.target = 0
-            this.#targetObj = this.#application.getMeshObjectManager().get(this.#loadedObjs[0])
-            this.updateActiveObj(false)
-        }
     }
 
     subscribeCurrentObjSignals() {
@@ -458,6 +402,63 @@ export class MenuControls {
             { type: 'checkbox', key: 'draw', change: () => { this.onDrawPressed() }},
 
         ]);
+
+        let application = this.#application;
+        this.#settings = {
+            log: true,
+            target: undefined,
+            look_at: false,
+            follow: false,
+            cameraX: application.getCamera().getCurrentPosition().getX(),
+            cameraY: application.getCamera().getCurrentPosition().getY(),
+            cameraZ: application.getCamera().getCurrentPosition().getY(),
+            cameraUpX: application.getCamera().getCurrentUp().getFirst(),
+            cameraUpY: application.getCamera().getCurrentUp().getSecond(),
+            cameraUpZ: application.getCamera().getCurrentUp().getThird(),
+            posX: 0,
+            posY: 0,
+            posZ: 0.25,
+            scaleX: 1,
+            scaleY: 1,
+            scaleZ: 1,
+            psi: 0,
+            theta: 0,
+            phi: 0,
+            targetX: application.getCamera().getCurrentTarget().getX(),
+            targetY: application.getCamera().getCurrentTarget().getY(),
+            targetZ: application.getCamera().getCurrentTarget().getZ(),
+            frustum: application.getMeshObjectDrawer().getLightFrustum(),
+            shadows: application.getMeshObjectDrawer().getSlManager().getShadows(),
+            bias: application.getMeshObjectDrawer().getBias(),
+            lightPosX: application.getMeshObjectDrawer().getSlManager().getLightPosition().getX(),
+            lightPosY: application.getMeshObjectDrawer().getSlManager().getLightPosition().getY(),
+            lightPosZ: application.getMeshObjectDrawer().getSlManager().getLightPosition().getZ(),
+            lightTargX: application.getMeshObjectDrawer().getSlManager().getLightTarget().getX(),
+            lightTargY: application.getMeshObjectDrawer().getSlManager().getLightTarget().getY(),
+            lightTargZ: application.getMeshObjectDrawer().getSlManager().getLightTarget().getZ(),
+            lightFov: application.getMeshObjectDrawer().getSlManager().getFov().getValueIn(AngleUnit.DEG),
+            lightNear: application.getMeshObjectDrawer().getSlManager().getNear(),
+            lightFar: application.getMeshObjectDrawer().getSlManager().getFar(),
+            spotlight: application.getMeshObjectDrawer().getSlManager().isSpotlight(),
+            lightWidth: application.getMeshObjectDrawer().getSlManager().getProjWidth(),
+            lightHeight: application.getMeshObjectDrawer().getSlManager().getProjHeight(),
+            lightUpX: application.getMeshObjectDrawer().getSlManager().getLightUp().getFirst(),
+            lightUpY: application.getMeshObjectDrawer().getSlManager().getLightUp().getSecond(),
+            lightUpZ: application.getMeshObjectDrawer().getSlManager().getLightUp().getThird(),
+            fov: application.getCamera().getCurrentFov().getValueIn(AngleUnit.DEG),
+            zNear: application.getMeshObjectDrawer().zNear,
+            zFar: application.getMeshObjectDrawer().zFar,
+            currentobj: undefined,
+            hidden: false,
+            draw: false,
+        };
+
+        if(this.#loadedObjs.length > 0) {
+            this.#settings.currentobj = 0
+            this.#settings.target = 0
+            this.#targetObj = this.#application.getMeshObjectManager().get(this.#loadedObjs[0])
+            this.updateActiveObj(false)
+        }
     }
 
 }

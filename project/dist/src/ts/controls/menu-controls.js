@@ -37,60 +37,6 @@ let MenuControls = class MenuControls {
         __classPrivateFieldSet(this, _MenuControls_application, application, "f");
         __classPrivateFieldSet(this, _MenuControls_loadedObjs, application.getMeshObjectManager().getAll().map((obj) => obj.getName()), "f");
         __classPrivateFieldSet(this, _MenuControls_currentObjReceipt, [], "f");
-        __classPrivateFieldSet(this, _MenuControls_settings, {
-            log: true,
-            target: undefined,
-            look_at: false,
-            follow: false,
-            cameraX: application.getCamera().getCurrentPosition().getX(),
-            cameraY: application.getCamera().getCurrentPosition().getY(),
-            cameraZ: application.getCamera().getCurrentPosition().getY(),
-            cameraUpX: application.getCamera().getCurrentUp().getFirst(),
-            cameraUpY: application.getCamera().getCurrentUp().getSecond(),
-            cameraUpZ: application.getCamera().getCurrentUp().getThird(),
-            posX: 0,
-            posY: 0,
-            posZ: 0.25,
-            scaleX: 1,
-            scaleY: 1,
-            scaleZ: 1,
-            psi: 0,
-            theta: 0,
-            phi: 0,
-            targetX: application.getCamera().getCurrentTarget().getX(),
-            targetY: application.getCamera().getCurrentTarget().getY(),
-            targetZ: application.getCamera().getCurrentTarget().getZ(),
-            frustum: application.getMeshObjectDrawer().getLightFrustum(),
-            shadows: application.getMeshObjectDrawer().getSlManager().getShadows(),
-            bias: application.getMeshObjectDrawer().getBias(),
-            lightPosX: application.getMeshObjectDrawer().getSlManager().getLightPosition().getX(),
-            lightPosY: application.getMeshObjectDrawer().getSlManager().getLightPosition().getY(),
-            lightPosZ: application.getMeshObjectDrawer().getSlManager().getLightPosition().getZ(),
-            lightTargX: application.getMeshObjectDrawer().getSlManager().getLightTarget().getX(),
-            lightTargY: application.getMeshObjectDrawer().getSlManager().getLightTarget().getY(),
-            lightTargZ: application.getMeshObjectDrawer().getSlManager().getLightTarget().getZ(),
-            lightFov: application.getMeshObjectDrawer().getSlManager().getFov().getValueIn(angle_1.AngleUnit.DEG),
-            lightNear: application.getMeshObjectDrawer().getSlManager().getNear(),
-            lightFar: application.getMeshObjectDrawer().getSlManager().getFar(),
-            spotlight: application.getMeshObjectDrawer().getSlManager().isSpotlight(),
-            lightWidth: application.getMeshObjectDrawer().getSlManager().getProjWidth(),
-            lightHeight: application.getMeshObjectDrawer().getSlManager().getProjHeight(),
-            lightUpX: application.getMeshObjectDrawer().getSlManager().getLightUp().getFirst(),
-            lightUpY: application.getMeshObjectDrawer().getSlManager().getLightUp().getSecond(),
-            lightUpZ: application.getMeshObjectDrawer().getSlManager().getLightUp().getThird(),
-            fov: application.getCamera().getCurrentFov().getValueIn(angle_1.AngleUnit.DEG),
-            zNear: application.getMeshObjectDrawer().zNear,
-            zFar: application.getMeshObjectDrawer().zFar,
-            currentobj: undefined,
-            hidden: false,
-            draw: false,
-        }, "f");
-        if (__classPrivateFieldGet(this, _MenuControls_loadedObjs, "f").length > 0) {
-            __classPrivateFieldGet(this, _MenuControls_settings, "f").currentobj = 0;
-            __classPrivateFieldGet(this, _MenuControls_settings, "f").target = 0;
-            __classPrivateFieldSet(this, _MenuControls_targetObj, __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectManager().get(__classPrivateFieldGet(this, _MenuControls_loadedObjs, "f")[0]), "f");
-            this.updateActiveObj(false);
-        }
     }
     subscribeCurrentObjSignals() {
         log_1.Log.log("Subscribing to signals of " + __classPrivateFieldGet(this, _MenuControls_activeObj, "f").getName());
@@ -380,6 +326,61 @@ let MenuControls = class MenuControls {
             { type: 'slider', key: 'phi', change: () => { this.onObjectPolarRotationChange(); }, min: -180, max: 180 },
             { type: 'checkbox', key: 'draw', change: () => { this.onDrawPressed(); } },
         ]), "f");
+        let application = __classPrivateFieldGet(this, _MenuControls_application, "f");
+        __classPrivateFieldSet(this, _MenuControls_settings, {
+            log: true,
+            target: undefined,
+            look_at: false,
+            follow: false,
+            cameraX: application.getCamera().getCurrentPosition().getX(),
+            cameraY: application.getCamera().getCurrentPosition().getY(),
+            cameraZ: application.getCamera().getCurrentPosition().getY(),
+            cameraUpX: application.getCamera().getCurrentUp().getFirst(),
+            cameraUpY: application.getCamera().getCurrentUp().getSecond(),
+            cameraUpZ: application.getCamera().getCurrentUp().getThird(),
+            posX: 0,
+            posY: 0,
+            posZ: 0.25,
+            scaleX: 1,
+            scaleY: 1,
+            scaleZ: 1,
+            psi: 0,
+            theta: 0,
+            phi: 0,
+            targetX: application.getCamera().getCurrentTarget().getX(),
+            targetY: application.getCamera().getCurrentTarget().getY(),
+            targetZ: application.getCamera().getCurrentTarget().getZ(),
+            frustum: application.getMeshObjectDrawer().getLightFrustum(),
+            shadows: application.getMeshObjectDrawer().getSlManager().getShadows(),
+            bias: application.getMeshObjectDrawer().getBias(),
+            lightPosX: application.getMeshObjectDrawer().getSlManager().getLightPosition().getX(),
+            lightPosY: application.getMeshObjectDrawer().getSlManager().getLightPosition().getY(),
+            lightPosZ: application.getMeshObjectDrawer().getSlManager().getLightPosition().getZ(),
+            lightTargX: application.getMeshObjectDrawer().getSlManager().getLightTarget().getX(),
+            lightTargY: application.getMeshObjectDrawer().getSlManager().getLightTarget().getY(),
+            lightTargZ: application.getMeshObjectDrawer().getSlManager().getLightTarget().getZ(),
+            lightFov: application.getMeshObjectDrawer().getSlManager().getFov().getValueIn(angle_1.AngleUnit.DEG),
+            lightNear: application.getMeshObjectDrawer().getSlManager().getNear(),
+            lightFar: application.getMeshObjectDrawer().getSlManager().getFar(),
+            spotlight: application.getMeshObjectDrawer().getSlManager().isSpotlight(),
+            lightWidth: application.getMeshObjectDrawer().getSlManager().getProjWidth(),
+            lightHeight: application.getMeshObjectDrawer().getSlManager().getProjHeight(),
+            lightUpX: application.getMeshObjectDrawer().getSlManager().getLightUp().getFirst(),
+            lightUpY: application.getMeshObjectDrawer().getSlManager().getLightUp().getSecond(),
+            lightUpZ: application.getMeshObjectDrawer().getSlManager().getLightUp().getThird(),
+            fov: application.getCamera().getCurrentFov().getValueIn(angle_1.AngleUnit.DEG),
+            zNear: application.getMeshObjectDrawer().zNear,
+            zFar: application.getMeshObjectDrawer().zFar,
+            currentobj: undefined,
+            hidden: false,
+            draw: false,
+        }, "f");
+        if (__classPrivateFieldGet(this, _MenuControls_loadedObjs, "f").length > 0) {
+            __classPrivateFieldGet(this, _MenuControls_settings, "f").currentobj = 0;
+            __classPrivateFieldGet(this, _MenuControls_settings, "f").target = 0;
+            __classPrivateFieldSet(this, _MenuControls_targetObj, __classPrivateFieldGet(this, _MenuControls_application, "f").getMeshObjectManager().get(__classPrivateFieldGet(this, _MenuControls_loadedObjs, "f")[0]), "f");
+            this.updateActiveObj(false);
+        }
     }
 };
 _MenuControls_application = new WeakMap(), _MenuControls_activeObj = new WeakMap(), _MenuControls_targetObj = new WeakMap(), _MenuControls_widgets = new WeakMap(), _MenuControls_loadedObjs = new WeakMap(), _MenuControls_settings = new WeakMap(), _MenuControls_currentObjReceipt = new WeakMap();
