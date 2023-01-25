@@ -24,7 +24,7 @@ Log.enableLog()
 )
 class MyApp extends WebGLApplication {
 
-    @WebGLMesh("./assets/Consegna_fiori/Saviano.obj")
+    @WebGLMesh("./assets/Consegna_fiori/Saviano2.obj")
     private Saviano: MeshObject
 
     @WebGLMesh("./assets/Consegna_fiori/furgoncino.obj")
@@ -53,6 +53,7 @@ class MyApp extends WebGLApplication {
         let camera = this.getCamera()
 
         camera.setPosition(15,0,5);
+        this.getMeshObjectDrawer().zFar = 700
         camera.startFollowingObject(this.Furgoncino)
 
 

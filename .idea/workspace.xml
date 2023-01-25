@@ -7,24 +7,13 @@
     <list default="true" id="69c67db6-e460-42b0-b811-1cfc12049c58" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/webgl-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/webgl-utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/lib/js/webgl-utils.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/lib/js/webgl-utils.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/user-input-controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/user-input-controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/user-input-controller.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/user-input-controller.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/user-inputs.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/flowed-mesh-object.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/sl-manager.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/webgl/webgl-environment.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/result.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/result.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/types/result.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/types/result.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/project/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/lib/js/webgl-utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/lib/js/webgl-utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/ts/AntonioFranzeseApp.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/AntonioFranzeseApp.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu-settings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-settings.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/controls/user-input-controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/user-input-controller.ts" afterDir="false" />

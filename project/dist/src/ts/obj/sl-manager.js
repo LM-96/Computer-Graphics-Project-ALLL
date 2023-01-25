@@ -1,14 +1,14 @@
 "use strict";
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+};
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
-};
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
-    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
-    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _SlManager_instances, _a, _SlManager_depthTB, _SlManager_lightDirection, _SlManager_sharedUniforms, _SlManager_lightPosition, _SlManager_lightTarget, _SlManager_lightUp, _SlManager_lightFov, _SlManager_spotlight, _SlManager_projWidth, _SlManager_projHeight, _SlManager_shadows, _SlManager_near, _SlManager_far, _SlManager_updateSharedUniforms;
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -18,22 +18,6 @@ const point_factory_1 = require("../geometry/point/point-factory");
 const angle_1 = require("../geometry/angle/angle");
 const pair_1 = require("../types/pair");
 class SlManager {
-    constructor(sharedUniforms) {
-        _SlManager_instances.add(this);
-        _SlManager_lightDirection.set(this, (0, number_trio_1.numberTrio)(0, 0, 0));
-        _SlManager_sharedUniforms.set(this, void 0);
-        _SlManager_lightPosition.set(this, (0, point_factory_1.mutablePoint3D)(0, 0, 100));
-        _SlManager_lightTarget.set(this, (0, point_factory_1.mutablePoint3D)(0, 0, 0));
-        _SlManager_lightUp.set(this, (0, number_trio_1.numberTrio)(0, 1, 0));
-        _SlManager_lightFov.set(this, (0, angle_1.radians)(0));
-        _SlManager_spotlight.set(this, false);
-        _SlManager_projWidth.set(this, 10);
-        _SlManager_projHeight.set(this, 10);
-        _SlManager_shadows.set(this, false);
-        _SlManager_near.set(this, 1);
-        _SlManager_far.set(this, 700);
-        __classPrivateFieldSet(this, _SlManager_sharedUniforms, sharedUniforms, "f");
-    }
     static getTextureForLights(gl) {
         let res = __classPrivateFieldGet(SlManager, _a, "f", _SlManager_depthTB).get(gl);
         if (res === undefined) {
@@ -81,6 +65,22 @@ class SlManager {
             __classPrivateFieldGet(this, _a, "f", _SlManager_depthTB).set(gl, res);
         }
         return res;
+    }
+    constructor(sharedUniforms) {
+        _SlManager_instances.add(this);
+        _SlManager_lightDirection.set(this, (0, number_trio_1.numberTrio)(0, 0, 0));
+        _SlManager_sharedUniforms.set(this, void 0);
+        _SlManager_lightPosition.set(this, (0, point_factory_1.mutablePoint3D)(0, 0, 100));
+        _SlManager_lightTarget.set(this, (0, point_factory_1.mutablePoint3D)(0, 0, 0));
+        _SlManager_lightUp.set(this, (0, number_trio_1.numberTrio)(0, 1, 0));
+        _SlManager_lightFov.set(this, (0, angle_1.radians)(0));
+        _SlManager_spotlight.set(this, false);
+        _SlManager_projWidth.set(this, 10);
+        _SlManager_projHeight.set(this, 10);
+        _SlManager_shadows.set(this, false);
+        _SlManager_near.set(this, 1);
+        _SlManager_far.set(this, 700);
+        __classPrivateFieldSet(this, _SlManager_sharedUniforms, sharedUniforms, "f");
     }
     calculateLightWorldMatrix() {
         return M4.lookAt([__classPrivateFieldGet(this, _SlManager_lightPosition, "f").getX(), __classPrivateFieldGet(this, _SlManager_lightPosition, "f").getY(), __classPrivateFieldGet(this, _SlManager_lightPosition, "f").getZ()], [__classPrivateFieldGet(this, _SlManager_lightTarget, "f").getX(), __classPrivateFieldGet(this, _SlManager_lightTarget, "f").getY(), __classPrivateFieldGet(this, _SlManager_lightTarget, "f").getZ()], [__classPrivateFieldGet(this, _SlManager_lightUp, "f").getFirst(), __classPrivateFieldGet(this, _SlManager_lightUp, "f").getSecond(), __classPrivateFieldGet(this, _SlManager_lightUp, "f").getThird()]);
