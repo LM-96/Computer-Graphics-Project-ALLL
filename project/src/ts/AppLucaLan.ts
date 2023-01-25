@@ -46,6 +46,7 @@ class MyApp extends WebGLApplication {
         light.setProjWidth(200)
         light.setLightPosition(20,20,100)
         light.setLightTarget(20, 20, 0)
+        light.setShadows(true)
 
         //Camera Set up
         let camera = this.getCamera()
