@@ -9,20 +9,7 @@
       <change beforePath="$PROJECT_DIR$/project/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/bundle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/LucaMarchegianiApp.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/camera/camera-man.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/camera/camera-man.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/camera/camera-man.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/camera/camera-man.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/camera/flowed-camera.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/camera/flowed-camera.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/controls/menu-controls.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/project/dist/src/ts/obj/mesh-object-drawer.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/ts/LucaMarchegianiApp.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/LucaMarchegianiApp.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/camera/camera-man.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/camera/camera-man.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/camera/camera.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/camera/camera.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/camera/flowed-camera.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/camera/flowed-camera.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-controls.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/controls/menu-settings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/controls/menu-settings.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-drawer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/ts/obj/mesh-object-drawer.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,6 +179,7 @@
       <workItem from="1674644530984" duration="17321000" />
       <workItem from="1674667429433" duration="10152000" />
       <workItem from="1674678431498" duration="11096000" />
+      <workItem from="1674715727191" duration="337000" />
     </task>
     <servers />
   </component>

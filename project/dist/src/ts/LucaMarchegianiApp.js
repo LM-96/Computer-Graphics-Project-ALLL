@@ -64,9 +64,9 @@ let GothamApp = class GothamApp extends webgl_application_1.WebGLApplication {
         // Light Set up
         let light = this.getMeshObjectDrawer().getSlManager();
         light.setFar(200);
-        light.setProjHeight(200);
-        light.setProjWidth(200);
-        light.setLightPosition(20, 20, 100);
+        light.setProjHeight(500);
+        light.setProjWidth(500);
+        light.setLightPosition(200, 20, 100);
         light.setLightTarget(20, 20, 0);
         light.setShadows(true);
         this.getMeshObjectDrawer().zFar = 700;
